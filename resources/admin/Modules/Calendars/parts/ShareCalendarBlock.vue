@@ -73,6 +73,15 @@
                     </div>
                 </div>
             </el-tab-pane>
+            <el-tab-pane name="generate-link">
+                <template #label>
+                    {{ $t('Generate Link') }}
+                </template>
+                <GenerateLinkTab
+                    v-if="activeTab == 'generate-link'"
+                    :slot="slot"
+                />
+            </el-tab-pane>
         </el-tabs>
         <template #footer>
             <div class="dialog-footer">
@@ -87,7 +96,7 @@
  <script>
 import { Clock, Link, CopyDocument } from '@element-plus/icons-vue';
 import { copyToClipBoard } from '@/Bits/data_config.js';
-
+import GenerateLinkTab from './_GenerateLinkTab.vue';
 export default {
     name: 'ShareCalendarBlock',
     props: ['slot', 'openShare', 'calendarId'],
@@ -95,8 +104,9 @@ export default {
     components: {
         Clock,
         Link,
-        CopyDocument
-    },    
+        CopyDocument,
+        GenerateLinkTab
+    },
     data() {
         return {
             showShare: this.openShare,
@@ -133,7 +143,7 @@ export default {
     methods: {
         gotoCalendarSettings() {
             this.$router.push({
-                name: 'calendar_settings', 
+                name: 'calendar_settings',
                 params: { calendar_id: this.calendarId}
             })
         },

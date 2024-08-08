@@ -1663,7 +1663,7 @@
                     }
                 }
                 .el-tabs__content {
-                    padding: 20px 0;
+                    padding: 10px 0;
                 }
                 .fcal_create_calendar_body {
                     max-width: 550px;
@@ -1683,9 +1683,16 @@
                             }
                         }
                     }
+                    h4 {
+                        color: #445164;
+                        margin-top: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                    }
                     .el-input {
                         &.el-input-group--append {
                             .el-input__wrapper {
+                                border: 1px solid #D6DAE1;
                                 border-top-right-radius: 0;
                                 border-bottom-right-radius: 0;
                             }
@@ -1693,7 +1700,6 @@
                                 border-top-right-radius: 8px;
                                 border-bottom-right-radius: 8px;
                                 padding: 0;
-                                box-shadow: none;
                                 .el-button {
                                     height: 100%;
                                     margin: 0;
@@ -1702,7 +1708,7 @@
                                     border: none;
                                     box-shadow: none;
                                     color: $dark;
-                                    padding: 11px 15px;
+                                    padding: 11px 11px;
                                     a {
                                         color: #8F97A2;
                                         text-decoration: none;
@@ -1725,6 +1731,18 @@
                                     }
                                 }
                             }
+                            &.is-disabled {
+                                .el-input__wrapper {
+                                    border: none;
+                                }
+                                .el-input-group__append {
+                                    box-shadow: none;
+                                }
+                                .el-input__inner {
+                                    color: #637083;
+                                    -webkit-text-fill-color: #637083;
+                                }
+                            }
                         }
                         .el-input__wrapper {
                             border-radius: 8px;
@@ -1742,6 +1760,71 @@
                         max-width: 300px;
                         display: block;
                         margin: auto;
+                    }
+                    form.el-form {
+                        .fcal_select_page {
+                            .el-form-item__label {
+                                font-size: 15px;
+                            }
+                            .el-form-item__content {
+                                margin-top: 16px;
+                                .el-radio-group {
+                                    .el-radio {
+                                        .el-radio__label {
+                                            font-size: 14px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .fcal_param_fields {
+                            .fcal_table {
+                                border-collapse: separate;
+                                border-spacing: 0;
+                                border-radius: 8px;
+                                border: 1px solid #D6DAE1;
+                                overflow: hidden;
+                                thead {
+                                    tr {
+                                        background: none;
+                                        th {
+                                            font-size: 14px;
+                                            font-weight: 700;
+                                            line-height: 26px;
+                                            color: #323232;
+                                            padding: 8px 20px;
+                                            background: #EAECF0;
+                                            text-align: justify;
+                                        }
+                                    }
+                                }
+                                tbody {
+                                    tr {
+                                        td {
+                                            padding: 8px 20px;
+                                            &.fcal_table_action {
+                                                gap: 8px;
+                                                display: flex;
+                                                padding: 8px 20px 8px 0;
+                                                justify-content: center;
+                                                align-items: center;
+                                                p {
+                                                    cursor: pointer;
+                                                    font-size: 16px;
+                                                    margin: 0.5rem 0;
+                                                }
+                                            }
+                                            .el-input__wrapper {
+                                                border: 1px solid #D6DAE1;
+                                            }
+                                            .el-date-editor {
+                                                width: 100%;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
