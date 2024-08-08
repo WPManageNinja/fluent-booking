@@ -201,7 +201,7 @@ class SettingsController extends Controller
 
         $allPages = $db->table('posts')->where('post_type', 'page')
             ->where('post_status', 'publish')
-            ->select(['ID', 'post_title'])
+            ->select(['ID', 'post_title', 'post_name'])
             ->orderBy('post_title', 'ASC')
             ->get();
 
@@ -209,6 +209,7 @@ class SettingsController extends Controller
         foreach ($allPages as $page) {
             $pages[] = [
                 'id'    => $page->ID,
+                'name'  => $page->post_name,
                 'title' => $page->post_title ? $page->post_title : __('(no title)', 'fluent-boards')
             ];
         }

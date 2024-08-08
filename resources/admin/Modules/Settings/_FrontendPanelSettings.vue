@@ -40,11 +40,13 @@
 
             <el-form class="fbs_form" v-model="featureModules.frontend" label-position="top">
                 <el-form-item>
-                    <el-checkbox v-model="featureModules.frontend.enabled" true-label="yes"
-                                 false-label="no">{{ $t('Enable Frontend Portal') }}
+                    <el-checkbox 
+                        v-model="featureModules.frontend.enabled"
+                        true-label="yes"
+                        false-label="no">
+                        {{ $t('Enable Frontend Portal') }}
                     </el-checkbox>
                 </el-form-item>
-
                 <template v-if="featureModules.frontend.enabled == 'yes'">
                     <el-form-item :label="$t('Via Shortcode / Dedicated Page?')">
                         <el-radio-group v-model="featureModules.frontend.render_type">
@@ -53,8 +55,7 @@
                         </el-radio-group>
                     </el-form-item>
 
-                    <el-form-item v-if="featureModules.frontend.render_type === 'shortcode'"
-                                  :label="$t('Please Select the page where you want to show')">
+                    <el-form-item v-if="featureModules.frontend.render_type === 'shortcode'" :label="$t('Please Select the page where you want to show')">
                         <el-select :placeholder="$t('Select Page')" filterable popper-class="fcal_select" placement="bottom" v-model="featureModules.frontend.page_id">
                             <el-option v-for="page in pages" :key="page.id" :label="page.title" :value="page.id">
                                 <span style="float: left">{{ page.title }}</span>
@@ -67,8 +68,10 @@
                     </el-form-item>
 
                     <el-form-item v-else :label="$t('URL Slug for the frontend panel (eg: projects)')">
-                        <el-input v-model="featureModules.frontend.slug"
-                                  :placeholder="$t('Enter the slug for the frontend portal')"></el-input>
+                        <el-input
+                            v-model="featureModules.frontend.slug"
+                            :placeholder="$t('Enter the slug for the frontend portal')">
+                        </el-input>
                     </el-form-item>
 
                 </template>

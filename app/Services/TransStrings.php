@@ -871,6 +871,12 @@ class TransStrings
             'Recommended Plugins and Addons'                                                   => __('Recommended Plugins and Addons', 'fluent-booking'),
             'Send Confirmation Email'                                                          => __('Send Confirmation Email', 'fluent-booking'),
             'Load FluentBooking in the frontend of the website'                                => __('Load FluentBooking in the frontend of the website', 'fluent-booking'),
+            'Add Parameters'                                                                   => __('Add Parameters', 'fluent-booking'),
+            'Page Type'                                                                        => __('Page Type', 'fluent-booking'),
+            'Other Page'                                                                       => __('Other Page', 'fluent-booking'),
+            'Generate Link'                                                                    => __('Generate Link', 'fluent-booking'),
+            'Generated Link'                                                                   => __('Generated Link', 'fluent-booking'),
+            'Generate booking link with URL parameters'                                        => __('Generate booking link with URL parameters', 'fluent-booking'),
         );
     }
 }
