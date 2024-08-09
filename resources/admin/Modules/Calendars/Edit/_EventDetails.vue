@@ -201,7 +201,9 @@ export default {
             this.calendar_event.status = this.isEnable ? 'active' : 'draft';
         },
         validateDuration(calendar_event) {
-            this.calendar_event.custom_duration = Math.max(5, Math.min(720, calendar_event.custom_duration));
+            const { event_type, custom_duration } = calendar_event;
+            const maxValue = event_type == 'group_event' ? 2880 : 720;
+            this.calendar_event.custom_duration = Math.max(5, Math.min(maxValue, custom_duration));
         },
         getDuration(duration) {
             return this.durationLookup[duration];

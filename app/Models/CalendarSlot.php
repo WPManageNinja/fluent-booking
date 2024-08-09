@@ -366,7 +366,7 @@ class CalendarSlot extends Model
 
         $durationLookup = Helper::getDurationLookup();
 
-        $duration = $durationLookup[$this->duration] ?? $this->duration . __(' Minutes', 'fluent-booking');
+        $duration = $durationLookup[$this->duration] ?? Helper::formatDuration($this->duration);
 
         return [$duration];
     }

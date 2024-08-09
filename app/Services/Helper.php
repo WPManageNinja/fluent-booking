@@ -1213,6 +1213,25 @@ class Helper
         return $durationLookup;
     }
 
+    public static function formatDuration($totalMinutes) {
+        $days = floor($totalMinutes / 1440); // 1440 minutes in a day
+        $hours = floor(($totalMinutes % 1440) / 60);
+        $minutes = $totalMinutes % 60;
+
+        $formattedDuration = [];
+        if ($days > 0) {
+            $formattedDuration[] = $days . __(' Days', 'fluent-booking');
+        }
+        if ($hours > 0) {
+            $formattedDuration[] = $hours . __(' Hours', 'fluent-booking');
+        }
+        if ($minutes > 0 || empty($formattedDuration)) {
+            $formattedDuration[] = $minutes . __(' Minutes', 'fluent-booking');
+        }
+    
+        return implode(' ', $formattedDuration);
+    }
+
     public static function getBufferTimes()
     {
         return apply_filters('fluent_booking/buffer_times_schema', [
