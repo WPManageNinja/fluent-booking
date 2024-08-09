@@ -124,12 +124,30 @@
 
     function getDuration(duration) {
         const durationLookup = appData.duration_lookup;
-        return durationLookup[duration] ?? duration + ' ' + i18('Minutes');
+        return durationLookup[duration] ?? formatDuration(duration);
     }
 
     function getMultiDuration(duration) {
         const durationLookup = appData.multi_duration_lookup;
         return durationLookup[duration];
+    }
+
+    function formatDuration(duration) {
+        const days = Math.floor(duration / 1440);
+        const hours = Math.floor((duration % 1440) / 60);
+        const minutes = duration % 60;
+
+        let formattedDuration = [];
+        if (days > 0) {
+            formattedDuration.push(days + ' ' + i18('Days'));
+        }
+        if (hours > 0) {
+            formattedDuration.push(hours + ' ' + i18('Hours'));
+        }
+        if (minutes > 0 || formattedDuration.length === 0) {
+            formattedDuration.push(minutes + ' ' + i18('Minutes'));
+        }
+        return formattedDuration.join(' ');
     }
 
     function formatHours(e) {
