@@ -92,7 +92,8 @@
                     gap: 8px;
                     position: relative;
                 }
-                .fcal_slot_duration {
+                .fcal_slot_duration,
+                .fcal_slot_location {
                     font-size: 12px;
                     font-weight: 500;
                     line-height: 18px;
@@ -103,6 +104,19 @@
                     color: #445164;
                     padding-left: 19px;
                 }
+                .fcal_slot_payment_icon {
+                    gap: 6px;
+                    margin: 0;
+                    font-size: 12px;
+                    display: inline-flex;
+                    align-items: center;
+                    color: #445164;
+                    padding-left: 19px;
+                    svg {
+                        height: 15px;
+                        width: 15px;
+                    }
+                  }
                 .slot_location {
                     &.fcal_icon_item {
                         gap: 7px;

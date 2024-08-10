@@ -103,7 +103,8 @@ $border-color_1: var(--fcal_primaryColor);
     padding-left: 19px;
   }
 
-  .fcal_slot_duration {
+  .fcal_slot_duration,
+  .fcal_slot_location {
     font-size: 12px;
     font-weight: 500;
     line-height: 18px;
@@ -144,7 +145,8 @@ $border-color_1: var(--fcal_primaryColor);
       list-style: none;
       min-width: 120px;
       width: max-content;
-      .fcal_slot_duration {
+      .fcal_slot_duration,
+      .fcal_slot_location {
         padding-left: 0;
         color: var(--fcal_whiteColor);
         font-weight: 400;
@@ -172,6 +174,20 @@ $border-color_1: var(--fcal_primaryColor);
         width: 0.9rem;
         height: 0.9rem;
       }
+    }
+  }
+
+  .fcal_slot_payment_icon {
+    gap: 6px;
+    margin: 0;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    color: $color_2;
+    padding-left: 19px;
+    svg {
+        height: 15px;
+        width: 15px;
     }
   }
 

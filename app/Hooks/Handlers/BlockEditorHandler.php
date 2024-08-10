@@ -73,6 +73,7 @@ class BlockEditorHandler
                         'color_schema' => $event->color_schema,
                         'durations'    => $event->getAvailableDurations(),
                         'locations'    => $event->defaultLocationHtml(),
+                        'payment_html' => $event->getPaymentHtml(),
                         'loc_settings' => $event->location_settings,
                         'description'  => Helper::excerpt($event->getDescription())
                     ];
@@ -262,6 +263,7 @@ class BlockEditorHandler
             }
 
             foreach ($events as $event) {
+                $event->payment_html = $event->getPaymentHtml();
                 $event->public_url = $event->getPublicUrl();
                 $event->durations = $event->getAvailableDurations();
                 $event->description = $event->getDescription();
@@ -315,6 +317,7 @@ class BlockEditorHandler
         }
 
         foreach ($events as $event) {
+            $event->payment_html = $event->getPaymentHtml();
             $event->public_url = $event->getPublicUrl();
             $event->durations = $event->getAvailableDurations();
             $event->description = $event->getDescription();

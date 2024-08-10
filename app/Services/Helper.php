@@ -1220,15 +1220,20 @@ class Helper
 
         $formattedDuration = [];
         if ($days > 0) {
-            $formattedDuration[] = $days . __(' Days', 'fluent-booking');
+            $unit = $days > 1 ? __('Days', 'fluent-booking') : __('Day', 'fluent-booking');
+            $formattedDuration[] = $days . ' ' . $unit;
         }
+
         if ($hours > 0) {
-            $formattedDuration[] = $hours . __(' Hours', 'fluent-booking');
+            $unit = $hours > 1 ? __('Hours', 'fluent-booking') : __('Hour', 'fluent-booking');
+            $formattedDuration[] = $hours . ' ' . $unit;
         }
+
         if ($minutes > 0 || empty($formattedDuration)) {
-            $formattedDuration[] = $minutes . __(' Minutes', 'fluent-booking');
+            $unit = $minutes > 1 ? __('Minutes', 'fluent-booking') : __('Minute', 'fluent-booking');
+            $formattedDuration[] = $minutes . ' ' . $unit;
         }
-    
+
         return implode(' ', $formattedDuration);
     }
 

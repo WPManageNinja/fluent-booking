@@ -111,6 +111,7 @@ class LandingPageHandler
         $activeEvents = $activeEvents->get();
 
         foreach ($activeEvents as $activeEvent) {
+            $activeEvent->payment_html = $activeEvent->getPaymentHtml();
             $activeEvent->public_url = $activeEvent->getPublicUrl();
             $activeEvent->durations = $activeEvent->getAvailableDurations();
             $activeEvent->description = $activeEvent->getDescription();
