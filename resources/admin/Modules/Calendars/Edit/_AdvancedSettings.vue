@@ -8,7 +8,7 @@
                 </h2>
             </div>
             <template v-if="!disabled">
-                <div class="fcal_create_calendar_form_body">
+                <div class="fcal_create_calendar_form_body fcal_advanced_settings">
                     <el-form label-position="top">
     
                         <el-form-item>
@@ -32,6 +32,17 @@
                                             </el-input>
                                         </template>
                                     </popover>
+                                </el-form-item>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="fcal_event_card">
+                                <el-form-item :label="$t('Submit Button Text')">
+                                    <el-input
+                                        type="text"
+                                        v-model="settings.submit_button_text"
+                                        :placeholder="$t('Schedule Meeting')"
+                                    />
                                 </el-form-item>
                             </div>
                         </el-form-item>
@@ -430,6 +441,7 @@ export default {
             this.$post('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/advanced-settings', {
                 calendar_id: this.calendar_event.calendar_id,
                 booking_title: this.settings.booking_title,
+                submit_button_text: this.settings.submit_button_text,
                 custom_redirect: this.settings.custom_redirect,
                 requires_confirmation: this.settings.requires_confirmation,
                 can_not_cancel: this.settings.can_not_cancel,

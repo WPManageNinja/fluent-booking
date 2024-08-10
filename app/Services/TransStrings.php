@@ -806,6 +806,8 @@ class TransStrings
             'Format'                                                                           => __('Format', 'fluent-booking'),
             'Select Format'                                                                    => __('Select Format', 'fluent-booking'),
             'Booking Title'                                                                    => __('Booking Title', 'fluent-booking'),
+            'Schedule Meeting'                                                                 => __('Schedule Meeting', 'fluent-booking'),
+            'Submit Button Text'                                                               => __('Submit Button Text', 'fluent-booking'),
             'Advanced Settings'                                                                => __('Advanced Settings', 'fluent-booking'),
             'The default date format will be applied if no format is chosen.'                  => __('The default date format will be applied if no format is chosen.', 'fluent-booking'),
             'Customize the questions asked on the booking page'                                => __('Customize the questions asked on the booking page', 'fluent-booking'),
