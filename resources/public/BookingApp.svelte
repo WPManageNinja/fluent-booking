@@ -139,13 +139,16 @@
 
         let formattedDuration = [];
         if (days > 0) {
-            formattedDuration.push(days + ' ' + i18('Days'));
+            const unit = days > 1 ? i18('Days') : i18('Day');
+            formattedDuration.push(days + ' ' + unit);
         }
         if (hours > 0) {
-            formattedDuration.push(hours + ' ' + i18('Hours'));
+            const unit = hours > 1 ? i18('Hours') : i18('Hour');
+            formattedDuration.push(hours + ' ' + unit);
         }
         if (minutes > 0 || formattedDuration.length === 0) {
-            formattedDuration.push(minutes + ' ' + i18('Minutes'));
+            const unit = minutes > 1 ? i18('Minutes') : i18('Minute');
+            formattedDuration.push(minutes + ' ' + unit);
         }
         return formattedDuration.join(' ');
     }

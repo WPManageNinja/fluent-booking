@@ -58,7 +58,7 @@
                                         } ?>
                                     </span>
 
-                                    <span class="fcal_slot_duration fcal_slot_location">
+                                    <span class="fcal_slot_location">
                                         <?php
                                         if (count($event->location_settings) > 1) { ?>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin">
@@ -73,6 +73,10 @@
                                             echo wp_kses_post($event->locations);
                                         } ?>
                                     </span>
+
+                                    <?php if ($event->payment_html) { ?>
+                                        <?php echo $event->payment_html; ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <button class="book_now">
