@@ -65,7 +65,9 @@ $whiteBG: #ffffff;
   }
 
   .fcal_slot {
-    .fcal_slot_duration {
+    .fcal_slot_duration,
+    .fcal_slot_location,
+    .fcal_slot_payment_icon {
       color: $color_2;
     }
     .book_now {
