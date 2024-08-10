@@ -249,6 +249,7 @@ class FrontEndHandler
             if (!isset($calendarEvents[$event->calendar_id])) {
                 $calendarEvents[$event->calendar_id] = [];
             }
+            $event->payment_html = $event->getPaymentHtml();
             $event->durations = $event->getAvailableDurations();
             $event->description = $event->getDescription();
             $event->short_description = Helper::excerpt($event->description);
@@ -360,6 +361,7 @@ class FrontEndHandler
         }
 
         foreach ($calendarEvents as $event) {
+            $event->payment_html = $event->getPaymentHtml();
             $event->public_url = $event->getPublicUrl();
             $event->durations = $event->getAvailableDurations();
             $event->description = $event->getDescription();
@@ -591,6 +593,11 @@ class FrontEndHandler
             'start_day'      => $startDay,
             'i18'            => [
                 'Timezone'                      => __('Timezone', 'fluent-booking'),
+                'Day'                           => __('Day', 'fluent-booking'),
+                'Days'                          => __('Days', 'fluent-booking'),
+                'Hour'                          => __('Hour', 'fluent-booking'),
+                'Hours'                         => __('Hours', 'fluent-booking'),
+                'Minute'                        => __('Minute', 'fluent-booking'),
                 'Minutes'                       => __('Minutes', 'fluent-booking'),
                 'Enter Details'                 => __('Enter Details', 'fluent-booking'),
                 'Summary'                       => __('Summary', 'fluent-booking'),
