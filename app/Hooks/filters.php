@@ -67,6 +67,10 @@ $app->addFilter('fluent_booking/calendar_setting_menu_items', function ($items, 
         $settings['booking_title'] = '';
     }
 
+    if (!isset($settings['submit_button_text'])) {
+        $settings['submit_button_text'] = '';
+    }
+
     if (!isset($settings['can_not_cancel'])) {
         $enabled = Arr::get($settings, 'can_cancel') == 'no' ? true : false;
         $settings['can_not_cancel'] = [
