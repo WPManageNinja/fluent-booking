@@ -38,11 +38,14 @@ class CalendarController extends Controller
             $query->where('status', '!=', 'expired')
                 ->where($applySearchFilter);
             }])
-            ->where('status', '!=', 'expired')
-            ->whereHas('slots', $applySearchFilter);
+            ->where('status', '!=', 'expired');
+
+        if (!empty($search)) {
+            $calendarsQuery->whereHas('slots', $applySearchFilter);
+        }
 
         if (!empty($calendarType) && $calendarType != 'all') {
-            $calendarsQuery = $calendarsQuery->where('type', $calendarType);
+            $calendarsQuery->where('type', $calendarType);
         }
 
         $calendarsQuery = $calendarsQuery->latest();
