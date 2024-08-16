@@ -171,13 +171,18 @@ class TimeSlotService
 
         $fromDate = gmdate('Y-m-d', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $toDate = gmdate('Y-m-d', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        
+
         $availableSlots = $slots[$fromDate] ?? [];
         
         if ($fromDate != $toDate) {
             $availableSlots = array_merge($availableSlots, $slots[$toDate] ?? []);
         }
 
+        return $this->isSlotExists($availableSlots, $fromTimeStamp, $toTimeStamp);
+    }
+
+    protected function isSlotExists($availableSlots, $fromTimeStamp, $toTimeStamp)
+    {
         $left = 0;
         $right = count($availableSlots) - 1;
 

@@ -177,6 +177,9 @@ $whiteBG: #ffffff;
       }
       span {
         margin-top: -0.2rem;
+        &.fcal_multi_time {
+            margin-left: 1.5rem;
+        }
       }
     }
     .fcal_remaining_spot {

@@ -25,6 +25,84 @@ class BookingService
             'host_user_id' => $calendarSlot->user_id
         ];
 
+        $data = self::prepareBookingData($data, $calendarSlot);
+
+        $additionalGuests = Arr::get($data, 'additional_guests', []);
+
+        $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
+
+        $bookingData['group_id'] = self::getGroupId($calendarSlot, $bookingData);
+
+        $bookingData['event_type'] = $calendarSlot->event_type;
+
+        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot, $customFieldsData);
+
+        if (is_wp_error($bookingData)) {
+            return $bookingData;
+        }
+
+        return self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
+    }
+
+    public static function createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests)
+    {
+        if (is_array($bookingData['start_time'])) {
+            return self::createMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
+        }
+
+        do_action('fluent_booking/before_booking', $bookingData, $calendarSlot);
+
+        $booking = Booking::create($bookingData);
+
+        self::attachHosts($booking, $calendarSlot);
+        self::updateMetas($booking, $customFieldsData, $additionalGuests);
+
+        $booking->load('calendar');
+
+        // this pre hook is for early actions that require for remote calendars and locations
+        do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+
+        // We are just renewing this as this may have been changed by the pre hook
+        $booking = Booking::find($booking->id);
+        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+
+        return $booking;
+    }
+
+    public static function createMultiBooking($data, $calendarSlot, $customFieldsData, $additionalGuests)
+    {
+        $booking = [];
+        $lastBooking = end($data['start_time']);
+        $totalBooking = count($data['start_time']);
+        $bookingTimes = array_combine($data['start_time'], $data['end_time']);
+
+        foreach ($bookingTimes as $startTime => $endTime) {
+            $bookingData = $data;
+
+            $bookingData['start_time'] = $startTime;
+            $bookingData['end_time'] = $endTime;
+            
+            $isConfRequired = $calendarSlot->isConfirmationRequired($startTime);
+            $bookingData['status'] = $isConfRequired ? 'pending' : $data['status'];
+            
+            if (Arr::get($data, 'payment_method')) {
+                if ($startTime == $lastBooking) {
+                    $bookingData['quantity'] = $totalBooking;
+                } else {
+                    $bookingData['status'] = !$isConfRequired ? 'scheduled' : 'pending';
+                    $bookingData['payment_status'] = '';
+                    $bookingData['payment_method'] = '';
+                }
+            }
+
+            $booking = self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
+        }
+
+        return $booking;
+    }
+
+    private static function prepareBookingData($data, $calendarSlot)
+    {
         if (empty($data['first_name']) && !empty($data['name'])) {
             $nameArray = explode(' ', trim($data['name']));
             $data['first_name'] = array_shift($nameArray);
@@ -54,40 +132,11 @@ class BookingService
             $data['location_details'] = LocationService::getLocationDetails($calendarSlot, [], []);
         }
 
-        $additionalGuests = Arr::get($data, 'additional_guests', []);
+        return $data;
+    }
 
-        $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
-
-        if ($calendarSlot->isMultiGuestEvent()){
-            $event = Booking::select('group_id')
-                ->where('event_id', $calendarSlot->id)
-                ->where('calendar_id', $calendarSlot->calendar_id)
-                ->where('start_time', $bookingData['start_time'])
-                ->first();
-
-            $bookingData['group_id'] = $event ? $event->group_id : null;
-        }
-
-        $bookingData['event_type'] = $calendarSlot->event_type;
-
-        $bookingData = apply_filters('fluent_booking/booking_data', $bookingData, $calendarSlot, $customFieldsData);
-
-        if (is_wp_error($bookingData)) {
-            return $bookingData;
-        }
-
-        do_action('fluent_booking/before_booking', $bookingData, $calendarSlot);
-
-        $booking = Booking::create($bookingData);
-
-        if ($customFieldsData) {
-            Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
-        }
-
-        if ($additionalGuests) {
-            Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
-        }
-        
+    private static function attachHosts($booking, $calendarSlot)
+    {
         $hosts = [$booking->host_user_id];
         if ($calendarSlot->isOneOffEvent()) {
             $hosts = $calendarSlot->getHostIds();
@@ -99,17 +148,32 @@ class BookingService
         }
 
         $booking->hosts()->attach($hostData);
+    }
 
-        $booking->load('calendar');
+    protected static function getGroupId($calendarSlot, $bookingData)
+    {
+        if (!$calendarSlot->isMultiGuestEvent()) {
+            return null;
+        }
 
-        // this pre hook is for early actions that require for remote calendars and locations
-        do_action('fluent_booking/pre_after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+        $event = Booking::select('group_id')
+            ->where('event_id', $calendarSlot->id)
+            ->where('calendar_id', $calendarSlot->calendar_id)
+            ->where('start_time', $bookingData['start_time'])
+            ->first();
 
-        // We are just renewing this as this may have been changed by the pre hook
-        $booking = Booking::find($booking->id);
-        do_action('fluent_booking/after_booking_' . $booking->status, $booking, $calendarSlot, $bookingData);
+        return $event ? $event->group_id : null;
+    }
 
-        return $booking;
+    private static function updateMetas($booking, $customFieldsData, $additionalGuests)
+    {
+        if ($customFieldsData) {
+            Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
+        }
+
+        if ($additionalGuests) {
+            Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
+        } 
     }
 
     public static function getBookingConfirmationHtml(Booking $booking, $actionType = 'confirmation')

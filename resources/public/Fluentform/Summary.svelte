@@ -2,7 +2,6 @@
     import { util, i18 } from '../util.js';
 
     export let timezone, slot, dateFormatter, selectedDateTime;
-
 </script>
 
 
