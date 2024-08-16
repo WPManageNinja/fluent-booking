@@ -22,6 +22,10 @@ class TimeSlotServiceHandler
             }
         }
 
+        if ($calendarEvent->allowMultiBooking()) {
+            return new \FluentBookingPro\App\Services\MultiTimeSlotService($calendar, $calendarEvent);
+        }
+
         return new TimeSlotService($calendar, $calendarEvent);
     }
 

@@ -4,7 +4,10 @@
     {/each}
     {#each days as day}
         {#if day.enabled}
-            <span role="button" tabindex="0" aria-label="Select Day {day.name}" class="day day-enabled { (selectedDate === day.date) ? 'day_is_selected' : ''}" on:keypress={()=>daySelected(day)} on:click={()=>daySelected(day)}>
+            <span role="button" tabindex="0" aria-label="Select Day {day.name}"
+                class="day day-enabled { (isSelectedDay(selectedDate, day)) ? 'day_is_selected' : ''}"
+                on:keypress={()=>daySelected(day)}
+                on:click={()=>daySelected(day)}>
                 <span class={formatDate(currentDate) == day.date ? 'is-today' : ''}>{getDateTimeStringI18(day.name, 'mNumber')}</span>
             </span>
         {:else}
@@ -16,18 +19,33 @@
 </div>
 
 <script>
-    import {getDateTimeStringI18} from '../util';
-    import {createEventDispatcher} from 'svelte';
+    import { getDateTimeStringI18 } from '../util';
+    import { createEventDispatcher } from 'svelte';
 
     export var headers = [];
     export let days = [];
     export let selectedDate = '';
+    export let selectedDateTimes = [];
+    export let isMultiBooking;
 
     let dispatch = createEventDispatcher();
 
     function daySelected(day) {
         selectedDate = day.date;
         dispatch('dayClick', day);
+    }
+
+    function isSelectedDay(selectedDate, day) {
+        if (selectedDate == day.date) {
+            return true;
+        }
+        if (isMultiBooking) {
+            return selectedDateTimes.some(dateTime => {
+                const date = dateTime.start.split(' ')[0];
+                return date == day.date;
+            });
+        }
+        return false;
     }
 
     let currentDate = new Date();

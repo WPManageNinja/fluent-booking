@@ -808,15 +808,30 @@ class FrontEndHandler
             return;
         }
 
-        $startDate = sanitize_text_field(Arr::get($postedData, 'start_date'));
-        $timezone  = sanitize_text_field(Arr::get($postedData, 'timezone', 'UTC'));
+        $startDate = Arr::get($postedData, 'start_date');
+        $timezone = sanitize_text_field(Arr::get($postedData, 'timezone', 'UTC'));
 
-        $startDateTime = DateTimeHelper::convertToUtc($startDate, $timezone);
-        $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        if (is_array($startDate)) {
+            $startDateTime = array_slice(
+                array_map(function($date) use ($timezone) {
+                    return DateTimeHelper::convertToUtc(sanitize_text_field($date), $timezone);
+                }, $startDate), 0, $calendarEvent->multiBookingLimit()
+            );
+            $endDateTime = array_map(function($date) use ($duration) {
+                return gmdate('Y-m-d H:i:s', strtotime($date) + ($duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            }, $startDateTime);
+        }
+
+        if (is_string($startDate)) {
+            $startDate = sanitize_text_field($startDate);
+            $startDateTime = DateTimeHelper::convertToUtc($startDate, $timezone);
+            $endDateTime = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        }
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($timezone),
             'start_time'       => $startDateTime,
+            'end_time'         => $endDateTime,
             'name'             => sanitize_text_field($postedData['name']),
             'email'            => sanitize_email($postedData['email']),
             'message'          => sanitize_textarea_field(wp_unslash(Arr::get($postedData, 'message', ''))),
@@ -833,7 +848,8 @@ class FrontEndHandler
             $bookingData['status'] = 'pending';
         }
 
-        $selectedLocation = LocationService::getLocationDetails($calendarEvent, Arr::get($postedData, 'location_config', []), $postedData);
+        $locationConfig = Arr::get($postedData, 'location_config', []);
+        $selectedLocation = LocationService::getLocationDetails($calendarEvent, $locationConfig, $postedData);
         if ($selectedLocation['type'] == 'phone_guest') {
             $bookingData['phone'] = $selectedLocation['description'];
         }
