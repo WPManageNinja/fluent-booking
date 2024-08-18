@@ -124,7 +124,7 @@ class FrontEndHandler
                 $existingBooking->save();
 
                 $existingBooking->updateMeta('previous_meeting_time', $previousBooking->start_time);
-                
+
                 $reschedulingMessage = sanitize_textarea_field(Arr::get($postedData, 'rescheduling_reason'));
                 if ($reschedulingMessage) {
                     $existingBooking->updateMeta('reschedule_reason', $reschedulingMessage);

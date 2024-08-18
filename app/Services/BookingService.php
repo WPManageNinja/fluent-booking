@@ -44,7 +44,7 @@ class BookingService
         return self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
     }
 
-    public static function createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests)
+    public static function createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests, $bookingIds = [])
     {
         if (is_array($bookingData['start_time'])) {
             return self::createMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
@@ -56,6 +56,7 @@ class BookingService
 
         self::attachHosts($booking, $calendarSlot);
         self::updateMetas($booking, $customFieldsData, $additionalGuests);
+        self::updateParentInfo($booking, $bookingIds);
 
         $booking->load('calendar');
 
@@ -72,6 +73,8 @@ class BookingService
     public static function createMultiBooking($data, $calendarSlot, $customFieldsData, $additionalGuests)
     {
         $booking = [];
+        $bookingIds = [];
+        $createdBookingIds = [];
         $lastBooking = end($data['start_time']);
         $totalBooking = count($data['start_time']);
         $bookingTimes = array_combine($data['start_time'], $data['end_time']);
@@ -81,12 +84,13 @@ class BookingService
 
             $bookingData['start_time'] = $startTime;
             $bookingData['end_time'] = $endTime;
-            
+
             $isConfRequired = $calendarSlot->isConfirmationRequired($startTime);
             $bookingData['status'] = $isConfRequired ? 'pending' : $data['status'];
             
             if (Arr::get($data, 'payment_method')) {
                 if ($startTime == $lastBooking) {
+                    $createdBookingIds = $bookingIds;
                     $bookingData['quantity'] = $totalBooking;
                 } else {
                     $bookingData['status'] = !$isConfRequired ? 'scheduled' : 'pending';
@@ -95,7 +99,9 @@ class BookingService
                 }
             }
 
-            $booking = self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
+            $booking = self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests, $createdBookingIds);
+
+            $bookingIds[] = $booking->id;
         }
 
         return $booking;
@@ -173,7 +179,16 @@ class BookingService
 
         if ($additionalGuests) {
             Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
-        } 
+        }
+    }
+
+    private static function updateParentInfo($booking, $bookingIds)
+    {
+        if (!$bookingIds) {
+            return;
+        }
+
+        Booking::whereIn('id', $bookingIds)->update(['parent_id' => $booking->id]);
     }
 
     public static function getBookingConfirmationHtml(Booking $booking, $actionType = 'confirmation')
@@ -264,8 +279,14 @@ class BookingService
         if ($booking->status == 'scheduled') {
             // translators: %s is the name of the person scheduled
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
+
+            $requestType = sanitize_text_field(Arr::get($_REQUEST, 'type'));
+            if ($requestType == 'confirmation' && $calendarSlot->allowMultiBooking()) {
+                $bookingTime = (array) $sections['when']['content'];
+                $sections['when']['content'] = array_merge($bookingTime, $booking->getOtherBookingTimes());
+            }
         }
-        
+
         // translators: %s is the status of the meeting
         $title = sprintf(__('Your meeting has been %s', 'fluent-booking'), $bookingStatus);
         if ($booking->status == 'pending' && $booking->payment_status != 'pending') {
