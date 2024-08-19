@@ -34,6 +34,7 @@ defined( 'ABSPATH' ) || exit;
  */
 $app->addAction('init', 'BlockEditorHandler@init');
 $app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
+$app->addAction('wp_ajax_fluent_booking_export_calendar', 'DataExporter@exportCalendar');
 
 $app->addAction('fluent_booking/after_calendar_event_landing_page', function () {
     echo \FluentBooking\App\Services\LandingPage\LandingPageHelper::getPoweredByHtml();

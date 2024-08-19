@@ -698,7 +698,7 @@ class CalendarController extends Controller
 
         $calendar = Calendar::findOrFail($newCalendarId);
 
-        $originalEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
+        $originalEvent = CalendarSlot::with('events_meta')->where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $clonedEvent = $originalEvent->replicate();
 
@@ -712,17 +712,9 @@ class CalendarController extends Controller
 
         $clonedEvent->save();
 
-        $eventsMeta = $originalEvent->getCalendarEventsMeta();
-
-        $integrationsMeta = $originalEvent->getIntegrationsMeta();
+        $eventsMeta = $originalEvent->events_meta;
 
         foreach ($eventsMeta as $meta) {
-            $clonedMeta = $meta->replicate();
-            $clonedMeta->object_id = $clonedEvent->id;
-            $clonedMeta->save();
-        }
-
-        foreach ($integrationsMeta as $meta) {
             $clonedMeta = $meta->replicate();
             $clonedMeta->object_id = $clonedEvent->id;
             $clonedMeta->save();

@@ -4,10 +4,41 @@ namespace FluentBooking\App\Hooks\Handlers;
 
 
 use FluentBooking\App\Models\Booking;
+use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\PermissionManager;
 
 class DataExporter
 {
+    public function exportCalendar()
+    {
+        $calendarId = (int)$_REQUEST['calendar_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+        if (!$calendarId) {
+            die(esc_html__('Please provide Calendar ID', 'fluent-booking'));
+        }
+
+        $calendar = Calendar::with(['events' => function ($query) {
+            $query->with('events_meta');
+        }])->find($calendarId);
+
+        if (!$calendar) {
+            die(esc_html__('Calendar not found', 'fluent-booking'));
+        }
+
+        if (!PermissionManager::hasAllCalendarAccess() && $calendar->user_id != get_current_user_id()) {
+            die(esc_html__('You do not have permission to export data', 'fluent-booking'));
+        }
+
+        $calendarData = $calendar->toArray();
+
+        $calendarData = apply_filters('fluent_booking/exporting_calendar_data_json', $calendarData, $calendar);
+
+        header('Content-Type: application/json');
+        header('Content-Disposition: attachment; filename=Calendar-' . $calendarId . '.json');
+        echo json_encode($calendarData, JSON_PRETTY_PRINT); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        exit();
+    }
+
     public function exportBookingHosts()
     {
         if (!PermissionManager::hasAllCalendarAccess()) {
@@ -103,5 +134,4 @@ class DataExporter
         fclose($output); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         exit();
     }
-
 }

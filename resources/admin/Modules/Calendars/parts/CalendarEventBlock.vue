@@ -31,6 +31,9 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
+                            <el-dropdown-item command="export"><el-icon><Download /></el-icon>
+                                {{ $t('Export') }}
+                            </el-dropdown-item>
                             <el-dropdown-item command="delete"><el-icon><Delete /></el-icon>
                                 {{ $t('Delete') }}
                             </el-dropdown-item>
@@ -210,7 +213,7 @@
 
 <script>
 import EachSlot from "./EachSlot";
-import { Setting, User, Right, MoreFilled, Delete, CopyDocument, Link } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled, Delete, CopyDocument, Download, Link } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings";
 import SaveButton from "../../../Components/Buttons/SaveButton.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
@@ -230,6 +233,7 @@ export default {
         MoreFilled,
         Delete,
         CopyDocument,
+        Download,
         Link,
         SaveButton,
         ProNoticeDialog
@@ -327,6 +331,11 @@ export default {
                 return;
             }
 
+            if (command == 'export') {
+                this.exportCalendar();
+                return;
+            }
+
             if (command == 'delete') {
                 this.$confirm(this.$t('Are you sure you want to delete this calendar? All the associate bookings and data will be deleted'), this.$t('Delete Calendar'), {
                     confirmButtonText: this.$t('Delete'),
@@ -364,7 +373,13 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
-        }
+        },
+        exportCalendar() {
+            location.href = window.ajaxurl + '?' + jQuery.param({
+                action: 'fluent_booking_export_calendar',
+                calendar_id: this.calendar.id
+            });
+        },
     },
     mounted() {
         if (this.calendar.type == 'team') {
