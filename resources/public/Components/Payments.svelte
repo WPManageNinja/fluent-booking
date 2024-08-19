@@ -36,14 +36,26 @@
 </div>
 <script>
     import { i18 } from '../util.js';
+    import { onMount } from "svelte";
 
     export let field;
     export let form;
     export let duration;
+    export let quantity;
 
     const multiPayments = field.multi_payment_items;
     const paymentMethods = Object.values(field?.payment_methods || {});
     const totalMethod = Object.keys(field?.payment_methods || {}).length;
 
     form[field.name] = form[field.name] || (totalMethod !=0 && paymentMethods[0].name);
+
+    onMount(() => {
+        const paymentElements = document.querySelectorAll('.fcal_payment_amount');
+        paymentElements.forEach(element => {
+            if (element.textContent && quantity > 1) {
+                const currentValue = element.textContent;
+                element.textContent = currentValue * quantity;
+            }
+        });
+    });
 </script>

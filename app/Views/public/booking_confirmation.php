@@ -24,9 +24,11 @@
                 <div class="fcal_confirm_section_title">
                     <h4><?php echo esc_html($section['title']); ?></h4>
                 </div>
-                <div class="fcal_confirm_section_content">
-                    <?php echo wp_kses_post($section['content']); ?>
-                </div>
+                <?php foreach ((array)$section['content'] as $content) : ?>
+                    <div class="fcal_confirm_section_content">
+                        <?php echo wp_kses_post($content); ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         <?php endforeach; ?>
 

@@ -71,6 +71,13 @@ $app->addFilter('fluent_booking/calendar_setting_menu_items', function ($items, 
         $settings['submit_button_text'] = '';
     }
 
+    if (!isset($settings['multiple_booking'])) {
+        $settings['multiple_booking'] = [
+            'enabled' => false,
+            'limit'   => 5
+        ];
+    }
+
     if (!isset($settings['can_not_cancel'])) {
         $enabled = Arr::get($settings, 'can_cancel') == 'no' ? true : false;
         $settings['can_not_cancel'] = [
