@@ -20,21 +20,25 @@
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
     const dateFormatter = appData.date_formatter;
+    const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
+
     let form = getPreSelectsFormData();
 
     let appReady = false;
-    let bookingConfirmationHtml = '';
     let component = null;
     let isBookingDone = false;
+    let bookingConfirmationHtml = '';
 
     let skipCalendar = !!slot.pre_selects?.time;
     let selectedDate = false;
     let selectedDateTime = {};
+    let selectedDateTimes = [];
     let isLoadingDates = false;
 
     let showingPayments = false;
     let timezone = '';
+    let quantity = 1;
     let wrapperWidth = 800;
 
     let fluentFormDateTimeSelected = {};
@@ -116,10 +120,29 @@
     function spotSelected(spot) {
         selectedDateTime = spot;
     }
+    
+    function spotClicked(spot) {
+        if (!spot) {
+            selectedDateTimes = [];
+            return;
+        }
+        if (!isMultiBooking) {
+            selectedDateTimes = [spot];
+            return;
+        }
+        const indx = selectedDateTimes.findIndex(item => item.start === spot.start);
+        if (indx > -1) {
+            selectedDateTimes.splice(indx, 1);
+        } else {
+            selectedDateTimes.push(spot);
+        }
+        quantity = selectedDateTimes.length || 1;
+        selectedDateTimes = [...selectedDateTimes];
+    }
 
     function durationSelected(value) {
         duration = value;
-        maybeUpdatePayment(value)
+        maybeUpdatePayment(value);
     }
 
     function getDuration(duration) {
@@ -161,7 +184,6 @@
         if (appData.multi_payment_items) {
             slot.total_payment = appData.multi_payment_items[duration]?.value;
         }
-
         if (appData.multi_payment_woo_ids) {
             slot.total_payment = appData.multi_payment_woo_ids[duration]?.value;
         }
@@ -177,7 +199,6 @@
         bookingConfirmationHtml = confirmation.response_html;
         // remove height css to .fcal_calendar_inner class
         const calendar = document.getElementsByClassName("fcal_calendar_inner")[0];
-
         // check if pushState is supported
         if (window.history.pushState) {
             // add url params to the current url with browser history api
@@ -187,7 +208,6 @@
             urlParams.set('meeting_hash', confirmation.booking_hash);
             window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
         }
-
         calendar.style.height = 'auto';
         isBookingDone = true;
     }
@@ -315,17 +335,9 @@
                                         </div>
                                     {/if}
                                     <div class="slot_timing fcal_icon_item">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 18 18"
-                                            fill="none">
-                                            <path
-                                                d="M16.5 9C16.5 13.14 13.14 16.5 9 16.5C4.86 16.5 1.5 13.14 1.5 9C1.5 4.86 4.86 1.5 9 1.5C13.14 1.5 16.5 4.86 16.5 9Z"
-                                                stroke="#445164" stroke-width="1.25" stroke-linecap="round"
-                                                stroke-linejoin="round"/>
-                                            <path
-                                                d="M11.7825 11.3849L9.45753 9.99745C9.05253 9.75745 8.72253 9.17995 8.72253 8.70745V5.63245"
-                                                stroke="#445164" stroke-width="1.25" stroke-linecap="round"
-                                                stroke-linejoin="round"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M16.5 9C16.5 13.14 13.14 16.5 9 16.5C4.86 16.5 1.5 13.14 1.5 9C1.5 4.86 4.86 1.5 9 1.5C13.14 1.5 16.5 4.86 16.5 9Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M11.7825 11.3849L9.45753 9.99745C9.05253 9.75745 8.72253 9.17995 8.72253 8.70745V5.63245" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
                                         {#if slot.settings?.multi_duration?.enabled}
                                             {#if selectedDateTime.start}
@@ -351,10 +363,7 @@
                                         {#if slot.location_settings }
                                             <div class="fcal_multi_locations">
                                                 <div class="fcal_multi_location_title">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="feather feather-map-pin">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin">
                                                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                                                         <circle cx="12" cy="10" r="3"/>
                                                     </svg> {slot.location_settings.length} {i18('location options')}
@@ -377,46 +386,31 @@
                                     {#if !isFluentform && slot.total_payment && slot.total_payment != 0 }
                                         <div class="fcal_slot_payment_item">
                                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
-                                                <path fill="currentColor" d="M256 640v192h640V384H768v-64h150.976c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H233.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096c-2.688-5.184-4.224-10.368-4.224-24.576V640h64z"></path>
-                                                <path fill="currentColor" d="M768 192H128v448h640V192zm64-22.976v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H105.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096C65.536 682.432 64 677.248 64 663.04V169.024c0-14.272 1.472-19.456 4.288-24.64a29.056 29.056 0 0 1 12.096-12.16C85.568 129.536 90.752 128 104.96 128h685.952c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64z"></path>
-                                                <path fill="currentColor" d="M448 576a160 160 0 1 1 0-320 160 160 0 0 1 0 320zm0-64a96 96 0 1 0 0-192 96 96 0 0 0 0 192z"></path>
-                                            </svg> {@html slot.currency}{slot.total_payment}
+                                                <path fill="currentColor" d="M256 640v192h640V384H768v-64h150.976c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H233.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096c-2.688-5.184-4.224-10.368-4.224-24.576V640h64z"></path><path fill="currentColor" d="M768 192H128v448h640V192zm64-22.976v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H105.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096C65.536 682.432 64 677.248 64 663.04V169.024c0-14.272 1.472-19.456 4.288-24.64a29.056 29.056 0 0 1 12.096-12.16C85.568 129.536 90.752 128 104.96 128h685.952c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64z"></path><path fill="currentColor" d="M448 576a160 160 0 1 1 0-320 160 160 0 0 1 0 320zm0-64a96 96 0 1 0 0-192 96 96 0 0 0 0 192z"></path>
+                                            </svg> {@html slot.currency}{slot.total_payment*quantity}
                                         </div>
                                     {/if}
-                                    {#if selectedDateTime.start}
-                                        <div class="slot_time_range fcal_icon_item">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                                <path d="M6 1.5V3.75" stroke="#445164" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M12 1.5V3.75" stroke="#445164" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M2.625 6.8175H15.375" stroke="#445164" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z" stroke="#445164" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M11.771 10.275H11.7778" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M11.771 12.525H11.7778" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M8.99661 10.275H9.00335" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M8.99661 12.525H9.00335" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M6.22073 10.275H6.22747" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M6.22073 12.525H6.22747" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-
-                                            <span>
-                                                {#if slot.time_format == '24' }
-                                                    {util.dateTimeI18(selectedDateTime.start, 'HH:mm')}
-                                                    - {util.dateTimeI18(selectedDateTime.end, 'HH:mm')},
-                                                {:else}
-                                                    {util.dateTimeI18(selectedDateTime.start, 'hh:mma')}
-                                                    - {util.dateTimeI18(selectedDateTime.end, 'hh:mma')},
+                                    {#if selectedDateTimes.length > 0}
+                                        {#each selectedDateTimes as selectedTime, indx}
+                                            <div class="slot_time_range fcal_icon_item">
+                                                {#if indx == 0}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                        <path d="M6 1.5V3.75" stroke="#445164" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 1.5V3.75" stroke="#445164" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.625 6.8175H15.375" stroke="#445164" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z" stroke="#445164" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.771 10.275H11.7778" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.771 12.525H11.7778" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.99661 10.275H9.00335" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.99661 12.525H9.00335" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.22073 10.275H6.22747" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.22073 12.525H6.22747" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
                                                 {/if}
-                                                {util.dateTimeI18(selectedDateTime.start, dateFormatter)}
-                                            </span>
-                                        </div>
+                                                <span class="{indx > 0 ? 'fcal_multi_time' : ''}">
+                                                    {#if slot.time_format == '24' }
+                                                        {util.dateTimeI18(selectedTime.start, 'HH:mm')} - {util.dateTimeI18(selectedTime.end, 'HH:mm')},
+                                                    {:else}
+                                                        {util.dateTimeI18(selectedTime.start, 'hh:mma')} - {util.dateTimeI18(selectedTime.end, 'hh:mma')},
+                                                    {/if}
+                                                    {util.dateTimeI18(selectedTime.start, dateFormatter)}
+                                                </span>                                                
+                                            </div>
+                                        {/each}
                                         <div class="slot_time_range slot_timezone fcal_icon_item">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                                viewBox="0 0 18 18" fill="none">
-                                                <path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M5.99995 2.25H6.74995C5.28745 6.63 5.28745 11.37 6.74995 15.75H5.99995" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M11.25 2.25C12.7125 6.63 12.7125 11.37 11.25 15.75" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M2.25 12V11.25C6.63 12.7125 11.37 12.7125 15.75 11.25V12" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M2.25 6.74995C6.63 5.28745 11.37 5.28745 15.75 6.74995" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                <path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.99995 2.25H6.74995C5.28745 6.63 5.28745 11.37 6.74995 15.75H5.99995" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.25 2.25C12.7125 6.63 12.7125 11.37 11.25 15.75" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.25 12V11.25C6.63 12.7125 11.37 12.7125 15.75 11.25V12" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.25 6.74995C6.63 5.28745 11.37 5.28745 15.75 6.74995" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                             <span>{timezone}</span>
                                         </div>
@@ -425,8 +419,7 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-6fbb019e="">
                                                     <path fill="currentColor" d="M192 128v768h640V128zm-32-64h704a32 32 0 0 1 32 32v832a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32m160 448h384v64H320zm0-192h192v64H320zm0 384h384v64H320z"></path>
                                                 </svg>
-                                                <span>{selectedDateTime.remaining} {i18('spots remaining')}</span>
-                                                
+                                                <span>{selectedDateTime.remaining} {i18('spots remaining')}</span>   
                                             </div>
                                         {/if}
                                     {/if}
@@ -448,12 +441,14 @@
                                 {slot}
                                 {selectedDate}
                                 {selectedDateTime}
+                                {selectedDateTimes}
                                 bind:duration={duration}
                                 bind:timezone={timezone}
                                 bind:skipCalendar={skipCalendar}
                                 bind:isLoadingDates={isLoadingDates}
                                 on:dayClicked={(e) => {dayClicked(e.detail)}}
                                 on:spotSelected={(e) => {spotSelected(e.detail)}}
+                                on:spotClicked={(e) => {spotClicked(e.detail)}}
                                 on:dateOnFluentForm={(e) => {fluentFormDateHandle(e)}}
                                 on:formatHours={(e) => {formatHours(e.detail)}}
                                 on:timezoneChanged={(e) => {resetSelection()}}
@@ -497,9 +492,11 @@
                                     {slot}
                                     {timezone}
                                     {duration}
+                                    {quantity}
                                     bind:form={form}
                                     on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
                                     bind:spot={selectedDateTime}
+                                    bind:spots={selectedDateTimes}
                                     bind:formFields={appData.form_fields}
                                     on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
                                 >
@@ -510,6 +507,7 @@
                                                 {timezone}
                                                 {dateFormatter}
                                                 {selectedDateTime}
+                                                {selectedDateTimes}
                                             />
                                         {/if}
                                     </div>

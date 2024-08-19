@@ -35,10 +35,9 @@ class CalendarController extends Controller
         };
 
         $calendarsQuery = Calendar::with(['slots' => function($query) use ($applySearchFilter) {
-            $query->where('status', '!=', 'expired')
-                ->where($applySearchFilter);
-            }])
-            ->where('status', '!=', 'expired');
+            $query->where($applySearchFilter);
+        }])
+        ->where('status', '!=', 'expired');
 
         if (!empty($search)) {
             $calendarsQuery->whereHas('slots', $applySearchFilter);

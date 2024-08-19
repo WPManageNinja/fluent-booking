@@ -103,7 +103,7 @@
                                             </svg>
                                         </div>
                                 {:else if field.type === 'payment' && slot.type === 'paid' && hasPaymentItem()}
-                                    <Payments field={field} bind:form={form} {duration}/>
+                                    <Payments field={field} bind:form={form} {duration} {quantity}/>
                                 {:else if field.type === 'hidden'}
                                     <input type="hidden" bind:value={form[field.name]}/>
                                 {/if}
@@ -180,7 +180,9 @@
 
     export let timezone;
     export let duration;
+    export let quantity;
     export let formFields;
+    export let spots;
     export let spot;
     export let slot;
 
@@ -230,6 +232,13 @@
             return false;
         }
         return !!(slot.total_payment);
+    }
+
+    function getStartDate() {
+        if (spots && spots.length > 1) {
+            return spots.map(spot => spot.start);
+        }
+        return spot.start;
     }
 
     let getSubTotal = (items) => {
@@ -291,18 +300,19 @@
     };
 
     function submitForm(e) {
-        if (!validateForm()) return;
+        if (submitting || !validateForm()) {
+            return;
+        }
+
         const postdata = {
             ...form,
             timezone,
             duration,
-            start_date: spot.start,
+            start_date: getStartDate(),
             event_id: slot.id,
             source_url: currentUrl,
             action: 'fluent_cal_schedule_meeting'
         }
-
-        if (submitting) return;
 
         errors = '';
         submitting = true;

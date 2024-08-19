@@ -157,6 +157,16 @@ class CalendarSlot extends Model
         return $this->isGroup() || $this->isTeamEvent() || $this->isOneOffEvent();
     }
 
+    public function allowMultiBooking()
+    {
+        return Arr::isTrue($this->settings, 'multiple_booking.enabled');
+    }
+
+    public function multiBookingLimit()
+    {
+        return Arr::get($this->settings, 'multiple_booking.limit', 5);
+    }
+
     public function getAuthorProfile($public = true, $userID = null)
     {
         $userID = $userID ?: $this->user_id;
@@ -660,26 +670,27 @@ class CalendarSlot extends Model
 
     public function isConfirmationRequired($bookingStartTime, $bookingCreatedTime = null)
     {
-        if ($this->isConfirmationEnabled()) {
-            $type = Arr::get($this->settings, 'requires_confirmation.type', 'always');
-            if ($type == 'always') {
-                return true;
-            }
-            
-            $bookingStartTime   = strtotime($bookingStartTime);
-            $bookingCreatedTime = $bookingCreatedTime ? strtotime($bookingCreatedTime) : time();
-
-            $conditionUnit  = Arr::get($this->settings, 'requires_confirmation.condition.unit', 'minutes');
-            $conditionValue = Arr::get($this->settings, 'requires_confirmation.condition.value', 0);
-
-            $conditionTime = $conditionValue * 60;
-            if ($conditionUnit == 'hours') {
-                $conditionTime = $conditionTime * 60;
-            }
-
-            return $bookingStartTime - $bookingCreatedTime < $conditionTime;
+        if (!$this->isConfirmationEnabled() || !is_string($bookingStartTime)) {
+            return false;
         }
-        return false;
+
+        $type = Arr::get($this->settings, 'requires_confirmation.type', 'always');
+        if ($type == 'always') {
+            return true;
+        }
+        
+        $bookingStartTime   = strtotime($bookingStartTime);
+        $bookingCreatedTime = $bookingCreatedTime ? strtotime($bookingCreatedTime) : time();
+
+        $conditionUnit  = Arr::get($this->settings, 'requires_confirmation.condition.unit', 'minutes');
+        $conditionValue = Arr::get($this->settings, 'requires_confirmation.condition.value', 0);
+
+        $conditionTime = $conditionValue * 60;
+        if ($conditionUnit == 'hours') {
+            $conditionTime = $conditionTime * 60;
+        }
+
+        return $bookingStartTime - $bookingCreatedTime < $conditionTime;
     }
 
     public function getCanNotCancelSettings()

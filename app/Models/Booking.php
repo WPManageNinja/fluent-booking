@@ -306,6 +306,15 @@ class Booking extends Model
         return DateTimeHelper::convertFromUtc($this->end_time, $this->person_time_zone, $format);
     }
 
+    public function getOtherBookingTimes()
+    {
+        $otherBookings = self::where('parent_id', $this->id)->get();
+
+        return $otherBookings->map(function ($otherBooking) {
+            return $otherBooking->getFullBookingDateTimeText($this->person_time_zone, true) . ' (' . $this->person_time_zone . ')';
+        })->toArray();
+    }
+
     public function getHostAndGuestDetailsHtml()
     {
         $authors = $this->getHostsDetails();

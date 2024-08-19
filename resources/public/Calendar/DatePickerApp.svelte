@@ -11,6 +11,7 @@
     export let appData;
     export let selectedDate = '';
     export let selectedDateTime = {};
+    export let selectedDateTimes = [];
     export let skipCalendar = false;
     export let isLoadingDates = false;
 
@@ -19,7 +20,8 @@
     const isFFConversational = appData.isFFConversational;
 
     const id = appData.id;
-    const isTimezoneDisabled = slot.settings?.lock_timezone?.enabled ? true : false;
+    const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
+    const isTimezoneDisabled = slot.settings?.lock_timezone?.enabled || false;
 
     const isRTL = appData.isRtl;
     let dispatch = createEventDispatcher();
@@ -122,17 +124,22 @@
         noAvailability = !hasReqMonthDate;
     }
 
+    function isSelectedDateTime(selectedDateTime, day) {
+        if (isMultiBooking) {
+            return selectedDateTimes.some(time => time.start == day.start);
+        }
+        return selectedDateTime.start == day.start;
+    }
+
     // choose what date/day gets displayed in each date box.
     function initContent() {
         headers = dayNames;
         initMonth();
     }
 
-    let firstLoading = true;
-
     let error = false;
     let errorText = '';
-
+    let firstLoading = true;
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
@@ -157,6 +164,7 @@
                     dayClick({ date: selectedDate });
                 } else {
                     selectedDate = '';
+                    dispatch('spotClicked', '');
                     dispatch('dayClicked', '');
                 }
 
@@ -281,6 +289,12 @@
         loadAvailableDates();
     }
 
+    function spotClicked(day) {
+        selectedDateTime = day;
+        slotSpotForFluentForm(day);
+        dispatch('spotClicked', day);
+    }
+
     function slotSpotConfirmed() {
         dispatch('spotSelected', selectedDateTime);
         dispatch('formatHours', formatHours);
@@ -313,12 +327,12 @@
     function resetSelection() {
         selectedDate = '';
         selectedDateTime = {};
+        selectedDateTimes = [];
         dispatch('resetSelection');
     }
 
     function convertTime12to24(time12h, formatHr) {
         const [time, modifier] = time12h.split(' ');
-
         let [hours, minutes] = time.split(':');
 
         if (formatHr === '24' && hours === '12') {
@@ -328,6 +342,7 @@
         if (modifier === 'PM' && formatHr === '24') {
             hours = parseInt(hours, 10) + 12;
         }
+
         const string = `${hours}:${minutes} ${formatHr === '12' ? `${i18(modifier)}` : ''}`;
         return getDateTimeStringI18(string, 'mNumber');
     }
@@ -356,7 +371,7 @@
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                                 <path fill="currentColor"d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
                             </svg>
-                            {:else}
+                        {:else}
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                                 <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
                             </svg>
@@ -368,7 +383,7 @@
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                                 <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0z"></path>
                             </svg>
-                            {:else}
+                        {:else}
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                                 <path fill="currentColor"d="M338.752 104.704a64 64 0 0 0 0 90.496l316.8 316.8-316.8 316.8a64 64 0 0 0 90.496 90.496l362.048-362.048a64 64 0 0 0 0-90.496L429.248 104.704a64 64 0 0 0-90.496 0z"></path>
                             </svg>
@@ -378,6 +393,8 @@
             </div>
             <Calendar
                 selectedDate="{selectedDate}"
+                isMultiBooking={isMultiBooking}
+                {selectedDateTimes}
                 {headers}
                 {days}
                 on:dayClick={(e)=>dayClick(e.detail)}
@@ -447,10 +464,10 @@
                 <div class="fcal_spot_lists">
                     {#each daySlots as day}
                         <div
-                            class="fcal_spot { selectedDateTime && selectedDateTime.start == day.start ? 'fcal_spot_selected' : '' }">
+                            class="fcal_spot { isSelectedDateTime(selectedDateTime, day) ? 'fcal_spot_selected' : '' }">
                             <div role="button" tabindex="0" aria-label="Select Time"
-                                on:click="{slotSpotForFluentForm(day)}"
-                                on:keypress="{(e) => {selectedDateTime = day}}"
+                                on:click="{spotClicked(day)}"
+                                on:keypress="{(e) => {spotClicked(day)}}"
                                 class="fcal_spot_name">
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
@@ -461,7 +478,7 @@
                                     </div>
                                 {/if}
                             </div>
-                            {#if selectedDateTime && selectedDateTime.start == day.start}
+                            {#if isSelectedDateTime(selectedDateTime, day)}
                                 {#if isFluentform}
                                     <span on:click="{slotSpotForFluentForm(day)}" on:keypress={slotSpotForFluentForm(day)}
                                         role="button" aria-label="Confirm Time" tabindex="0" class="fcal_spot_confirm">

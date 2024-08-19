@@ -134,7 +134,27 @@
                                 </div>
                             </div>
                         </el-form-item>
-    
+
+                        <el-form-item v-if="showMultipleBooking">
+                            <div class="fcal_event_card fcal_event_card_wrap">
+                                <div class="fcal_event_card_header">
+                                    <div class="card_contents">
+                                        <span class="sub-label card-title">{{ $t("Allow Multiple Booking") }}</span>
+                                        <span>{{ $t("AdvancedSettings/single_multi_booking_description") }}</span>
+                                    </div>
+                                    <div class="card_action">
+                                        <el-switch v-model="settings.multiple_booking.enabled"/>
+                                    </div>
+                                </div>
+                                <div class="fcal_event_child_card" v-if="settings.multiple_booking.enabled">
+                                    <el-form-item :label="$t('Maximum Booking Limit')">
+                                        <el-input v-model="settings.multiple_booking.limit" @input="validateLimit(settings.multiple_booking)"></el-input>
+                                        <p class="fcal_event_input_hint">{{ $t("AdvancedSettings/multiple_booking_limit_hint") }}</p>
+                                    </el-form-item>
+                                </div>
+                            </div>
+                        </el-form-item>
+
                         <el-form-item>
                             <div class="fcal_event_card fcal_event_card_wrap">
                                 <div class="fcal_event_card_header">
@@ -324,6 +344,9 @@ export default {
         showRequiresConfirmation() {
             return this.calendar_event.event_type == 'single';
         },
+        showMultipleBooking () {
+            return this.calendar_event.event_type == 'single';
+        },
         showReschedulingCondition() {
             const eventType = this.calendar_event.event_type;
             return eventType != 'single_event' && eventType != 'group_event';
@@ -382,6 +405,13 @@ export default {
                 item.condition.value = '';
             } else if (item.condition.value > limitValues[item.condition.unit]) {
                 item.condition.value = limitValues[item.condition.unit];
+            }
+        },
+        validateLimit (item) {
+            if (isNaN(item.limit) || item.limit <= 0) {
+                item.limit = '';
+            } else {
+                item.limit = Math.min(50, item.limit);
             }
         },
         changeContentEvent() {
@@ -444,6 +474,7 @@ export default {
                 submit_button_text: this.settings.submit_button_text,
                 custom_redirect: this.settings.custom_redirect,
                 requires_confirmation: this.settings.requires_confirmation,
+                multiple_booking: this.settings.multiple_booking,
                 can_not_cancel: this.settings.can_not_cancel,
                 can_not_reschedule: this.settings.can_not_reschedule,
                 slug: this.calendarEventSlug
