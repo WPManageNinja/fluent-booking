@@ -102,6 +102,12 @@ class CalendarSlot extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function events_meta()
+    {
+        return $this->hasMany(Meta::class, 'object_id', 'id')
+            ->whereIn('object_type', ['calendar_event', 'integration']);
+    }
+
     public function isGroup()
     {
         return $this->event_type == 'group';
@@ -989,7 +995,7 @@ class CalendarSlot extends Model
         $eventsMeta = Meta::where('object_id', $this->id)
             ->where('object_type', 'calendar_event')
             ->get();
-        
+
         return $eventsMeta;
     }
 
@@ -998,7 +1004,7 @@ class CalendarSlot extends Model
         $integrationsMeta = Meta::where('object_id', $this->id)
             ->where('object_type', 'integration')
             ->get();
-        
+
         return $integrationsMeta;
     }
 
