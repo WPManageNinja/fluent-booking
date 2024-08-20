@@ -1,6 +1,6 @@
 <?php
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * All registered action's handlers should be in app\Hooks\Handlers,
@@ -44,5 +44,4 @@ add_action('init', function () {
     if (!isset($_REQUEST['gcal'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         return;
     }
-
 });
