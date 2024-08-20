@@ -206,12 +206,12 @@
               margin: 0 0 24px 0;
               color: $dark;
               display: flex;
-              align-items: center;
+              align-items: flex-start;
               position: relative;
               gap: 12px;
               font-size: 18px;
               overflow-wrap: anywhere;
-              padding-right: 16px;
+              padding-right: 20px;
               .fcal_slot_title {
                 cursor: pointer;
               }
@@ -222,6 +222,7 @@
                 width: 14px;
                 display: block;
                 flex: none;
+                margin-top: 2px;
               }
 
               .fcal_slot_config {
