@@ -18,6 +18,7 @@
                     popper-class="fcal_daterange_popover"
                     format="YYYY/MM/DD"
                     value-format="YYYY-MM-DD"
+                    :disabled-date="disabledDate"
                     @change="fetchGraphReports"
                 />
             </div>
@@ -101,6 +102,9 @@ export default {
         }
     },
     methods: {
+        disabledDate(time) {
+            return time.getTime() > Date.now();
+        },
         fetchGraphReports() {
             this.loading = true;
             this.$get('reports/graph-reports', {
