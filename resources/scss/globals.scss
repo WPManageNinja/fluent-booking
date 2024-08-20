@@ -538,82 +538,149 @@
         }
     }
     &.fcal_daterange_popover {
-        box-shadow: 0 32px 80px -4px #1B25331F;
+        box-shadow: 0 32px 80px -4px #1B25331F !important;
         border-radius: 16px;
-        border: none;
+        border: 1px solid #EAECF0 !important;
         z-index: 9999 !important;
         .el-date-range-picker {
             border-radius: 16px;
+            .el-picker-panel__body-wrapper {
+                .el-picker-panel__sidebar {
+                    border-top-left-radius: 16px;
+                    border-bottom-left-radius: 16px;
+                    width: 120px;
+                    padding: 10px 5px;
+                    .el-picker-panel__shortcut {
+                        padding: 7px 8px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        color: #1B2533;
+                        font-weight: 500;
+                        line-height: 1rem;
+                        transition: .3s;
+                        -webkit-transition: .3s;
+                        &:hover {
+                            background: #f5f6f7;
+                            color: #1B2533;
+                        }
+                    }
+                }
+            }
         }
 
         .el-picker-panel__body {
             .el-date-range-picker__content {
                 padding: 16px;
                 &.is-left {
-                    border-right-color: #EAECF0;
+                    border-right-color: #eaecf0;
+                }
+            }
+            .el-date-range-picker__header {
+                button {
+                    color: #1B2533;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px;
+                    margin-top: 4px;
+					border-radius: 4px;
+                    transition: .3s;
+                    -webkit-transition: .3s;
+                    &:hover {
+                        color: #1B2533;
+                        background: #f5f6f7;
+                    }
+                    &.is-disabled {
+                        cursor: not-allowed;
+                        opacity: .3;
+                        i {
+                            cursor: not-allowed;
+                        }
+                    }
+                }
+                > div {
+                    color: #1B2533;
+                    font-size: 14px;
+                    font-weight: 500;
                 }
             }
             .el-date-table {
                 border-spacing: 0;
-                td {
-                    position: relative;
-                    &.available {
-                        &:hover {
-                            color: $primaryColor;
-                        }
+                tr {
+                    th {
+                        font-weight: 500;
+                        text-transform: uppercase;
+                        font-size: 12px;
+                        color: #1B2533;
                     }
-                    &.today {
-                        &.in-range {
+                    td {
+                        position: relative;
+                        font-weight: 500;
+                        padding: 1px 0;
+                        &.available {
+                            color: #1B2533;
                             &:hover {
+                                color: $primaryColor;
+                            }
+                        }
+                        &.disabled {
+                            .el-date-table-cell {
+                                background: none;
+                            }
+                        }
+                        &.today {
+                            &.in-range {
+                                &:hover {
+                                    .el-date-table-cell__text {
+                                        color: #ffffff;
+                                    }
+                                }
+                            }
+                            .el-date-table-cell__text {
+                                color: $primaryColor;
+                            }
+                            .el-date-table-cell {
+                                color: $primaryColor;
+                            }
+                        }
+                        &.in-range {
+                            .el-date-table-cell {
+                                background: #DDEBFC;
+                            }
+                        }
+                        &.end-date {
+                            .el-date-table-cell {
                                 .el-date-table-cell__text {
-                                    color: #ffffff;
+                                    color: #fff;
+                                    background: $primaryColor;
+                                    border-radius: 0 8px 8px 0;
                                 }
                             }
                         }
-                        .el-date-table-cell__text {
-                            color: $primaryColor;
-                        }
-                        .el-date-table-cell {
-                            color: $primaryColor;
-                        }
-                    }
-                    &.in-range {
-                        .el-date-table-cell {
-                            background: #DDEBFC;
-                        }
-                    }
-                    &.end-date {
-                        .el-date-table-cell {
-                            .el-date-table-cell__text {
-                                color: #fff;
-                                background: $primaryColor;
-                                border-radius: 0 8px 8px 0;
+                        &.start-date {
+                            .el-date-table-cell {
+                                .el-date-table-cell__text {
+                                    color: #fff;
+                                    border-radius: 12px 0 0 12px;
+                                    background: $primaryColor;
+                                }
                             }
                         }
-                    }
-                    &.start-date {
                         .el-date-table-cell {
-                            .el-date-table-cell__text {
-                                color: #fff;
-                                border-radius: 12px 0 0 12px;
-                                background: $primaryColor;
-                            }
-                        }
-                    }
-                    .el-date-table-cell {
-                        width: 42px;
-                        height: 40px;
-                        position: relative;
-                        margin: 0;
-                        .el-date-table-cell__text {
                             width: 42px;
                             height: 40px;
-                            line-height: 38px;
-                            position: absolute;
-                            left: 0;
-                            transform: translateX(0);
-                            border-radius: 0;
-                            top: 0;
+                            position: relative;
+                            margin: 0;
+                            .el-date-table-cell__text {
+                                width: 42px;
+                                height: 40px;
+                                line-height: 38px;
+                                position: absolute;
+                                left: 0;
+                                transform: translateX(0);
+                                border-radius: 0;
+                                top: 0;
+                            }
                         }
                     }
                 }

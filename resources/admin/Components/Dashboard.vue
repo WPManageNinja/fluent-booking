@@ -16,6 +16,7 @@
                         :end-placeholder="$t('End date')"
                         :shortcuts="shortcuts"
                         popper-class="fcal_daterange_popover"
+                        :disabled-date="disabledDate"
                         @change="fetchReports"
                     />
                 </div>
@@ -189,6 +190,9 @@ export default {
         }
     },
     methods: {
+        disabledDate(time) {
+            return time.getTime() > Date.now();
+        },
         convertDate(date) {
             if (date) {
                 return this.toCurrentTimezone(date, 'YYYY-MM-DD HH:MM:ss')
