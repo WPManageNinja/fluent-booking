@@ -224,23 +224,15 @@ class CalendarController extends Controller
             ], 422);
         }
 
-        $availability = AvailabilityService::getDefaultSchedule($calendar->user_id);
+        $weeklySchedule = Arr::get($data, 'slot.weekly_schedules', []);
 
-        if (!$availability) {
-            $weeklySchedule = Arr::get($data, 'slot.weekly_schedules', []);
-
-            $defaultSchedule = AvailabilityService::createScheduleSchema(
-                $calendar->user_id, 'Weekly Hours', true, $calendar->author_timezone, 'UTC', $weeklySchedule
-            );
-
-            $availability = Availability::create($defaultSchedule);
-        }
+        $availability = AvailabilityService::maybeCreateAvailability($calendar, $weeklySchedule);
 
         $title = (!empty($slot['title'])) ? sanitize_text_field($slot['title']) : $slot['duration'] . ' Minute Meeting';
 
         $slotData = [
             'title'             => $title,
-            'slug'              => Helper::generateSlotSlug($slot['duration'] . 'min', $calendar),
+            'slug'              => Helper::generateSlotSlug((int)$slot['duration'] . 'min', $calendar),
             'calendar_id'       => $calendar->id,
             'user_id'           => $calendar->user_id,
             'duration'          => (int)$slot['duration'],
@@ -417,28 +409,7 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::findOrFail($calendarId);
 
-        $userCalendarId = $calendar->type == 'simple' ? $calendarId : null;
-
-        $settingsSchema = (new CalendarSlot())->getSlotSettingsSchema($userCalendarId);
-
-        $schema = [
-            'title'             => '',
-            'status'            => 'active',
-            'description'       => '',
-            'duration'          => '30',
-            'color_schema'      => '#0099ff',
-            'calendar'          => $calendar,
-            'settings'          => $settingsSchema,
-            'max_book_per_slot' => 1,
-            'location_settings' => [
-                [
-                    'type'              => '',
-                    'title'             => '',
-                    'description'       => '',
-                    'host_phone_number' => ''
-                ]
-            ]
-        ];
+        $schema = (new CalendarSlot())->getEventSchema($calendar);
 
         return [
             'slot' => $schema
@@ -698,7 +669,7 @@ class CalendarController extends Controller
 
         $calendar = Calendar::findOrFail($newCalendarId);
 
-        $originalEvent = CalendarSlot::with('events_meta')->where('calendar_id', $calendarId)->findOrFail($eventId);
+        $originalEvent = CalendarSlot::with('event_metas')->where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $clonedEvent = $originalEvent->replicate();
 
@@ -712,7 +683,7 @@ class CalendarController extends Controller
 
         $clonedEvent->save();
 
-        $eventsMeta = $originalEvent->events_meta;
+        $eventsMeta = $originalEvent->event_metas;
 
         foreach ($eventsMeta as $meta) {
             $clonedMeta = $meta->replicate();
