@@ -81,6 +81,12 @@ class Calendar extends Model
         return $this->hasMany(Availability::class, 'object_id', 'user_id');
     }
 
+    public function metas()
+    {
+        return $this->hasMany(Meta::class, 'object_id', 'id')
+            ->where('object_type', 'calendar');
+    }
+
     public function isTeamCalendar()
     {
         return $this->type == 'team';

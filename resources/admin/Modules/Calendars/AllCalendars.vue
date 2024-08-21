@@ -310,7 +310,7 @@
                         class="fcal_file_upload"
                         :before-upload="beforeUpload"
                         :on-change="handleFileChange"
-                        :show-file-list="false"
+                        @click.native="clearUpload"
                         :multiple="false">
                         <el-icon><UploadFilled /></el-icon>
                         <div class="el-upload__text">
@@ -455,6 +455,10 @@ export default {
             if (file.status === 'success') {
                 this.selectedFile = file.raw;
             }
+        },
+        clearUpload() {
+            this.$refs.uploader.clearFiles();
+            this.selectedFile = null;
         },
         importCalendar() {
             if ((!this.user_id && !this.calendar_title) || !this.user_timezone) {

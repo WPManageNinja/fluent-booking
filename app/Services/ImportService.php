@@ -9,10 +9,10 @@ class ImportService
     /*
      * Import host data from JSON
      * @param array|string $data JSON data or array
-     * @param bool $userCurrentUser If true, the current user will be used as the host
+     * @param bool $useCurrentUser If true, the current user will be used as the host
      * @return \FluentBooking\App\Models\Calendar|\WP_Error
      */
-    public function importHostJson($data, $userCurrentUser = true)
+    public function importHostJson($data, $useCurrentUser = true)
     {
         if (is_string($data)) {
             $data = json_decode($data, true);
@@ -41,7 +41,7 @@ class ImportService
             return new \WP_Error('invalid_data', 'Invalid data provided');
         }
 
-        if ($userCurrentUser) {
+        if ($useCurrentUser) {
             $currentUserId = get_current_user_id();
             if ($currentUserId) {
                 $user = get_user_by('ID', $currentUserId);
@@ -131,7 +131,7 @@ class ImportService
             $eventAtts['user_id'] = $createdCalendar->user_id;
             $createdEvent = \FluentBooking\App\Models\CalendarSlot::create($eventAtts);
 
-            foreach (Arr::get($eventData, 'events_meta', []) as $eventMeta) {
+            foreach (Arr::get($eventData, 'event_metas', []) as $eventMeta) {
                 $metaData = Arr::only($eventMeta, ['key', 'value']);
                 if (empty($metaData['key']) || empty($metaData['value'])) {
                     continue;
@@ -167,10 +167,10 @@ class ImportService
     /*
      * Import host data from JSON URL
      * @param string $jsonUrl JSON URL
-     * @param bool $userCurrentUser If true, the current user will be used as the host
+     * @param bool $useCurrentUser If true, the current user will be used as the host
      * @return \FluentBooking\App\Models\Calendar|\WP_Error
      */
-    public function importHostByJSONUrl($jsonUrl, $userCurrentUser = true)
+    public function importHostByJSONUrl($jsonUrl, $useCurrentUser = true)
     {
         $response = wp_safe_remote_get($jsonUrl, [
             'timeout' => 30,
@@ -190,6 +190,6 @@ class ImportService
 
         $body = json_decode(wp_remote_retrieve_body($response), true);
 
-        return $this->importHostJson($body, $userCurrentUser);
+        return $this->importHostJson($body, $useCurrentUser);
     }
 }
