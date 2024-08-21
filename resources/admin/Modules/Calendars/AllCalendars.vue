@@ -66,6 +66,18 @@
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
+                <el-dropdown @command="handleCommand" popper-class="fcal_select" trigger="click">
+                    <span class="el-dropdown-link">
+                        <el-icon><MoreFilled /></el-icon>
+                    </span>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="import"><el-icon><UploadFilled /></el-icon>
+                                {{ $t('Import') }}
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
         </div>
         <div class="fcal_section_body">
@@ -75,8 +87,7 @@
             <div v-else class="fcal_calendars_wrap">
                 <template v-if="calendars.length">
                     <div v-for="calendar in calendars" :key="calendar.id" class="fcal_each_cal">
-                        <calendar-event-block :calendar="calendar" :eventLists="event_lists"
-                                              @fetchCalendar="getCalendars"/>
+                        <calendar-event-block :calendar="calendar" :eventLists="event_lists" @fetchCalendar="getCalendars"/>
                     </div>
                 </template>
                 <el-empty v-else :description="$t('No Calendars found')" class="fcal_empty"/>
@@ -134,9 +145,7 @@
                         <h4><strong>{{ $t('One host') }}</strong> <span>{{ $t('with') }}</span>
                             <strong>{{ $t('Group of invitees') }}</strong></h4>
                         <p>{{ $t('Good for: webinars, online classes, etc.') }}</p>
-                        <el-icon class="icon-right">
-                            <Right/>
-                        </el-icon>
+                        <el-icon class="icon-right"><Right/></el-icon>
                     </div>
                 </el-button>
             </div>
@@ -174,9 +183,7 @@
                         <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span>
                             <strong>{{ $t('One invitee') }}</strong></h4>
                         <p>{{ $t('Good for: distributing incoming sales leads.') }}</p>
-                        <el-icon class="icon-right">
-                            <Right/>
-                        </el-icon>
+                        <el-icon class="icon-right"><Right/></el-icon>
                     </div>
                 </el-button>
             </div>
@@ -210,18 +217,10 @@
                     :disabled="!event_name || !event_members.length"
                     @click="createEventCalendar('single_event')">
                     <div class="icons-wrap">
-                        <el-icon>
-                            <User/>
-                        </el-icon>
-                        <el-icon>
-                            <User/>
-                        </el-icon>
-                        <el-icon>
-                            <Right/>
-                        </el-icon>
-                        <el-icon>
-                            <User/>
-                        </el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><User/></el-icon>
+                        <el-icon><Right/></el-icon>
+                        <el-icon><User/></el-icon>
                     </div>
                     <div class="content">
                         <h3>{{ $t('Single Event') }}</h3>
@@ -229,9 +228,7 @@
                                 $t('to pick a time to meet with')
                             }}</span> <strong>{{ $t('hosts') }}</strong></h4>
                         <p>{{ $t('Good for: higher priority meetings.') }}</p>
-                        <el-icon class="icon-right">
-                            <Right/>
-                        </el-icon>
+                        <el-icon class="icon-right"><Right/></el-icon>
                     </div>
                 </el-button>
                 <el-button
@@ -248,9 +245,7 @@
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
                         </div>
-                        <el-icon>
-                            <Right/>
-                        </el-icon>
+                        <el-icon><Right/></el-icon>
                         <div class="icons">
                             <svg class="-mt-px mr-1 inline h-3 w-3" fill="none" height="24" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -268,9 +263,7 @@
                                 $t('for a scheduled event with')
                             }}</span> <strong>{{ $t('hosts') }}</strong></h4>
                         <p>{{ $t('Good for: reservation or ticketing system') }}</p>
-                        <el-icon class="icon-right">
-                            <Right/>
-                        </el-icon>
+                        <el-icon class="icon-right"><Right/></el-icon>
                     </div>
                 </el-button>
             </div>
@@ -279,6 +272,59 @@
                 <a :href="appVars.upgrade_url" class="el-button fcal_primary_btn" target="_blank">
                     {{ $t('Upgrade to Pro') }}
                 </a>
+            </div>
+        </el-drawer>
+
+        <el-drawer
+            v-model="isImportCalendarOpen"
+            :title="$t('Import Calendar')"
+            :zIndex="999"
+            label-position="top"
+            modal-class="fcal_drawer">
+            <div class="fcal_create_new_booking_type_drawer">
+                <el-form-item :label="$t('Calendar Type')">
+                    <el-select v-model="calendar_type" placeholder="{{ $t('Select Calendar Type') }}">
+                        <el-option :label="$t('Host')" value="simple"/>
+                        <el-option :label="$t('Team')" value="team"/>
+                        <el-option :label="$t('One-off Event')" value="event"/>
+                    </el-select>
+                </el-form-item>
+                <el-form-item v-if="calendar_type == 'simple'" :label="$t('Select Host') + '*'">
+                    <HostSelector v-model="user_id"/>
+                    <p>{{ $t('AllCalendars/create_host_desc') }}</p>
+                </el-form-item>
+                <el-form-item v-if="calendar_type == 'team'" :label="$t('Team Name') + '*'">
+                    <el-input v-model="calendar_title" type="text"/>
+                </el-form-item>
+                <el-form-item v-if="calendar_type == 'event'" :label="$t('Event Name') + '*'">
+                    <el-input v-model="calendar_title" type="text"/>
+                </el-form-item>
+                <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone fcal_event_timezone">
+                    <TimeZoneSelector v-model="user_timezone"/>
+                </el-form-item>
+                <el-form-item>
+                    <el-upload
+                        drag
+                        :limit="1"
+                        ref="uploader"
+                        :before-upload="beforeUpload"
+                        :on-change="handleFileChange"
+                        :show-file-list="false"
+                        :multiple="false">
+                        <i class="el-icon-upload"/>
+                        <div class="el-upload__text">
+                            {{$t('Drop JSON file here or')}} <em>{{$t('click to upload')}}</em>
+                        </div>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item>
+                    <el-button
+                        :disabled="!user_id || !user_timezone || !selectedFile"
+                        class="fcal_primary_btn"
+                        @click="importCalendar">
+                        {{ $t('Import') }}
+                    </el-button>
+                </el-form-item>
             </div>
         </el-drawer>
         <ProNoticeDialog
@@ -293,8 +339,9 @@
 <script>
 import Pagination from "../../Pieces/Pagination";
 import CalendarEventBlock from "./parts/CalendarEventBlock";
-import {User, Right, Search, Sort} from '@element-plus/icons-vue';
+import { User, Right, Search, Sort, UploadFilled, MoreFilled } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
+import TimeZoneSelector from "./parts/TimeZoneSelector";
 import TeamMemberSelector from "../../Pieces/TeamMemberSelector";
 import SkeletonLoader from "../../Pieces/SkeletonLoader";
 import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
@@ -304,11 +351,14 @@ export default {
     components: {
         SkeletonLoader,
         HostSelector,
+        TimeZoneSelector,
         TeamMemberSelector,
         User,
         Right,
         Search,
         Sort,
+        UploadFilled,
+        MoreFilled,
         Pagination,
         CalendarEventBlock,
         ProNoticeDialog
@@ -327,12 +377,17 @@ export default {
             isNewBookingOpen: false,
             isNewTeamOpen: false,
             isSingleEventOpen: false,
+            isImportCalendarOpen: false,
             user_id: '',
             team_name: '',
             team_members: [],
             event_name: '',
             event_members: [],
             event_lists: [],
+            calendar_type: 'simple',
+            calendar_title: '',
+            user_timezone: '',
+            selectedFile: null,
             query: {
                 search: '',
                 calendarType: 'all'
@@ -387,6 +442,62 @@ export default {
                 params: {host_id: this.appVars.me.id, event_type: eventType},
                 query: {event_name: this.event_name, event_members: this.event_members}
             })
+        },
+        beforeUpload(file) {
+            const isJsonFile = file.type === 'application/json';
+            if (!isJsonFile) {
+                this.$handleError(this.$t('Only JSON files are allowed'));
+            }
+            return isJsonFile;
+        },
+        handleFileChange(file) {
+            if (file.status === 'success') {
+                this.selectedFile = file.raw;
+            }
+        },
+        importCalendar() {
+            this.loading = true;
+            const formData = new FormData();
+            formData.append('type', this.calendar_type);
+            formData.append('title', this.calendar_title);
+            formData.append('user_id', this.user_id);
+            formData.append('author_timezone', this.user_timezone);
+            formData.append('file', this.selectedFile);
+            formData.append('action', 'fluent_booking_import_calendar');
+
+            jQuery.ajax({
+                url: window.ajaxurl,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: response => {
+                    console.log(response);
+                    if (response.success) {
+                        this.getCalendars();
+                        this.$handleSuccess(response);
+                    } else {
+                        this.$handleError(response);
+                    }
+                },
+                error: errors => {
+                    this.$handleError(errors);
+                },
+                complete: () => {
+                    this.loading = false;
+                    this.isImportCalendarOpen = false;
+                }
+            });
+        },
+        handleCommand(command) {
+            if (command === 'import') {
+                if (!this.appVars.has_pro) {
+                    this.noticeModal = true;
+                    this.noticeTitle = this.$t('Import Calendar');
+                    return;
+                }
+                this.isImportCalendarOpen = true;
+            }
         }
     },
     mounted() {

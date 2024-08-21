@@ -337,7 +337,7 @@ export default {
             }
 
             if (command == 'delete') {
-                this.$confirm(this.$t('Are you sure you want to delete this calendar? All the associate bookings and data will be deleted'), this.$t('Delete Calendar'), {
+                this.$confirm(this.$t('CalendarEventBlock/delete_confirmation_desc'), this.$t('Delete Calendar'), {
                     confirmButtonText: this.$t('Delete'),
                     cancelButtonText: this.$t('Cancel'),
                     type: 'warning'

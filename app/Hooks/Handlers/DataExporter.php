@@ -2,7 +2,6 @@
 
 namespace FluentBooking\App\Hooks\Handlers;
 
-
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Services\PermissionManager;
@@ -18,7 +17,7 @@ class DataExporter
         }
 
         $calendar = Calendar::with(['events' => function ($query) {
-            $query->with('events_meta');
+            $query->with('event_metas');
         }])->find($calendarId);
 
         if (!$calendar) {

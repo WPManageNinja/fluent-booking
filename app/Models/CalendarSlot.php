@@ -102,7 +102,7 @@ class CalendarSlot extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function events_meta()
+    public function event_metas()
     {
         return $this->hasMany(Meta::class, 'object_id', 'id')
             ->whereIn('object_type', ['calendar_event', 'integration']);
@@ -248,6 +248,140 @@ class CalendarSlot extends Model
     public function isGuestFieldRequired()
     {
         return !$this->isMultiGuestEvent();
+    }
+
+    public function getEventDefaultData($calendar)
+    {
+        $weeklySchedule = Helper::getWeeklyScheduleSchema();
+
+        $availability = AvailabilityService::maybeCreateAvailability($calendar, $weeklySchedule);
+
+        $defaultData = [
+            'title'             => '30 Minute Meeting',
+            'calendar_id'       => $calendar->id,
+            'user_id'           => $calendar->user_id,
+            'status'            => 'active',
+            'event_type'        => 'single',
+            'description'       => '',
+            'duration'          => '30',
+            'color_schema'      => '#0099ff',
+            'availability_type' => 'existing_schedule',
+            'availability_id'   => (int)$availability->id,
+            'max_book_per_slot' => 1,
+            'is_display_spots'  => false,
+            'location_settings' => [
+                [
+                    'type'              => 'in_person_guest',
+                    'title'             => 'In Person (Attendee Address)',
+                    'description'       => '',
+                    'host_phone_number' => ''
+                ]
+            ],
+            'settings'         => [
+                'schedule_type'       => 'weekly_schedules',
+                'weekly_schedules'    => $weeklySchedule,
+                'date_overrides'      => [],
+                'range_type'          => 'range_days',
+                'range_days'          => 60,
+                'range_date_between'  => ['', ''],
+                'schedule_conditions' => [
+                    'value' => 4,
+                    'unit'  => 'hours'
+                ],
+                'buffer_time_before'  => '0',
+                'buffer_time_after'   => '0',
+                'slot_interval'       => '',
+                'booking_title'       => '',
+                'submit_button_text'  => '',
+                'multiple_booking'    => [
+                    'enabled' => false,
+                    'limit'   => 5
+                ],
+                'booking_frequency'   => [
+                    'enabled' => false,
+                    'limits'  => [
+                        ['unit' => 'per_day', 'value' => 5]
+                    ]
+                ],
+                'booking_duration'    => [
+                    'enabled' => false,
+                    'limits'  => [
+                        ['unit' => 'per_day', 'value' => 120]
+                    ]
+                ],
+                'can_not_cancel'      => [
+                    'enabled'   => false,
+                    'message'   => 'Sorry! you can not cancel this',
+                    'type'      => 'always',
+                    'condition' => [
+                        'unit'  => 'minutes',
+                        'value' => 30
+                    ]
+                ],
+                'can_not_reschedule'  => [
+                    'enabled'   => false,
+                    'message'   => 'Sorry! you can not reschedule this',
+                    'type'      => 'always',
+                    'condition' => [
+                        'unit'  => 'minutes',
+                        'value' => 30
+                    ]
+                ],
+                'custom_redirect'     => [
+                    'enabled'         => false,
+                    'redirect_url'    => '',
+                    'is_query_string' => 'no',
+                    'query_string'    => ''
+                ],
+                'multi_duration'      => [
+                    'enabled'             => false,
+                    'default_duration'    => '',
+                    'available_durations' => []
+                ],
+                'lock_timezone'       => [
+                    'enabled'  => false,
+                    'timezone' => ''
+                ],
+                'requires_confirmation' => [
+                    'enabled'   => false,
+                    'type'      => 'always',
+                    'condition' => [
+                        'unit'  => 'minutes',
+                        'value' => 30
+                    ]
+                ],
+            ]
+        ];
+
+        return $defaultData;
+    }
+
+    public function getEventSchema($calendar)
+    {
+        $userCalendarId = $calendar->type == 'simple' ? $calendar->id : null;
+
+        $settingsSchema = $this->getSlotSettingsSchema($userCalendarId);
+
+        $schema = [
+            'title'             => '',
+            'status'            => 'active',
+            'description'       => '',
+            'duration'          => '30',
+            'color_schema'      => '#0099ff',
+            'calendar'          => $calendar,
+            'settings'          => $settingsSchema,
+            'max_book_per_slot' => 1,
+            'location_settings' => [
+                [
+                    'type'              => '',
+                    'title'             => '',
+                    'description'       => '',
+                    'host_phone_number' => ''
+                ]
+            ]
+        ];
+
+        return $schema;
     }
 
     public function getSlotSettingsSchema($calendarId = null)
