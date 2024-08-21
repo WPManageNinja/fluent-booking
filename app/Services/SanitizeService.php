@@ -144,8 +144,8 @@ class SanitizeService
     public static function locationSettings($locations)
     {
         $sanitizedLocations = [];
-        foreach ($locations as $locationIndex => $location) {
 
+        foreach ($locations as $locationIndex => $location) {
             $locationType = $location['type'];
             $locationTitle = sanitize_text_field(Arr::get($location, 'title'));
 
@@ -169,6 +169,7 @@ class SanitizeService
 
             $sanitizedLocations[] = $sanitizedLocation;
         }
+
         return $sanitizedLocations;
     }
 }

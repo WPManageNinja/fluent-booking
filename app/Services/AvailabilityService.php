@@ -10,6 +10,23 @@ use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityService
 {
+    public static function maybeCreateAvailability($calendar, $scheduleData)
+    {
+        $userId = $calendar->user_id;
+
+        $availability = self::getDefaultSchedule($userId);
+
+        if ($availability) {
+            return $availability;
+        }
+
+        $timezone = $calendar->author_timezone;
+
+        $defaultSchedule = self::createScheduleSchema($userId, 'Weekly Hours', true, $timezone, 'UTC', $scheduleData);
+
+        return Availability::create($defaultSchedule);
+    }
+
     public static function availabilitySchedules()
     {
         $permissions = ['read_and_use_other_availabilities', 'manage_other_availabilities', 'read_other_calendars', 'manage_other_calendars'];

@@ -96,7 +96,7 @@ export default {
                 author_timezone: '',
                 user_id: '',
                 slot: {
-                    duration: '15',
+                    duration: '30',
                     title: '',
                     description: '',
                     status: 'active',
