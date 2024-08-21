@@ -47,7 +47,6 @@ class DataImporter
 
         wp_send_json([
             'success'  => true,
-            'calendar' => $calendar,
             'message'  => __('Calendar imported successfully', 'fluent-booking'),
         ]);
     }

@@ -2,10 +2,9 @@
 
 namespace FluentBooking\App\Hooks\Handlers;
 
-use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
-use FluentBooking\App\Models\Meta;
+use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\PermissionManager;
 
 class DataExporter
@@ -18,8 +17,8 @@ class DataExporter
             die(esc_html__('Please provide Calendar ID', 'fluent-booking'));
         }
 
-        $calendar = Calendar::with(['events' => function ($query) {
-            $query->with('events_meta');
+        $calendar = Calendar::with(['metas', 'events' => function ($query) {
+            $query->with('event_metas');
         }])->find($calendarId);
 
         if (!$calendar) {
@@ -43,13 +42,9 @@ class DataExporter
         }
 
         $calendarData = $calendar->toArray();
+
         $calendarData['data_type'] = 'host';
         $calendarData['availabilities'] = $availabilities;
-
-        $calendarData['metas'] = Meta::where('object_type', 'Calendar')
-            ->where('object_id', $calendar->id)
-            ->whereIn('key', ['sharing_settings', 'featured_image_url'])
-            ->get()->toArray();
 
         $calendarData = apply_filters('fluent_booking/exporting_calendar_data_json', $calendarData, $calendar);
 

@@ -4,14 +4,15 @@ namespace FluentBooking\App\Services;
 
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
 class CalendarService
 {
-    public static function createCalendar($data)
+    public static function createCalendar($data, $useCurrentUser = false)
     {
-        $calendarData = self::prepareCalendarData($data);
+        $calendarData = self::prepareCalendarData($data, $useCurrentUser);
 
         if (is_wp_error($calendarData)) {
             return new \WP_Error($calendarData->get_error_code(), $calendarData->get_error_message());
@@ -25,9 +26,17 @@ class CalendarService
 
         $calendar = Calendar::create($calendarData);
 
+        $calendarMetas = self::prepareCalendarMetas(Arr::get($data, 'metas', []));
+
+        $calendar->metas()->createMany($calendarMetas);
+
+        $availabilitiesData = Arr::get($data, 'availabilities', []);
+
+        $createdAvailabilities = self::createAvailabilities($calendar, $availabilitiesData);
+
         $eventsData = Arr::get($data, 'events', []);
 
-        self::createCalendarEvents($calendar, $eventsData);
+        self::createCalendarEvents($calendar, $eventsData, $createdAvailabilities);
 
         do_action('fluent_booking/after_create_calendar', $calendar);
 
@@ -36,7 +45,23 @@ class CalendarService
         ];
     }
 
-    public static function createCalendarEvents($calendar, $eventsData)
+    public static function createAvailabilities($calendar, $availabilitiesData)
+    {
+        $createdAvailabilities = [];
+
+        foreach ($availabilitiesData as $existingId => $availabilityData)
+        {
+            $availability = Arr::only($availabilityData, ['key', 'value']);
+            $availability['value']['timezone'] = $calendar->author_timezone;
+            $availability['object_id'] = $calendar->user_id;
+            $availabilityModel = Availability::create($availability);
+            $createdAvailabilities[$existingId] = $availabilityModel->id;
+        }
+
+        return $createdAvailabilities;
+    }
+
+    public static function createCalendarEvents($calendar, $eventsData, $availabilities = [])
     {
         $defaultEventData = (new CalendarSlot())->getEventDefaultData($calendar);
 
@@ -52,7 +77,7 @@ class CalendarService
         {
             $eventMetas = Arr::get($eventData, 'event_metas', []);
 
-            $eventData = self::prepareEventData($eventData, $calendar);
+            $eventData = self::prepareEventData($eventData, $calendar, $availabilities);
 
             $createEventData = wp_parse_args($eventData, $defaultEventData);
 
@@ -79,7 +104,7 @@ class CalendarService
         return $createdEvents;
     }
 
-    protected static function prepareCalendarData($calendarData)
+    protected static function prepareCalendarData($calendarData, $useCurrentUser = false)
     {
         if (!$calendarData) {
             return new \WP_Error('invalid_data', esc_html__('Invalid JSON Data', 'fluent-booking'));
@@ -92,7 +117,7 @@ class CalendarService
             'author_timezone' => sanitize_text_field(Arr::get($calendarData, 'author_timezone')),
         ];
 
-        if (!Arr::get($preparedData, 'user_id')) {
+        if ($useCurrentUser || !Arr::get($preparedData, 'user_id')) {
             $preparedData['user_id'] = get_current_user_id();
         }
 
@@ -123,7 +148,29 @@ class CalendarService
         return $preparedData;
     }
 
-    protected static function prepareEventData($eventData, $calendar)
+    protected static function prepareCalendarMetas($calendarMetas)
+    {
+        $preparedCalendarMetas = [];
+
+        foreach ($calendarMetas as $calendarMeta)
+        {
+            if (empty($calendarMeta['key']) || empty($calendarMeta['value'])) {
+                continue;
+            }
+
+            $value = $calendarMeta['value'];
+
+            $preparedCalendarMetas[] = [
+                'key'         => sanitize_text_field($calendarMeta['key']),
+                'value'       => is_array($value) ? self::sanitize_mapped_data($value) : sanitize_text_field($value),
+                'object_type' => sanitize_text_field($calendarMeta['object_type'])
+            ];
+        }
+
+        return $preparedCalendarMetas;
+    }
+
+    protected static function prepareEventData($eventData, $calendar, $availabilities = [])
     {
         $preparedEventData = [
             'title'             => sanitize_text_field(Arr::get($eventData, 'title')),
@@ -133,6 +180,7 @@ class CalendarService
             'status'            => sanitize_text_field(Arr::get($eventData, 'status', 'active')),
             'color_schema'      => sanitize_text_field(Arr::get($eventData, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($eventData, 'event_type')),
+            'availability_id'   => (int)self::prepareAvailabilityId(Arr::get($eventData, 'availability_id', 0), $availabilities),
             'availability_type' => sanitize_text_field(Arr::get($eventData, 'availability_type')),
             'location_type'     => sanitize_text_field(Arr::get($eventData, 'location_type')),
             'location_settings' => SanitizeService::locationSettings(Arr::get($eventData, 'location_settings', [])),
@@ -191,14 +239,30 @@ class CalendarService
                 continue;
             }
 
+            $value = $eventMeta['value'];
+
             $preparedEventMetas[] = [
                 'key'         => sanitize_text_field($eventMeta['key']),
-                'value'       => self::sanitize_mapped_data($eventMeta['value']),
+                'value'       => is_array($value) ? self::sanitize_mapped_data($value) : sanitize_text_field($value),
                 'object_type' => sanitize_text_field($eventMeta['object_type'])
             ];
         }
 
         return $preparedEventMetas;
+    }
+
+    protected static function prepareAvailabilityId($availabilityId, $availabilities)
+    {
+        if ($availabilityId && isset($availabilities[$availabilityId])) {
+            return $availabilities[$availabilityId];
+        }
+
+        if ($availabilities) {
+            $firstKey = array_key_first($availabilities);
+            return $availabilities[$firstKey];
+        }
+
+        return $availabilityId;
     }
 
     public static function getSlotOptions($calendarId)
