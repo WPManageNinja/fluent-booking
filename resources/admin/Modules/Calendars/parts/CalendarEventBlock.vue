@@ -31,17 +31,17 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item command="export"><el-icon><Download /></el-icon>
-                                {{ $t('Export') }}
-                            </el-dropdown-item>
-                            <el-dropdown-item command="delete"><el-icon><Delete /></el-icon>
-                                {{ $t('Delete') }}
-                            </el-dropdown-item>
                             <el-dropdown-item v-if="calendar.public_url" command="copy"><el-icon><Link /></el-icon>
                                 {{ $t('Copy link') }}
                             </el-dropdown-item>
                             <el-dropdown-item command="clone"><el-icon><CopyDocument /></el-icon>
                                 {{ $t('Clone from') }}
+                            </el-dropdown-item>
+                            <el-dropdown-item command="export"><el-icon><Download /></el-icon>
+                                {{ $t('Export') }}
+                            </el-dropdown-item>
+                            <el-dropdown-item command="delete"><el-icon><Delete /></el-icon>
+                                {{ $t('Delete') }}
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
@@ -337,7 +337,7 @@ export default {
             }
 
             if (command == 'delete') {
-                this.$confirm(this.$t('Are you sure you want to delete this calendar? All the associate bookings and data will be deleted'), this.$t('Delete Calendar'), {
+                this.$confirm(this.$t('CalendarEventBlock/delete_confirmation_desc'), this.$t('Delete Calendar'), {
                     confirmButtonText: this.$t('Delete'),
                     cancelButtonText: this.$t('Cancel'),
                     type: 'warning'
