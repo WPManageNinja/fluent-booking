@@ -33,8 +33,10 @@ defined('ABSPATH') || exit;
  * Register all the single action handlers
  */
 $app->addAction('init', 'BlockEditorHandler@init');
-$app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
+
 $app->addAction('wp_ajax_fluent_booking_export_calendar', 'DataExporter@exportCalendar');
+$app->addAction('wp_ajax_fluent_booking_export_hosts', 'DataExporter@exportBookingHosts');
+$app->addAction('wp_ajax_fluent_booking_import_calendar', 'DataImporter@importCalendar');
 
 $app->addAction('fluent_booking/after_calendar_event_landing_page', function () {
     echo \FluentBooking\App\Services\LandingPage\LandingPageHelper::getPoweredByHtml();

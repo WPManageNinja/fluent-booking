@@ -2,7 +2,6 @@
 
 namespace FluentBooking\App\Hooks\Handlers;
 
-
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;

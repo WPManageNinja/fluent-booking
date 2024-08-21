@@ -3564,6 +3564,25 @@
                         padding: 4px 16px;
                     }
                 }
+                .fcal_time_zone_selector {
+                    width: 100%;
+                }
+                .fcal_file_upload {
+                    width: 100%;
+                    .el-upload {
+                        margin-top: 8px;
+                        .el-upload-dragger {
+                            padding: 8px;
+                            .el-icon {
+                                color: #c0c4cc;
+                                font-size: 32px;
+                            }
+                            .el-upload__text {
+                                line-height: 24px;
+                            }
+                        }
+                    }
+                }
             }
         }
         .el-button {
