@@ -29,27 +29,10 @@ class DataExporter
             die(esc_html__('You do not have permission to export data', 'fluent-booking'));
         }
 
-        $availabilities = [];
-
-        foreach ($calendar->events as $event) {
-            if (isset($availabilities[$event->availability_id])) {
-                continue;
-            }
-            $availability = Availability::find($event->availability_id);
-            if ($availability) {
-                $availabilities[$event->availability_id] = $availability;
-            }
-        }
-
-        $calendarData = $calendar->toArray();
-
-        $calendarData['data_type'] = 'host';
-        $calendarData['availabilities'] = $availabilities;
-
-        $calendarData = apply_filters('fluent_booking/exporting_calendar_data_json', $calendarData, $calendar);
+        $calendarData = $this->prepareCalendarExportData($calendar);
 
         header('Content-Type: application/json');
-        header('Content-Disposition: attachment; filename=Calendar-' . $calendarId . '.json');
+        header('Content-Disposition: attachment; filename=CluentBookingHostExport-' . $calendarId . '.json');
         echo json_encode($calendarData, JSON_PRETTY_PRINT); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         exit();
     }
@@ -148,5 +131,44 @@ class DataExporter
 
         fclose($output); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         exit();
+    }
+
+    /*
+     * Prepare calendar data for export
+     * @param Calendar|int $calendar Calendar Model or ID
+     * @return array
+     */
+    public function prepareCalendarExportData($calendar)
+    {
+        if (is_numeric($calendar)) {
+            $calendar = Calendar::with(['metas', 'events' => function ($query) {
+                $query->with('event_metas');
+            }])->find($calendar);
+        }
+
+        if (!$calendar) {
+            return [];
+        }
+
+        $availabilities = [];
+
+        foreach ($calendar->events as $event) {
+            if (isset($availabilities[$event->availability_id])) {
+                continue;
+            }
+            $availability = Availability::find($event->availability_id);
+            if ($availability) {
+                $availabilities[$event->availability_id] = $availability;
+            }
+        }
+
+        $calendarData = $calendar->toArray();
+
+        $calendarData['data_type'] = 'host';
+        $calendarData['availabilities'] = $availabilities;
+
+        $calendarData = apply_filters('fluent_booking/exporting_calendar_data_json', $calendarData, $calendar);
+
+        return $calendarData;
     }
 }
