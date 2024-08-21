@@ -138,12 +138,16 @@ class DataExporter
      * @param Calendar|int $calendar Calendar Model or ID
      * @return array
      */
-    public function prepareCalendarExportData($calendar)
+    public function prepareCalendarExportData($calendar = null)
     {
         if (is_numeric($calendar)) {
             $calendar = Calendar::with(['metas', 'events' => function ($query) {
                 $query->with('event_metas');
             }])->find($calendar);
+        } else if (is_null($calendar)) {
+            $calendar = Calendar::with(['metas', 'events' => function ($query) {
+                $query->with('event_metas');
+            }])->first();
         }
 
         if (!$calendar) {
