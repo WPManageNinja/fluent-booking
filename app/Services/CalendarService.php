@@ -112,8 +112,13 @@ class CalendarService
 
         $preparedData = [
             'title'           => sanitize_text_field(Arr::get($calendarData, 'title')),
-            'type'            => sanitize_text_field(Arr::get($calendarData, 'type')),
+            'description'     => sanitize_textarea_field(Arr::get($calendarData, 'description')),
             'user_id'         => intval(Arr::get($calendarData, 'user_id')),
+            'status'          => sanitize_text_field(Arr::get($calendarData, 'status', 'active')),
+            'type'            => sanitize_text_field(Arr::get($calendarData, 'type')),
+            'event_type'      => sanitize_text_field(Arr::get($calendarData, 'event_type')),
+            'account_type'    => sanitize_text_field(Arr::get($calendarData, 'account_type')),
+            'visibility'      => sanitize_text_field(Arr::get($calendarData, 'visibility')),
             'author_timezone' => sanitize_text_field(Arr::get($calendarData, 'author_timezone')),
         ];
 
@@ -235,11 +240,15 @@ class CalendarService
 
         foreach ($eventMetasData as $eventMeta)
         {
-            if (empty($eventMeta['key']) || empty($eventMeta['value']) || empty($eventMeta['object_type'])) {
+            if (empty($eventMeta['key']) || empty($eventMeta['value'])) {
                 continue;
             }
 
             $value = $eventMeta['value'];
+
+            if ($eventMeta['key'] == 'email_notification') {
+                $value = self::updateNotificationImageUrl($value);
+            }
 
             $preparedEventMetas[] = [
                 'key'         => sanitize_text_field($eventMeta['key']),
@@ -263,6 +272,28 @@ class CalendarService
         }
 
         return $availabilityId;
+    }
+
+    protected static function updateNotificationImageUrl($notifications)
+    {
+        $formattedNotifications = [];
+
+        foreach ($notifications as $key => $notification)
+        {
+            $emailBody = Arr::get($notification, 'email.body');
+            if (!$emailBody) {
+                continue;
+            }
+
+            $newImageUrl = FLUENT_BOOKING_URL . 'assets/images';
+            $pattern = '/(https:\/\/[^"]*?' . preg_quote('assets/images', '/') . ')/';
+            $emailBody = preg_replace($pattern, $newImageUrl, $emailBody);
+            $notification['email']['body'] = $emailBody;
+
+            $formattedNotifications[$key] = $notification;
+        }
+
+        return $formattedNotifications;
     }
 
     public static function getSlotOptions($calendarId)
