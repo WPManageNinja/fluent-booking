@@ -5,7 +5,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 use FluentBooking\App\App;
 use FluentBooking\App\Services\CalendarService;
 
-class DataExporter
+class DataImporter
 {
     public function importCalendar()
     {
