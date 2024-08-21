@@ -302,24 +302,25 @@
                 <el-form-item :label="$t('Select Your Timezone *')" class="fcal_global_timezone fcal_event_timezone">
                     <TimeZoneSelector v-model="user_timezone"/>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item :label="$t('Import your exported calendar JSON file') + '*'">
                     <el-upload
                         drag
                         :limit="1"
                         ref="uploader"
+                        class="fcal_file_upload"
                         :before-upload="beforeUpload"
                         :on-change="handleFileChange"
                         :show-file-list="false"
                         :multiple="false">
-                        <i class="el-icon-upload"/>
+                        <el-icon><UploadFilled /></el-icon>
                         <div class="el-upload__text">
-                            {{$t('Drop JSON file here or')}} <em>{{$t('click to upload')}}</em>
+                            {{$t('Drop file here or')}} <em>{{$t('click to upload')}}</em>
                         </div>
                     </el-upload>
                 </el-form-item>
                 <el-form-item>
                     <el-button
-                        :disabled="!user_id || !user_timezone || !selectedFile"
+                        :disabled="!selectedFile"
                         class="fcal_primary_btn"
                         @click="importCalendar">
                         {{ $t('Import') }}
@@ -456,6 +457,10 @@ export default {
             }
         },
         importCalendar() {
+            if ((!this.user_id && !this.calendar_title) || !this.user_timezone) {
+                this.$handleError(this.$t('Please fill all the required fields'));
+                return;
+            }
             this.loading = true;
             const formData = new FormData();
             formData.append('type', this.calendar_type);
@@ -472,7 +477,6 @@ export default {
                 contentType: false,
                 processData: false,
                 success: response => {
-                    console.log(response);
                     if (response.success) {
                         this.getCalendars();
                         this.$handleSuccess(response);

@@ -86,7 +86,7 @@ class CalendarService
         }
 
         $preparedData = [
-            'title'           => is_email($user->user_login) ? explode('@', $user->user_login)[0] : $user->user_login,
+            'title'           => sanitize_text_field(Arr::get($calendarData, 'title')),
             'type'            => sanitize_text_field(Arr::get($calendarData, 'type')),
             'user_id'         => intval(Arr::get($calendarData, 'user_id')),
             'author_timezone' => sanitize_text_field(Arr::get($calendarData, 'author_timezone')),
@@ -112,8 +112,8 @@ class CalendarService
 
         $isHostCalendar = $preparedData['type'] == 'simple' ? true : false;
 
-        if (!$isHostCalendar) {
-            $preparedData['title'] = sanitize_text_field(Arr::get($calendarData, 'title'));
+        if ($isHostCalendar || !$preparedData['title']) {
+            $preparedData['title'] = is_email($user->user_login) ? explode('@', $user->user_login)[0] : $user->user_login;
         }
 
         if ($isHostCalendar && Calendar::where('user_id', $preparedData['user_id'])->where('type', 'simple')->first()) {
@@ -129,6 +129,7 @@ class CalendarService
             'title'             => sanitize_text_field(Arr::get($eventData, 'title')),
             'duration'          => (int)Arr::get($eventData, 'duration', 30),
             'description'       => sanitize_textarea_field(Arr::get($eventData, 'description')),
+            'type'              => sanitize_text_field(Arr::get($eventData, 'type')),
             'status'            => sanitize_text_field(Arr::get($eventData, 'status', 'active')),
             'color_schema'      => sanitize_text_field(Arr::get($eventData, 'color_schema', '#0099ff')),
             'event_type'        => sanitize_text_field(Arr::get($eventData, 'event_type')),
@@ -164,11 +165,11 @@ class CalendarService
                 'available_durations' => array_map('sanitize_text_field', Arr::get($eventSettings, 'multi_duration.available_durations', []))
             ],
             'booking_frequency'   => [
-                'enabled' => Arr::isTrue($data, 'settings.booking_frequency.enabled'),
+                'enabled' => Arr::isTrue($eventSettings, 'booking_frequency.enabled'),
                 'limits'  => self::sanitize_mapped_data(Arr::get($eventSettings, 'booking_frequency.limits', []))
             ],
             'booking_duration'      => [
-                'enabled' => Arr::isTrue($data, 'settings.booking_duration.enabled'),
+                'enabled' => Arr::isTrue($eventSettings, 'booking_duration.enabled'),
                 'limits'  => self::sanitize_mapped_data(Arr::get($eventSettings, 'booking_duration.limits', []))
             ],
             'lock_timezone'         => [
