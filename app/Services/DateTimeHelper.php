@@ -56,16 +56,33 @@ class DateTimeHelper
     public static function getTimeZone()
     {
         $timeZone = wp_timezone_string();
-
-        if (!in_array($timeZone, \DateTimeZone::listIdentifiers())) {
+        if (!$timeZone || !in_array($timeZone, \DateTimeZone::listIdentifiers())) {
             $timeZone = 'UTC';
         }
 
         return $timeZone;
     }
 
+    public static function getValidatedTimeZone($requestedTimeZone)
+    {
+        static $cached = [];
+        if (isset($cached[$requestedTimeZone])) {
+            return $cached[$requestedTimeZone];
+        }
+        
+        if (!in_array($requestedTimeZone, \DateTimeZone::listIdentifiers())) {
+            $requestedTimeZone = apply_filters('fluent_booking/fallback_timezone', self::getTimeZone(), $requestedTimeZone);
+        }
+
+        $cached[$requestedTimeZone] = $requestedTimeZone;
+        return $requestedTimeZone;
+    }
+
     public static function convertToUtc($dateTime, $timezone, $format = 'Y-m-d H:i:s')
     {
+
+        $timezone = self::getValidatedTimeZone($timezone);
+
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($timezone));
         $dateTime->setTimezone(new \DateTimeZone('UTC'));
         return $dateTime->format($format);
@@ -76,6 +93,7 @@ class DateTimeHelper
         $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
 
         if ($timezone != 'UTC') {
+            $timezone = self::getValidatedTimeZone($timezone);
             $dateTime->setTimezone(new \DateTimeZone($timezone));
         }
 
@@ -92,6 +110,9 @@ class DateTimeHelper
             $dateTime = gmdate('Y-m-d H:i', strtotime($date . ' ' . gmdate('H:i', strtotime($dateTime)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
 
+        $fromTimeZone = self::getValidatedTimeZone($fromTimeZone);
+        $toTimeZone = self::getValidatedTimeZone($toTimeZone);
+
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
         $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
         return $dateTime->format($format);
@@ -107,12 +128,15 @@ class DateTimeHelper
 
     public static function convertToIso($dateTime, $fromTimeZone = 'UTC')
     {
+        $fromTimeZone = self::getValidatedTimeZone($fromTimeZone);
+
         $dateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
         return $dateTime->format('Y-m-d\TH:i:s\Z');
     }
 
     public static function convertFromIso($dateTime, $toTimeZone = 'UTC')
     {
+        $toTimeZone = self::getValidatedTimeZone($toTimeZone);
         $dateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
         $dateTime->setTimezone(new \DateTimeZone($toTimeZone));
         return $dateTime->format('Y-m-d H:i:s');
@@ -120,6 +144,7 @@ class DateTimeHelper
 
     public static function getTimestamp($timezone = 'UTC')
     {
+        $timezone = self::getValidatedTimeZone($timezone);
         $dateTime = new \DateTime(gmdate('Y-m-d H:i:s'), new \DateTimeZone('UTC')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         $dateTime->setTimezone(new \DateTimeZone($timezone));
         $date = $dateTime->format('Y-m-d H:i:s');
@@ -143,16 +168,16 @@ class DateTimeHelper
     public static function getAvailableDateFormats()
     {
         $dateFormats = apply_filters('fluent_booking/available_date_formats', [
-            'm/d/Y'       => 'm/d/Y - (Ex: 05/20/2024)', // USA
-            'd/m/Y'       => 'd/m/Y - (Ex: 20/05/2024)', // Canada, UK
-            'd.m.Y'       => 'd.m.Y - (Ex: 20.05.2024)', // Germany
-            'n/j/y'       => 'n/j/y - (Ex: 5/20/24)',
-            'm/d/y'       => 'm/d/y - (Ex: 05/20/24)',
-            'M/d/Y'       => 'M/d/Y - (Ex: May/20/2024)',
-            'y/m/d'       => 'y/m/d - (Ex: 24/05/20)',
-            'Y-m-d'       => 'Y-m-d - (Ex: 2024-05-20)',
-            'd-M-y'       => 'd-M-y - (Ex: 20-May-24)',
-            'F j, Y'      => 'F j, Y - (Ex: May 20, 2024)'
+            'm/d/Y'  => 'm/d/Y - (Ex: 05/20/2024)', // USA
+            'd/m/Y'  => 'd/m/Y - (Ex: 20/05/2024)', // Canada, UK
+            'd.m.Y'  => 'd.m.Y - (Ex: 20.05.2024)', // Germany
+            'n/j/y'  => 'n/j/y - (Ex: 5/20/24)',
+            'm/d/y'  => 'm/d/y - (Ex: 05/20/24)',
+            'M/d/Y'  => 'M/d/Y - (Ex: May/20/2024)',
+            'y/m/d'  => 'y/m/d - (Ex: 24/05/20)',
+            'Y-m-d'  => 'Y-m-d - (Ex: 2024-05-20)',
+            'd-M-y'  => 'd-M-y - (Ex: 20-May-24)',
+            'F j, Y' => 'F j, Y - (Ex: May 20, 2024)'
         ]);
 
         $formatted = [];
@@ -267,12 +292,16 @@ class DateTimeHelper
 
     public static function getTodayDate($timezone = 'UTC', $format = 'Y-m-d')
     {
+        $timezone = self::getValidatedTimeZone($timezone);
         $dateTime = new \DateTime('now', new \DateTimeZone($timezone));
         return $dateTime->format($format);
     }
 
     public static function getDayDifference($dateTime, $fromTimeZone, $toTimeZone, $refDate = 'now')
     {
+        $fromTimeZone = self::getValidatedTimeZone($fromTimeZone);
+        $toTimeZone = self::getValidatedTimeZone($toTimeZone);
+
         if ($refDate != 'now') {
             $dateTime = gmdate('Y-m-d H:i', strtotime($refDate . ' ' . gmdate('H:i', strtotime($dateTime)))); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
         }
@@ -280,7 +309,7 @@ class DateTimeHelper
         $currentDate = new \DateTime($refDate, new \DateTimeZone($fromTimeZone));
 
         $originalDateTime = new \DateTime($dateTime, new \DateTimeZone($fromTimeZone));
-        
+
         $originalDateTime->setTimezone(new \DateTimeZone($toTimeZone));
 
         return $originalDateTime->format('z') - $currentDate->format('z');
@@ -288,6 +317,7 @@ class DateTimeHelper
 
     public static function getDaylightSavingTime($timezone)
     {
+        $timezone = self::getValidatedTimeZone($timezone);
         $timezone = new \DateTimeZone($timezone);
         $dateTime = new \DateTime('2024-01-01', $timezone);
 
@@ -307,6 +337,8 @@ class DateTimeHelper
         if (!$dateTime || !$timezone) {
             return false;
         }
+
+        $timezone = self::getValidatedTimeZone($timezone);
 
         $dateTimeObject = new \DateTime($dateTime, new \DateTimeZone($timezone));
 
