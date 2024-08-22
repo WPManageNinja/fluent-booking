@@ -111,7 +111,7 @@ class RemoteCalendarHelper
     {
         try {
             $durationSeconds = strtotime($sampleRange[1]) - strtotime($sampleRange[0]);
-
+            $timezone = DateTimeHelper::getValidatedTimeZone($timezone);
             // Define the time range you're interested in
             $minDate = new \DateTime($minDate, new \DateTimeZone($timezone));
             $maxDate = new \DateTime($maxDate, new \DateTimeZone($timezone));
@@ -193,6 +193,8 @@ class RemoteCalendarHelper
         if (isset($cache[$cacheKey])) {
             return $cache[$cacheKey];
         }
+
+        $timezone = DateTimeHelper::getValidatedTimeZone($timezone);
 
         $refDate = new \DateTime($refDate, new \DateTimeZone('UTC'));
         $refDate->setTimezone(new \DateTimeZone($timezone));
