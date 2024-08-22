@@ -74,6 +74,8 @@
 
     $: duration, maybeDurationChanged();
 
+    $: selectedDateTimes, maybeUpdateDaySlots();
+
     let lastTimeZone = timezone;
 
     let lastDuration = duration;
@@ -122,6 +124,10 @@
         const dateKeys = Object.keys(availableDates);
         const hasReqMonthDate = dateKeys.some(date => month == date.substring(5, 7) - 1);
         noAvailability = !hasReqMonthDate;
+    }
+
+    function maybeUpdateDaySlots() {
+        daySlots = [...daySlots];
     }
 
     function isSelectedDateTime(selectedDateTime, day) {
