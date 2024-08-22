@@ -103,12 +103,20 @@ class LandingPageHandler
 
         $activeEvents = CalendarSlot::where('calendar_id', $calendar->id)
             ->where('status', 'active');
-
+            
         if ($settings['show_type'] != 'all') {
             $activeEvents = $activeEvents->whereIn('id', $settings['enabled_slots']);
         }
-
+        
         $activeEvents = $activeEvents->get();
+
+        $eventOrder = $calendar->getMeta('event_order');
+
+        if (!empty($eventOrder)) {
+            $activeEvents = $activeEvents->sortBy(function($event) use ($eventOrder) {
+                return array_search($event->id, $eventOrder);
+            })->values();
+        }
 
         foreach ($activeEvents as $activeEvent) {
             $activeEvent->payment_html = $activeEvent->getPaymentHtml();

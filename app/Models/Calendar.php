@@ -84,7 +84,7 @@ class Calendar extends Model
     public function metas()
     {
         return $this->hasMany(Meta::class, 'object_id', 'id')
-            ->where('object_type', 'calendar');
+            ->where('object_type', 'Calendar');
     }
 
     public function isTeamCalendar()
@@ -100,6 +100,25 @@ class Calendar extends Model
     public function isHostCalendar()
     {
         return $this->type == 'simple';
+    }
+
+    public function updateEventOrder($eventId)
+    {
+        $eventOrder = $this->getMeta('event_order', []);
+
+        if ($eventOrder) {
+            $updatedOrder = array_merge($eventOrder, [$eventId]);
+
+            if (in_array($eventId, $eventOrder)) {
+                $updatedOrder = array_filter($eventOrder, function($id) use ($eventId) {
+                    return $id !== $eventId;
+                });
+            }
+
+            return $this->updateMeta('event_order', array_values($updatedOrder));
+        }
+
+        return $eventOrder;
     }
 
     public function getAuthorPhoto()
