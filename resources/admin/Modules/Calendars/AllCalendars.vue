@@ -73,7 +73,7 @@
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item command="import"><el-icon><UploadFilled /></el-icon>
-                                {{ $t('Import') }}
+                                {{ $t('Import Calendar') }}
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </template>

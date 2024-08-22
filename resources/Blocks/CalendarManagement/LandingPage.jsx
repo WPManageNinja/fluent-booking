@@ -25,6 +25,14 @@ export const LandingPage = props => {
 
     if (calendarId) {
         calendar = calendars.find(cal => cal.id === calendarId);
+        const eventOrder = calendar.event_order ?? [];
+        calendar.events = calendar.events.slice().sort((a, b) => {
+            const indexA = eventOrder.indexOf(a.id);
+            const indexB = eventOrder.indexOf(b.id);
+            const posA = indexA >= 0 ? indexA : Number.MAX_SAFE_INTEGER;
+            const posB = indexB >= 0 ? indexB : Number.MAX_SAFE_INTEGER;
+            return posA - posB;
+        });
     }
 
     return [
@@ -56,7 +64,7 @@ export const LandingPage = props => {
                 </div>
                 { eventIds.length && calendar.events?.length ?
                     <div>
-                        {!hideInfo && 
+                        {!hideInfo &&
                             <div className="fcal_calendar_management_block_header">
                                 <img src={calendar?.author?.avatar} alt={calendar?.title} />
                                 <h4>{calendar?.title}</h4>
@@ -97,7 +105,7 @@ export const LandingPage = props => {
                                                             <span dangerouslySetInnerHTML={{ __html: event.payment_html }} />
                                                         }
                                                     </div>
-                                                    <button className="book_now">{__('Book Noww')}</button>
+                                                    <button className="book_now">{__('Book Now')}</button>
                                                 </div>
                                             </div>
                                         )

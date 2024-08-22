@@ -59,13 +59,11 @@ class BlockEditorHandler
             $formattedCalendars = [];
 
             foreach ($calendars as $calendar) {
-                $events = $calendar->events;
-                if ($events->isEmpty()) {
+                if ($calendar->events->isEmpty()) {
                     continue;
                 }
 
                 $formattedEvents = [];
-
                 foreach ($calendar->events as $event) {
                     $formattedEvents[] = [
                         'id'           => (string)$event->id,
@@ -84,6 +82,7 @@ class BlockEditorHandler
                     'title'       => $calendar->title,
                     'description' => wpautop(Helper::excerpt($calendar->description, 200)),
                     'author'      => $calendar->getAuthorProfile(),
+                    'event_order' => $calendar->getMeta('event_order'),
                     'events'      => $formattedEvents
                 ];
             }
@@ -240,26 +239,31 @@ class BlockEditorHandler
             if (!$calendar) {
                 continue;
             }
+
             $eventIds = Arr::get($config, 'events', []);
             if (!$eventIds) {
                 continue;
             }
 
-            $isAll = in_array('all', $eventIds);
-
-            if ($isAll) {
-                $events = CalendarSlot::where('calendar_id', $calendar->id)
-                    ->where('status', 'active')
-                    ->get();
-            } else {
-                $events = CalendarSlot::where('calendar_id', $calendar->id)
-                    ->whereIn('id', $eventIds)
-                    ->where('status', 'active')
-                    ->get();
+            $eventsQuery = CalendarSlot::where('calendar_id', $calendar->id)
+                ->where('status', 'active');
+            
+            if (!in_array('all', $eventIds)) {
+                $eventsQuery->whereIn('id', $eventIds);
             }
+
+            $events = $eventsQuery->get();
 
             if ($events->isEmpty()) {
                 continue;
+            }
+
+            $eventOrder = $calendar->getMeta('event_order');
+
+            if (!empty($eventOrder)) {
+                $events = $events->sortBy(function($event) use ($eventOrder) {
+                    return array_search($event->id, $eventOrder);
+                })->values();
             }
 
             foreach ($events as $event) {
@@ -299,21 +303,25 @@ class BlockEditorHandler
             return '';
         }
 
-        $isAll = in_array('all', $eventIds);
-
-        if ($isAll) {
-            $events = CalendarSlot::where('calendar_id', $calendar->id)
-                ->where('status', 'active')
-                ->get();
-        } else {
-            $events = CalendarSlot::where('calendar_id', $calendar->id)
-                ->whereIn('id', $eventIds)
-                ->where('status', 'active')
-                ->get();
+        $eventsQuery = CalendarSlot::where('calendar_id', $calendar->id)
+            ->where('status', 'active');
+        
+        if (!in_array('all', $eventIds)) {
+            $eventsQuery->whereIn('id', $eventIds);
         }
+
+        $events = $eventsQuery->get();
 
         if ($events->isEmpty()) {
             return '';
+        }
+
+        $eventOrder = $calendar->getMeta('event_order');
+
+        if (!empty($eventOrder)) {
+            $events = $events->sortBy(function($event) use ($eventOrder) {
+                return array_search($event->id, $eventOrder);
+            })->values();
         }
 
         foreach ($events as $event) {
@@ -324,7 +332,7 @@ class BlockEditorHandler
             $event->short_description = Helper::excerpt($event->description);
             $event->locations = $event->defaultLocationHtml();
         }
-        
+
         $calendar->activeEvents = $events;
 
         return (new FrontEndHandler())->renderCalendarBlock($calendar, [
