@@ -177,9 +177,6 @@ $whiteBG: #ffffff;
       }
       span {
         margin-top: -0.2rem;
-        &.fcal_multi_time {
-            margin-left: 1.5rem;
-        }
       }
     }
     .fcal_remaining_spot {
@@ -1472,6 +1469,30 @@ body >.fcal_calendar_wrap {
       }
       .fcal_duration_title {
         margin-top: -0.2rem;
+      }
+
+      &.fcal_time_limit_error {
+        color: rgb(185, 28, 28);
+        svg {
+            margin-top: 2px;
+            stroke: rgb(185, 28, 28);
+            circle {
+                fill: none;
+                stroke: rgb(185, 28, 28);
+            }
+        }
+      }
+
+      .fcal_multi_time {
+        margin-left: 1.5rem;
+      }
+      .fcal_remove_time {
+        transform: rotate(45deg);
+        font-size: 20px;
+        font-weight: 600;
+        color: rgb(185, 28, 28);
+        line-height: 18px;
+        cursor: pointer;
       }
     }
 

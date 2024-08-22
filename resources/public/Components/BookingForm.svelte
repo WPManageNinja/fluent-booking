@@ -243,14 +243,14 @@
 
     let getSubTotal = (items) => {
         if (appData.multi_payment_items) {
-            return parseFloat(slot.total_payment);
+            return parseFloat(slot.total_payment) * quantity;
         }
 
         let subtotal = 0;
         for (let item of items) {
             subtotal += parseFloat(item.value);
         }
-        return subtotal;
+        return subtotal * quantity;
     }
 
     function handleError(errors) {

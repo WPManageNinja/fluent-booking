@@ -21,6 +21,7 @@
     const isFluentform = appData.is_fluentform;
     const dateFormatter = appData.date_formatter;
     const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
+    const multiBookingLimit = slot.settings?.multiple_booking?.limit || 5;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
 
     let form = getPreSelectsFormData();
@@ -29,6 +30,7 @@
     let component = null;
     let isBookingDone = false;
     let bookingConfirmationHtml = '';
+    let limitReachedError = '';
 
     let skipCalendar = !!slot.pre_selects?.time;
     let selectedDate = false;
@@ -122,6 +124,7 @@
     }
     
     function spotClicked(spot) {
+        limitReachedError = '';
         if (!spot) {
             selectedDateTimes = [];
             return;
@@ -133,9 +136,12 @@
         const indx = selectedDateTimes.findIndex(item => item.start === spot.start);
         if (indx > -1) {
             selectedDateTimes.splice(indx, 1);
-        } else {
+        } else if (selectedDateTimes.length < multiBookingLimit) {
             selectedDateTimes.push(spot);
+        } else if (selectedDateTimes.length >= multiBookingLimit) {
+            limitReachedError = i18(`You can only book up to ${multiBookingLimit} slots at a time`);
         }
+
         quantity = selectedDateTimes.length || 1;
         selectedDateTimes = [...selectedDateTimes];
     }
@@ -221,6 +227,7 @@
         if (wrapperWidth < 800) {
             selectedDate = null;
         }
+        limitReachedError = '';
         selectedDateTime = {};
         component.style.height = 'auto';
         summaryDetailsHeightHandle();
@@ -405,9 +412,22 @@
                                                         {util.dateTimeI18(selectedTime.start, 'hh:mma')} - {util.dateTimeI18(selectedTime.end, 'hh:mma')},
                                                     {/if}
                                                     {util.dateTimeI18(selectedTime.start, dateFormatter)}
-                                                </span>                                                
+                                                </span>
+                                                {#if selectedDateTimes.length > 1}
+                                                    <span class="fcal_remove_time"
+                                                        on:click={() => spotClicked(selectedTime)}
+                                                        on:keypress={(e) => { spotClicked(selectedTime) }}>
+                                                        +
+                                                    </span>
+                                                {/if}
                                             </div>
                                         {/each}
+                                        {#if limitReachedError}
+                                            <div class="fcal_time_limit_error fcal_icon_item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 ltr:mr-2 rtl:ml-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg>
+                                                <span>{limitReachedError}</span>
+                                            </div>
+                                        {/if}
                                         <div class="slot_time_range slot_timezone fcal_icon_item">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                                 <path d="M9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5Z" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.99995 2.25H6.74995C5.28745 6.63 5.28745 11.37 6.74995 15.75H5.99995" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.25 2.25C12.7125 6.63 12.7125 11.37 11.25 15.75" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.25 12V11.25C6.63 12.7125 11.37 12.7125 15.75 11.25V12" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.25 6.74995C6.63 5.28745 11.37 5.28745 15.75 6.74995" stroke="#445164" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
