@@ -228,7 +228,9 @@
             selectedDate = null;
         }
         limitReachedError = '';
+        quantity = 1;
         selectedDateTime = {};
+        selectedDateTimes = [];
         component.style.height = 'auto';
         summaryDetailsHeightHandle();
     }
