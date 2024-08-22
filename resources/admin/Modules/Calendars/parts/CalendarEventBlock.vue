@@ -37,6 +37,9 @@
                             <el-dropdown-item command="clone"><el-icon><CopyDocument /></el-icon>
                                 {{ $t('Clone from') }}
                             </el-dropdown-item>
+                            <el-dropdown-item command="reorder"><el-icon><Rank /></el-icon>
+                                {{ $t('Reorder Events') }}
+                            </el-dropdown-item>
                             <el-dropdown-item command="export"><el-icon><Download /></el-icon>
                                 {{ $t('Export') }}
                             </el-dropdown-item>
@@ -49,8 +52,8 @@
             </div>
         </div>
         <div class="fcal_cal_slots">
-            <div v-if="calendar.slots.length" class="fcal_cal_slot" v-for="(slot, slotIndex) in calendar.slots" :key="slot.id">
-                <each-slot @slotDeleted="slotDeleted(slotIndex)" :slot="slot" :calendarId="calendar.id"/>
+            <div v-if="calendar.slots.length" class="fcal_cal_slot" v-for="(slot, slotIndex) in orderedCalendarEvents" :key="slot.id">
+                <each-slot @slotDeleted="slotDeleted(slot.id)" :slot="slot" :calendarId="calendar.id"/>
             </div>
             <div v-else class="fcal_cal_empty_slots">
                 {{ $t('No Event Found!') }}
@@ -202,6 +205,14 @@
                 <SaveButton :saving="saving" :disabled="!cloneEventId" :label="$t('Clone Event')" @click="cloneEvent"/>
             </div>
         </el-drawer>
+
+        <ReorderDialog
+            v-if="reorderModal"
+            :openModal="reorderModal"
+            :calendar="calendar"
+            @saveOrder="$emit('fetchCalendar')"
+            @closeModal="reorderModal = false"
+        />
         <ProNoticeDialog 
             v-if="noticeModal" 
             :openModal="noticeModal" 
@@ -213,12 +224,13 @@
 
 <script>
 import EachSlot from "./EachSlot";
-import { Setting, User, Right, MoreFilled, Delete, CopyDocument, Download, Link } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled, Delete, Rank, CopyDocument, Download, Link } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings";
 import SaveButton from "../../../Components/Buttons/SaveButton.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import TeamMemberSelector from "@/Pieces/TeamMemberSelector.vue";
 import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
+import ReorderDialog from "./_ReorderDialog";
 
 export default {
     name: 'CalendarEventBlock',
@@ -232,10 +244,12 @@ export default {
         TeamMemberSelector,
         MoreFilled,
         Delete,
+        Rank,
         CopyDocument,
         Download,
         Link,
         SaveButton,
+        ReorderDialog,
         ProNoticeDialog
     },
     data() {
@@ -246,6 +260,7 @@ export default {
             showSettings: false,
             isNewBookingOpen: false,
             isCloneOpen: false,
+            reorderModal: false,
             noticeModal: false,
             noticeTitle: '',
             teamMembers: [],
@@ -258,11 +273,24 @@ export default {
         },
         filteredEventList() {
             return this.calendarEvents.filter(calendarEvent => calendarEvent.id != this.calendar.id);
+        },
+        orderedCalendarEvents() {
+            const eventOrder = this.calendar.event_order ?? [];
+            return this.calendar.slots.slice().sort((a, b) => {
+                const indexA = eventOrder.indexOf(a.id);
+                const indexB = eventOrder.indexOf(b.id);
+                const posA = indexA == -1 ? Number.MAX_SAFE_INTEGER : indexA;
+                const posB = indexB == -1 ? Number.MAX_SAFE_INTEGER : indexB;
+                return posA - posB;
+            });
         }
     },
     methods: {
-        slotDeleted(slotIndex) {
-            this.calendar.slots.splice(slotIndex, 1);
+        slotDeleted(slotId) {
+            const slotIndex = this.calendar.slots.findIndex(slot => slot.id === slotId);
+            if (slotIndex > 0) {
+                this.calendar.slots.splice(slotIndex, 1);
+            }
         },
         goToCalendarSetting() {
             this.$router.push({
@@ -331,6 +359,11 @@ export default {
                 return;
             }
 
+            if (command == 'reorder') {
+                this.reorderModal = true;
+                return;
+            }
+
             if (command == 'export') {
                 this.exportCalendar();
                 return;
@@ -347,7 +380,7 @@ export default {
                     })
                         .then(response => {
                             this.$handleSuccess(response);
-                            this.$emit('fetchCalendar')
+                            this.$emit('fetchCalendar');
                         })
                         .catch(errors => {
                             this.$handleError(errors);

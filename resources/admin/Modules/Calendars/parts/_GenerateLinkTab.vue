@@ -34,8 +34,8 @@
                     <table class="fcal_table">
                         <thead>
                             <tr>
-                                <th>{{'Field'}}</th>
-                                <th>{{'Value'}}</th>
+                                <th>{{ $t('Field')}}</th>
+                                <th>{{$t('Value')}}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -59,7 +59,7 @@
                                             :placeholder="field.placeholder"
                                             type="date"
                                             size="small"
-                                            :default-value="new Date(2024, 9, 1)"
+                                            :default-value="new Date()"
                                             value-format="YYYY-MM-DD"
                                         />
                                     </template>
@@ -67,7 +67,7 @@
                                         <el-time-select
                                             v-model="field.value"
                                             start="00:00"
-                                            :step="'00:15'"
+                                            :step="'00:05'"
                                             end="23:59"
                                             :placeholder="$t('Start Time')"
                                             popper-class="fcal_select"

@@ -260,7 +260,17 @@ class FrontEndHandler
         $calendars = Calendar::query()->whereIn('id', $calendarIds)->get();
 
         foreach ($calendars as $calendar) {
-            $calendar->activeEvents = $calendarEvents[$calendar->id];
+            $calendar->activeEvents = $calendarEvents[$calendar->id] ?? [];
+            $eventOrder = $calendar->getMeta('event_order');
+            if (!empty($eventOrder)) {
+                $eventsArray = $calendar->activeEvents;
+                usort($eventsArray, function($a, $b) use ($eventOrder) {
+                    $posA = array_search($a->id, $eventOrder);
+                    $posB = array_search($b->id, $eventOrder);
+                    return $posA - $posB;
+                });
+                $calendar->activeEvents = $eventsArray;
+            }
         }
 
         return $this->renderTeamHosts($calendars, [
@@ -360,6 +370,14 @@ class FrontEndHandler
             return '';
         }
 
+        $eventOrder = $calendar->getMeta('event_order');
+
+        if (!empty($eventOrder)) {
+            $calendarEvents = $calendarEvents->sortBy(function($event) use ($eventOrder) {
+                return array_search($event->id, $eventOrder);
+            })->values();
+        }
+
         foreach ($calendarEvents as $event) {
             $event->payment_html = $event->getPaymentHtml();
             $event->public_url = $event->getPublicUrl();
@@ -368,7 +386,7 @@ class FrontEndHandler
             $event->short_description = Helper::excerpt($event->description);
             $event->locations = $event->defaultLocationHtml();
         }
-        
+
         $calendar->activeEvents = $calendarEvents;
 
         return $this->renderCalendarBlock($calendar, [

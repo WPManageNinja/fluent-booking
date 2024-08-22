@@ -1078,6 +1078,122 @@
                     }
                 }
             }
+            &.fcal_reorder_event_dialog {
+                max-width: 700px;
+                .el-dialog__header {
+                    margin: 0 20px;
+                    h3 {
+                        margin: 0;
+                        font-size: 20px;
+                    }
+                }
+                .el-dialog__body {
+                    padding-top: 10px;
+                    .fcal_reorder_wrapper {
+                        .fcal_reorder_header {
+                            text-align: center;
+                            .fcal_author_avatar {
+                                width: 80px;
+                                height: 80px;
+                                margin-top: 12px;
+                                object-fit: cover;
+                                border-radius: 8px;
+                            }
+                            .fcal_author_title {
+                                margin-top: 5px;
+                            }
+                        }
+                        .fcal_reorder_events {
+                            border-top-right-radius: 8px;
+                            border-top-left-radius: 8px;
+                            border-bottom-left-radius: 8px;
+                            border-bottom-right-radius: 8px;
+                            border: 1px solid #d6dae1;
+                            .fcal_reorder_event {
+                                position: relative;
+                                padding: 12px 24px;
+                                transition: 0.3s;
+                                border-bottom: 1px solid #d6dae1;
+                                &:hover {
+                                    background: #f6f7f8;
+                                    .fcal_reorder_icon {
+                                        .el-icon {
+                                            transform: scale(1);
+                                        }
+                                    }
+                                }
+                                &:last-child {
+                                    border-bottom: none;
+                                }
+                                .fcal_reorder_icon {
+                                    left: -10px;
+                                    gap: 12px;
+                                    z-index: 9;
+                                    height: 80%;
+                                    display: flex;
+                                    position: absolute;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    .el-icon {
+                                        width: 20px;
+                                        height: 20px;
+                                        line-height: 20px;
+                                        text-align: center;
+                                        border-radius: 4px;
+                                        border: 1px solid #EAECF0;
+                                        background: #ffffff;
+                                        transition: 0.3s;
+                                        transform: scale(0);
+                                        cursor: pointer;
+                                        &:hover {
+                                            border-color: #1B2533;
+                                        }
+                                    }
+                                }
+                                .fcal_event_title {
+                                    margin: 0;
+                                    padding-left: 18px;
+                                    font-size: 16px;
+                                    font-weight: 700;
+                                    line-height: 24px;
+                                    position: relative;
+                                    .fcal_event_color {
+                                        left: 0;
+                                        top: 8px;
+                                        width: 10px;
+                                        height: 10px;
+                                        border-radius: 50%;
+                                        position: absolute;
+                                        background: rgb(10, 232, 240);
+                                    }
+                                }
+                                .fcal_event_description {
+                                    color: #6b7280;
+                                    font-size: 15px;
+                                    line-height: 24px;
+                                    margin: 4px 0 4px;
+                                    padding-left: 18px;
+                                }
+                                .fcal_event_infos {
+                                    gap: 18px;
+                                    display: flex;
+                                    padding-left: 18px;
+                                    .fcal_event_info {
+                                        gap: 5px;
+                                        font-size: 12px;
+                                        font-weight: 400;
+                                        display: flex;
+                                        align-items: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .el-dialog__footer {
+                    margin: 0 20px;
+                }
+            }
         }
         .el-dialog__body {
             .el-form {

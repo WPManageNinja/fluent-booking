@@ -26,6 +26,8 @@ $router->prefix('calendars')->withPolicy('CalendarPolicy')->group(function ($rou
     $router->get('/{id}/sharing-settings', 'CalendarController@getSharingSettings')->int('id');
     $router->post('/{id}/sharing-settings', 'CalendarController@saveSharingSettings')->int('id');
 
+    $router->post('/{id}/event-order', 'CalendarController@saveCalendarEventOrder')->int('id');
+
     $router->post('/{id}/clone-event/{event_id}', 'CalendarController@cloneCalendarEvent')->int('id')->int('event_id');
 
     $router->get('/{id}/events/{event_id}', 'CalendarController@getEvent')->int('id')->int('event_id');

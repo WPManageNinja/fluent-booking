@@ -423,8 +423,11 @@ class CalendarService
     private static function sanitize_mapped_data($settings)
     {
         $sanitizerMap = [
-            'value' => 'intval',
-            'unit'  => 'sanitize_text_field',
+            'value'                 => 'intval',
+            'unit'                  => 'sanitize_text_field',
+            'subject'               => 'sanitize_text_field',
+            'body'                  => 'fcal_sanitize_html',
+            'additional_recipients' => 'sanitize_text_field'
         ];
 
         return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);

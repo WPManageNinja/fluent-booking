@@ -58,12 +58,14 @@ class CalendarController extends Controller
         foreach ($calendars as $calendar) {
             $calendar->author_profile = $calendar->getAuthorProfile();
             $calendar->public_url = $calendar->getLandingPageUrl();
+            $calendar->event_order = $calendar->getMeta('event_order');
             foreach ($calendar->slots as $slot) {
                 $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
                 $slot->public_url = $slot->getPublicUrl();
                 $slot->duration = $slot->getDefaultDuration();
                 $slot->price_total = $slot->getPricingTotal();
                 $slot->location_fields = $slot->getLocationFields();
+                $slot->short_description = Helper::excerpt($slot->getDescription());
                 $slot->author_profiles = $slot->isMultiHostEvent() ? $slot->getAuthorProfiles() : [];
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
@@ -504,6 +506,8 @@ class CalendarController extends Controller
 
         do_action('fluent_booking/after_create_event', $calendar, $createdSlot);
 
+        $calendar->updateEventOrder($createdSlot->id);
+
         return [
             'message' => __('New Event Type has been created successfully', 'fluent-booking'),
             'slot'    => $createdSlot
@@ -683,6 +687,8 @@ class CalendarController extends Controller
 
         $clonedEvent->save();
 
+        $calendar->updateEventOrder($clonedEvent->id);
+
         $eventsMeta = $originalEvent->event_metas;
 
         foreach ($eventsMeta as $meta) {
@@ -692,8 +698,22 @@ class CalendarController extends Controller
         }
 
         return [
-            'message' => __('The Event Type has been cloned successfully', 'fluent-booking'),
-            'slot'    => $clonedEvent
+            'slot'    => $clonedEvent,
+            'message' => __('The Event Type has been cloned successfully', 'fluent-booking')
+        ];
+    }
+
+    public function saveCalendarEventOrder(Request $request, $calendarId)
+    {
+        $calendar = Calendar::findOrFail($calendarId);
+
+        $eventOrder = array_map('intval', $request->get('event_order', []));
+
+        $calendar->updateMeta('event_order', array_filter($eventOrder));
+
+        return [
+            'calendar' => $calendar,
+            'message' => __('Event order has been updated', 'fluent-booking')
         ];
     }
 
@@ -824,10 +844,15 @@ class CalendarController extends Controller
     public function deleteCalendarEvent(Request $request, $calendarId, $calendarEventId)
     {
         $calendar = Calendar::query()->findOrFail($calendarId);
+
         $calendarEvent = CalendarSlot::query()->where('calendar_id', $calendar->id)->findOrFail($calendarEventId);
 
+        $calendar->updateEventOrder($calendarEvent->id);
+
         do_action('fluent_booking/before_delete_calendar_event', $calendarEvent, $calendar);
+
         $calendarEvent->delete();
+
         do_action('fluent_booking/after_delete_calendar_event', $calendarEventId, $calendar);
 
         return [
