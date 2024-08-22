@@ -55,8 +55,8 @@ class BookingService
         $booking = Booking::create($bookingData);
 
         self::attachHosts($booking, $calendarSlot);
-        self::updateMetas($booking, $customFieldsData, $additionalGuests);
         self::updateParentInfo($booking, $bookingIds);
+        self::updateMetas($booking, $bookingData, $customFieldsData, $additionalGuests);
 
         $booking->load('calendar');
 
@@ -171,7 +171,7 @@ class BookingService
         return $event ? $event->group_id : null;
     }
 
-    private static function updateMetas($booking, $customFieldsData, $additionalGuests)
+    private static function updateMetas($booking, $bookingData, $customFieldsData, $additionalGuests)
     {
         if ($customFieldsData) {
             Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
@@ -179,6 +179,10 @@ class BookingService
 
         if ($additionalGuests) {
             Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
+        }
+
+        if ($quantity = Arr::get($bookingData, 'quantity')) {
+            Helper::updateBookingMeta($booking->id, 'quantity', $quantity);
         }
     }
 
