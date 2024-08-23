@@ -14,6 +14,11 @@ class FluentCrmInit
 
         // Contextual SmartCodes
         (new CrmSmartCode())->register();
+
+        add_filter('fluent_crm_asset_listed_slugs', function ($lists) {
+            $lists[] = 'fluent-booking';
+            return $lists;
+        });
     }
 
     /**
