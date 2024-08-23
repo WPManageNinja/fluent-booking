@@ -10,6 +10,10 @@ export const attributes = {
         type: 'string',
         default: ''
     },
+    eventHash: {
+        type: 'string',
+        default: ''
+    },
     calendars: {
         type: 'array',
         default: []

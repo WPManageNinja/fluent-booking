@@ -105,6 +105,10 @@ class BlockEditorHandler
                         'type'    => 'string',
                         'default' => '',
                     ],
+                    'eventHash'     => [
+                        'type'    => 'string',
+                        'default' => '',
+                    ],
                     'avatar_rounded' => [
                         'type'    => 'boolean',
                         'default' => false
