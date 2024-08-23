@@ -14,6 +14,7 @@ export const LandingPage = props => {
             slotId,
             calendars,
             calendarId,
+            eventHash,
             avatarStyle,
             hideHostInfo,
             theme
@@ -26,6 +27,7 @@ export const LandingPage = props => {
 
     const apiFetch = wp.apiFetch;
     const {addQueryArgs} = wp.url;
+    const [allCalendars, setAllCalendars] = useState([]);
 
     useEffect(() => {
         getCalendars();
@@ -40,7 +42,7 @@ export const LandingPage = props => {
             })
         })
         .then((response) => {
-            setAttributes( { calendars: response.calendars.data } );
+            setAllCalendars(response.calendars.data);
         })
         .catch(error => {
             setError(error);
@@ -74,9 +76,11 @@ export const LandingPage = props => {
 
     const handleCalendar = (event) => {
         const ids = event.target.value.split(",");
+        const selectedSlot = allCalendars.find(cal => cal.id == ids[1]).slots.find(slot => slot.id == ids[0]);
 
         setAttributes( { slotId: ids[0] } );
         setAttributes( { calendarId: ids[1] } );
+        setAttributes( { eventHash: selectedSlot.hash } );
     }
 
     return [
@@ -146,14 +150,14 @@ export const LandingPage = props => {
                                 :
                             <div>
                                 {
-                                    calendars && calendars.length && !error ?
+                                    allCalendars && allCalendars.length && !error ?
                                         <select
                                             value={[slotId, calendarId]}
                                             id="fcal_select_calendar"
                                             onChange={handleCalendar}
                                         >
                                             <option key="default" value="">{__('---Select a Event---')}</option>
-                                            {calendars.map((item, index) => {
+                                            {allCalendars.map((item, index) => {
                                                 return <optgroup label={item.title} key={index}>
                                                     {
                                                         item.slots.map((slot, index) => {

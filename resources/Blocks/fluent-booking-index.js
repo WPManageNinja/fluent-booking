@@ -6,8 +6,8 @@ import Save from './save';
 import { attributes } from './attributes';
 
 registerBlockType('fluent-booking/calendar', {
-    title: __('Fluent Booking'),
-    description: __('Fluent Booking'),
+    title: __('Fluent Booking Event'),
+    description: __('Fluent Booking Event'),
     category: 'layout',
     icon: {
         src: <svg xmlns="http://www.w3.org/2000/svg" width="30" height="32" viewBox="0 0 30 32" fill="none">
