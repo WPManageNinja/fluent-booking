@@ -38,7 +38,7 @@
                 type="button"
                 class="fcal_add_guest_btn"
                 on:click={(() => handleAddGuest())}>
-                {'+ ' + (form[field.name].length === 0 ? addGuestLabel() : i18('Add another'))}
+                {'+ ' + (form[field.name].length === 0 ? i18('Add guest') : i18('Add another'))}
             </button>
         {/if}
     </div>
@@ -98,13 +98,6 @@
             return Math.min(field.limit, spot.remaining);
         }
         return field.limit;
-    }
-
-    function addGuestLabel() {
-        if (isMultiGuests) {
-            return i18('Add attendee');
-        }
-        return i18('Add guest');
     }
 
     function handleRemoveGuest(index) {
