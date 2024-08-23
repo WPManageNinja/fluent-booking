@@ -6,7 +6,7 @@
         <div class="fcal_settings_body">
             <el-aside v-loading="loading">
                 <ul class="fcal_settings_sidebar">
-                    <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item">
+                    <li v-for="(menu, itemName) in menuItems" :key="itemName" class="fcal_settings_submenu_item" :class="menu.class">
                         <router-link class="fcal_img_menu_link" :to="menu.route" @click.native="setMenuStatus(menu.disable)">
                             <img v-if="menu.icon_url" class="fcal_img_icon" :src="menu.icon_url"/>
                             <el-icon v-else-if="menu.el_icon" class="fcal_img_icon">

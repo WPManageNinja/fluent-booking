@@ -72,9 +72,6 @@
             &.router-link-exact-active {
                 background: $primaryColor;
                 color: #ffffff;
-                img {
-                    filter: invert(1);
-                }
                 svg {
                     path {
                         stroke: #ffffff;
@@ -85,6 +82,29 @@
                 svg {
                     path {
                         stroke: #ffffff;
+                    }
+                }
+            }
+        }
+
+
+        &.configure_nextcloud_calendar {
+            a {
+                img {
+                    width: 24px;
+                    flex: none;
+                    display: block;
+                    max-width: none;
+                }
+            }
+        }
+        &.configure_nextcloud_calendar,
+        &.advanced_features_and_addons,
+        &.configure_twilio {
+            a {
+                &.router-link-exact-active {
+                    img {
+                        filter: invert(1);
                     }
                 }
             }
