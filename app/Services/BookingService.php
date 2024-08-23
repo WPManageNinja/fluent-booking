@@ -97,7 +97,6 @@ class BookingService
                     $createdBookingIds = $bookingIds;
                     $bookingData['quantity'] = $totalBooking;
                 } else {
-                    $bookingData['status'] = !$isConfRequired ? 'scheduled' : 'pending';
                     $bookingData['payment_status'] = '';
                     $bookingData['payment_method'] = '';
                 }
@@ -140,7 +139,6 @@ class BookingService
                     $createdBookingIds = $bookingIds;
                     $bookingData['quantity'] = $totalBooking;
                 } else {
-                    $bookingData['status'] = 'scheduled';
                     $bookingData['payment_status'] = '';
                     $bookingData['payment_method'] = '';
                 }

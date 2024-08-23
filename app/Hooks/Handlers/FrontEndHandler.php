@@ -894,6 +894,9 @@ class FrontEndHandler
         if ($additionalGuests) {
             $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
             $guestLimit = Arr::get($guestField, 'limit', 10);
+            if ($calendarEvent->isMultiGuestEvent()) {
+                $guestLimit--;
+            }
             $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
