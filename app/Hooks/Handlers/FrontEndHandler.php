@@ -779,7 +779,7 @@ class FrontEndHandler
             }
         }
 
-        $duration  = (int)$calendarEvent->getDuration(Arr::get($postedData, 'duration', null));
+        $duration = (int)$calendarEvent->getDuration(Arr::get($postedData, 'duration', null));
 
         if ($calendarEvent->isPaymentEnabled($duration)) {
             $rules['payment_method'] = 'required';
@@ -787,8 +787,17 @@ class FrontEndHandler
         }
 
         if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
-            $postedData['guests'] = array_filter(array_map('sanitize_email', $additionalGuests));
+            if (in_array($calendarEvent->event_type, ['group', 'group_event'])) {
+                $additionalGuests = $this->sanitize_mapped_data($additionalGuests);
+                $additionalGuests = array_values(array_filter($additionalGuests, function ($guest) {
+                    return Arr::get($guest, 'name') && Arr::get($guest, 'email');
+                }));
+            } else {
+                $additionalGuests = array_filter(array_map('sanitize_email', $additionalGuests));
+            }
         }
+
+        $postedData['guests'] = $additionalGuests;
 
         $requiredFields = array_filter($calendarEvent->getMeta('booking_fields', []), function ($field) {
             return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && (Arr::get($field, 'name') == 'message' || Arr::get($field, 'name') == 'guests');
@@ -1095,5 +1104,15 @@ class FrontEndHandler
 
         wp_redirect($meeting->getConfirmationUrl());
         exit;
+    }
+
+    private static function sanitize_mapped_data($settings)
+    {
+        $sanitizerMap = [
+            'name'  => 'sanitize_text_field',
+            'email' => 'sanitize_email',
+        ];
+
+        return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);
     }
 }

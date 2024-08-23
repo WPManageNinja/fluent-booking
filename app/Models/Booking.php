@@ -319,7 +319,14 @@ class Booking extends Model
     {
         $authors = $this->getHostsDetails();
 
-        $guestName = trim($this->first_name . ' ' . $this->last_name);
+        $guestNames = (array) trim($this->first_name . ' ' . $this->last_name);
+
+        if ($this->isMultiGuestBooking()) {
+            $otherGuests = self::where('parent_id', $this->id)->get()->map(function ($guest) {
+                return trim($guest->first_name . ' ' . $guest->last_name);
+            })->toArray();
+            $guestNames = array_merge($guestNames, $otherGuests);
+        }
 
         $hostUserId = $this->host_user_id;
 
@@ -330,7 +337,9 @@ class Booking extends Model
             $authorListHtml .= '<li class="fcal_host_name">' . $author['name'] . $authorBadge . '</li>';
         }
 
-        $authorListHtml .= '<li class="fcal_guest_name">' . $guestName . '</li>';
+        foreach ($guestNames as $guestName) {
+            $authorListHtml .= '<li class="fcal_guest_name">' . $guestName . '</li>';
+        }
         $authorListHtml .= '</ul>';
     
         return $authorListHtml;

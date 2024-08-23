@@ -43,19 +43,29 @@
     export let duration;
     export let quantity;
 
+    let initialValues = [];
+
+    $: quantity, maybeUpdateQuantity();
+
     const multiPayments = field.multi_payment_items;
     const paymentMethods = Object.values(field?.payment_methods || {});
     const totalMethod = Object.keys(field?.payment_methods || {}).length;
 
     form[field.name] = form[field.name] || (totalMethod !=0 && paymentMethods[0].name);
 
-    onMount(() => {
+    function maybeUpdateQuantity() {
         const paymentElements = document.querySelectorAll('.fcal_payment_amount');
-        paymentElements.forEach(element => {
-            if (element.textContent && quantity > 1) {
-                const currentValue = element.textContent;
-                element.textContent = currentValue * quantity;
+        paymentElements.forEach((element, index) => {
+            if (initialValues[index] && quantity > 1) {
+                element.textContent = initialValues[index] * quantity;
             }
         });
-    });
+    };
+
+    onMount(() => {
+        const paymentElements = document.querySelectorAll('.fcal_payment_amount');
+            paymentElements.forEach(element => {
+                initialValues.push(element.textContent);
+            });
+        });
 </script>

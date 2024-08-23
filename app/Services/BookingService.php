@@ -27,7 +27,7 @@ class BookingService
 
         $data = self::prepareBookingData($data, $calendarSlot);
 
-        $additionalGuests = Arr::get($data, 'additional_guests', []);
+        $guests = Arr::get($data, 'additional_guests', []);
 
         $bookingData = Arr::only(wp_parse_args($data, $defaults), (new Booking())->getFillable());
 
@@ -41,13 +41,17 @@ class BookingService
             return $bookingData;
         }
 
-        return self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
+        return self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData);
     }
 
-    public static function createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests, $bookingIds = [])
+    public static function createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $guests = [], $bookingIds = [])
     {
         if (is_array($bookingData['start_time'])) {
-            return self::createMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests);
+            return self::createMultiTimeBooking($bookingData, $calendarSlot, $customFieldsData, $guests);
+        }
+
+        if (is_array($bookingData['email'])) {
+            return self::createMultiGuestBooking($bookingData, $calendarSlot, $customFieldsData);
         }
 
         do_action('fluent_booking/before_booking', $bookingData, $calendarSlot);
@@ -56,7 +60,7 @@ class BookingService
 
         self::attachHosts($booking, $calendarSlot);
         self::updateParentInfo($booking, $bookingIds);
-        self::updateMetas($booking, $bookingData, $customFieldsData, $additionalGuests);
+        self::updateMetas($booking, $bookingData, $guests, $customFieldsData);
 
         $booking->load('calendar');
 
@@ -70,7 +74,7 @@ class BookingService
         return $booking;
     }
 
-    public static function createMultiBooking($data, $calendarSlot, $customFieldsData, $additionalGuests)
+    public static function createMultiTimeBooking($data, $calendarSlot, $customFieldsData, $guests)
     {
         $booking = [];
         $bookingIds = [];
@@ -99,7 +103,50 @@ class BookingService
                 }
             }
 
-            $booking = self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $additionalGuests, $createdBookingIds);
+            $booking = self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $guests, $createdBookingIds);
+
+            $bookingIds[] = $booking->id;
+        }
+
+        return $booking;
+    }
+
+    public static function createMultiGuestBooking($data, $calendarSlot, $customFieldsData)
+    {
+        $booking = [];
+        $bookingIds = [];
+        $createdBookingIds = [];
+        $lastBooking = end($data['email']);
+        $totalBooking = count($data['email']);
+        $guests = array_combine($data['email'], $data['first_name']);
+
+        foreach ($guests as $email => $name) {
+            $bookingData = $data;
+
+            $bookingData['email'] = $email;
+
+            $nameArray = explode(' ', trim($name));
+            $bookingData['first_name'] = array_shift($nameArray);
+            $bookingData['last_name'] = implode(' ', $nameArray);
+
+            if ($user = get_user_by('email', $email)) {
+                $bookingData['person_user_id'] = $user->ID;
+            }
+
+            $bookingData['group_id'] = self::getGroupId($calendarSlot, $bookingData);
+
+            if (Arr::get($data, 'payment_method')) {
+                if ($email == $lastBooking) {
+                    $createdBookingIds = $bookingIds;
+                    $bookingData['quantity'] = $totalBooking;
+                } else {
+                    $bookingData['status'] = 'scheduled';
+                    $bookingData['payment_status'] = '';
+                    $bookingData['payment_method'] = '';
+                }
+            }
+
+            $booking = self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, [], $createdBookingIds);
 
             $bookingIds[] = $booking->id;
         }
@@ -138,6 +185,20 @@ class BookingService
             $data['location_details'] = LocationService::getLocationDetails($calendarSlot, [], []);
         }
 
+        if ($additionalGuests = Arr::get($data, 'additional_guests', [])) {
+            if ($calendarSlot->isMultiGuestEvent()) {
+                $guestEmails = array_map(function ($guest) {
+                    return $guest['email'];
+                }, $additionalGuests);
+                $data['email'] = array_merge($guestEmails, (array) $data['email']);
+                $guestNames = array_map(function ($guest) {
+                    return $guest['name'];
+                }, $additionalGuests);
+                $data['first_name'] = array_merge($guestNames, (array) $data['first_name']);
+                $data['additional_guests'] = [];
+            }
+        }
+
         return $data;
     }
 
@@ -171,14 +232,14 @@ class BookingService
         return $event ? $event->group_id : null;
     }
 
-    private static function updateMetas($booking, $bookingData, $customFieldsData, $additionalGuests)
+    private static function updateMetas($booking, $bookingData, $guests, $customFieldsData)
     {
         if ($customFieldsData) {
             Helper::updateBookingMeta($booking->id, 'custom_fields_data', $customFieldsData);
         }
 
-        if ($additionalGuests) {
-            Helper::updateBookingMeta($booking->id, 'additional_guests', $additionalGuests);
+        if ($guests) {
+            Helper::updateBookingMeta($booking->id, 'additional_guests', $guests);
         }
 
         if ($quantity = Arr::get($bookingData, 'quantity')) {
