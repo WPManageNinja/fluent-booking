@@ -247,7 +247,7 @@ class CalendarSlot extends Model
 
     public function isGuestFieldRequired()
     {
-        return !$this->isMultiGuestEvent();
+        return true;
     }
 
     public function getEventDefaultData($calendar)

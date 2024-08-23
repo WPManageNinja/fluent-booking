@@ -3,6 +3,7 @@
         v-model="openModal"
         :title="$t('Add New Booking')"
         :append-to-body="true"
+        :close-on-click-modal="false"
         class="fcal_modal fcal_new_booking">
         <el-form v-if="openModal" label-position="top">
             <el-form-item :label="$t('Select Event') + ' *'">

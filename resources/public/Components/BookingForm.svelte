@@ -15,7 +15,7 @@
                         {#if field.name === 'location'}
                             <LocationField {appData} field={field} {validating} {hasError} bind:form={form}/>
                         {:else if field.type == 'multi-guests'}
-                            <MultiGuests field={field} {validating} {hasError} bind:form={form} />
+                            <MultiGuests {slot} {spot} field={field} {validating} {hasError} bind:quantity={quantity} bind:form={form} />
                         {:else if field.type === 'multi-select' }
                             <MultiSelect field={field} {validating} {hasError} bind:form={form} />
                         {:else}

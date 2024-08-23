@@ -132,6 +132,9 @@ class BookingFieldService
                 'system_defined' => true,
                 'disable_alter'  => false
             ];
+            if ($calendarSlot->isMultiGuestEvent()) {
+                $defaultFields['guests']['label'] =  __('Additional Attendees', 'fluent-booking');
+            }
         }
         if ($calendarSlot->isLocationFieldRequired()) {
             $requiredIndexes[] = 'location';

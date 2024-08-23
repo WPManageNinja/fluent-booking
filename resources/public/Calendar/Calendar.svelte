@@ -26,7 +26,7 @@
     export let days = [];
     export let selectedDate = '';
     export let selectedDateTimes = [];
-    export let isMultiBooking;
+    export let isMultiBookingAllow;
 
     let dispatch = createEventDispatcher();
 
@@ -39,7 +39,7 @@
         if (selectedDate == day.date) {
             return true;
         }
-        if (isMultiBooking) {
+        if (isMultiBookingAllow) {
             return selectedDateTimes.some(dateTime => {
                 const date = dateTime.start.split(' ')[0];
                 return date == day.date;

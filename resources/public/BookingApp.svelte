@@ -20,7 +20,9 @@
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
     const dateFormatter = appData.date_formatter;
+    const isSingleGuest = slot.event_type === 'single';
     const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
+    const isMultiBookingAllow = isMultiBooking && isSingleGuest;
     const multiBookingLimit = slot.settings?.multiple_booking?.limit || 5;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
 
@@ -129,7 +131,7 @@
             selectedDateTimes = [];
             return;
         }
-        if (!isMultiBooking) {
+        if (!isMultiBookingAllow) {
             selectedDateTimes = [spot];
             return;
         }
@@ -436,7 +438,7 @@
                                             </svg>
                                             <span>{timezone}</span>
                                         </div>
-                                        {#if skipCalendar && selectedDateTime.remaining}
+                                        {#if selectedDateTime.remaining}
                                             <div class="fcal_remaining_spot fcal_icon_item">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-6fbb019e="">
                                                     <path fill="currentColor" d="M192 128v768h640V128zm-32-64h704a32 32 0 0 1 32 32v832a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32m160 448h384v64H320zm0-192h192v64H320zm0 384h384v64H320z"></path>
@@ -510,17 +512,17 @@
                             </div>
                             {#if selectedDateTime.start}
                                 <BookingForm
-                                    {appData}
                                     {slot}
+                                    {appData}
                                     {timezone}
                                     {duration}
-                                    {quantity}
                                     bind:form={form}
-                                    on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
+                                    bind:quantity={quantity}
                                     bind:spot={selectedDateTime}
                                     bind:spots={selectedDateTimes}
                                     bind:formFields={appData.form_fields}
                                     on:bookingConfirmed={(e) => { handleBookingConfirmation(e.detail) }}
+                                    on:onPaymentsVisibilityChanged={(e) => {onPaymentsVisibilityChanged(e.detail)}}
                                 >
                                     <div slot="before_form">
                                         {#if isFluentform}
