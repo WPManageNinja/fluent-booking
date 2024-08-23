@@ -49,8 +49,7 @@ class CalendarService
     {
         $createdAvailabilities = [];
 
-        foreach ($availabilitiesData as $existingId => $availabilityData)
-        {
+        foreach ($availabilitiesData as $existingId => $availabilityData) {
             $availability = Arr::only($availabilityData, ['key', 'value']);
             $availability['value']['timezone'] = $calendar->author_timezone;
             $availability['object_id'] = $calendar->user_id;
@@ -73,8 +72,7 @@ class CalendarService
 
         $createEventMetasData = [];
 
-        foreach ($eventsData as $eventData)
-        {
+        foreach ($eventsData as $eventData) {
             $eventMetas = Arr::get($eventData, 'event_metas', []);
 
             $eventData = self::prepareEventData($eventData, $calendar, $availabilities);
@@ -82,9 +80,9 @@ class CalendarService
             $createEventData = wp_parse_args($eventData, $defaultEventData);
 
             $createEventData['slug'] = Helper::generateSlotSlug((int)$createEventData['duration'] . 'min', $calendar);
-    
+
             $createEventData['settings'] = wp_parse_args($createEventData['settings'], $defaultEventData['settings']);
-    
+
             $createEventsData[] = Arr::only($createEventData, (new CalendarSlot())->getFillable());
 
             $createEventMetasData[] = $eventMetas;
@@ -92,8 +90,7 @@ class CalendarService
 
         $createdEvents = $calendar->events()->createMany($createEventsData);
 
-        foreach ($createdEvents as $index => $event)
-        {
+        foreach ($createdEvents as $index => $event) {
             $eventMetasData = Arr::get($createEventMetasData, $index, []);
 
             $eventMetasData = self::prepareEventMetas($eventMetasData);
@@ -157,8 +154,7 @@ class CalendarService
     {
         $preparedCalendarMetas = [];
 
-        foreach ($calendarMetas as $calendarMeta)
-        {
+        foreach ($calendarMetas as $calendarMeta) {
             if (empty($calendarMeta['key']) || empty($calendarMeta['value'])) {
                 continue;
             }
@@ -193,6 +189,13 @@ class CalendarService
             'is_display_spots'  => (bool)Arr::get($eventData, 'is_display_spots', false),
         ];
 
+        if (!empty($eventData['hash'])) {
+            $hash = sanitize_text_field($eventData['hash']);
+            if (!CalendarSlot::where('hash', $hash)->exists()) {
+                $preparedEventData['hash'] = $hash;
+            }
+        }
+
         $eventSettings = Arr::get($eventData, 'settings', []);
 
         if (!$eventSettings) {
@@ -212,7 +215,7 @@ class CalendarService
             'buffer_time_after'   => sanitize_text_field(Arr::get($eventSettings, 'buffer_time_after', '0')),
             'slot_interval'       => sanitize_text_field(Arr::get($eventSettings, 'slot_interval', '')),
             'team_members'        => array_map('intval', Arr::get($eventSettings, 'team_members', [])),
-            'multi_duration'  => [
+            'multi_duration'      => [
                 'enabled'             => Arr::isTrue($eventSettings, 'multi_duration.enabled'),
                 'default_duration'    => Arr::get($eventSettings, 'multi_duration.default_duration', ''),
                 'available_durations' => array_map('sanitize_text_field', Arr::get($eventSettings, 'multi_duration.available_durations', []))
@@ -221,11 +224,11 @@ class CalendarService
                 'enabled' => Arr::isTrue($eventSettings, 'booking_frequency.enabled'),
                 'limits'  => self::sanitize_mapped_data(Arr::get($eventSettings, 'booking_frequency.limits', []))
             ],
-            'booking_duration'      => [
+            'booking_duration'    => [
                 'enabled' => Arr::isTrue($eventSettings, 'booking_duration.enabled'),
                 'limits'  => self::sanitize_mapped_data(Arr::get($eventSettings, 'booking_duration.limits', []))
             ],
-            'lock_timezone'         => [
+            'lock_timezone'       => [
                 'enabled'  => Arr::isTrue($eventSettings, 'lock_timezone.enabled'),
                 'timezone' => sanitize_text_field(Arr::get($eventSettings, 'lock_timezone.timezone'))
             ],
@@ -238,8 +241,7 @@ class CalendarService
     {
         $preparedEventMetas = [];
 
-        foreach ($eventMetasData as $eventMeta)
-        {
+        foreach ($eventMetasData as $eventMeta) {
             if (empty($eventMeta['key']) || empty($eventMeta['value'])) {
                 continue;
             }
@@ -278,8 +280,7 @@ class CalendarService
     {
         $formattedNotifications = [];
 
-        foreach ($notifications as $key => $notification)
-        {
+        foreach ($notifications as $key => $notification) {
             $emailBody = Arr::get($notification, 'email.body');
             if (!$emailBody) {
                 continue;
@@ -320,7 +321,7 @@ class CalendarService
             ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
                 return $query->where('user_id', get_current_user_id());
             })
-            ->with(['slots' => function($query) {
+            ->with(['slots' => function ($query) {
                 $query->where('status', '!=', 'expired');
             }])
             ->latest()
@@ -368,7 +369,7 @@ class CalendarService
                 break;
         }
 
-        $calendars = $calendarQuery->with(['slots' => function($query) {
+        $calendars = $calendarQuery->with(['slots' => function ($query) {
             $query->where('status', '!=', 'expired');
         }])->latest()->get();
 
@@ -399,8 +400,7 @@ class CalendarService
     {
         $calendarEvents = CalendarSlot::query()->where('calendar_id', $calendarId)->get();
 
-        foreach ($calendarEvents as $event)
-        {
+        foreach ($calendarEvents as $event) {
             if ($weeklySchedule = Arr::get($event->settings, 'weekly_schedules', [])) {
                 $originalSchedule = SanitizeService::weeklySchedules($weeklySchedule, 'UTC', $oldTimezone);
                 $weeklySchedule = SanitizeService::weeklySchedules($originalSchedule, $updatedTimezone, 'UTC');
