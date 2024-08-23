@@ -130,7 +130,7 @@
                 {#if hasPaymentItem()}
                     <div class="fluent_booking_payment_processor" style="display:none;">
                         <h3 class="label">{i18('Total Payment')}
-                            : {@html appData?.currency_sign}{getSubTotal(appData?.payment_items)}</h3>
+                            : {@html appData?.currency_sign}{getSubTotal(appData?.payment_items, quantity)}</h3>
                         {#if appData?.payment_methods?.template}
                             <div class="fcal_form_payment_item">
                                 {@html appData.payment_methods.template}
@@ -241,16 +241,16 @@
         return spot.start;
     }
 
-    let getSubTotal = (items) => {
+    let getSubTotal = (items, qty) => {
         if (appData.multi_payment_items) {
-            return parseFloat(slot.total_payment) * quantity;
+            return parseFloat(slot.total_payment) * qty;
         }
 
         let subtotal = 0;
         for (let item of items) {
             subtotal += parseFloat(item.value);
         }
-        return subtotal * quantity;
+        return subtotal * qty;
     }
 
     function handleError(errors) {
