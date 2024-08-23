@@ -20,7 +20,9 @@
     const isFFConversational = appData.isFFConversational;
 
     const id = appData.id;
+    const isSingleGuest = slot.event_type == 'single';
     const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
+    const isMultiBookingAllow = isSingleGuest && isMultiBooking;
     const isTimezoneDisabled = slot.settings?.lock_timezone?.enabled || false;
 
     const isRTL = appData.isRtl;
@@ -131,7 +133,7 @@
     }
 
     function isSelectedDateTime(selectedDateTime, day) {
-        if (isMultiBooking) {
+        if (isMultiBookingAllow) {
             return selectedDateTimes.some(time => time.start == day.start);
         }
         return selectedDateTime.start == day.start;
@@ -399,7 +401,7 @@
             </div>
             <Calendar
                 selectedDate="{selectedDate}"
-                isMultiBooking={isMultiBooking}
+                isMultiBookingAllow={isMultiBookingAllow}
                 {selectedDateTimes}
                 {headers}
                 {days}
