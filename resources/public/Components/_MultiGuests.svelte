@@ -33,7 +33,7 @@
                 {/if}
             </div>
         {/each}
-        {#if form[field.name].length < getLimit()}
+        {#if form[field.name].length < getLimit() - 1}
             <button
                 type="button"
                 class="fcal_add_guest_btn"

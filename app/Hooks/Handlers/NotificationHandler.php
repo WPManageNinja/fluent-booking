@@ -76,7 +76,7 @@ class NotificationHandler
 
     public function pushBookingPendingToQueue($booking, $bookingEvent)
     {
-        if (!$bookingEvent->isConfirmationEnabled()) {
+        if (!$bookingEvent->isConfirmationEnabled() || $bookingEvent->isMultiGuestEvent()) {
             return;
         }
 
