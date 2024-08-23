@@ -477,6 +477,7 @@ class AdminMenuHandler
                 'disable'        => false,
                 'el_icon'        => 'Operation',
                 'component_type' => 'StandAloneComponent',
+                'class'          => 'general_settings',
                 'route'          => [
                     'name' => 'general_settings'
                 ]
@@ -486,6 +487,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'el_icon'        => 'TeamIcon',
                 'component_type' => 'StandAloneComponent',
+                'class'          => 'team_members',
                 'route'          => [
                     'name' => 'team_members'
                 ]
@@ -495,6 +497,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/gg-calendar.svg',
                 'component_type' => 'StandAloneComponent',
+                'class'          => 'configure_google_calendar',
                 'route'          => [
                     'name' => 'configure-google'
                 ]
@@ -504,6 +507,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/ol-icon-color.svg',
                 'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'configure_outlook_calendar',
                 'route'          => [
                     'name'   => 'configure-integrations',
                     'params' => [
@@ -516,6 +520,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/a-cal.svg',
                 'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'configure_apple_calendar',
                 'route'          => [
                     'name'   => 'configure-integrations',
                     'params' => [
@@ -528,6 +533,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/Ncloud.svg',
                 'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'configure_nextcloud_calendar',
                 'route'          => [
                     'name'   => 'configure-integrations',
                     'params' => [
@@ -540,6 +546,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/zoom.svg',
                 'component_type' => 'StandAloneComponent',
+                'class'          => 'zoom_integrations',
                 'route'          => [
                     'name' => 'zoom_integrations'
                 ]
@@ -549,6 +556,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/tw.svg',
                 'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'configure_twilio',
                 'route'          => [
                     'name'   => 'configure-integrations',
                     'params' => [
@@ -561,6 +569,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/payment-methods/stripe.svg',
                 'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'stripe_payment',
                 'route'          => [
                     'name'   => 'PaymentSettingsIndex',
                     'params' => [
@@ -573,6 +582,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'icon_url'       => $urlAssets . 'images/payment-methods/paypal.svg',
                 'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'paypal_payment',
                 'route'          => [
                     'name'   => 'PaymentSettingsIndex',
                     'params' => [
@@ -585,6 +595,7 @@ class AdminMenuHandler
                 'disable'        => true,
                 'el_icon'        => 'Lock',
                 'component_type' => 'StandAloneComponent',
+                'class'          => 'configure_license',
                 'route'          => [
                     'name' => 'license'
                 ]
