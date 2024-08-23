@@ -41,7 +41,7 @@ class BookingService
             return $bookingData;
         }
 
-        return self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData);
+        return self::createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $guests);
     }
 
     public static function createSingleOrMultiBooking($bookingData, $calendarSlot, $customFieldsData, $guests = [], $bookingIds = [])
