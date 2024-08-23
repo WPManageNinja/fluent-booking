@@ -55,7 +55,10 @@ class CalendarSlot extends Model
             if (empty($model->user_id)) {
                 $model->user_id = get_current_user_id();
             }
-            $model->hash = md5(wp_generate_uuid4() . time());
+
+            if (empty($model->hash)) {
+                $model->hash = md5(wp_generate_uuid4() . time());
+            }
         });
     }
 
@@ -203,7 +206,7 @@ class CalendarSlot extends Model
 
     public function getAuthorProfiles($public = true)
     {
-        $teamMembers   = [];
+        $teamMembers = [];
         $teamMemberIds = $this->getHostIds();
 
         foreach ($teamMemberIds as $teamMemberId) {
@@ -277,39 +280,39 @@ class CalendarSlot extends Model
                     'host_phone_number' => ''
                 ]
             ],
-            'settings'         => [
-                'schedule_type'       => 'weekly_schedules',
-                'weekly_schedules'    => $weeklySchedule,
-                'date_overrides'      => [],
-                'range_type'          => 'range_days',
-                'range_days'          => 60,
-                'range_date_between'  => ['', ''],
-                'schedule_conditions' => [
+            'settings'          => [
+                'schedule_type'         => 'weekly_schedules',
+                'weekly_schedules'      => $weeklySchedule,
+                'date_overrides'        => [],
+                'range_type'            => 'range_days',
+                'range_days'            => 60,
+                'range_date_between'    => ['', ''],
+                'schedule_conditions'   => [
                     'value' => 4,
                     'unit'  => 'hours'
                 ],
-                'buffer_time_before'  => '0',
-                'buffer_time_after'   => '0',
-                'slot_interval'       => '',
-                'booking_title'       => '',
-                'submit_button_text'  => '',
-                'multiple_booking'    => [
+                'buffer_time_before'    => '0',
+                'buffer_time_after'     => '0',
+                'slot_interval'         => '',
+                'booking_title'         => '',
+                'submit_button_text'    => '',
+                'multiple_booking'      => [
                     'enabled' => false,
                     'limit'   => 5
                 ],
-                'booking_frequency'   => [
+                'booking_frequency'     => [
                     'enabled' => false,
                     'limits'  => [
                         ['unit' => 'per_day', 'value' => 5]
                     ]
                 ],
-                'booking_duration'    => [
+                'booking_duration'      => [
                     'enabled' => false,
                     'limits'  => [
                         ['unit' => 'per_day', 'value' => 120]
                     ]
                 ],
-                'can_not_cancel'      => [
+                'can_not_cancel'        => [
                     'enabled'   => false,
                     'message'   => 'Sorry! you can not cancel this',
                     'type'      => 'always',
@@ -318,7 +321,7 @@ class CalendarSlot extends Model
                         'value' => 30
                     ]
                 ],
-                'can_not_reschedule'  => [
+                'can_not_reschedule'    => [
                     'enabled'   => false,
                     'message'   => 'Sorry! you can not reschedule this',
                     'type'      => 'always',
@@ -327,18 +330,18 @@ class CalendarSlot extends Model
                         'value' => 30
                     ]
                 ],
-                'custom_redirect'     => [
+                'custom_redirect'       => [
                     'enabled'         => false,
                     'redirect_url'    => '',
                     'is_query_string' => 'no',
                     'query_string'    => ''
                 ],
-                'multi_duration'      => [
+                'multi_duration'        => [
                     'enabled'             => false,
                     'default_duration'    => '',
                     'available_durations' => []
                 ],
-                'lock_timezone'       => [
+                'lock_timezone'         => [
                     'enabled'  => false,
                     'timezone' => ''
                 ],
@@ -428,7 +431,7 @@ class CalendarSlot extends Model
             if (!Arr::get($statuses, 'rescheduled_by_attendee')) {
                 $statuses['rescheduled_by_attendee'] = $defaults['rescheduled_by_attendee'];
             }
-            
+
             if (!Arr::get($statuses, 'booking_request_host')) {
                 $statuses['booking_request_host'] = $defaults['booking_request_host'];
             }
@@ -500,7 +503,7 @@ class CalendarSlot extends Model
         if ($this->isMultiDurationEnabled()) {
             return Arr::get($this->settings, 'multi_duration.default_duration', '');
         }
-        
+
         return $this->duration;
     }
 
@@ -643,7 +646,7 @@ class CalendarSlot extends Model
         if ($rangeType == 'range_date_between') {
             $range = Arr::get($this->settings, 'range_date_between', []);
             if (is_array($range) && count(array_filter($range)) == 2) {
-                $minDate =  gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $minDate = gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
         }
 
@@ -818,11 +821,11 @@ class CalendarSlot extends Model
         if ($type == 'always') {
             return true;
         }
-        
-        $bookingStartTime   = strtotime($bookingStartTime);
+
+        $bookingStartTime = strtotime($bookingStartTime);
         $bookingCreatedTime = $bookingCreatedTime ? strtotime($bookingCreatedTime) : time();
 
-        $conditionUnit  = Arr::get($this->settings, 'requires_confirmation.condition.unit', 'minutes');
+        $conditionUnit = Arr::get($this->settings, 'requires_confirmation.condition.unit', 'minutes');
         $conditionValue = Arr::get($this->settings, 'requires_confirmation.condition.value', 0);
 
         $conditionTime = $conditionValue * 60;
@@ -884,7 +887,7 @@ class CalendarSlot extends Model
             $paymentSettings = $this->getPaymentSettings();
             if (Arr::get($paymentSettings, 'multi_payment_enabled') == 'yes') {
                 $duration = $duration ?? $this->getDefaultDuration();
-                if (!Arr::get($paymentSettings, 'multi_payment_items.'. $duration .'.value')) {
+                if (!Arr::get($paymentSettings, 'multi_payment_items.' . $duration . '.value')) {
                     return false;
                 }
             }
@@ -906,7 +909,7 @@ class CalendarSlot extends Model
 
         if ($this->isMultiDurationEnabled() && $isMultiEnabled) {
             $duration = $duration ?? $this->getDefaultDuration();
-            return [Arr::get($paymentSettings, 'multi_payment_items.'. $duration)];
+            return [Arr::get($paymentSettings, 'multi_payment_items.' . $duration)];
         }
 
         return Arr::get($paymentSettings, 'items', []);
@@ -943,7 +946,7 @@ class CalendarSlot extends Model
         if ($product) {
             $price = $product->get_price();
         }
-        
+
         return $price;
     }
 
@@ -964,7 +967,7 @@ class CalendarSlot extends Model
     }
 
     public function getPaymentHtml()
-    {   
+    {
         $paymentHtml = '';
 
         $driver = Arr::get($this->getPaymentSettings(), 'driver');
@@ -1004,11 +1007,13 @@ class CalendarSlot extends Model
         return false;
     }
 
-    public function isRoundRobinDefaultSchedule() {
+    public function isRoundRobinDefaultSchedule()
+    {
         return $this->isRoundRobin() && $this->isTeamDefaultSchedule();
     }
 
-    public function isRoundRobinCommonSchedule() {
+    public function isRoundRobinCommonSchedule()
+    {
         return $this->isRoundRobin() && $this->isTeamCommonSchedule();
     }
 
@@ -1042,7 +1047,7 @@ class CalendarSlot extends Model
             return $this->getProcessedWeeklySlots($schedule);
         }
 
-        $scheduleData = Arr::get($this->settings,'weekly_schedules',[]);
+        $scheduleData = Arr::get($this->settings, 'weekly_schedules', []);
         $schedule = SanitizeService::weeklySchedules($scheduleData, 'UTC', $this->calendar->author_timezone);
         return AvailabilityService::getUtcWeeklySchedules($schedule, $this->calendar->author_timezone);
     }
@@ -1059,7 +1064,7 @@ class CalendarSlot extends Model
             return $this->getProcessedDateOverrides($schedule);
         }
 
-        $scheduleData = Arr::get($this->settings,'date_overrides',[]);
+        $scheduleData = Arr::get($this->settings, 'date_overrides', []);
         $schedule = SanitizeService::slotDateOverrides($scheduleData, 'UTC', $this->calendar->author_timezone);
         $overrideSlots = AvailabilityService::getUtcDateOverrides($schedule, $this->calendar->author_timezone);
         $overrideDays = AvailabilityService::getDateOverrideDays($schedule, $this->calendar->author_timezone);
@@ -1076,8 +1081,8 @@ class CalendarSlot extends Model
 
         $hostBookings = [];
         foreach ($hostIds as $hostId) {
-            $dayStart = gmdate('Y-m-d 00:00:00',strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-            $dayEnd   = gmdate('Y-m-d 23:59:59',strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $dayStart = gmdate('Y-m-d 00:00:00', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            $dayEnd = gmdate('Y-m-d 23:59:59', strtotime($startDate)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             $hostBookings[$hostId] = Booking::getHostTotalBooking($this->id, [$hostId], [$dayStart, $dayEnd]);
         }
         usort($hostIds, function ($a, $b) use ($hostBookings) {
