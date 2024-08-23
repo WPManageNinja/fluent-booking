@@ -499,11 +499,6 @@ export default {
         },
         handleCommand(command) {
             if (command === 'import') {
-                if (!this.appVars.has_pro) {
-                    this.noticeModal = true;
-                    this.noticeTitle = this.$t('Import Calendar');
-                    return;
-                }
                 this.isImportCalendarOpen = true;
             }
         }
