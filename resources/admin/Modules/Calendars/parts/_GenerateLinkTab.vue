@@ -42,7 +42,8 @@
                         <tbody>
                             <tr v-for="(field, indx) in paramFields" :key="'field_' + indx">
                                 <td>
-                                    <el-select v-model="field.name">
+                                    <el-select v-model="field.name"
+                                               popper-class="fcal_select">
                                         <el-option
                                             v-for="option in fieldTypes"
                                             :disabled="alreadyExists(option.value)"
@@ -74,7 +75,8 @@
                                         />
                                     </template>
                                     <template v-else-if="bookingField(field.name)?.type == 'checkbox'">
-                                        <el-select v-model="field.value">
+                                        <el-select v-model="field.value"
+                                                   popper-class="fcal_select">
                                             <el-option :value="true" :label="$t('True')"></el-option>
                                             <el-option :value="false" :label="$t('False')"></el-option>
                                         </el-select>
@@ -83,7 +85,9 @@
                                         <el-select
                                             v-model="field.value"
                                             :multiple="bookingField(field.name)?.type == 'multi-select'"
-                                            :placeholder="field.placeholder">
+                                            :placeholder="field.placeholder"
+                                            popper-class="fcal_select"
+                                        >
                                             <el-option
                                                 v-for="option in bookingField(field.name)?.options"
                                                 :key="option"
