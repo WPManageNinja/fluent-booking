@@ -995,6 +995,9 @@ body >.fcal_calendar_wrap {
     .fcal_requires_confirmation {
         &.fcal_icon_item {
             margin-bottom: 0.875rem;
+            svg {
+                stroke: var(--fcal_dark);
+            }
         }
         span {
             margin-top: -0.2rem;
