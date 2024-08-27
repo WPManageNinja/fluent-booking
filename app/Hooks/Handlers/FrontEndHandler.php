@@ -150,12 +150,12 @@ class FrontEndHandler
 
                 $html = BookingService::getBookingConfirmationHtml($existingBooking);
 
-                wp_send_json([
+                wp_send_json(apply_filters('fluent_booking/booking_rescheduled_response', [
                     'message'       => __('Booking has been rescheduled', 'fluent-booking'),
                     'redirect_url'  => $redirectUrl,
                     'response_html' => $html,
                     'booking_hash'  => $existingBooking->hash
-                ], 200);
+                ], $existingBooking), 200);
 
             }, 10, 3);
         });
