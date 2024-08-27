@@ -37,7 +37,7 @@ class DataImporter
             ]);
         }
 
-        $calendar = CalendarService::createCalendar($calendarData);
+        $calendar = CalendarService::createCalendar($calendarData, false, true);
 
         if (is_wp_error($calendar)) {
             wp_send_json_error([

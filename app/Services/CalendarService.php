@@ -10,9 +10,9 @@ use FluentBooking\Framework\Support\Arr;
 
 class CalendarService
 {
-    public static function createCalendar($data, $useCurrentUser = false)
+    public static function createCalendar($data, $useCurrentUser = false, $isFileInput = false)
     {
-        $calendarData = self::prepareCalendarData($data, $useCurrentUser);
+        $calendarData = self::prepareCalendarData($data, $useCurrentUser, $isFileInput);
 
         if (is_wp_error($calendarData)) {
             return new \WP_Error($calendarData->get_error_code(), $calendarData->get_error_message());
@@ -101,7 +101,7 @@ class CalendarService
         return $createdEvents;
     }
 
-    protected static function prepareCalendarData($calendarData, $useCurrentUser = false)
+    protected static function prepareCalendarData($calendarData, $useCurrentUser = false, $isFileInput = false)
     {
         if (!$calendarData) {
             return new \WP_Error('invalid_data', esc_html__('Invalid JSON Data', 'fluent-booking'));
@@ -143,8 +143,13 @@ class CalendarService
             $preparedData['title'] = is_email($user->user_login) ? explode('@', $user->user_login)[0] : $user->user_login;
         }
 
-        if ($isHostCalendar && Calendar::where('user_id', $preparedData['user_id'])->where('type', 'simple')->first()) {
-            return new \WP_Error('calendar_exists', esc_html__('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking'));
+        $firstCalendar = Calendar::where('user_id', $preparedData['user_id'])->where('type', 'simple')->first();
+
+        if ($isHostCalendar && $firstCalendar) {
+            if ($isFileInput) {
+                return new \WP_Error('calendar_exists', esc_html__('The user already have a calendar. Please delete it first to create a new one', 'fluent-booking'));
+            }
+            return $firstCalendar;
         }
 
         return $preparedData;
