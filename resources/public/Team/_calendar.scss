@@ -31,6 +31,16 @@ $border-color_1: var(--fcal_primaryColor);
   }
 }
 
+.fcal-dark-mode {
+    .fcal_loc_icon {
+        &.location_icon,
+        &.phone_icon,
+        &.link_icon {
+            filter: invert(1);
+        }
+    }
+}
+
 .fcal_slots {
   display: grid;
   grid-template-columns: 1fr;
