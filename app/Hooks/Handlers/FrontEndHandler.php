@@ -165,8 +165,8 @@ class FrontEndHandler
     {
         $atts = shortcode_atts([
             'id'             => 0,
-            'disable_author' => 'no',
-            'theme'          => 'light'
+            'theme'          => 'light',
+            'disable_author' => 'no'
         ], $atts);
 
         if (!$atts['id']) {

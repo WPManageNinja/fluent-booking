@@ -188,6 +188,14 @@
         slot.time_format = e;
     }
 
+    function maybeDisplayDate(date) {
+        const startDate = util.dateTimeI18(date.start, dateFormatter);
+        const endData = util.dateTimeI18(date.end, dateFormatter);
+        if (startDate != endData) {
+            return startDate;
+        }
+        return '';
+    }
     function maybeUpdatePayment(duration) {
         if (appData.multi_payment_items) {
             slot.total_payment = appData.multi_payment_items[duration]?.value;
@@ -418,11 +426,11 @@
                                                 {/if}
                                                 <span class="{indx > 0 ? 'fcal_multi_time' : ''}">
                                                     {#if slot.time_format == '24' }
-                                                        {util.dateTimeI18(selectedTime.start, 'HH:mm')} - {util.dateTimeI18(selectedTime.end, 'HH:mm')},
+                                                        {util.dateTimeI18(selectedTime.start, 'HH:mm')} {maybeDisplayDate(selectedTime)} - {util.dateTimeI18(selectedTime.end, 'HH:mm')},
                                                     {:else}
                                                         {util.dateTimeI18(selectedTime.start, 'hh:mma')} - {util.dateTimeI18(selectedTime.end, 'hh:mma')},
                                                     {/if}
-                                                    {util.dateTimeI18(selectedTime.start, dateFormatter)}
+                                                    {util.dateTimeI18(selectedTime.end, dateFormatter)}
                                                 </span>
                                                 {#if selectedDateTimes.length > 1}
                                                     <span class="fcal_remove_time"
