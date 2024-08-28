@@ -191,16 +191,14 @@ class FrontEndHandler
 
         if (BookingFieldService::hasPhoneNumberField($localizeData['form_fields'])) {
             wp_enqueue_script('fluent-booking-phone-field', App::getInstance('url.assets') . 'public/js/phone-field.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
-            add_action('fluent_booking/short_code_render', function () use ($assetUrl) {
-                ?>
+            ?>
                 <style>
                     .fcal_phone_wrapper .flag {
                         background: url(<?php echo esc_url($assetUrl.'images/flags_responsive.png'); ?>) no-repeat;
                         background-size: 100%;
                     }
                 </style>
-                <?php
-            });
+            <?php
         }
 
         wp_enqueue_script('fluent-booking-public', $assetUrl . 'public/js/app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);

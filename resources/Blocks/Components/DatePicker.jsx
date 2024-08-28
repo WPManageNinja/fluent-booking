@@ -74,7 +74,7 @@ export const DatePicker = props => {
             })
             .then((data) => {
                 setAvailableDates(data?.available_slots);
-                setTimezone(data.timezone);
+                setTimezone(data?.timezone);
             })
             .catch((error) => {
                 console.error('There was an error!', error);
@@ -84,9 +84,11 @@ export const DatePicker = props => {
 
     useEffect(() => {
         loadAvailableDates();
+    }, [slotId]);
+
+    useEffect(() => {
         initMonth();
     }, [availableDates]);
-
 
     let currentDate = new Date();
     function formatDate(date) {
@@ -135,16 +137,14 @@ export const DatePicker = props => {
                     ))}
                 </div>
 
-                {
-                    timezone ?
-                        <div className="fcal_block_timezone">
-                            <h3>{__('Timezone')}</h3>
-                            <span className="timezone">
-                                {timezone}
-                            </span>
-                        </div>
-                    : ''
-                }
+                {timezone ?
+                    <div className="fcal_block_timezone">
+                        <h3>{__('Timezone')}</h3>
+                        <span className="timezone">
+                            {timezone}
+                        </span>
+                    </div>
+                : ''}
 
             </div>
         </Fragment>

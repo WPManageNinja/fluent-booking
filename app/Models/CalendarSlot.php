@@ -260,7 +260,7 @@ class CalendarSlot extends Model
         $availability = AvailabilityService::maybeCreateAvailability($calendar, $weeklySchedule);
 
         $defaultData = [
-            'title'             => '30 Minute Meeting',
+            'title'             => '',
             'calendar_id'       => $calendar->id,
             'user_id'           => $calendar->user_id,
             'status'            => 'active',
@@ -274,8 +274,8 @@ class CalendarSlot extends Model
             'is_display_spots'  => false,
             'location_settings' => [
                 [
-                    'type'              => 'in_person_guest',
-                    'title'             => 'In Person (Attendee Address)',
+                    'type'              => '',
+                    'title'             => '',
                     'description'       => '',
                     'host_phone_number' => ''
                 ]
@@ -290,69 +290,7 @@ class CalendarSlot extends Model
                 'schedule_conditions'   => [
                     'value' => 4,
                     'unit'  => 'hours'
-                ],
-                'buffer_time_before'    => '0',
-                'buffer_time_after'     => '0',
-                'slot_interval'         => '',
-                'booking_title'         => '',
-                'submit_button_text'    => '',
-                'multiple_booking'      => [
-                    'enabled' => false,
-                    'limit'   => 5
-                ],
-                'booking_frequency'     => [
-                    'enabled' => false,
-                    'limits'  => [
-                        ['unit' => 'per_day', 'value' => 5]
-                    ]
-                ],
-                'booking_duration'      => [
-                    'enabled' => false,
-                    'limits'  => [
-                        ['unit' => 'per_day', 'value' => 120]
-                    ]
-                ],
-                'can_not_cancel'        => [
-                    'enabled'   => false,
-                    'message'   => 'Sorry! you can not cancel this',
-                    'type'      => 'always',
-                    'condition' => [
-                        'unit'  => 'minutes',
-                        'value' => 30
-                    ]
-                ],
-                'can_not_reschedule'    => [
-                    'enabled'   => false,
-                    'message'   => 'Sorry! you can not reschedule this',
-                    'type'      => 'always',
-                    'condition' => [
-                        'unit'  => 'minutes',
-                        'value' => 30
-                    ]
-                ],
-                'custom_redirect'       => [
-                    'enabled'         => false,
-                    'redirect_url'    => '',
-                    'is_query_string' => 'no',
-                    'query_string'    => ''
-                ],
-                'multi_duration'        => [
-                    'enabled'             => false,
-                    'default_duration'    => '',
-                    'available_durations' => []
-                ],
-                'lock_timezone'         => [
-                    'enabled'  => false,
-                    'timezone' => ''
-                ],
-                'requires_confirmation' => [
-                    'enabled'   => false,
-                    'type'      => 'always',
-                    'condition' => [
-                        'unit'  => 'minutes',
-                        'value' => 30
-                    ]
-                ],
+                ]
             ]
         ];
 

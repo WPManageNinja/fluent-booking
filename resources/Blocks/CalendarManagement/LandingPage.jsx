@@ -25,14 +25,13 @@ export const LandingPage = props => {
 
     if (calendarId) {
         calendar = calendars.find(cal => cal.id === calendarId);
-        const eventOrder = calendar.event_order ?? [];
-        calendar.events = calendar.events.slice().sort((a, b) => {
-            const indexA = eventOrder.indexOf(a.id);
-            const indexB = eventOrder.indexOf(b.id);
-            const posA = indexA >= 0 ? indexA : Number.MAX_SAFE_INTEGER;
-            const posB = indexB >= 0 ? indexB : Number.MAX_SAFE_INTEGER;
-            return posA - posB;
-        });
+        const events = calendar?.events ?? [];
+        const eventOrder = calendar?.event_order ?? [];
+        if (events && eventOrder) {
+            calendar.events = events.slice().sort((a, b) => {
+                return eventOrder.indexOf(a.id) - eventOrder.indexOf(b.id);
+            });
+        }
     }
 
     return [
@@ -62,7 +61,7 @@ export const LandingPage = props => {
                         placeholder={__('Enter description here...')}
                     />
                 </div>
-                { eventIds.length && calendar.events?.length ?
+                { eventIds.length && calendar && calendar.events?.length ?
                     <div>
                         {!hideInfo &&
                             <div className="fcal_calendar_management_block_header">

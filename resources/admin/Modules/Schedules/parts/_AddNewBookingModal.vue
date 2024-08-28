@@ -338,7 +338,7 @@ export default {
         fetchEvent() {
             this.loading = true;
             this.resetSelection();
-            this.$get('bookings/event', {
+            this.$get('bookings/event/' + this.newBooking.event_id, {
                 event_id: this.newBooking.event_id,
                 timezone: this.newBooking.timezone,
                 duration: this.newBooking.duration,

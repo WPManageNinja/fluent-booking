@@ -112,7 +112,7 @@ class CalendarService
             'description'     => sanitize_textarea_field(Arr::get($calendarData, 'description')),
             'user_id'         => intval(Arr::get($calendarData, 'user_id')),
             'status'          => sanitize_text_field(Arr::get($calendarData, 'status', 'active')),
-            'type'            => sanitize_text_field(Arr::get($calendarData, 'type')),
+            'type'            => sanitize_text_field(Arr::get($calendarData, 'type', 'simple')),
             'event_type'      => sanitize_text_field(Arr::get($calendarData, 'event_type')),
             'account_type'    => sanitize_text_field(Arr::get($calendarData, 'account_type')),
             'visibility'      => sanitize_text_field(Arr::get($calendarData, 'visibility')),
