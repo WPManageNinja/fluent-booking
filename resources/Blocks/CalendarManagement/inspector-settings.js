@@ -134,8 +134,8 @@ const InspectorSettings = props => {
                             <DropdownMenu
                                 className="fcal-add-calendar-container"
                                 icon={null}
-                                text={calendarId == '' ? __('-- Select a Calendar --') : calendar.title}
-                                label={calendarId == '' ? __('-- Select a Calendar --') : calendar.title}>
+                                text={calendarId == '' ? __('-- Select a Calendar --') : calendar?.title}
+                                label={calendarId == '' ? __('-- Select a Calendar --') : calendar?.title}>
                                 { ( { onClose } ) => (
                                     <div className='fcal-add-calendar-content'>
                                         {

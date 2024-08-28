@@ -6,6 +6,9 @@ const {
     PanelRow
 } = wp.components;
 
+const hostsVar = window.fluent_booking_block.hosts;
+const calendarsVar = Object.values(hostsVar);
+
 const InspectorSettings = props => {
     const {
         attributes: {
@@ -69,12 +72,12 @@ const InspectorSettings = props => {
                                 onChange={calendarChangeHandler}
                             >
                                 <option key="default" value="">{__('---Select a Event---')}</option>
-                                {calendars.map((item, index) => {
+                                {calendarsVar.map((item, index) => {
                                     return <optgroup label={item.title} key={index}>
                                         {
-                                            item.slots.map((slot, index) => {
-                                                return <option key={index} value={[slot.id, item.id]}>
-                                                    {slot.title}
+                                            item.events.map((event, index) => {
+                                                return <option key={index} value={[event.id, item.id]}>
+                                                    {event.title}
                                                 </option>
                                             })
                                         }

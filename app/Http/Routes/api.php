@@ -53,9 +53,13 @@ $router->prefix('admin')->withPolicy('AdminPolicy')->group(function ($router) {
     $router->get('all-hosts', 'AdminController@getAllHosts');
 });
 
+$router->prefix('events')->withPolicy('CalendarEventPolicy')->group(function ($router) {
+    $router->get('/{event_id}', 'EventController@getEvent')->int('event_id');
+});
+
 $router->prefix('bookings')->withPolicy('CalendarEventPolicy')->group(function ($router) {
     $router->get('/', 'BookingController@getBookings');
-    $router->get('event', 'BookingController@getEvent');
+    $router->get('event/{event_id}', 'BookingController@getEvent')->int('event_id');
     $router->post('create/{event_id}', 'BookingController@createBooking')->int('event_id');
 });
 
