@@ -183,6 +183,8 @@ class LandingPageHandler
             $data['js_files'] = array_merge($data['js_files'], $extraJsFiles);
         }
 
+        $data = apply_filters('fluent_booking/host_view_page_vars', $data, $calendar, $activeEvents, $authorProfile);
+        
         $app = App::getInstance();
         status_header(200);
         $app->view->render('landing.author_landing', $data);
