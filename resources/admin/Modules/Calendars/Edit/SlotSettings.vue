@@ -2,8 +2,8 @@
     <div class="fcal_create_calendar_wrap">
         <div class="fcal_header">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ name: 'calendars' }">{{ $t('Booking Types') }}</el-breadcrumb-item>
-                <el-breadcrumb-item>{{ calendar.title ?? '...' }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="gotoCalendars()">{{ $t('Calendars') }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="gotoCalendarSettings()">{{ calendar.title ?? '...' }}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ slot?.title ?? '...'}}</el-breadcrumb-item>
             </el-breadcrumb>
 
@@ -103,6 +103,17 @@ export default {
             const currentMenu = Object.values(this.menuItems).find(menu => menu.route.name === currentRouteName);
             if (currentMenu) {
                 this.currentMenu = currentMenu;
+            }
+        },
+        gotoCalendars() {
+            return {
+                name: 'calendars'
+            }
+        },
+        gotoCalendarSettings() {
+            return {
+                name: 'calendar_settings',
+                params: { calendar_id: this.calendar_id }
             }
         },
         getSlot() {
