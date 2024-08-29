@@ -239,11 +239,9 @@ class BookingController extends Controller
         ];
     }
 
-    public function getEvent(Request $request)
-    {
-        $eventId = $request->get('event_id');
-        
-        $calendarEvent = CalendarSlot::query()->find($eventId);
+    public function getEvent(Request $request, $eventId)
+    {   
+        $calendarEvent = CalendarSlot::find($eventId);
 
         if (!$calendarEvent || $calendarEvent->status != 'active') {
             wp_send_json([
