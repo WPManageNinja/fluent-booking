@@ -744,6 +744,18 @@ class CalendarSlot extends Model
         ], $calendarEvent ?: $this);
     }
 
+    public function isDisplaySpots()
+    {
+        return $this->is_display_spots == true;
+    }
+
+    public function isAdditionalGuestEnabled()
+    {
+        $guestField = BookingFieldService::getBookingFieldByName($this, 'guests');
+
+        return Arr::isTrue($guestField, 'enabled', false);
+    }
+
     public function isConfirmationEnabled()
     {
         return Arr::isTrue($this->settings, 'requires_confirmation.enabled');

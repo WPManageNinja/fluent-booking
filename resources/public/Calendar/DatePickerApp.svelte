@@ -21,6 +21,7 @@
 
     const id = appData.id;
     const isSingleGuest = slot.event_type == 'single';
+    const isDisplaySpots = slot.is_display_spots || false;
     const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
     const isMultiBookingAllow = isSingleGuest && isMultiBooking;
     const isTimezoneDisabled = slot.settings?.lock_timezone?.enabled || false;
@@ -480,7 +481,7 @@
                                 <div class="{ day.remaining && selectedDateTime != day ? 'fcal_spot_time' : '' }">
                                     {convertTime12to24(util.dayjs(day.start).format('hh:mm A'), formatHours)}
                                 </div>
-                                {#if day.remaining && selectedDateTime != day }
+                                {#if isDisplaySpots && day.remaining && selectedDateTime != day }
                                     <div class="fcal_spot_remaining">
                                         {getDateTimeStringI18(day.remaining)} {i18('spots left')}
                                     </div>

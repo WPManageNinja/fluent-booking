@@ -21,6 +21,7 @@
     const isFluentform = appData.is_fluentform;
     const dateFormatter = appData.date_formatter;
     const isSingleGuest = slot.event_type === 'single';
+    const isDisplaySpots = slot.is_display_spots || false;
     const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
     const isMultiBookingAllow = isMultiBooking && isSingleGuest;
     const multiBookingLimit = slot.settings?.multiple_booking?.limit || 5;
@@ -453,7 +454,7 @@
                                             </svg>
                                             <span>{timezone}</span>
                                         </div>
-                                        {#if selectedDateTime.remaining}
+                                        {#if isDisplaySpots && selectedDateTime.remaining}
                                             <div class="fcal_remaining_spot fcal_icon_item">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-6fbb019e="">
                                                     <path fill="currentColor" d="M192 128v768h640V128zm-32-64h704a32 32 0 0 1 32 32v832a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32m160 448h384v64H320zm0-192h192v64H320zm0 384h384v64H320z"></path>

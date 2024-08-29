@@ -1015,6 +1015,7 @@ class FrontEndHandler
             'max_lookup_date'    => $calendarEvent->getMaxLookUpDate(),
             'min_lookup_date'    => $calendarEvent->getMinLookUpDate(),
             'min_bookable_date'  => $calendarEvent->getMinBookableDateTime(),
+            'is_display_spots'   => $calendarEvent->isDisplaySpots(),
             'duration'           => $calendarEvent->getDefaultDuration(),
             'title'              => $calendarEvent->title,
             'location_settings'  => $calendarEvent->location_settings,
