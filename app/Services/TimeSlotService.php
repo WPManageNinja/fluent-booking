@@ -551,11 +551,12 @@ class TimeSlotService
 
         $isDisplaySpots = $event->is_display_spots;
         $isMultiGuest   = $event->isMultiGuestEvent();
+        $isMultiBooking = $event->isAdditionalGuestEnabled();
         $endDate        = $event->getMaxBookableDateTime($startDate, $timeZone);
         $startDate      = $event->getMinBookableDateTime($startDate, $timeZone);
 
         $maxBooking = false;
-        if ($isDisplaySpots && $isMultiGuest) {
+        if ($isMultiGuest && ($isDisplaySpots || $isMultiBooking)) {
             $maxBooking = $event->getMaxBookingPerSlot();
         }
 

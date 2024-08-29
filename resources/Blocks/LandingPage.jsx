@@ -21,8 +21,8 @@ export const LandingPage = props => {
         }, setAttributes,
     } = props;
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [slot, setSlot] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [event, setEvent] = useState([]);
     const [error, setError] = useState(false);
 
     const apiFetch = wp.apiFetch;
@@ -31,11 +31,16 @@ export const LandingPage = props => {
 
     useEffect(() => {
         getCalendars();
-        getSlot();
-    }, [ slotId, calendarId ] );
+    }, []);
+
+    useEffect(() => {
+        if (slotId) {
+            getCalendarEvent();
+        }
+    }, [slotId]);
 
     const getCalendars = (queryArgs) => {
-        setIsLoading(true);
+        setLoading(true);
         apiFetch({
             path: addQueryArgs('fluent-booking/v2/calendars', {
                 ...queryArgs
@@ -48,78 +53,71 @@ export const LandingPage = props => {
             setError(error);
         })
         .finally(() => {
-            setIsLoading(false);
+            setLoading(false);
         });
     };
 
-    const getSlot = (queryArgs) => {
-        if (!slotId) {
-            return false;
-        }
-        setIsLoading(true);
+    const getCalendarEvent = (queryArgs) => {
+        setLoading(true);
         apiFetch({
-            path: addQueryArgs('fluent-booking/v2/calendars/'+calendarId+'/events/'+slotId, {
-                ...queryArgs
+            path: addQueryArgs(`fluent-booking/v2/events/${slotId}`, {
+                ...queryArgs,
+                event_hash: eventHash
             })
         })
             .then((response) => {
-                setSlot(response.calendar_event);
+                setEvent(response.calendar_event);
             })
             .catch(error => {
                 setError(error);
             })
             .finally(() => {
-                setIsLoading(false);
+                setLoading(false);
             });
     }
 
 
-    const handleCalendar = (event) => {
-        const ids = event.target.value.split(",");
+    const handleCalendar = (e) => {
+        const ids = e.target.value.split(",");
         const selectedSlot = allCalendars.find(cal => cal.id == ids[1]).slots.find(slot => slot.id == ids[0]);
-
-        setAttributes( { slotId: ids[0] } );
-        setAttributes( { calendarId: ids[1] } );
-        setAttributes( { eventHash: selectedSlot.hash } );
+        setAttributes({ slotId: ids[0], calendarId: ids[1], eventHash: selectedSlot.hash });
     }
 
     return [
         <Fragment>
             <div className={slotId ? 'fcal_block_landing_page fcal_block_landing_preview' : 'fcal_block_landing_page '}>
-
                 {
-                    slotId && slot ?
+                    slotId && event ?
                         <div className={theme +' fcal_block_preview_wrap'}>
                             {
                                 hideHostInfo == 'no' ?
                                     <div className="fcal_block_preview_aside">
                                         <div className="fcal_author">
                                             <div className="fcal_author_avatar">
-                                                <img style={{borderRadius: avatarStyle?avatarStyle:'8px'}} src={slot.calendar.author_profile?.avatar} alt={slot.calendar?.title} />
+                                                <img style={{borderRadius: avatarStyle?avatarStyle:'8px'}} src={event.calendar?.author_profile?.avatar} alt={event.calendar?.title} />
                                             </div>
-                                            <h3 className="fcal_author_name">{slot.calendar?.title}</h3>
+                                            <h3 className="fcal_author_name">{event.calendar?.title}</h3>
                                         </div>
 
                                         <div className="fcal_slot_info">
-                                            <h2 className="fcal_slot_heading">{slot.title}</h2>
+                                            <h2 className="fcal_slot_heading">{event.title}</h2>
                                             <div className="slot_timing fcal_icon_item">
                                                 <svg fill="#000000" width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g strokeWidth="0"></g><g strokeLinecap="round" strokeLinejoin="round"></g><g><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm5,11H12a1,1,0,0,1-1-1V6a1,1,0,0,1,2,0v5h4a1,1,0,0,1,0,2Z"></path></g></svg>
-                                                <span>{slot.duration} {__('Minutes')}</span>
+                                                <span>{event.duration} {__('Minutes')}</span>
                                             </div>
                                             {
-                                                slot.location_settings.type == 'in_person_organizer' ?
+                                                event.location_settings?.type == 'in_person_organizer' ?
                                                     <div className="slot_location fcal_icon_item">
                                                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
-                                                        <span>{slot.location_settings.title}</span>
+                                                        <span>{event.location_settings?.title}</span>
                                                     </div>
                                                     :
                                                     null
                                             }
                                             {
-                                                slot.location_settings.type == 'phone_organizer' ?
+                                                event.location_settings?.type == 'phone_organizer' ?
                                                     <div className="slot_location fcal_icon_item">
-                                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path>
-                                                        </svg>
+                                                        <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" data-testid="location-marker-icon" data-id="details-item-icon"><title>Physical location</title><path d="M12 0C7.453 0 3.623 3.853 3.623 8.429c0 6.502 7.18 14.931 7.42 15.172.479.482 1.197.482 1.675.24l.24-.24c.239-.24 7.419-8.67 7.419-15.172C20.377 3.853 16.547 0 12 0zm0 11.56c-1.675 0-2.872-1.445-2.872-2.89S10.566 5.78 12 5.78c1.436 0 2.872 1.445 2.872 2.89S13.675 11.56 12 11.56z" fill="currentColor"></path></svg>
                                                         <span>{__('Phone Call')}</span>
                                                     </div>
                                                     :
@@ -127,7 +125,7 @@ export const LandingPage = props => {
                                             }
                                         </div>
                                         <div className="fcal_slot_description">
-                                            <p>{slot.description}</p>
+                                            <p>{event.description}</p>
                                         </div>
                                     </div>
                                 :
@@ -142,7 +140,7 @@ export const LandingPage = props => {
                     :
                     <div className="fcal_block_select_cal">
                         {
-                            isLoading ?
+                            loading ?
                                 <h2 className="fcal_block_loading">
                                     {__('Loading...')}
                                     <Spinner/>
