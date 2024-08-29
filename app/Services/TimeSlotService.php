@@ -78,13 +78,13 @@ class TimeSlotService
                 continue;
             }
 
-            $currentBookedSlots = $bookedSlots[$date] ?? [];
-
             $isToday = $date === $todayDate;
 
             $isLastDay = $date === $lastDate;
 
             $validSlots = [];
+
+            $validDstDateSlots = [];
 
             foreach ($availableSlots as $start) {
                 $end = gmdate('H:i', strtotime($start) + $period); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
@@ -97,6 +97,10 @@ class TimeSlotService
 
                 $slot = $this->maybeDayLightSavingSlot($slot, $dstTime, $scheduleTimezone);
 
+                $slotDate = gmdate('Y-m-d', strtotime($slot['start'])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+                $currentBookedSlots = $bookedSlots[$slotDate] ?? [];
+
                 if ($isToday && strtotime($slot['start']) < $cutOutTime) {
                     continue;
                 }
@@ -108,13 +112,23 @@ class TimeSlotService
                 $isSlotAvailable = $this->isSlotAvailable($slot, $currentBookedSlots, $bufferTime, $hostId);
 
                 if ($isSlotAvailable) {
-                    $validSlots[] = $slot;
+                    if ($slotDate != $date) {
+                        $validDstDateSlots[] = $slot;
+                    } else {
+                        $validSlots[] = $slot;
+                    }
                 }
             }
 
             if ($validSlots) {
                 $currentSlots = $rangedSlots[$date] ?? [];
                 $rangedSlots[$date] = $this->mergeAndSortSlots($currentSlots, $validSlots);
+            }
+
+            if ($validDstDateSlots) {
+                $slotDate = gmdate('Y-m-d', strtotime($validDstDateSlots[0]['start'])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                $currentSlots = $rangedSlots[$slotDate] ?? [];
+                $rangedSlots[$slotDate] = $this->mergeAndSortSlots($currentSlots, $validDstDateSlots);
             }
         }
 
@@ -162,10 +176,15 @@ class TimeSlotService
         $fromTimeStamp = strtotime($fromTime);
         $toTimeStamp = strtotime($toTime);
 
-        $fromTime = gmdate('Y-m-d 00:00:00', $fromTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-        $toTime = gmdate('Y-m-d 23:59:59', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-
         $duration = $this->calendarSlot->getDuration($duration);
+
+        list($scheduleTimezone, $dstTime) = $this->getTimezoneInfo();
+
+        $fromStartTime = $this->maybeDayLightSavingTime($fromTime, $dstTime, $scheduleTimezone);
+        $toEndTime = $this->maybeDayLightSavingTime($toTime, $dstTime, $scheduleTimezone);
+
+        $fromTime = gmdate('Y-m-d 00:00:00', strtotime($fromStartTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+        $toTime = gmdate('Y-m-d 23:59:59', strtotime($toEndTime)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $slots = $this->getDates($fromTime, $toTime, $duration, true);
 
@@ -173,7 +192,7 @@ class TimeSlotService
         $toDate = gmdate('Y-m-d', $toTimeStamp); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
         $availableSlots = $slots[$fromDate] ?? [];
-        
+
         if ($fromDate != $toDate) {
             $availableSlots = array_merge($availableSlots, $slots[$toDate] ?? []);
         }
