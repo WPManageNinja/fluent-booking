@@ -277,18 +277,14 @@ export default {
         orderedCalendarEvents() {
             const eventOrder = this.calendar.event_order ?? [];
             return this.calendar.slots.slice().sort((a, b) => {
-                const indexA = eventOrder.indexOf(a.id);
-                const indexB = eventOrder.indexOf(b.id);
-                const posA = indexA == -1 ? Number.MAX_SAFE_INTEGER : indexA;
-                const posB = indexB == -1 ? Number.MAX_SAFE_INTEGER : indexB;
-                return posA - posB;
+                return eventOrder.indexOf(a.id) - eventOrder.indexOf(b.id);
             });
         }
     },
     methods: {
         slotDeleted(slotId) {
             const slotIndex = this.calendar.slots.findIndex(slot => slot.id === slotId);
-            if (slotIndex > 0) {
+            if (slotIndex != -1) {
                 this.calendar.slots.splice(slotIndex, 1);
             }
         },

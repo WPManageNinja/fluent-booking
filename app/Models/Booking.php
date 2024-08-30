@@ -706,6 +706,13 @@ class Booking extends Model
         ]);
     }
 
+    public function deleteMeta($key)
+    {
+        return BookingMeta::where('booking_id', $this->id)
+            ->where('meta_key', $key)
+            ->delete();
+    }
+
     public function getMeta($key, $default = '')
     {
         $exist = BookingMeta::where('booking_id', $this->id)

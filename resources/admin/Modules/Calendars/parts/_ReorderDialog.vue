@@ -11,7 +11,7 @@
                 <img class="fcal_author_avatar" :src="calendar.author_profile.avatar">
                 <h2 class="fcal_author_title"> {{ calendar.title }} </h2>
             </div>
-            <div class="fcal_reorder_events">
+            <div v-if="calendarEvents.length" class="fcal_reorder_events">
                 <div v-for="event in orderedCalendarEvents" :key="event.id" class="fcal_reorder_event">
                     <div class="fcal_reorder_icon">
                         <el-icon @click="moveUp(event.id)"><Top /></el-icon>
@@ -39,6 +39,7 @@
                     </div>
                 </div>
             </div>
+            <div v-else class="fcal_no_event">{{ $t('No events found') }}</div>
         </div>
         <template #footer>
             <div class="dialog-footer">
