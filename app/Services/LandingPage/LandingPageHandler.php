@@ -232,10 +232,8 @@ class LandingPageHandler
 
         $isRtl = Helper::fluentbooking_is_rtl();
 
-        $publicCss = 'public/saas.css';
-        if ($isRtl) {
-            $publicCss = 'public/saas-rtl.css';
-        }
+        $publicCss = $isRtl ? 'public/saas-rtl.css' : 'public/saas.css';
+
         $data = [
             'calendar'       => $calendar,
             'calendar_event' => $calendarEvent,
