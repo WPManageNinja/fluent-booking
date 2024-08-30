@@ -15,7 +15,7 @@ class NotificationHandler
         add_action('fluent_booking/after_booking_pending', [$this, 'pushBookingPendingToQueue'], 10, 2);
         add_action('fluent_booking/after_booking_pending_async', [$this, 'bookingRequestEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
-        add_action('fluent_booking/after_booking_rescheduled', [$this, 'emailOnBookingRescheduled'], 10, 2);
+        add_action('fluent_booking/after_booking_rescheduled', [$this, 'emailOnBookingRescheduled'], 10, 3);
         add_action('fluent_booking/booking_schedule_cancelled', [$this, 'emailOnBookingCancelled'], 10, 2);
         add_action('fluent_booking/booking_schedule_rejected', [$this, 'emailOnBookingRejected'], 10, 2);
         add_action('fluent_booking/after_patch_booking_email', [$this, 'emailToUpdatedEmail'], 10, 2);
@@ -154,7 +154,9 @@ class NotificationHandler
         if ('guest' == $emailTo && Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $email = Arr::get($notifications, 'reminder_to_attendee.email', []);
             EmailNotificationService::reminderEmail($booking, $email, $emailTo);
-        } elseif ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
+        }
+
+        if ('host' == $emailTo && Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $email = Arr::get($notifications, 'reminder_to_host.email', []);
             $additionalRecipients = Arr::get($email, 'additional_recipients', false);
             if ($additionalRecipients) {
@@ -233,9 +235,8 @@ class NotificationHandler
         }
     }
 
-    public function emailOnBookingRescheduled(Booking $booking)
+    public function emailOnBookingRescheduled(Booking $booking, $oldBooking, $calendarEvent)
     {
-        $calendarEvent = $booking->calendar_event;
         if (!$calendarEvent) {
             return;
         }
@@ -243,6 +244,20 @@ class NotificationHandler
         $notifications = $calendarEvent->getNotifications();
         if (!$notifications) {
             return;
+        }
+
+        // Remove all reminders
+        as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$oldBooking->id, 'host'], 'fluent-booking');
+        as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$oldBooking->id, 'guest'], 'fluent-booking');
+
+        if (Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
+            $reminderTimes = Arr::get($notifications, 'reminder_to_attendee.email.times', []);
+            $this->pushRemindersToQueue($booking, $calendarEvent, $reminderTimes, 'guest');
+        }
+
+        if (Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
+            $reminderTimes = Arr::get($notifications, 'reminder_to_host.email.times', []);
+            $this->pushRemindersToQueue($booking, $calendarEvent, $reminderTimes, 'host');
         }
 
         $rescheduledBy = $booking->getMeta('rescheduled_by_type', 'host');
