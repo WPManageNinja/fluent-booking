@@ -18,7 +18,7 @@
                                     {{ $t('Send Confirmation Email') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
-                                    v-if="canMarkAsPaid" @click="updateScheduleStatus('scheduled')">
+                                    v-if="canMarkAsPaid" @click="bookingMarkAsPaid">
                                     <el-icon>
                                         <Check/>
                                     </el-icon>
@@ -31,7 +31,7 @@
                                     </el-icon>
                                     {{ $t('Mark As Completed') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item 
+                                <el-dropdown-item
                                     v-if="canMakeNoShow"
                                     @click="updateScheduleStatus('no_show')">
                                     <el-icon>
@@ -350,7 +350,8 @@ export default {
             return !this.canMarkAsPaid && ['scheduled', 'approved', 'pending'].includes(this.showing_booking.status);
         },
         canMarkAsPaid() {
-            return this.showing_booking.payment_method && this.showing_booking.payment_status != 'paid' && !this.isBookingCancelled && !this.isBookingRejected;
+            const isPaidEvent = this.showing_booking.calendar_event.type == 'paid' && this.showing_booking.payment_status != 'paid';
+            return isPaidEvent && !this.isBookingCancelled && !this.isBookingRejected;
         },
         canReschedule() {
             return this.isSingleGuestEvent && ['scheduled', 'approved', 'pending'].includes(this.showing_booking.status);
@@ -454,10 +455,10 @@ export default {
                     this.loading_sidebar = false;
                 });
         },
-        updateScheduleStatus(new_status) {
+        updateScheduleStatus(new_status, column = 'status') {
             this.updating = true;
             const data = {
-                column: 'status',
+                column: column,
                 value: new_status
             };
             if (new_status == 'cancelled') {
@@ -468,8 +469,10 @@ export default {
             this.$put(`schedules/${this.showing_booking.id}`, data)
                 .then(response => {
                     this.$handleSuccess(response.message);
-                    this.showing_booking.status = new_status;
-                    this.showing_booking.happening_status = '';
+                    if (column == 'status') {
+                        this.showing_booking.status = new_status;
+                        this.showing_booking.happening_status = '';
+                    }
                     this.cancelDialog = false;
                 })
                 .catch(errors => {
@@ -498,6 +501,13 @@ export default {
         },
         rescheduleBooking() {
             window.open(this.showing_booking.reschedule_url, '_blank');
+        },
+        bookingMarkAsPaid() {
+            if (this.showing_booking.source == 'admin') {
+                this.updateScheduleStatus('paid', 'payment_status');
+            } else {
+                this.updateScheduleStatus('scheduled');
+            }
         },
         handleDataUpdated(data) {
             if (this.booking) {
