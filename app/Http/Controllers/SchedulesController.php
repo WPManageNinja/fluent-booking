@@ -146,7 +146,8 @@ class SchedulesController extends Controller
             'phone',
             'first_name',
             'last_name',
-            'status'
+            'status',
+            'payment_status'
         ];
 
         if (!in_array($column, $validColumns)) {
@@ -176,7 +177,7 @@ class SchedulesController extends Controller
 
                 $updateData['payment_status'] = 'paid';
 
-                do_action('fluent_booking/log_booking_activity', $this->getPaymentLog($booking->id));
+                do_action('fluent_booking/log_booking_activity', $this->getPaymentPaidLog($booking->id));
 
                 do_action('fluent_booking/payment/update_payment_status_paid', $booking);
 
@@ -205,6 +206,20 @@ class SchedulesController extends Controller
             }
         }
 
+        if ($column == 'payment_status') {
+            if (!in_array($value, ['pending', 'paid'])) {
+                return $this->sendError(['message' => __('Invalid payment status', 'fluent-booking')]);
+            }
+
+            if ($value == 'paid') {
+                do_action('fluent_booking/log_booking_activity', $this->getPaymentPaidLog($booking->id));
+            }
+
+            if ($value == 'pending') {
+                do_action('fluent_booking/log_booking_activity', $this->getPaymentPendingLog($booking->id));
+            }
+        }
+
         $updateData[$column] = $value;
         $booking->fill($updateData);
         $booking->save();
@@ -225,7 +240,7 @@ class SchedulesController extends Controller
 
         return [
             /* translators: Updated column name */
-            'message' => sprintf(__('%s has been updated', 'fluent-booking'), $column)
+            'message' => sprintf(__('%s has been updated', 'fluent-booking'), ucfirst($column))
         ];
     }
 
@@ -418,7 +433,7 @@ class SchedulesController extends Controller
         return $booking;
     }
 
-    private function getPaymentLog($bookingId)
+    private function getPaymentPaidLog($bookingId)
     {
         return [
             'booking_id'  => $bookingId,
@@ -426,6 +441,17 @@ class SchedulesController extends Controller
             'type'        => 'success',
             'title'       => __('Payment Successfully Completed', 'fluent-booking'),
             'description' => __('Payment marked as paid by admin', 'fluent-booking')
+        ];
+    }
+
+    private function getPaymentPendingLog($bookingId)
+    {
+        return [
+            'booking_id'  => $bookingId,
+            'status'      => 'closed',
+            'type'        => 'success',
+            'title'       => __('Payment Successfully Marked as Pending', 'fluent-booking'),
+            'description' => __('Payment marked as pending by admin', 'fluent-booking')
         ];
     }
 
