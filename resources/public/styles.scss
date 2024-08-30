@@ -143,7 +143,13 @@ $whiteBG: #ffffff;
   .fcal_slot_info {
     .slot_location {
       img {
-        filter: invert(1);
+        &.fcal_loc_icon {
+            &.location_icon,
+            &.phone_icon,
+            &.link_icon {
+                filter: invert(1);
+            }
+        }
       }
     }
     .fcal_multi_location_title,
@@ -562,6 +568,12 @@ body >.fcal_calendar_wrap {
         input[type=checkbox] {
             display: inline-block;
             width: auto;
+        }
+
+        select {
+            background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiNiYmIiPjxwYXRoIGQ9Ik02IDlsNiA2IDYtNiIvPjwvc3ZnPg==) no-repeat 98% 50%;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .fcal_checkbox_wrap {

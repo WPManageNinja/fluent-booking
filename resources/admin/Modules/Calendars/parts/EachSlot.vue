@@ -298,7 +298,7 @@ export default {
                         })
                             .then(response => {
                                 this.$handleSuccess(response);
-                                this.$emit('slotDeleted');
+                                this.$emit('slotDeleted', this.slot.id);
                             })
                             .catch(errors => {
                                 this.$handleError(errors);
