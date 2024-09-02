@@ -272,7 +272,10 @@ class TimeSlotService
             ->whereHas('hosts', function ($query) use ($hostIds) {
                 $query->whereIn('user_id', $hostIds);
             })
-            ->whereBetween('start_time', $dateRange)
+            ->where(function ($query) use ($dateRange) {
+                $query->whereBetween('start_time', $dateRange)
+                      ->orWhereBetween('end_time', $dateRange);
+            })
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', $status)
             ->get()
