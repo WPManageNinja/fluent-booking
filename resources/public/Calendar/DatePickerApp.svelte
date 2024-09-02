@@ -173,7 +173,6 @@
                     dayClick({ date: selectedDate });
                 } else {
                     selectedDate = '';
-                    dispatch('spotClicked', '');
                     dispatch('dayClicked', '');
                 }
 

@@ -36,7 +36,7 @@
 </div>
 <script>
     import { i18 } from '../util.js';
-    import { onMount } from "svelte";
+    import { onMount, afterUpdate } from "svelte";
 
     export let field;
     export let form;
@@ -64,8 +64,12 @@
 
     onMount(() => {
         const paymentElements = document.querySelectorAll('.fcal_payment_amount');
-            paymentElements.forEach(element => {
-                initialValues.push(element.textContent);
-            });
+        paymentElements.forEach(element => {
+            initialValues.push(element.textContent);
         });
+    });
+
+    afterUpdate(() => {
+        maybeUpdateQuantity();
+    });
 </script>

@@ -20,7 +20,7 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item 
+                            <el-dropdown-item
                                 @click="isNewBookingOpen = true">
                                 {{ $t('Create Booking Manually') }}
                             </el-dropdown-item>
