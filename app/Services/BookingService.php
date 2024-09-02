@@ -91,10 +91,13 @@ class BookingService
 
             $isConfRequired = $calendarSlot->isConfirmationRequired($startTime);
             $bookingData['status'] = $isConfRequired ? 'pending' : $data['status'];
-            
+
+            if ($startTime == $lastBooking) {
+                $createdBookingIds = $bookingIds;
+            }
+
             if (Arr::get($data, 'payment_method')) {
                 if ($startTime == $lastBooking) {
-                    $createdBookingIds = $bookingIds;
                     $bookingData['quantity'] = $totalBooking;
                 } else {
                     $bookingData['payment_status'] = '';
@@ -343,8 +346,7 @@ class BookingService
             // translators: %s is the name of the person scheduled
             $subHeading = sprintf(__('You are scheduled with %s', 'fluent-booking'), $author['name']);
 
-            $requestType = sanitize_text_field(Arr::get($_REQUEST, 'type'));
-            if ($requestType == 'confirmation' && $calendarSlot->allowMultiBooking()) {
+            if ($actionType == 'confirmation' && $calendarSlot->allowMultiBooking()) {
                 $bookingTime = (array) $sections['when']['content'];
                 $sections['when']['content'] = array_merge($bookingTime, $booking->getOtherBookingTimes());
             }

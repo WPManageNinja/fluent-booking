@@ -1521,6 +1521,8 @@ body >.fcal_calendar_wrap {
         margin-left: 1.5rem;
       }
       .fcal_remove_time {
+        padding-left: 4px;
+        display: inline-block;
         transform: rotate(45deg);
         font-size: 20px;
         font-weight: 600;
