@@ -35,6 +35,7 @@
     let isBookingDone = false;
     let bookingConfirmationHtml = '';
     let limitReachedError = '';
+    let timeFormat = getTimeFormat(slot.time_format);
 
     let skipCalendar = !!slot.pre_selects?.time;
     let selectedDate = false;
@@ -126,7 +127,7 @@
     function spotSelected(spot) {
         selectedDateTime = spot;
     }
-    
+ 
     function spotClicked(spot) {
         limitReachedError = '';
         if (!spot) {
@@ -186,15 +187,23 @@
         return formattedDuration.join(' ');
     }
 
+    function getTimeFormat(format) {
+        if (format === '24') {
+            return 'HH:mm';
+        }
+        return 'hh:mma';
+    }
+
     function formatHours(e) {
         slot.time_format = e;
+        timeFormat = getTimeFormat(e);
     }
 
     function maybeDisplayDate(date) {
         const startDate = util.dateTimeI18(date.start, dateFormatter);
         const endData = util.dateTimeI18(date.end, dateFormatter);
         if (startDate != endData) {
-            return startDate;
+            return ', ' + startDate;
         }
         return '';
     }
@@ -427,12 +436,8 @@
                                                     </svg>
                                                 {/if}
                                                 <span class="{indx > 0 ? 'fcal_multi_time' : ''}">
-                                                    {#if slot.time_format == '24' }
-                                                        {util.dateTimeI18(selectedTime.start, 'HH:mm')} {maybeDisplayDate(selectedTime)} - {util.dateTimeI18(selectedTime.end, 'HH:mm')},
-                                                    {:else}
-                                                        {util.dateTimeI18(selectedTime.start, 'hh:mma')} - {util.dateTimeI18(selectedTime.end, 'hh:mma')},
-                                                    {/if}
-                                                    {util.dateTimeI18(selectedTime.end, dateFormatter)}
+                                                    {util.dateTimeI18(selectedTime.start, timeFormat)}{maybeDisplayDate(selectedTime)}
+                                                    - {util.dateTimeI18(selectedTime.end, timeFormat)}, {util.dateTimeI18(selectedTime.end, dateFormatter)}
                                                     {#if selectedDateTimes.length > 1}
                                                         <span class="fcal_remove_time"
                                                             on:click={() => spotClicked(selectedTime)}

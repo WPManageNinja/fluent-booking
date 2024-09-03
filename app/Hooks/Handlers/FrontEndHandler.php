@@ -12,6 +12,7 @@ use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
+use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
@@ -129,11 +130,7 @@ class FrontEndHandler
             if (!isset($calendarEvents[$event->calendar_id])) {
                 $calendarEvents[$event->calendar_id] = [];
             }
-            $event->payment_html = $event->getPaymentHtml();
-            $event->durations = $event->getAvailableDurations();
-            $event->description = $event->getDescription();
-            $event->short_description = Helper::excerpt($event->description);
-            $event->locations = $event->defaultLocationHtml();
+            $event = CalendarEventService::processEvent($event);
             $calendarEvents[$event->calendar_id][] = $event;
         }
 
@@ -259,12 +256,7 @@ class FrontEndHandler
         }
 
         foreach ($calendarEvents as $event) {
-            $event->payment_html = $event->getPaymentHtml();
-            $event->public_url = $event->getPublicUrl();
-            $event->durations = $event->getAvailableDurations();
-            $event->description = $event->getDescription();
-            $event->short_description = Helper::excerpt($event->description);
-            $event->locations = $event->defaultLocationHtml();
+            $event = CalendarEventService::processEvent($event);
         }
 
         $calendar->activeEvents = $calendarEvents;
