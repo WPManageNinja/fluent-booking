@@ -5,6 +5,7 @@ namespace FluentBooking\App\Hooks\Handlers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Support\Arr;
 
@@ -271,12 +272,7 @@ class BlockEditorHandler
             }
 
             foreach ($events as $event) {
-                $event->payment_html = $event->getPaymentHtml();
-                $event->public_url = $event->getPublicUrl();
-                $event->durations = $event->getAvailableDurations();
-                $event->description = $event->getDescription();
-                $event->short_description = Helper::excerpt($event->description);
-                $event->locations = $event->defaultLocationHtml();
+                $event = CalendarEventService::processEvent($event);
             }
 
             $calendar->activeEvents = $events;
@@ -329,12 +325,7 @@ class BlockEditorHandler
         }
 
         foreach ($events as $event) {
-            $event->payment_html = $event->getPaymentHtml();
-            $event->public_url = $event->getPublicUrl();
-            $event->durations = $event->getAvailableDurations();
-            $event->description = $event->getDescription();
-            $event->short_description = Helper::excerpt($event->description);
-            $event->locations = $event->defaultLocationHtml();
+            $event = CalendarEventService::processEvent($event);
         }
 
         $calendar->activeEvents = $events;

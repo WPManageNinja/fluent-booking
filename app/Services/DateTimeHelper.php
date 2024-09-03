@@ -63,6 +63,17 @@ class DateTimeHelper
         return $timeZone;
     }
 
+    public static function guessTimeZone()
+    {
+        $timeZone = self::getTimeZone();
+
+        if (isset($_COOKIE['fluent_booking_user_timezone'])) {
+            $timeZone = $_COOKIE['fluent_booking_user_timezone'];
+        }
+
+        return $timeZone;
+    }
+
     public static function getValidatedTimeZone($requestedTimeZone)
     {
         static $cached = [];
@@ -188,6 +199,19 @@ class DateTimeHelper
             ];
         }
         return $formatted;
+    }
+
+    public static function getFormattedEventTime($eventTime)
+    {
+        $timeZone = self::guessTimeZone();
+
+        $convertedTime = self::convertToTimeZone($eventTime, 'UTC', $timeZone);
+
+        $eventTime = self::formatToLocale($convertedTime, 'time');
+
+        $eventDate = self::formatToLocale($convertedTime, 'date');
+
+        return $eventTime . ', ' . $eventDate . ' (' . $timeZone . ')';
     }
 
     public static function convertPhpDateToDayJSFormay($phpFormat)

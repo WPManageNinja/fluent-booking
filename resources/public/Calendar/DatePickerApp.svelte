@@ -248,6 +248,7 @@
             daySlots = availableDates[preSelectDate];
             dispatch('dayClicked', selectedDate);
             slotSpotConfirmed();
+            spotClicked(selectedDateTime);
             slotSpotForFluentForm(selectedDateTime);
         } else {
             skipCalendar = false;
