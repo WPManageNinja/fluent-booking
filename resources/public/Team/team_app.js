@@ -70,6 +70,10 @@ function faCalOpenBookingPage(item, event) {
 
 window.faCalOpenBookingPage = faCalOpenBookingPage;
 
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+document.cookie = "fluent_booking_user_timezone=" + timeZone + "; path=/";
+
 // Now you can append teamViewHtml to the DOM or do whatever you need with it
 // For example, if you want to append it to the body:
 

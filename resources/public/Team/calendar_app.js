@@ -63,21 +63,25 @@ function faCalOpenBookingPageBlock(item, event) {
 
 window.faCalOpenBookingPageBlock = faCalOpenBookingPageBlock;
 
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+document.cookie = "fluent_booking_user_timezone=" + timeZone + "; path=/";
+
 const calendar = document.querySelector('.fcal_calendar_wrapper');
 
 const teamVars = window[calendar?.id];
 
 if (teamVars) {
     const calendarVars = teamVars['fcal_host_calendar'];
-    
+
     let teamViewHtml = document.createElement('div');
 
     teamViewHtml.className = 'fluent_booking_team_view';
-    
+
     teamViewHtml.innerHTML = calendarVars?.calendar_html;
 
     calendar.querySelector('.fcal_cals_wrap').style.display = 'block';
-    
+
     calendar.querySelector('.fcal_calendar_loading').remove();
 
     calendar.querySelector('.fcal_calendar_block_inner').appendChild(teamViewHtml);
