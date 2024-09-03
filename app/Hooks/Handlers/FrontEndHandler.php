@@ -890,27 +890,28 @@ class FrontEndHandler
             $customFieldsData['payment_method'] = $postedData['payment_method'];
         }
 
-        if ($additionalGuests) {
-            $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
-            $guestLimit = Arr::get($guestField, 'limit', 10);
-            if ($calendarEvent->isMultiGuestEvent()) {
-                $guestLimit--;
-            }
-            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
-        }
-
         $timeSlotService = TimeSlotServiceHandler::initService($calendarEvent->calendar, $calendarEvent);
 
         if (is_wp_error($timeSlotService)) {
             return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
         }
 
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        $availableSpot = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
-        if (!$isSpotAvailable) {
+        if (!$availableSpot) {
             wp_send_json([
                 'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
             ], 422);
+        }
+
+        if ($additionalGuests) {
+            $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
+            $guestLimit = Arr::get($guestField, 'limit', 10);
+            if ($calendarEvent->isMultiGuestEvent()) {
+                $remaining = Arr::get($availableSpot, 'remaining', $calendarEvent->getMaxBookingPerSlot());
+                $guestLimit = min($remaining, $guestLimit) - 1;
+            }
+            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         if ($calendarEvent->isTeamEvent()) {
