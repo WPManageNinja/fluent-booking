@@ -207,13 +207,14 @@ class TimeSlotService
 
         while ($left <= $right) {
             $mid = $left + (($right - $left) >> 1);
+            $slot = $availableSlots[$mid];
 
-            $midStartTime = strtotime($availableSlots[$mid]['start']);
-            $midEndTime = strtotime($availableSlots[$mid]['end']);
+            $slotStartTime = strtotime($slot['start']);
+            $slotEndTime = strtotime($slot['end']);
 
-            if ($fromTimeStamp == $midStartTime && $toTimeStamp == $midEndTime) {
-                return true;
-            } elseif ($fromTimeStamp > $midStartTime) {
+            if ($fromTimeStamp == $slotStartTime && $toTimeStamp == $slotEndTime) {
+                return $slot;
+            } elseif ($fromTimeStamp > $slotStartTime) {
                 $left = $mid + 1;
             } else {
                 $right = $mid - 1;
