@@ -11,7 +11,7 @@ class NotificationHandler
     public function register()
     {
         add_action('fluent_booking/after_booking_scheduled', [$this, 'pushBookingScheduledToQueue'], 10, 2);
-        add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 2);
+        add_action('fluent_booking/after_booking_scheduled_async', [$this, 'bookingScheduledEmails'], 10, 1);
         add_action('fluent_booking/after_booking_pending', [$this, 'pushBookingPendingToQueue'], 10, 2);
         add_action('fluent_booking/after_booking_pending_async', [$this, 'bookingRequestEmails'], 10, 2);
         add_action('fluent_booking/booking_schedule_reminder', [$this, 'bookingReminderEmails'], 10, 2);
@@ -34,7 +34,7 @@ class NotificationHandler
         return $timestamp;
     }
 
-    private function pushRemindersToQueue($booking, $slot, $reminderTimes, $emailTo)
+    private function pushRemindersToQueue($booking, $reminderTimes, $emailTo)
     {
         foreach ($reminderTimes as $time) {
             $reminderTimestamp = $this->getReminderTime($time);
@@ -65,12 +65,12 @@ class NotificationHandler
 
         if (Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_attendee.email.times', []);
-            $this->pushRemindersToQueue($booking, $bookingEvent, $reminderTimes, 'guest');
+            $this->pushRemindersToQueue($booking, $reminderTimes, 'guest');
         }
 
         if (Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_host.email.times', []);
-            $this->pushRemindersToQueue($booking, $bookingEvent, $reminderTimes, 'host');
+            $this->pushRemindersToQueue($booking, $reminderTimes, 'host');
         }
     }
 
@@ -106,7 +106,7 @@ class NotificationHandler
         }
     }
 
-    public function bookingScheduledEmails($bookingId, $slotId)
+    public function bookingScheduledEmails($bookingId)
     {
         $booking = Booking::with(['calendar', 'calendar_event'])->find($bookingId);
 
@@ -252,12 +252,12 @@ class NotificationHandler
 
         if (Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_attendee.email.times', []);
-            $this->pushRemindersToQueue($booking, $calendarEvent, $reminderTimes, 'guest');
+            $this->pushRemindersToQueue($booking, $reminderTimes, 'guest');
         }
 
         if (Arr::isTrue($notifications, 'reminder_to_host.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_host.email.times', []);
-            $this->pushRemindersToQueue($booking, $calendarEvent, $reminderTimes, 'host');
+            $this->pushRemindersToQueue($booking, $reminderTimes, 'host');
         }
 
         $rescheduledBy = $booking->getMeta('rescheduled_by_type', 'host');

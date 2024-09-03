@@ -40,7 +40,7 @@ class TimeSlotService
 
         $cutOutTime = DateTimeHelper::getTimestamp() + $this->calendarSlot->getCutoutSeconds();
 
-        $maxBookingTime = strtotime($this->calendarSlot->getMaxBookableDateTime($fromDate, $timeZone, 'Y-m-d H:i:s'));
+        $maxBookingTime = $this->getMaxBookingTimestamp($fromDate, $toDate, $timeZone);
 
         $timezoneInfo = $this->getTimezoneInfo();
 
@@ -272,7 +272,10 @@ class TimeSlotService
             ->whereHas('hosts', function ($query) use ($hostIds) {
                 $query->whereIn('user_id', $hostIds);
             })
-            ->whereBetween('start_time', $dateRange)
+            ->where(function ($query) use ($dateRange) {
+                $query->whereBetween('start_time', $dateRange)
+                      ->orWhereBetween('end_time', $dateRange);
+            })
             ->orderBy('start_time', 'ASC')
             ->whereIn('status', $status)
             ->get()
@@ -931,6 +934,13 @@ class TimeSlotService
             ->whereBetween('start_time', [$start, $end])
             ->whereIn('status', ['scheduled', 'completed'])
             ->sum('slot_minutes');
+    }
+
+    protected function getMaxBookingTimestamp($fromDate, $toDate, $timeZone)
+    {
+        $maxBookingTime = $this->calendarSlot->getMaxBookableDateTime($fromDate, $timeZone, 'Y-m-d H:i:s');
+
+        return strtotime($maxBookingTime);
     }
 
     protected function getTimezoneInfo($hostId = null)
