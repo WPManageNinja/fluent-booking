@@ -208,9 +208,9 @@ class BookingController extends Controller
                 return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
             }
 
-            $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostUserId);
+            $availableSpot = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration, $hostUserId);
 
-            if (!$isSpotAvailable) {
+            if (!$availableSpot) {
                 wp_send_json([
                     'message' => __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking')
                 ], 422);

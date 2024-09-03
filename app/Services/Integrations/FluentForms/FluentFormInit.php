@@ -108,9 +108,9 @@ class FluentFormInit
             return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
         }
 
-        $isSpotAvailable = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
+        $availableSpot = $timeSlotService->isSpotAvailable($startDateTime, $endDateTime, $duration);
 
-        if (!$isSpotAvailable) {
+        if (!$availableSpot) {
             $message = __('This selected time slot is not available. Maybe someone booked the spot just a few seconds ago.', 'fluent-booking');
             wp_send_json(['errors' => [$message]], 422);
         }
