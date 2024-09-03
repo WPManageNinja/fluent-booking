@@ -137,9 +137,12 @@ class BookingService
 
             $bookingData['group_id'] = self::getGroupId($calendarSlot, $bookingData);
 
+            if ($email == $lastBooking) {
+                $createdBookingIds = $bookingIds;
+            }
+
             if (Arr::get($data, 'payment_method')) {
                 if ($email == $lastBooking) {
-                    $createdBookingIds = $bookingIds;
                     $bookingData['quantity'] = $totalBooking;
                 } else {
                     $bookingData['payment_status'] = '';
@@ -192,10 +195,12 @@ class BookingService
                     return $guest['email'];
                 }, $additionalGuests);
                 $data['email'] = array_merge($guestEmails, (array) $data['email']);
+
                 $guestNames = array_map(function ($guest) {
                     return $guest['name'];
                 }, $additionalGuests);
                 $data['first_name'] = array_merge($guestNames, (array) $data['first_name']);
+
                 $data['additional_guests'] = [];
             }
         }
