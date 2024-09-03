@@ -28,12 +28,11 @@
                            href="<?php echo esc_url($event->public_url); ?>" class="fcal_card fcal_event_card">
                             <div class="fcal_slot_content">
                                 <h2>
-                                    <span class="fcal_slot_color_schema"
-                                          style="background: <?php echo esc_attr($event->color_schema); ?>;"></span>
+                                    <span class="fcal_slot_color_schema" style="background: <?php echo esc_attr($event->color_schema); ?>;"></span>
                                     <?php echo esc_html($event->title); ?>
                                 </h2>
                                 <p class="fcal_description"><?php echo wp_kses_post($event->short_description); ?></p>
-                                <div class="fcal_slot_durations_wrap">
+                                <div class="fcal_slot_items_wrap">
                                     <span class="fcal_slot_duration">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                                             <path d="M12.8334 7C12.8334 10.22 10.22 12.8333 7.00002 12.8333C3.78002 12.8333 1.16669 10.22 1.16669 7C1.16669 3.78 3.78002 1.16666 7.00002 1.16666C10.22 1.16666 12.8334 3.78 12.8334 7Z" stroke="#445164" stroke-linecap="round" stroke-linejoin="round"/>
@@ -76,6 +75,13 @@
 
                                     <?php if ($event->payment_html) { ?>
                                         <?php echo $event->payment_html; ?>
+                                    <?php } ?>
+
+                                    <?php if ($event->event_time) { ?>
+                                        <span class="fcal_slot_time">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 1.5V3.75" stroke="#445164" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 1.5V3.75" stroke="#445164" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.625 6.8175H15.375" stroke="#445164" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.75 6.375V12.75C15.75 15 14.625 16.5 12 16.5H6C3.375 16.5 2.25 15 2.25 12.75V6.375C2.25 4.125 3.375 2.625 6 2.625H12C14.625 2.625 15.75 4.125 15.75 6.375Z" stroke="#445164" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11.771 10.275H11.7778" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11.771 12.525H11.7778" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.99661 10.275H9.00335" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.99661 12.525H9.00335" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6.22073 10.275H6.22747" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6.22073 12.525H6.22747" stroke="#445164" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                            <?php echo esc_html(\FluentBooking\App\Services\DateTimeHelper::getFormattedEventTime($event->event_time)); ?>
+                                        </span>
                                     <?php } ?>
                                 </div>
                             </div>

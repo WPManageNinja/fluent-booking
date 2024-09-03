@@ -114,7 +114,8 @@ $border-color_1: var(--fcal_primaryColor);
   }
 
   .fcal_slot_duration,
-  .fcal_slot_location {
+  .fcal_slot_location,
+  .fcal_slot_time {
     font-size: 12px;
     font-weight: 500;
     line-height: 18px;

@@ -7,6 +7,7 @@ use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
+use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\Helper;
@@ -119,11 +120,7 @@ class LandingPageHandler
         }
 
         foreach ($activeEvents as $activeEvent) {
-            $activeEvent->payment_html = $activeEvent->getPaymentHtml();
-            $activeEvent->public_url = $activeEvent->getPublicUrl();
-            $activeEvent->durations = $activeEvent->getAvailableDurations();
-            $activeEvent->description = $activeEvent->getDescription();
-            $activeEvent->short_description = Helper::excerpt($activeEvent->description);
+            $activeEvent = CalendarEventService::processEvent($activeEvent);
         }
 
         $metaDescription = Helper::excerpt($calendar->description);
@@ -156,6 +153,7 @@ class LandingPageHandler
             }
             $jsVars['fcal_public_vars_' . $calendar->id . '_' . $activeEvent->id] = $vars;
             $activeEvent->locations = $activeEvent->defaultLocationHtml();
+            do_action_ref_array('fluent_booking/landing_page_event', [&$activeEvent]);
         }
 
         $assetUrl = App::getInstance('url.assets');
