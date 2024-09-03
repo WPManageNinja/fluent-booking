@@ -20,10 +20,11 @@
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
     const dateFormatter = appData.date_formatter;
+    const isRescheduling = appData.rescheduling == 'yes';
     const isSingleGuest = slot.event_type === 'single';
     const isDisplaySpots = slot.is_display_spots || false;
     const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
-    const isMultiBookingAllow = isMultiBooking && isSingleGuest;
+    const isMultiBookingAllow = isMultiBooking && isSingleGuest && !isRescheduling;
     const multiBookingLimit = slot.settings?.multiple_booking?.limit || 5;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
 
@@ -432,14 +433,14 @@
                                                         {util.dateTimeI18(selectedTime.start, 'hh:mma')} - {util.dateTimeI18(selectedTime.end, 'hh:mma')},
                                                     {/if}
                                                     {util.dateTimeI18(selectedTime.end, dateFormatter)}
+                                                    {#if selectedDateTimes.length > 1}
+                                                        <span class="fcal_remove_time"
+                                                            on:click={() => spotClicked(selectedTime)}
+                                                            on:keypress={(e) => { spotClicked(selectedTime) }}>
+                                                            +
+                                                        </span>
+                                                    {/if}
                                                 </span>
-                                                {#if selectedDateTimes.length > 1}
-                                                    <span class="fcal_remove_time"
-                                                        on:click={() => spotClicked(selectedTime)}
-                                                        on:keypress={(e) => { spotClicked(selectedTime) }}>
-                                                        +
-                                                    </span>
-                                                {/if}
                                             </div>
                                         {/each}
                                         {#if limitReachedError}
