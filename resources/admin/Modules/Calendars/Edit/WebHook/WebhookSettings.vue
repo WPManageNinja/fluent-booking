@@ -248,7 +248,8 @@ export default {
                 webhook: {
                     id: row.id,
                     settings: row.settings
-                }
+                },
+                calendar_id: this.calendar_event.calendar_id
             };
             this.$post(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks`, data)
                 .then(response => {
@@ -260,7 +261,9 @@ export default {
         },
         deleteWebhook(id) {
             this.loading = true;
-            this.$del(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks/${id}`)
+            this.$del(`calendars/${this.calendar_event.calendar_id}/events/${this.calendar_event.id}/webhooks/${id}`, {
+                calendar_id: this.calendar_event.calendar_id
+            })
                 .then(response => {
                     this.$handleSuccess(response.message);
                     this.getFeeds();

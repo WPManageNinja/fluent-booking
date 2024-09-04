@@ -247,17 +247,7 @@ class FrontEndHandler
             return '';
         }
 
-        $eventOrder = $calendar->getMeta('event_order');
-
-        if (!empty($eventOrder)) {
-            $calendarEvents = $calendarEvents->sortBy(function($event) use ($eventOrder) {
-                return array_search($event->id, $eventOrder);
-            })->values();
-        }
-
-        foreach ($calendarEvents as $event) {
-            $event = CalendarEventService::processEvent($event);
-        }
+        $calendarEvents = CalendarEventService::processEvents($calendar, $calendarEvents);
 
         $calendar->activeEvents = $calendarEvents;
 
