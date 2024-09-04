@@ -108,20 +108,10 @@ class LandingPageHandler
         if ($settings['show_type'] != 'all') {
             $activeEvents = $activeEvents->whereIn('id', $settings['enabled_slots']);
         }
-        
+
         $activeEvents = $activeEvents->get();
 
-        $eventOrder = $calendar->getMeta('event_order');
-
-        if (!empty($eventOrder)) {
-            $activeEvents = $activeEvents->sortBy(function($event) use ($eventOrder) {
-                return array_search($event->id, $eventOrder);
-            })->values();
-        }
-
-        foreach ($activeEvents as $activeEvent) {
-            $activeEvent = CalendarEventService::processEvent($activeEvent);
-        }
+        $activeEvents = CalendarEventService::processEvents($calendar, $activeEvents);
 
         $metaDescription = Helper::excerpt($calendar->description);
 

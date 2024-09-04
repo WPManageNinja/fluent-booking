@@ -50,7 +50,8 @@ class CalendarController extends Controller
         $calendarsQuery = $calendarsQuery->latest();
 
         if (!PermissionManager::hasAllCalendarAccess(true)) {
-            $calendarsQuery->where('user_id', get_current_user_id());
+            $attachedCalendarIds = CalendarService::getAttachedCalendarIds($calendarsQuery);
+            $calendarsQuery->whereIn('id', $attachedCalendarIds);
         }
 
         $calendars = $calendarsQuery->paginate();

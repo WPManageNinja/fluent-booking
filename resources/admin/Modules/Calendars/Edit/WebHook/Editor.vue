@@ -239,7 +239,8 @@ export default {
                 webhook: {
                     settings: this.settings,
                     id: this.editing_feed.id
-                }
+                },
+                calendar_id: this.calendar_event.calendar_id
             })
                 .then(response => {
                     this.$handleSuccess(response.message);
@@ -286,7 +287,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>
