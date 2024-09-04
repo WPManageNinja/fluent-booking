@@ -356,27 +356,30 @@ class CalendarService
 
     public static function getCalendarOptionsByTitle($condition = '')
     {
-        $calendarQuery = Calendar::select(['id', 'title'])
+        $calendarsQuery = Calendar::select(['id', 'title'])
             ->where('status', '!=', 'expired')
-            ->when(!PermissionManager::hasAllCalendarAccess(true), function ($query) {
-                return $query->where('user_id', get_current_user_id());
-            });
+            ->with(['slots' => function ($query) {
+                $query->where('status', '!=', 'expired');
+            }]);
 
         switch ($condition) {
             case 'only_hosts':
-                $calendarQuery->where('type', 'simple');
+                $calendarsQuery->where('type', 'simple');
                 break;
             case 'only_teams':
-                $calendarQuery->where('type', 'team');
+                $calendarsQuery->where('type', 'team');
                 break;
             case 'only_events':
-                $calendarQuery->where('type', 'event');
+                $calendarsQuery->where('type', 'event');
                 break;
         }
 
-        $calendars = $calendarQuery->with(['slots' => function ($query) {
-            $query->where('status', '!=', 'expired');
-        }])->latest()->get();
+        if (!PermissionManager::hasAllCalendarAccess(true)) {
+            $attachedCalendarIds = self::getAttachedCalendarIds($calendarsQuery);
+            $calendarsQuery->whereIn('id', $attachedCalendarIds);
+        }
+
+        $calendars = $calendarsQuery->latest()->get();
 
         $formattedCalendars = [];
         foreach ($calendars as $index => $calendar) {
@@ -399,6 +402,31 @@ class CalendarService
             }
         }
         return apply_filters('fluent_booking/calendar_options_by_title', $formattedCalendars);
+    }
+
+    public static function getAttachedCalendarIds($calendarsQuery)
+    {
+        $userId = get_current_user_id();
+
+        $calendars = $calendarsQuery->get();
+
+        $calendarIds = [];
+        foreach ($calendars as $calendar) {
+            if ($calendar->user_id == $userId) {
+                $calendarIds[] = $calendar->id;
+                continue;
+            }
+
+            $events = Arr::get($calendar, 'slots', []);
+            foreach ($events as $event) {
+                $teamMembers = Arr::get($event, 'settings.team_members', []);
+                if (in_array($userId, $teamMembers)) {
+                    $calendarIds[] = $calendar->id;
+                }
+            }
+        }
+
+        return $calendarIds;
     }
 
     public static function updateCalendarEventsSchedule($calendarId, $oldTimezone, $updatedTimezone)
