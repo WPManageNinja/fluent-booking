@@ -263,17 +263,7 @@ class BlockEditorHandler
                 continue;
             }
 
-            $eventOrder = $calendar->getMeta('event_order');
-
-            if (!empty($eventOrder)) {
-                $events = $events->sortBy(function ($event) use ($eventOrder) {
-                    return array_search($event->id, $eventOrder);
-                })->values();
-            }
-
-            foreach ($events as $event) {
-                $event = CalendarEventService::processEvent($event);
-            }
+            $events = CalendarEventService::processEvents($calendar, $events);
 
             $calendar->activeEvents = $events;
 
@@ -316,17 +306,7 @@ class BlockEditorHandler
             return '';
         }
 
-        $eventOrder = $calendar->getMeta('event_order');
-
-        if (!empty($eventOrder)) {
-            $events = $events->sortBy(function ($event) use ($eventOrder) {
-                return array_search($event->id, $eventOrder);
-            })->values();
-        }
-
-        foreach ($events as $event) {
-            $event = CalendarEventService::processEvent($event);
-        }
+        $events = CalendarEventService::processEvents($calendar, $events);
 
         $calendar->activeEvents = $events;
 

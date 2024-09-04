@@ -426,7 +426,6 @@ export default {
         loadMergeFields() {
             this.loading_list = true;
             const url = 'calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/integrations/' + this.editingIntegration.integration_id + '/merge-fields';
-
             this.$get(url, {
                 calendar_id: this.calendar_event.calendar_id,
                 list_id: this.settings.list_id,

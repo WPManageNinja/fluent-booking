@@ -25,7 +25,7 @@ class DataExporter
             die(esc_html__('Calendar not found', 'fluent-booking'));
         }
 
-        if (!PermissionManager::hasAllCalendarAccess() && $calendar->user_id != get_current_user_id()) {
+        if (!PermissionManager::hasAllCalendarAccess() && !PermissionManager::hasCalendarAccess($calendar)) {
             die(esc_html__('You do not have permission to export data', 'fluent-booking'));
         }
 
