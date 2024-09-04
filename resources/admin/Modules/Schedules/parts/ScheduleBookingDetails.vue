@@ -4,7 +4,7 @@
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
                     <div><span v-html="meetingDetails"></span> - {{ $t(ucFirst(showing_booking.status)) }}</div> 
-                    <el-dropdown v-if="hasAccess('manage_all_bookings')" trigger="click" popper-class="fcal_select">
+                    <el-dropdown v-if="hasWriteAccess" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
                         </span>
@@ -501,6 +501,12 @@ export default {
         },
         rescheduleBooking() {
             window.open(this.showing_booking.reschedule_url, '_blank');
+        },
+        hasWriteAccess() {
+            const allBookingAccess = this.hasAccess('manage_all_bookings');
+            const myCalendarBooking = this.showing_booking.calendar_id == this.appVars.me.calendar_id;
+            const myBooking = this.showing_booking.host_user_id == this.appVars.me.id;
+            return myBooking || myCalendarBooking || allBookingAccess;
         },
         bookingMarkAsPaid() {
             if (this.showing_booking.source == 'admin') {
