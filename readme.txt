@@ -5,7 +5,7 @@ Tags: booking, appointment booking, appointments, booking system
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.3
-Stable tag: 1.5.20
+Stable tag: 1.5.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -300,6 +300,17 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 5. General Settings
 
 == Changelog ==
+
+= 1.5.21 (Date: 04 Sep 2024) =
+- Multi-Month Support In Multiple Bookings
+- Added Event Time for One-off Group Event
+- Added Mark as Paid Option for Paid Bookings Created By Admin
+- Fixed Calendar Event and Booking Permission Issue
+- Fixed Reminder Email Not Sending After Rescheduling
+- Fixed Multi Booking Not Working When Display Spot is Disabled
+- Fixed Double Event Creating Issue in Google Calendar
+- Fixed Group Meeting Reschedule Issue With Zoom
+- Improved UI/UX
 
 = 1.5.20 (Date: 23 Aug 2024) =
 - New: Reorder Calendar Event
