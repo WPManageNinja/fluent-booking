@@ -7,7 +7,7 @@
                     <span v-else class="fbs_addon_installed fbs_addon_disabled">{{ $t('Disabled') }}</span>
                 </h4>
                 <p>{{ $t('Load FluentBooking in the frontend of the website') }}
-                    <a target="_blank" rel="noopener" href="#">
+                    <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/fluentbooking-frontend-panel/">
                         {{ $t('Learn') }} {{ $t('more') }}
                     </a> {{ $t('about this feature') }}.
                 </p>
