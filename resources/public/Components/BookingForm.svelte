@@ -58,7 +58,9 @@
                                         aria-required={field.required} aria-invalid={field.required && !form[field.name]} bind:value={form[field.name]}/>
                                 {:else if field.type === 'checkbox'}
                                     <label class="fcal_custom_checkbox" aria-label={field.label}>
-                                        <input type="checkbox" bind:checked={form[field.name]}/>
+                                        <input type="checkbox"
+                                            checked={form[field.name] == "Yes"}
+                                            on:change={() => form[field.name] = form[field.name] == "Yes" ? "No" : "Yes"}/>
                                         <span>{field.label}</span>
                                         <span class="checkbox_mark"></span>
                                     </label>
