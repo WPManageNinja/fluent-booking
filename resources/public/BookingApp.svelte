@@ -361,7 +361,11 @@
                                 <FcalSkeleton rows={5}/>
                             {:else}
                                 <div class="fcal_slot_info">
-                                    <h1 aria-level="1" class="fcal_slot_heading">{slot.title}</h1>
+                                     {#if isFluentform}
+                                        <h3 aria-level="3" class="fcal_slot_heading">{slot.title}</h3>
+                                    {:else}
+                                        <h1 aria-level="1" class="fcal_slot_heading">{slot.title}</h1>
+                                    {/if}
                                     {#if slot.settings?.requires_confirmation?.enabled}
                                         <div class="fcal_requires_confirmation fcal_icon_item">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
