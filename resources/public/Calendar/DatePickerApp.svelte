@@ -370,8 +370,13 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="calendar-month-year">
-                    <h2>{getDateTimeStringI18(monthNames[month], 'month')}
-                        <span>{getDateTimeStringI18(year, 'mNumber')}</span></h2>
+                    {#if isFluentform}
+                        <h4>{getDateTimeStringI18(monthNames[month], 'month')}
+                            <span>{getDateTimeStringI18(year, 'mNumber')}</span></h4>
+                    {:else}
+                        <h2>{getDateTimeStringI18(monthNames[month], 'month')}
+                            <span>{getDateTimeStringI18(year, 'mNumber')}</span></h2>
+                    {/if}
                 </div>
                 <div class="calendar_nav">
                     <button aria-label="Previous Month" type="button" tabindex={prevDisabled ? '-1' : '0'} class={prevDisabled ? 'fcal_btn_disabled' : 'fcal_nav_active'}
