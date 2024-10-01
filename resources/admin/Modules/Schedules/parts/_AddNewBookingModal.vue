@@ -127,7 +127,7 @@
             <el-form-item :label="getEmailLabel">
                 <el-input v-model="newBooking.email"/>
             </el-form-item>
-            <el-form-item :label="$t('What is this meeting about?') + (isAboutRequired ? ' *' : '')">
+            <el-form-item v-if="isAboutFieldEnabled" :label="$t('What is this meeting about?') + (isAboutRequired ? ' *' : '')">
                 <el-input v-model="newBooking.message" type="textarea" :rows="3"/>
             </el-form-item>
             <el-form-item v-if="isMultiGuestEnabled" :label="multiGuestField.label + (multiGuestField.required ? ' *' : '')">
@@ -145,7 +145,7 @@
                         <el-input v-model="customFields[field.name]" :type="field.type" :placeholder="field.placeholder"/>
                     </el-form-item>
                     <el-form-item v-if="field.type === 'checkbox'">
-                        <el-checkbox v-model="customFields[field.name]">
+                        <el-checkbox v-model="customFields[field.name]" true-label="yes" false-label="no">
                             {{ field.label }}
                         </el-checkbox>
                     </el-form-item>
@@ -324,6 +324,9 @@ export default {
                 }
             }
             return false;
+        },
+        isAboutFieldEnabled() {
+            return this.formFields.length && this.formFields.find(field => field.name === 'message' && field.enabled);
         },
         isAboutRequired() {
             return this.formFields.length && this.formFields.find(field => field.name === 'message' && field.required);
