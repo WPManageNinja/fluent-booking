@@ -16,7 +16,12 @@
                                     </el-icon>
                                     {{ $t('Disable') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item command="enable" v-else>{{ $t('Enable this event') }}</el-dropdown-item>
+                                <el-dropdown-item command="enable" v-else>
+                                    <el-icon>
+                                        <SwitchButton />
+                                    </el-icon>
+                                    {{ $t('Enable') }}
+                                </el-dropdown-item>
                                 <el-dropdown-item command="clone">
                                     <el-icon>
                                         <CopyDocument/>
@@ -120,8 +125,8 @@
     </div>
 </template>
 
-<script type="text/babel">
-import {copyToClipBoard} from '@/Bits/data_config.js';
+<script>
+import { copyToClipBoard } from '@/Bits/data_config.js';
 import {
     CopyDocument,
     More,

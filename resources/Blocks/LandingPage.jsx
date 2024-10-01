@@ -67,6 +67,7 @@ export const LandingPage = props => {
         })
             .then((response) => {
                 setEvent(response.calendar_event);
+                setAttributes({slotId: response.calendar_event?.id});
             })
             .catch(error => {
                 setError(error);
