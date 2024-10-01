@@ -1297,7 +1297,7 @@ body >.fcal_calendar_wrap {
       justify-content: space-between;
 
       .calendar-month-year {
-        h2 {
+        h2, h4 {
           margin: 0;
           font-size: 18px;
           color: var(--fcal_dark);
