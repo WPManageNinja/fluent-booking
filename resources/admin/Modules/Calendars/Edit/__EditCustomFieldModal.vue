@@ -91,8 +91,8 @@
     </el-dialog>
 </template>
 
- <script type="text/babel">
- import { markRaw } from "vue";
+<script>
+import { markRaw } from "vue";
 import { CloseBold } from '@element-plus/icons-vue';
 export default {
     name: 'EditCustomFieldModal',
