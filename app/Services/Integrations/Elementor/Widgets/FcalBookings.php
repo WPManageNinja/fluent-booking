@@ -167,7 +167,7 @@ class FcalBookings extends \Elementor\Widget_Base
     {
         $calendars = Calendar::with(['events' => function ($query) {
             $query->where('status', 'active');
-        }])->get();
+        }])->where('status', 'active')->get();
 
         $formattedValue = [];
 
