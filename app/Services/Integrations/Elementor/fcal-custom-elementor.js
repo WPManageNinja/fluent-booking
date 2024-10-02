@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    const css = `
+        .fluent-booking-icon {
+            width: 28px;
+            height: 28px;
+            display: block;
+            margin: 0 auto;
+            text-align: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('${fcal_elementor_ajax_object.svgIcon}');
+        }
+    `;
+
+    const style = document.createElement('style');
+
+    style.appendChild(document.createTextNode(css));
+
+    document.head.appendChild(style);
+
     elementor.hooks.addAction('panel/open_editor/widget', (panel, model, view) => {
 
         const controlContainer = document.querySelector('.elementor-control-selected_cal_id select');
