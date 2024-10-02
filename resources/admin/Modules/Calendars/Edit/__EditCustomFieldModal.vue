@@ -68,6 +68,32 @@
             <el-form-item v-if="hasHelpText" :label="$t('Help Message')">
                 <el-input v-model="fieldData.help_text" type="text"/>
             </el-form-item>
+            <template v-if="isFileField">
+                <el-form-item :label="$t('Max File Size ')">
+                    <el-input
+                        type="number"
+                        v-model="fieldData.file_size_value"
+                        :placeholder="$t('Max File Size')"
+                        class="fcal_input_with_select">
+                        <template #append>
+                            <el-select v-model="fieldData.file_size_unit" placeholder="Select">
+                                <el-option label="KB" value="kb"/>
+                                <el-option label="MB" value="mb"/>
+                            </el-select>
+                        </template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item :label="$t('Max Files Count')">
+                    <el-input v-model="fieldData.max_file_allow" type="number" :placeholder="$t('Max Files Count')"/>
+                </el-form-item>
+                <el-form-item :label="$t('File Type')">
+                    <el-checkbox-group v-model="fieldData.allow_file_types">
+                        <el-checkbox label="pdf">{{ $t('PDF') }}</el-checkbox>
+                        <el-checkbox label="doc">{{ $t('Doc') }}</el-checkbox>
+                        <el-checkbox label="zip">{{ $t('Zip') }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+            </template>
             <el-form-item v-if="isPhoneField">
                 <el-checkbox v-model="fieldData.is_sms_number">{{ $t('Use this number for sending sms notification') }}</el-checkbox>
             </el-form-item>
@@ -158,6 +184,9 @@ export default {
         },
         isDateField() {
             return this.fieldData.type == 'date';
+        },
+        isFileField() {
+            return this.fieldData.type == 'file';
         },
         hasPlaceHolder() {
             return ['text', 'textarea', 'message', 'number', 'email', 'date'].includes(this.fieldData.type);

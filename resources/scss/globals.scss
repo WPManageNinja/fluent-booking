@@ -1209,6 +1209,28 @@
                         color: #445164;
                         margin-bottom: 10px;
                     }
+                    .el-form-item__content {
+                      .fcal_input_with_select {
+                        .el-input__wrapper {
+                          border-top-right-radius: 0 !important;
+                          border-bottom-right-radius: 0 !important;
+                        }
+                        .el-input-group__append {
+                          padding: 0;
+                          max-width: 120px;
+                          border: none;
+                          box-shadow: none;
+                          background: transparent;
+                          .el-select {
+                            .el-input__wrapper {
+                              border-radius: 0 !important;
+                              border-top-right-radius: 8px !important;
+                              border-bottom-right-radius: 8px !important;
+                            }
+                          }
+                        }
+                      }
+                    }
                     .fcal_time_zone_selector {
                         width: 100%;
                     }
