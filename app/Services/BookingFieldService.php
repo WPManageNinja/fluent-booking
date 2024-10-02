@@ -26,12 +26,13 @@ class BookingFieldService
 
             if (is_array($value)) {
                 if ($customField['type'] === 'multi-select') {
-                    $value = array_map(
-                        function ($item) {
-                            return sanitize_text_field(Arr::get($item, 'value'));
-                        },
-                        $value
-                    );
+                    $value = array_map(function ($item) {
+                        return sanitize_text_field(Arr::get($item, 'value'));
+                    },$value);
+                } else if ($customField['type'] === 'file') {
+                    $maxField = Arr::get($customField, 'max_file_allow', 1);
+                    $value = array_slice($value, 0, $maxField);
+                    $value = array_map('sanitize_text_field', $value);
                 } else {
                     $value = array_map('sanitize_text_field', $value);
                 }
@@ -260,7 +261,7 @@ class BookingFieldService
         return $fieldName;
     }
 
-    public static function getFormattedCustomBookingData(Booking $booking)
+    public static function getFormattedCustomBookingData(Booking $booking, $htmlSupport = true)
     {
         $customFormData = $booking->getMeta('custom_fields_data', []);
         if (!$customFormData) {
@@ -281,6 +282,22 @@ class BookingFieldService
                 'label' => $label,
                 'value' => is_array($value) ? implode(', ', $value) : $value
             ];
+            $field = self::getBookingFieldByName($booking->calendar_event, $dataKey);
+            if ($field['type'] == 'file') {
+                $files = [];
+                foreach ($value as $key => $file) {
+                    if ($htmlSupport) {
+                        $files[] = '<a href="' . $file . '" target="_blank" download="' . $file . '">' . basename($file) . '</a>';
+                    } else {
+                        $files[] = $file;
+                    }
+                }
+                if ($htmlSupport) {
+                    $formattedData[$dataKey]['value'] = implode('<br>', $files);
+                } else {
+                    $formattedData[$dataKey]['value'] = implode(PHP_EOL, $files);
+                }
+            }
         }
 
         return $formattedData;

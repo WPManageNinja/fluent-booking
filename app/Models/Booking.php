@@ -1043,7 +1043,7 @@ class Booking extends Model
 
     public function getAdditionalData($isHtml = false)
     {
-        $customData = BookingFieldService::getFormattedCustomBookingData($this);
+        $customData = BookingFieldService::getFormattedCustomBookingData($this, $isHtml);
 
         if (!$customData) {
             return '';
