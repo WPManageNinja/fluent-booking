@@ -4,17 +4,16 @@ namespace FluentBooking\App\Services\Integrations\Elementor;
 
 
 use FluentBooking\App\Models\Calendar;
+use FluentBooking\App\App;
 
 class ElementorIntegration
 {
     public function register()
     {
-        // Add new Elementor Categories
         add_action('elementor/init', [$this, 'addElementorCategory']);
 
         add_action('elementor/widgets/widgets_registered', [$this, 'registerWidget']);
         add_action('elementor/controls/controls_registered', [$this, 'registerControl']);
-
 
         add_action('elementor/editor/before_enqueue_scripts', [$this, 'editorScripts']);
         add_action('elementor/editor/after_enqueue_scripts', [$this, 'editorScripts']);
@@ -30,6 +29,7 @@ class ElementorIntegration
         wp_localize_script('fcal-custom-elementor', 'fcal_elementor_ajax_object', array(
             'nonce'   => wp_create_nonce('calendar_events_nonce'),
             'ajaxurl' => admin_url('admin-ajax.php'),
+            'svgIcon' => App::getInstance('url.assets') . 'images/fluentbooking.svg'
         ));
     }
 

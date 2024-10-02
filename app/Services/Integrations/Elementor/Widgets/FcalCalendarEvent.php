@@ -7,7 +7,6 @@ use FluentBooking\App\Models\CalendarSlot;
 
 class FcalCalendarEvent extends \Elementor\Widget_Base
 {
-
     /**
      * Get widget name.
      *
@@ -35,7 +34,7 @@ class FcalCalendarEvent extends \Elementor\Widget_Base
      */
     public function get_icon()
     {
-        return 'eicon-calendar';
+        return 'fluent-booking-icon';
     }
 
     /**

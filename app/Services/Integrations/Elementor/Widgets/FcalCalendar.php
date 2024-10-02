@@ -37,7 +37,7 @@ class FcalCalendar extends \Elementor\Widget_Base
      */
     public function get_icon()
     {
-        return 'eicon-calendar';
+        return 'fluent-booking-icon';
     }
 
     /**
