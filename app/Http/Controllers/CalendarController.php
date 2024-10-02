@@ -823,13 +823,19 @@ class CalendarController extends Controller
             $formattedField = array_merge($textValues, $booleanValues);
 
             $formattedField['index'] = (int)Arr::get($value, 'index');
+            if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
+                $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
+                $formattedField['options'] = $sanitizedOptions;
+            }
             if ($value['type'] == 'payment' && $calendarEvent->type === 'paid') {
                 $formattedField['payment_items'] = Arr::get($value, 'payment_items');
                 $formattedField['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
             }
-            if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
-                $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
-                $formattedField['options'] = $sanitizedOptions;
+            if ($value['type'] == 'file') {
+                $formattedField['max_file_allow'] = intval(Arr::get($value, 'max_file_allow'));
+                $formattedField['allow_file_types'] = array_map('sanitize_text_field', Arr::get($value, 'allow_file_types'));
+                $formattedField['file_size_value'] = intval(Arr::get($value, 'file_size_value'));
+                $formattedField['file_size_unit'] = SanitizeService::checkCollection(Arr::get($value, 'file_size_unit'), ['kb','mb']);
             }
 
             $formattedFields[] = $formattedField;
