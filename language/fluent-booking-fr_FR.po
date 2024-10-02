@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Fluent Booking\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 16:40+0000\n"
-"PO-Revision-Date: 2024-09-04 09:27+0000\n"
+"PO-Revision-Date: 2024-10-02 11:29+0000\n"
 "Last-Translator: Eric Brulmans\n"
 "Language-Team: French (France)\n"
 "Language: fr_FR\n"
@@ -25,7 +25,7 @@ msgstr "(Numéro de téléphone de l'hôte)"
 msgid " ago"
 msgstr " il y a"
 
-#: app/Services/Helper.php:1821
+#: app/Services/Helper.php:1825
 #: builds/fluent-booking/app/Services/Helper.php:1821
 msgid " Email"
 msgstr " Courriel"
@@ -35,7 +35,7 @@ msgstr " Courriel"
 msgid " from now"
 msgstr " à partir de maintenant"
 
-#: app/Services/Helper.php:1820
+#: app/Services/Helper.php:1824
 #: builds/fluent-booking/app/Services/Helper.php:1820
 msgid " Name"
 msgstr " Nom"
@@ -425,7 +425,7 @@ msgstr "Ajouter un autre choix de lieu"
 msgid "Add Available Times"
 msgstr "Ajouter des heures disponibles"
 
-#: app/Services/Helper.php:1721 app/Services/Helper.php:1784
+#: app/Services/Helper.php:1725 app/Services/Helper.php:1788
 #: builds/fluent-booking/app/Services/Helper.php:1721
 #: builds/fluent-booking/app/Services/Helper.php:1784
 msgid "Add Booking to Calendar"
@@ -570,7 +570,7 @@ msgstr "Ajouter un membre de l'équipe"
 msgid "Add to Block"
 msgstr "Ajouter au bloc"
 
-#: app/Services/Helper.php:1647 app/Views/public/booking_confirmation.php:93
+#: app/Services/Helper.php:1651 app/Views/public/booking_confirmation.php:93
 #: builds/fluent-booking/app/Services/Helper.php:1647
 #: builds/fluent-booking/app/Views/public/booking_confirmation.php:93
 msgid "Add to calendar"
@@ -592,9 +592,9 @@ msgstr ""
 "Ajoutez votre FluentBooking au frontend de WordPress / à n'importe quelle "
 "page via un Shortcode."
 
-#: app/Services/TransStrings.php:213 app/Services/BookingFieldService.php:128
-#: app/Services/BookingService.php:304 app/Services/Helper.php:1685
-#: app/Services/Helper.php:1748
+#: app/Services/TransStrings.php:213 app/Services/BookingFieldService.php:129
+#: app/Services/BookingService.php:304 app/Services/Helper.php:1689
+#: app/Services/Helper.php:1752
 #: builds/fluent-booking/app/Services/TransStrings.php:213
 #: builds/fluent-booking/app/Services/BookingFieldService.php:128
 #: builds/fluent-booking/app/Services/BookingService.php:304
@@ -618,7 +618,7 @@ msgstr "Bénéficiaires supplémentaires"
 msgid "Additional Settings"
 msgstr "Paramètres supplémentaires"
 
-#: app/Services/BookingFieldService.php:175
+#: app/Services/BookingFieldService.php:176
 #: builds/fluent-booking/app/Services/BookingFieldService.php:175
 msgid "Address"
 msgstr "Adresse"
@@ -940,7 +940,7 @@ msgstr "Le participant ne peut pas annuler"
 msgid "Attendee Cannot Reschedule"
 msgstr "Le participant ne peut pas reprogrammer"
 
-#: app/Services/Helper.php:1666 app/Services/Helper.php:1728
+#: app/Services/Helper.php:1670 app/Services/Helper.php:1732
 #: builds/fluent-booking/app/Services/Helper.php:1666
 #: builds/fluent-booking/app/Services/Helper.php:1728
 msgid "Attendee Data"
@@ -1100,7 +1100,7 @@ msgstr "Réservation"
 msgid "Booking %s email %s to %s"
 msgstr "Réservation de %s email %s à %s"
 
-#: app/Services/Helper.php:1617
+#: app/Services/Helper.php:1621
 #: builds/fluent-booking/app/Services/Helper.php:1617
 msgid "Booking Approval Request to Host (email to Organizer)"
 msgstr ""
@@ -1127,7 +1127,7 @@ msgstr "Réservation annulée"
 msgid "Booking Cancellation"
 msgstr "Annulation de la réservation"
 
-#: app/Services/Helper.php:1696 app/Services/Helper.php:1759
+#: app/Services/Helper.php:1700 app/Services/Helper.php:1763
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:97
 #: builds/fluent-booking/app/Services/Helper.php:1696
 #: builds/fluent-booking/app/Services/Helper.php:1759
@@ -1144,12 +1144,12 @@ msgstr "URL d'annulation de réservation"
 msgid "Booking Cancelled"
 msgstr "Réservation annulée"
 
-#: app/Services/Helper.php:1581
+#: app/Services/Helper.php:1585
 #: builds/fluent-booking/app/Services/Helper.php:1581
 msgid "Booking Cancelled by Attendee (email to Organizer)"
 msgstr "Réservation annulée par le participant (courriel à l'organisateur)"
 
-#: app/Services/Helper.php:1590
+#: app/Services/Helper.php:1594
 #: builds/fluent-booking/app/Services/Helper.php:1590
 msgid "Booking Cancelled by Organizer (email to Attendee)"
 msgstr "Réservation annulée par l'organisateur (courriel au participant)"
@@ -1175,12 +1175,12 @@ msgstr "Réservation effectuée"
 msgid "Booking Completed Funnel"
 msgstr "Entonnoir de réservation"
 
-#: app/Services/Helper.php:1532
+#: app/Services/Helper.php:1536
 #: builds/fluent-booking/app/Services/Helper.php:1532
 msgid "Booking Confirmation Email to Attendee"
 msgstr "Courriel de confirmation de la réservation au participant"
 
-#: app/Services/Helper.php:1541
+#: app/Services/Helper.php:1545
 #: builds/fluent-booking/app/Services/Helper.php:1541
 msgid "Booking Confirmation Email to Organizer (You)"
 msgstr "Courriel de confirmation de la réservation à l'organisateur (vous)"
@@ -1196,7 +1196,7 @@ msgstr "Courriel de confirmation de la réservation à l'organisateur (vous)"
 msgid "Booking Confirmed"
 msgstr "Réservation confirmée"
 
-#: app/Services/Helper.php:1679 app/Services/Helper.php:1742
+#: app/Services/Helper.php:1683 app/Services/Helper.php:1746
 #: builds/fluent-booking/app/Services/Helper.php:1679
 #: builds/fluent-booking/app/Services/Helper.php:1742
 msgid "Booking Data"
@@ -1207,7 +1207,7 @@ msgstr "Données de réservation"
 msgid "Booking Date"
 msgstr "Date de réservation"
 
-#: app/Services/Helper.php:1634
+#: app/Services/Helper.php:1638
 #: builds/fluent-booking/app/Services/Helper.php:1634
 msgid "Booking Declined by Organizer (email to Attendee)"
 msgstr "Réservation refusée par l'organisateur (courriel au participant)"
@@ -1217,7 +1217,7 @@ msgstr "Réservation refusée par l'organisateur (courriel au participant)"
 msgid "Booking Deleted Successfully!"
 msgstr "Réservation supprimée avec succès !"
 
-#: app/Services/Helper.php:1698 app/Services/Helper.php:1761
+#: app/Services/Helper.php:1702 app/Services/Helper.php:1765
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:99
 #: builds/fluent-booking/app/Services/Helper.php:1698
 #: builds/fluent-booking/app/Services/Helper.php:1761
@@ -1298,7 +1298,7 @@ msgstr ""
 msgid "Booking request has been rejected by %s"
 msgstr "La demande de réservation a été rejetée par %s"
 
-#: app/Services/Helper.php:1697 app/Services/Helper.php:1760
+#: app/Services/Helper.php:1701 app/Services/Helper.php:1764
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:98
 #: builds/fluent-booking/app/Services/Helper.php:1697
 #: builds/fluent-booking/app/Services/Helper.php:1760
@@ -1313,12 +1313,12 @@ msgstr "Réservation Reprogrammation URL"
 msgid "Booking Rescheduled"
 msgstr "Réservation reportée"
 
-#: app/Services/Helper.php:1599
+#: app/Services/Helper.php:1603
 #: builds/fluent-booking/app/Services/Helper.php:1599
 msgid "Booking Rescheduled by Attendee (email to Organizer)"
 msgstr "Réservation reportée par le participant (courriel à l'organisateur)"
 
-#: app/Services/Helper.php:1608
+#: app/Services/Helper.php:1612
 #: builds/fluent-booking/app/Services/Helper.php:1608
 msgid "Booking Rescheduled by Organizer (email to Attendee)"
 msgstr "Réservation reportée par l'organisateur (courriel au participant)"
@@ -1333,14 +1333,14 @@ msgstr "Entonnoir de réservation reprogrammée"
 msgid "Booking Status"
 msgstr "Statut de réservation"
 
-#: app/Services/Helper.php:1626
+#: app/Services/Helper.php:1630
 #: builds/fluent-booking/app/Services/Helper.php:1626
 msgid "Booking Submission Confirmation (email to Attendee)"
 msgstr ""
 "Confirmation de la soumission de la réservation (courriel au participant)"
 
-#: app/Services/TransStrings.php:825 app/Services/Helper.php:1684
-#: app/Services/Helper.php:1747
+#: app/Services/TransStrings.php:825 app/Services/Helper.php:1688
+#: app/Services/Helper.php:1751
 #: builds/fluent-booking/app/Services/TransStrings.php:825
 #: builds/fluent-booking/app/Services/Helper.php:1684
 #: builds/fluent-booking/app/Services/Helper.php:1747
@@ -1488,13 +1488,13 @@ msgctxt "calendar day short"
 msgid "Wed"
 msgstr "Mer"
 
-#: app/Http/Controllers/CalendarController.php:888
+#: app/Http/Controllers/CalendarController.php:894
 #: builds/fluent-booking/app/Http/Controllers/CalendarController.php:888
 msgid "Calendar Deleted Successfully!"
 msgstr "Calendrier supprimé avec succès !"
 
-#: app/Services/TransStrings.php:648 app/Services/Helper.php:1720
-#: app/Services/Helper.php:1783
+#: app/Services/TransStrings.php:648 app/Services/Helper.php:1724
+#: app/Services/Helper.php:1787
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:108
 #: builds/fluent-booking/app/Services/TransStrings.php:648
 #: builds/fluent-booking/app/Services/Helper.php:1720
@@ -1503,7 +1503,7 @@ msgstr "Calendrier supprimé avec succès !"
 msgid "Calendar Description"
 msgstr "Description du calendrier"
 
-#: app/Http/Controllers/CalendarController.php:860
+#: app/Http/Controllers/CalendarController.php:866
 #: builds/fluent-booking/app/Http/Controllers/CalendarController.php:860
 msgid "Calendar Event has been deleted"
 msgstr "L'événement du calendrier a été supprimé"
@@ -1523,7 +1523,7 @@ msgstr "les événements du calendrier utilisent ce programme"
 msgid "Calendar has been updated successfully"
 msgstr "Le calendrier a été mis à jour avec succès"
 
-#: app/Services/Helper.php:1717 app/Services/Helper.php:1780
+#: app/Services/Helper.php:1721 app/Services/Helper.php:1784
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:106
 #: builds/fluent-booking/app/Services/Helper.php:1717
 #: builds/fluent-booking/app/Services/Helper.php:1780
@@ -1708,7 +1708,7 @@ msgstr "Paramètres du calendrier"
 msgid "Calendar start from"
 msgstr "Le calendrier commence à partir de"
 
-#: app/Services/Helper.php:1719 app/Services/Helper.php:1782
+#: app/Services/Helper.php:1723 app/Services/Helper.php:1786
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:107
 #: builds/fluent-booking/app/Services/Helper.php:1719
 #: builds/fluent-booking/app/Services/Helper.php:1782
@@ -1738,9 +1738,9 @@ msgstr "Calendriers"
 msgid "Can't delete: %s events depend on this schedule"
 msgstr "Impossible de supprimer : %s événements dépendent de cet horaire"
 
-#: app/Services/TransStrings.php:24 app/Services/Helper.php:1535
-#: app/Services/Helper.php:1553 app/Services/Helper.php:1611
-#: app/Services/Helper.php:1629 app/Views/public/booking_confirmation.php:81
+#: app/Services/TransStrings.php:24 app/Services/Helper.php:1539
+#: app/Services/Helper.php:1557 app/Services/Helper.php:1615
+#: app/Services/Helper.php:1633 app/Views/public/booking_confirmation.php:81
 #: builds/fluent-booking/app/Services/TransStrings.php:24
 #: builds/fluent-booking/app/Services/Helper.php:1535
 #: builds/fluent-booking/app/Services/Helper.php:1553
@@ -1977,12 +1977,12 @@ msgstr "Configurer %s pour synchroniser vos événements"
 msgid "Configure Google Calendar/Meet to sync your events"
 msgstr "Configurer Google Agenda/Meet pour synchroniser vos événements"
 
-#: app/Services/Helper.php:1550
+#: app/Services/Helper.php:1554
 #: builds/fluent-booking/app/Services/Helper.php:1550
 msgid "Configure Meeting Reminder to Attendee"
 msgstr "Configurer le rappel de la réunion au participant"
 
-#: app/Services/Helper.php:1565
+#: app/Services/Helper.php:1569
 #: builds/fluent-booking/app/Services/Helper.php:1565
 msgid "Configure Meeting Reminder to Organizer (You)"
 msgstr "Configurer le rappel de réunion à l'organisateur (vous)"
@@ -2026,7 +2026,7 @@ msgstr ""
 "Configurez vos paramètres de paiement globaux pour les paiements liés aux "
 "réservations"
 
-#: app/Services/TransStrings.php:26 app/Services/Helper.php:1656
+#: app/Services/TransStrings.php:26 app/Services/Helper.php:1660
 #: builds/fluent-booking/app/Services/TransStrings.php:26
 #: builds/fluent-booking/app/Services/Helper.php:1656
 msgid "Confirm"
@@ -2265,7 +2265,7 @@ msgstr "Créez votre premier événement de réservation"
 msgid "CRM Profile"
 msgstr "Profil CRM"
 
-#: app/Services/TransStrings.php:467 app/Services/Helper.php:1807
+#: app/Services/TransStrings.php:467 app/Services/Helper.php:1811
 #: builds/fluent-booking/app/Services/TransStrings.php:467
 #: builds/fluent-booking/app/Services/Helper.php:1807
 msgid "Currency"
@@ -3073,7 +3073,7 @@ msgstr "Les durées disponibles pour les événements sont requises"
 msgid "Event Calendar Name"
 msgstr "Nom du calendrier des événements"
 
-#: app/Services/Helper.php:1694 app/Services/Helper.php:1757
+#: app/Services/Helper.php:1698 app/Services/Helper.php:1761
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:95
 #: builds/fluent-booking/app/Services/Helper.php:1694
 #: builds/fluent-booking/app/Services/Helper.php:1757
@@ -3081,7 +3081,7 @@ msgstr "Nom du calendrier des événements"
 msgid "Event Cancel Reason"
 msgstr "Raison de l'annulation de l'événement"
 
-#: app/Services/Helper.php:1690 app/Services/Helper.php:1753
+#: app/Services/Helper.php:1694 app/Services/Helper.php:1757
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:91
 #: builds/fluent-booking/app/Services/Helper.php:1690
 #: builds/fluent-booking/app/Services/Helper.php:1753
@@ -3089,26 +3089,26 @@ msgstr "Raison de l'annulation de l'événement"
 msgid "Event Date Time (UTC)"
 msgstr "Date de l'événement Heure (UTC)"
 
-#: app/Services/Helper.php:1691
+#: app/Services/Helper.php:1695
 #: builds/fluent-booking/app/Services/Helper.php:1691
 #| msgid "Event Date time (with attendee timezone)"
 msgid "Event Date Time (with attendee timezone)"
 msgstr ""
 "Heure de la date de l'événement (avec le fuseau horaire des participants)"
 
-#: app/Services/Helper.php:1754
+#: app/Services/Helper.php:1758
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:92
 #: builds/fluent-booking/app/Services/Helper.php:1754
 #: builds/fluent-booking/app/Services/Integrations/FluentCRM/CrmSmartCode.php:92
 msgid "Event Date time (with guest timezone)"
 msgstr "Date de l'événement (avec le fuseau horaire de l'invité)"
 
-#: app/Services/Helper.php:1692
+#: app/Services/Helper.php:1696
 #: builds/fluent-booking/app/Services/Helper.php:1692
 msgid "Event Date Time (with host timezone)"
 msgstr "Date de l'événement Heure (avec le fuseau horaire de l'hôte)"
 
-#: app/Services/Helper.php:1755
+#: app/Services/Helper.php:1759
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:93
 #: builds/fluent-booking/app/Services/Helper.php:1755
 #: builds/fluent-booking/app/Services/Integrations/FluentCRM/CrmSmartCode.php:93
@@ -3120,7 +3120,7 @@ msgstr "Date de l'événement (avec le fuseau horaire de l'hôte)"
 msgid "Event default duration is required"
 msgstr "La durée par défaut de l'événement est requise"
 
-#: app/Services/Helper.php:1683 app/Services/Helper.php:1746
+#: app/Services/Helper.php:1687 app/Services/Helper.php:1750
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:88
 #: builds/fluent-booking/app/Services/Helper.php:1683
 #: builds/fluent-booking/app/Services/Helper.php:1746
@@ -3154,7 +3154,7 @@ msgstr "Invités de l'événement"
 msgid "Event Hosts"
 msgstr "Hôtes d'événements"
 
-#: app/Services/Helper.php:1716 app/Services/Helper.php:1779
+#: app/Services/Helper.php:1720 app/Services/Helper.php:1783
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:105
 #: builds/fluent-booking/app/Services/Helper.php:1716
 #: builds/fluent-booking/app/Services/Helper.php:1779
@@ -3172,12 +3172,12 @@ msgstr "L'événement est affiché, les spots sont obligatoires"
 msgid "Event location description field is required"
 msgstr "Le champ de description du lieu de l'événement est obligatoire"
 
-#: app/Services/Helper.php:1693
+#: app/Services/Helper.php:1697
 #: builds/fluent-booking/app/Services/Helper.php:1693
 msgid "Event Location Details"
 msgstr "Détails sur le lieu de l'événement"
 
-#: app/Services/Helper.php:1756
+#: app/Services/Helper.php:1760
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:94
 #: builds/fluent-booking/app/Services/Helper.php:1756
 #: builds/fluent-booking/app/Services/Integrations/FluentCRM/CrmSmartCode.php:94
@@ -3217,7 +3217,7 @@ msgid "Event max book per slot field is required"
 msgstr ""
 "Le champ \"nombre maximum de réservations par créneau\" est obligatoire"
 
-#: app/Services/Helper.php:1682 app/Services/Helper.php:1745
+#: app/Services/Helper.php:1686 app/Services/Helper.php:1749
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:87
 #: builds/fluent-booking/app/Services/Helper.php:1682
 #: builds/fluent-booking/app/Services/Helper.php:1745
@@ -3235,7 +3235,7 @@ msgstr "Nom de l'événement *"
 msgid "Event order has been updated"
 msgstr ""
 
-#: app/Services/Helper.php:1700 app/Services/Helper.php:1763
+#: app/Services/Helper.php:1704 app/Services/Helper.php:1767
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:101
 #: builds/fluent-booking/app/Services/Helper.php:1700
 #: builds/fluent-booking/app/Services/Helper.php:1763
@@ -3253,7 +3253,7 @@ msgstr "Le champ \"Type d'horaire de l'événement\" est obligatoire"
 msgid "Event Settings"
 msgstr "Paramètres de l'événement"
 
-#: app/Services/Helper.php:1695 app/Services/Helper.php:1758
+#: app/Services/Helper.php:1699 app/Services/Helper.php:1762
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:96
 #: builds/fluent-booking/app/Services/Helper.php:1695
 #: builds/fluent-booking/app/Services/Helper.php:1758
@@ -3266,7 +3266,7 @@ msgstr "Heure de début de l'événement (ex : dans 2 heures)"
 msgid "Event status field is required"
 msgstr "Le champ \"Statut de l'événement\" est obligatoire"
 
-#: app/Services/Helper.php:1718 app/Services/Helper.php:1781
+#: app/Services/Helper.php:1722 app/Services/Helper.php:1785
 #: builds/fluent-booking/app/Services/Helper.php:1718
 #: builds/fluent-booking/app/Services/Helper.php:1781
 msgid "Event Title"
@@ -3415,10 +3415,14 @@ msgstr "Type de champ"
 msgid "Field Value"
 msgstr "Valeur du champ"
 
-#: app/Http/Controllers/CalendarController.php:841
+#: app/Http/Controllers/CalendarController.php:847
 #: builds/fluent-booking/app/Http/Controllers/CalendarController.php:841
 msgid "Fields has been updated"
 msgstr "Les champs ont été mis à jour"
+
+#: app/Services/Helper.php:1520
+msgid "File"
+msgstr ""
 
 #: app/Services/Integrations/FluentCRM/Bootstrap.php:128
 #: builds/fluent-booking/app/Services/Integrations/FluentCRM/Bootstrap.php:128
@@ -3615,14 +3619,14 @@ msgstr "Paramètres du panneau frontal"
 msgid "Frontend Portal"
 msgstr "Portail frontal"
 
-#: app/Services/Helper.php:1688 app/Services/Helper.php:1751
+#: app/Services/Helper.php:1692 app/Services/Helper.php:1755
 #: builds/fluent-booking/app/Services/Helper.php:1688
 #: builds/fluent-booking/app/Services/Helper.php:1751
 msgid "Full Start & End Date Time (with guest timezone)"
 msgstr ""
 "Date complète de début et de fin Heure (avec le fuseau horaire de l'invité)"
 
-#: app/Services/Helper.php:1689 app/Services/Helper.php:1752
+#: app/Services/Helper.php:1693 app/Services/Helper.php:1756
 #: builds/fluent-booking/app/Services/Helper.php:1689
 #: builds/fluent-booking/app/Services/Helper.php:1752
 msgid "Full Start & End Date Time (with host timezone)"
@@ -3639,13 +3643,13 @@ msgstr "Heure complète de début et de fin (avec le fuseau horaire de l'invité
 msgid "Full Start & End Time (with host timezone)"
 msgstr "Heure complète de début et de fin (avec le fuseau horaire de l'hôte)"
 
-#: app/Services/Helper.php:1686 app/Services/Helper.php:1749
+#: app/Services/Helper.php:1690 app/Services/Helper.php:1753
 #: builds/fluent-booking/app/Services/Helper.php:1686
 #: builds/fluent-booking/app/Services/Helper.php:1749
 msgid "Full Start Date Time (with guest timezone)"
 msgstr "Date de début complète Heure (avec le fuseau horaire de l'invité)"
 
-#: app/Services/Helper.php:1687 app/Services/Helper.php:1750
+#: app/Services/Helper.php:1691 app/Services/Helper.php:1754
 #: builds/fluent-booking/app/Services/Helper.php:1687
 #: builds/fluent-booking/app/Services/Helper.php:1750
 msgid "Full Start Date Time (with host timezone)"
@@ -3800,8 +3804,8 @@ msgstr "Événement de groupe"
 msgid "Group of invitees"
 msgstr "Groupe d'invités"
 
-#: app/Services/TransStrings.php:96 app/Services/Helper.php:1672
-#: app/Services/Helper.php:1734
+#: app/Services/TransStrings.php:96 app/Services/Helper.php:1676
+#: app/Services/Helper.php:1738
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:82
 #: builds/fluent-booking/app/Services/TransStrings.php:96
 #: builds/fluent-booking/app/Services/Helper.php:1672
@@ -3815,7 +3819,7 @@ msgstr "Courriel de l'invité"
 msgid "Guest Fields"
 msgstr "Champs d'invités"
 
-#: app/Services/Helper.php:1669 app/Services/Helper.php:1731
+#: app/Services/Helper.php:1673 app/Services/Helper.php:1735
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:79
 #: builds/fluent-booking/app/Services/Helper.php:1669
 #: builds/fluent-booking/app/Services/Helper.php:1731
@@ -3823,14 +3827,14 @@ msgstr "Champs d'invités"
 msgid "Guest First Name"
 msgstr "Prénom de l'invité"
 
-#: app/Services/Helper.php:1738
+#: app/Services/Helper.php:1742
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:86
 #: builds/fluent-booking/app/Services/Helper.php:1738
 #: builds/fluent-booking/app/Services/Integrations/FluentCRM/CrmSmartCode.php:86
 msgid "Guest Form Submitted Data (HTML)"
 msgstr "Données soumises par les visiteurs (HTML)"
 
-#: app/Services/Helper.php:1671 app/Services/Helper.php:1733
+#: app/Services/Helper.php:1675 app/Services/Helper.php:1737
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:81
 #: builds/fluent-booking/app/Services/Helper.php:1671
 #: builds/fluent-booking/app/Services/Helper.php:1733
@@ -3838,7 +3842,7 @@ msgstr "Données soumises par les visiteurs (HTML)"
 msgid "Guest Full Name"
 msgstr "Nom complet de l'invité"
 
-#: app/Services/Helper.php:1670 app/Services/Helper.php:1732
+#: app/Services/Helper.php:1674 app/Services/Helper.php:1736
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:80
 #: builds/fluent-booking/app/Services/Helper.php:1670
 #: builds/fluent-booking/app/Services/Helper.php:1732
@@ -3846,7 +3850,7 @@ msgstr "Nom complet de l'invité"
 msgid "Guest Last Name"
 msgstr "Nom de famille de l'invité"
 
-#: app/Services/Helper.php:1674 app/Services/Helper.php:1735
+#: app/Services/Helper.php:1678 app/Services/Helper.php:1739
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:83
 #: builds/fluent-booking/app/Services/Helper.php:1674
 #: builds/fluent-booking/app/Services/Helper.php:1735
@@ -3854,7 +3858,7 @@ msgstr "Nom de famille de l'invité"
 msgid "Guest Main Phone Number (if provided)"
 msgstr "Numéro de téléphone principal de l'invité (si fourni)"
 
-#: app/Services/Helper.php:1673 app/Services/Helper.php:1736
+#: app/Services/Helper.php:1677 app/Services/Helper.php:1740
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:84
 #: builds/fluent-booking/app/Services/Helper.php:1673
 #: builds/fluent-booking/app/Services/Helper.php:1736
@@ -3862,7 +3866,7 @@ msgstr "Numéro de téléphone principal de l'invité (si fourni)"
 msgid "Guest Note"
 msgstr "Note de l'invité"
 
-#: app/Services/Helper.php:1675 app/Services/Helper.php:1737
+#: app/Services/Helper.php:1679 app/Services/Helper.php:1741
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:85
 #: builds/fluent-booking/app/Services/Helper.php:1675
 #: builds/fluent-booking/app/Services/Helper.php:1737
@@ -3935,13 +3939,13 @@ msgstr "Haut"
 msgid "Host"
 msgstr "Hôte"
 
-#: app/Services/Helper.php:1704 app/Services/Helper.php:1767
+#: app/Services/Helper.php:1708 app/Services/Helper.php:1771
 #: builds/fluent-booking/app/Services/Helper.php:1704
 #: builds/fluent-booking/app/Services/Helper.php:1767
 msgid "Host Data"
 msgstr "Données de l'hôte"
 
-#: app/Services/Helper.php:1708 app/Services/Helper.php:1771
+#: app/Services/Helper.php:1712 app/Services/Helper.php:1775
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:103
 #: builds/fluent-booking/app/Services/Helper.php:1708
 #: builds/fluent-booking/app/Services/Helper.php:1771
@@ -3949,7 +3953,7 @@ msgstr "Données de l'hôte"
 msgid "Host Email"
 msgstr "Courriel de l'hôte"
 
-#: app/Services/Helper.php:1707 app/Services/Helper.php:1770
+#: app/Services/Helper.php:1711 app/Services/Helper.php:1774
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:102
 #: builds/fluent-booking/app/Services/Helper.php:1707
 #: builds/fluent-booking/app/Services/Helper.php:1770
@@ -3977,8 +3981,8 @@ msgstr "Téléphone de l'hôte (avec code pays)"
 msgid "Host Settings"
 msgstr "Paramètres de l'hôte"
 
-#: app/Services/TransStrings.php:621 app/Services/Helper.php:1709
-#: app/Services/Helper.php:1772
+#: app/Services/TransStrings.php:621 app/Services/Helper.php:1713
+#: app/Services/Helper.php:1776
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:104
 #: builds/fluent-booking/app/Services/TransStrings.php:621
 #: builds/fluent-booking/app/Services/Helper.php:1709
@@ -4454,7 +4458,7 @@ msgstr "inférieur ou égal"
 msgid "Less than to Data length"
 msgstr "Inférieur à la longueur des données"
 
-#: app/Services/BookingFieldService.php:113
+#: app/Services/BookingFieldService.php:114
 #: builds/fluent-booking/app/Services/BookingFieldService.php:113
 msgid "Let others know why you need to reschedule"
 msgstr ""
@@ -4558,8 +4562,8 @@ msgstr "Chargement..."
 msgid "Loading...."
 msgstr "Chargement...."
 
-#: app/Services/TransStrings.php:435 app/Services/BookingFieldService.php:142
-#: app/Services/BookingFieldService.php:148
+#: app/Services/TransStrings.php:435 app/Services/BookingFieldService.php:143
+#: app/Services/BookingFieldService.php:149
 #: builds/fluent-booking/app/Services/TransStrings.php:435
 #: builds/fluent-booking/app/Services/BookingFieldService.php:142
 #: builds/fluent-booking/app/Services/BookingFieldService.php:148
@@ -4999,8 +5003,8 @@ msgstr "Mes horaires"
 msgid "Name"
 msgstr "Nom"
 
-#: app/Services/Helper.php:1535 app/Services/Helper.php:1553
-#: app/Services/Helper.php:1611 app/Services/Helper.php:1629
+#: app/Services/Helper.php:1539 app/Services/Helper.php:1557
+#: app/Services/Helper.php:1615 app/Services/Helper.php:1633
 #: app/Views/public/booking_confirmation.php:79
 #: builds/fluent-booking/app/Services/Helper.php:1535
 #: builds/fluent-booking/app/Services/Helper.php:1553
@@ -5389,7 +5393,7 @@ msgstr "Organisateur"
 msgid "Organizer Phone Number"
 msgstr "Numéro de téléphone de l'organisateur"
 
-#: app/Services/Helper.php:1713 app/Services/Helper.php:1776
+#: app/Services/Helper.php:1717 app/Services/Helper.php:1780
 #: app/Models/CalendarSlot.php:737
 #: builds/fluent-booking/app/Services/Helper.php:1713
 #: builds/fluent-booking/app/Services/Helper.php:1776
@@ -5444,7 +5448,7 @@ msgstr "Vue d'ensemble"
 msgid "Own App (Not Recommended)"
 msgstr "Propre application (non recommandé)"
 
-#: app/Views/public/bookings.php:93
+#: app/Views/public/bookings.php:95
 #: builds/fluent-booking/app/Views/public/bookings.php:93
 msgid "page"
 msgstr "page"
@@ -5493,12 +5497,12 @@ msgstr "Passé"
 msgid "Pay Now"
 msgstr "Payer maintenant"
 
-#: app/Services/Helper.php:1801
+#: app/Services/Helper.php:1805
 #: builds/fluent-booking/app/Services/Helper.php:1801
 msgid "Payment Data"
 msgstr "Données de paiement"
 
-#: app/Services/Helper.php:1808
+#: app/Services/Helper.php:1812
 #: builds/fluent-booking/app/Services/Helper.php:1808
 msgid "Payment Date"
 msgstr "Date de paiement"
@@ -5525,7 +5529,7 @@ msgstr "Paiement marqué comme payé par l'administrateur"
 msgid "Payment marked as pending by admin"
 msgstr ""
 
-#: app/Services/TransStrings.php:471 app/Services/Helper.php:1806
+#: app/Services/TransStrings.php:471 app/Services/Helper.php:1810
 #: app/Hooks/Handlers/FrontEndHandler.php:604
 #: builds/fluent-booking/app/Services/TransStrings.php:471
 #: builds/fluent-booking/app/Services/Helper.php:1806
@@ -5547,7 +5551,7 @@ msgstr ""
 "Le module de paiement a été désactivé. Aucun paiement ne sera traité et les "
 "fonctions associées seront désactivées"
 
-#: app/Services/Helper.php:1813
+#: app/Services/Helper.php:1817
 #: builds/fluent-booking/app/Services/Helper.php:1813
 msgid "Payment Receipt (HTML)"
 msgstr "Reçu de paiement (HTML)"
@@ -5560,7 +5564,7 @@ msgstr "Reçu de paiement (HTML)"
 msgid "Payment Settings"
 msgstr "Paramètres de paiement"
 
-#: app/Services/TransStrings.php:475 app/Services/Helper.php:1805
+#: app/Services/TransStrings.php:475 app/Services/Helper.php:1809
 #: builds/fluent-booking/app/Services/TransStrings.php:475
 #: builds/fluent-booking/app/Services/Helper.php:1805
 msgid "Payment Status"
@@ -5586,7 +5590,7 @@ msgstr ""
 msgid "Payment Title"
 msgstr "Titre de paiement"
 
-#: app/Services/TransStrings.php:474 app/Services/Helper.php:1804
+#: app/Services/TransStrings.php:474 app/Services/Helper.php:1808
 #: builds/fluent-booking/app/Services/TransStrings.php:474
 #: builds/fluent-booking/app/Services/Helper.php:1804
 msgid "Payment Total"
@@ -5747,7 +5751,7 @@ msgstr "Veuillez saisir votre adresse électronique"
 msgid "Please enter your name"
 msgstr "Veuillez saisir votre nom"
 
-#: app/Services/BookingFieldService.php:48
+#: app/Services/BookingFieldService.php:49
 #: app/Http/Controllers/BookingController.php:124
 #: app/Hooks/Handlers/FrontEndHandler.php:687
 #: app/Hooks/Handlers/FrontEndHandler.php:802
@@ -6100,7 +6104,7 @@ msgstr "Lire la documentation"
 msgid "read the documentation here"
 msgstr "lire la documentation ici"
 
-#: app/Services/TransStrings.php:487 app/Services/BookingFieldService.php:100
+#: app/Services/TransStrings.php:487 app/Services/BookingFieldService.php:101
 #: builds/fluent-booking/app/Services/TransStrings.php:487
 #: builds/fluent-booking/app/Services/BookingFieldService.php:100
 msgid "Reason for cancellation"
@@ -6111,7 +6115,7 @@ msgstr "Motif de l'annulation"
 msgid "Reason for rejection"
 msgstr "Motif du rejet"
 
-#: app/Services/BookingFieldService.php:112
+#: app/Services/BookingFieldService.php:113
 #: builds/fluent-booking/app/Services/BookingFieldService.php:112
 #| msgid "Reason of rescheduling"
 msgid "Reason for reschedule"
@@ -6195,7 +6199,7 @@ msgstr "Remboursé"
 msgid "Regex Match"
 msgstr "Correspondance des expressions rationnelles"
 
-#: app/Services/TransStrings.php:491 app/Services/Helper.php:1656
+#: app/Services/TransStrings.php:491 app/Services/Helper.php:1660
 #: builds/fluent-booking/app/Services/TransStrings.php:491
 #: builds/fluent-booking/app/Services/Helper.php:1656
 msgid "Reject"
@@ -6329,9 +6333,9 @@ msgstr "Exigée"
 msgid "Requires Confirmation"
 msgstr "Nécessite une confirmation"
 
-#: app/Services/TransStrings.php:495 app/Services/Helper.php:1535
-#: app/Services/Helper.php:1553 app/Services/Helper.php:1611
-#: app/Services/Helper.php:1629 app/Views/public/booking_confirmation.php:85
+#: app/Services/TransStrings.php:495 app/Services/Helper.php:1539
+#: app/Services/Helper.php:1557 app/Services/Helper.php:1615
+#: app/Services/Helper.php:1633 app/Views/public/booking_confirmation.php:85
 #: builds/fluent-booking/app/Services/TransStrings.php:495
 #: builds/fluent-booking/app/Services/Helper.php:1535
 #: builds/fluent-booking/app/Services/Helper.php:1553
@@ -7393,7 +7397,7 @@ msgstr "Équipe Avatar"
 msgid "Team Member"
 msgstr "Membre de l'équipe"
 
-#: app/Services/Helper.php:1820 app/Services/Helper.php:1821
+#: app/Services/Helper.php:1824 app/Services/Helper.php:1825
 #: builds/fluent-booking/app/Services/Helper.php:1820
 #: builds/fluent-booking/app/Services/Helper.php:1821
 msgid "Team Member "
@@ -7765,7 +7769,7 @@ msgstr "Demain"
 msgid "Top"
 msgstr "Haut de page"
 
-#: app/Views/public/bookings.php:87
+#: app/Views/public/bookings.php:89
 #: app/Views/public/receipt/order-items-table.php:71
 #: builds/fluent-booking/app/Views/public/bookings.php:87
 #: builds/fluent-booking/app/Views/public/receipt/order-items-table.php:71
@@ -7834,7 +7838,7 @@ msgstr "Activer"
 msgid "Unavailable"
 msgstr "Indisponible"
 
-#: app/Services/TransStrings.php:807 app/Views/public/bookings.php:60
+#: app/Services/TransStrings.php:807 app/Views/public/bookings.php:62
 #: builds/fluent-booking/app/Services/TransStrings.php:807
 #: builds/fluent-booking/app/Views/public/bookings.php:60
 msgid "Unconfirmed"
@@ -7845,7 +7849,7 @@ msgstr "Non confirmé"
 msgid "unconfirmed"
 msgstr "non confirmé"
 
-#: app/Services/Helper.php:1699 app/Services/Helper.php:1762
+#: app/Services/Helper.php:1703 app/Services/Helper.php:1766
 #: app/Services/Integrations/FluentCRM/CrmSmartCode.php:100
 #: builds/fluent-booking/app/Services/Helper.php:1699
 #: builds/fluent-booking/app/Services/Helper.php:1762
@@ -8020,7 +8024,7 @@ msgstr "Via Shortcode / Dedicated Page ?"
 msgid "Vietnamese Dong"
 msgstr "Dong vietnamien"
 
-#: app/Views/public/bookings.php:68
+#: app/Views/public/bookings.php:70
 #: builds/fluent-booking/app/Views/public/bookings.php:68
 msgid "View"
 msgstr "Voir"
@@ -8140,7 +8144,7 @@ msgstr "Type de réunion"
 msgid "What hours are you available?"
 msgstr "Quelles sont vos heures de disponibilité ?"
 
-#: app/Services/TransStrings.php:252 app/Services/BookingFieldService.php:89
+#: app/Services/TransStrings.php:252 app/Services/BookingFieldService.php:90
 #: builds/fluent-booking/app/Services/TransStrings.php:252
 #: builds/fluent-booking/app/Services/BookingFieldService.php:89
 msgid "What is this meeting about?"
@@ -8199,7 +8203,7 @@ msgstr "Quels sont les créneaux horaires disponibles ?"
 msgid "Who"
 msgstr "Qui"
 
-#: app/Services/BookingFieldService.php:101
+#: app/Services/BookingFieldService.php:102
 #: builds/fluent-booking/app/Services/BookingFieldService.php:101
 msgid "Why are you cancelling?"
 msgstr "Pourquoi annulez-vous ?"
@@ -8340,7 +8344,7 @@ msgstr ""
 msgid "Your %s Booking Summary"
 msgstr "Votre résumé de réservation %s"
 
-#: app/Services/BookingFieldService.php:170
+#: app/Services/BookingFieldService.php:171
 #: builds/fluent-booking/app/Services/BookingFieldService.php:170
 msgid "Your Address"
 msgstr "Votre adresse"
@@ -8364,8 +8368,8 @@ msgstr ""
 "Votre libellé de réservation n'accepte que des valeurs alphanumériques. "
 "Veuillez ne pas indiquer d'espace ou de caractères spéciaux"
 
-#: app/Services/BookingFieldService.php:76
-#: app/Services/BookingFieldService.php:82
+#: app/Services/BookingFieldService.php:77
+#: app/Services/BookingFieldService.php:83
 #: builds/fluent-booking/app/Services/BookingFieldService.php:76
 #: builds/fluent-booking/app/Services/BookingFieldService.php:82
 msgid "Your Email"
@@ -8410,15 +8414,15 @@ msgstr "Votre réunion a été reportée"
 msgid "Your Meeting Link"
 msgstr "Votre lien de réunion"
 
-#: app/Services/TransStrings.php:589 app/Services/BookingFieldService.php:63
-#: app/Services/BookingFieldService.php:69
+#: app/Services/TransStrings.php:589 app/Services/BookingFieldService.php:64
+#: app/Services/BookingFieldService.php:70
 #: builds/fluent-booking/app/Services/TransStrings.php:589
 #: builds/fluent-booking/app/Services/BookingFieldService.php:63
 #: builds/fluent-booking/app/Services/BookingFieldService.php:69
 msgid "Your Name"
 msgstr "Votre nom"
 
-#: app/Services/TransStrings.php:222 app/Services/BookingFieldService.php:156
+#: app/Services/TransStrings.php:222 app/Services/BookingFieldService.php:157
 #: builds/fluent-booking/app/Services/TransStrings.php:222
 #: builds/fluent-booking/app/Services/BookingFieldService.php:156
 msgid "Your Phone Number"
