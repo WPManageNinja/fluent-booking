@@ -1514,7 +1514,11 @@ class Helper
             [
                 'value' => 'date',
                 'label' => __('Date', 'fluent-booking')
-            ]
+            ],
+            [
+                'value' => 'file',
+                'label' => __('File', 'fluent-booking')
+            ],
         ]);
     }
 
