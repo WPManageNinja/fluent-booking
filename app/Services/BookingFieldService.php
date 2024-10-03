@@ -261,7 +261,20 @@ class BookingFieldService
         return $fieldName;
     }
 
-    public static function getFormattedCustomBookingData(Booking $booking, $htmlSupport = true)
+    public static function maybeGenerateFieldName($calendarEvent, $fieldValue)
+    {
+        $bookingFields = self::getBookingFields($calendarEvent);
+
+        foreach ($bookingFields as $field) {
+            if ($field['name'] == $fieldValue['name'] && $field['index'] != $fieldValue['index']) {
+                return self::generateFieldName($calendarEvent, $fieldValue['label']);
+            }
+        }
+
+        return sanitize_text_field($fieldValue['name']);
+    }
+
+    public static function getFormattedCustomBookingData(Booking $booking, $htmlSupport = true, $isPublic = false)
     {
         $customFormData = $booking->getMeta('custom_fields_data', []);
         if (!$customFormData) {
@@ -278,11 +291,18 @@ class BookingFieldService
             $formattedValue = is_array($value) ? implode(', ', $value) : $value;
             
             $field = self::getBookingFieldByName($booking->calendar_event, $dataKey);
-        
-            if (Arr::get($field, 'type') == 'file' && is_array($value)) {
+
+            $fieldType = Arr::get($field, 'type');
+
+            if ($fieldType == 'file' && is_array($value)) {
                 $formattedValue = self::getUploadedFiles($value, $htmlSupport);
             }
         
+            if ($fieldType == 'hidden') {
+                if ($isPublic) continue;
+                $formattedValue = EditorShortcodeParser::parse($formattedValue, $booking);
+            }
+
             $formattedData[$dataKey] = [
                 'label' => $label,
                 'value' => $formattedValue
@@ -353,6 +373,10 @@ class BookingFieldService
 
     public static function getUploadedFiles($fieldValue, $htmlSupport = true)
     {
+        if (empty($fieldValue)) {
+            return '';
+        }
+
         $files = array_map(function($file) use ($htmlSupport) {
             if ($htmlSupport) {
                 return '<a href="' . esc_url($file) . '" target="_blank" download="' . esc_attr(basename($file)) . '">' . esc_html(basename($file)) . '</a>';

@@ -20,6 +20,11 @@
                             <MultiSelect {field} {validating} {hasError} bind:form={form} />
                         {:else if field.type === 'file'}
                             <FileInput {slot} {field} {validating} {hasError} bind:form={form} />
+                        {:else if field.type === 'hidden'}
+                            {#if !form[field.name]}
+                                {form[field.name] = field.default_value}
+                            {/if}
+                            <input type="hidden" bind:value={form[field.name]}/>
                         {:else}
                             <label class="fcal_input_content" aria-label={field?.label} id="{field.name}-label">
                                 {#if field.label}
@@ -108,8 +113,6 @@
                                     </div>
                                 {:else if field.type === 'payment' && slot.type === 'paid' && hasPaymentItem()}
                                     <Payments {field} bind:form={form} {duration} {quantity}/>
-                                {:else if field.type === 'hidden'}
-                                    <input type="hidden" bind:value={form[field.name]}/>
                                 {/if}
                                 {#if field.help_text}
                                     <p class="fcal_help_text">{field.help_text}</p>
