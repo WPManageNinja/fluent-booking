@@ -69,7 +69,7 @@
                 <el-input v-model="fieldData.help_text" type="text"/>
             </el-form-item>
             <template v-if="isFileField">
-                <el-form-item :label="$t('Max File Size ')">
+                <el-form-item :label="$t('Max File Size')">
                     <el-input
                         type="number"
                         v-model="fieldData.file_size_value"
@@ -151,13 +151,21 @@ export default {
             this.$emit('closeModal');
         },
         'field.type': function() {
+            if (this.fieldData.type == 'checkbox') {
+                this.fieldData.required = false;
+            }
+            if (this.fieldData.type == 'file') {
+                this.maybeSetDefaultFileValues();
+            }
             if (this.isOptionRequired && !this.fieldData.options) {
                 this.fieldData.options = this.defaultOptions;
             } else {
                 this.fieldData.options = {};
             }
-            if (this.fieldData.type == 'checkbox') {
-                this.fieldData.required = false;
+        },
+        'fieldData.type': function() {
+            if (this.fieldData.type == 'file') {
+                this.maybeSetDefaultFileValues();
             }
         },
         'fieldData.is_sms_number': function (newValue, oldValue) {
@@ -232,6 +240,12 @@ export default {
         },
         validateLimit(limit) {
             this.fieldData.limit = Math.max(1, Math.min(50, limit));
+        },
+        maybeSetDefaultFileValues() {
+            this.fieldData.file_size_unit = this.fieldData.file_size_unit || 'mb';
+            this.fieldData.file_size_value = this.fieldData.file_size_value || 1;
+            this.fieldData.max_file_allow = this.fieldData.max_file_allow || 1;
+            this.fieldData.allow_file_types = this.fieldData.allow_file_types || ['pdf'];
         }
     },
     mounted() {

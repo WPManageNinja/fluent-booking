@@ -846,6 +846,12 @@ class TransStrings
             'Which slots are you available?'                                                   => __('Which slots are you available?', 'fluent-booking'),
             'Select All'                                                                       => __('Select All', 'fluent-booking'),
             'Reset All'                                                                        => __('Reset All', 'fluent-booking'),
+            'Max Files Count'                                                                  => __('Max Files Count', 'fluent-booking'),
+            'Max File Size'                                                                    => __('Max File Size', 'fluent-booking'),
+            'Zip'                                                                              => __('Zip', 'fluent-booking'),
+            'Doc'                                                                              => __('Doc', 'fluent-booking'),
+            'PDF'                                                                              => __('PDF', 'fluent-booking'),
+            'File Type'                                                                        => __('File Type', 'fluent-booking'),
             'Sort By Calendar Type'                                                            => __('Sort By Calendar Type', 'fluent-booking'),
             'Sort'                                                                             => __('Sort', 'fluent-booking'),
             'Host'                                                                             => __('Host', 'fluent-booking'),
@@ -895,7 +901,7 @@ class TransStrings
             'Other Page'                                                                       => __('Other Page', 'fluent-booking'),
             'Generate Link'                                                                    => __('Generate Link', 'fluent-booking'),
             'Generated Link'                                                                   => __('Generated Link', 'fluent-booking'),
-            'Generate booking link with URL parameters'                                        => __('Generate booking link with URL parameters', 'fluent-booking'),
+            'Generate booking link with URL parameters'                                        => __('Generate booking link with URL parameters', 'fluent-booking')
         );
     }
 }
