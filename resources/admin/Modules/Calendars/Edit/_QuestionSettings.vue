@@ -25,7 +25,7 @@
                                         <span class="required" v-if="!field.enabled">{{ $t('Hidden') }}</span>
                                     </h2>
                                     <p>
-                                        <span v-if="field.system_defined">{{ field.name }}</span>
+                                        <span v-if="displayFieldName(field)">{{ field.name }}</span>
                                         <span v-else>{{ field.type }}</span>
                                     </p>
                                 </div>
@@ -63,7 +63,7 @@
                                         <span class="required" v-if="!field.enabled">{{ $t('Hidden') }}</span>
                                     </h2>
                                     <p>
-                                        <span v-if="field.system_defined">{{ field.name }}</span>
+                                        <span v-if="displayFieldName(field)">{{ field.name }}</span>
                                         <span v-else>{{ field.type }}</span>
                                     </p>
                                 </div>
@@ -83,6 +83,7 @@
                 v-if="showModal"
                 :field="field"
                 :fields="fields"
+                :smartCodes="smartCodes"
                 :showModal="showModal"
                 @closeModal="closeModal"
                 @updateFieldData="updateFieldData"
@@ -126,6 +127,7 @@ export default {
             saving: false,
             field: '',
             fields : [],
+            smartCodes: {},
             showModal: false,
             buyModal: false,
             otherFieldNames: ['cancellation_reason', 'rescheduling_reason']
@@ -137,6 +139,11 @@ export default {
         },
         otherFields() {
             return this.fields.filter(field => this.otherFieldNames.includes(field.name));
+        },
+        displayFieldName() {
+            return (field) => {
+                return field.system_defined || field.type == 'hidden';
+            }
         }
     },
     methods: {
@@ -211,10 +218,12 @@ export default {
         fetchFields() {
             this.loading = true;
             this.$get('calendars/' + this.calendar_event.calendar_id + '/events/' + this.calendar_event.id + '/booking-fields', {
-                calendar_id: this.calendar_event.calendar_id
+                calendar_id: this.calendar_event.calendar_id,
+                with: ['smart_codes']
             })
                 .then(response => {
                     this.fields = response.fields;
+                    this.smartCodes = response.smart_codes;
                     this.updateFields();
                 })
                 .catch(errors => {

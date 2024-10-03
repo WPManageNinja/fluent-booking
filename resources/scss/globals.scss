@@ -1500,6 +1500,19 @@
         &.fcal_question_dialog {
             .el-dialog__body {
                 padding: 0;
+                .el-form-item {
+                  .el-form-item__content {
+                    .fcal_popover_shortcode {
+                      width: 100%;
+                      .el-input {
+                        .el-input__wrapper {
+                          border-top-right-radius: 0;
+                          border-bottom-right-radius: 0;
+                        }
+                      }
+                    }
+                  }
+                }
             }
         }
         &.fcal_new_booking {

@@ -1519,6 +1519,10 @@ class Helper
                 'value' => 'file',
                 'label' => __('File', 'fluent-booking')
             ],
+            [
+                'value' => 'hidden',
+                'label' => __('Hidden', 'fluent-booking')
+            ]
         ]);
     }
 

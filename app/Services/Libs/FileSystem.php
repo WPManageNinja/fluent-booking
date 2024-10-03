@@ -83,8 +83,6 @@ class FileSystem
         foreach ($files as $file) {
             $arr = explode('/', $file);
             $fileName = end($arr);
-            error_log('dir:' . $fileName);
-            error_log($this->getDir() . '/' . $fileName);
             wp_delete_file($this->getDir() . '/' . $fileName);
         }
     }

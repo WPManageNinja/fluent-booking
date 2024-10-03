@@ -327,8 +327,6 @@ export default {
             reschedulePopupVisible: false,
             calendarEventSlug: this.calendar_event.slug,
             settings: this.calendar_event.settings,
-            hasWpEditor: !!window.wp.editor,
-            editor_id: 'wp_editor_'+ Date.now() + parseInt( Math.random() * 1000 ),
             CloseBoldIcon: markRaw(CloseBold),
             MoreIcon: markRaw(More),
             smart_codes: {
@@ -414,30 +412,6 @@ export default {
                 item.limit = Math.min(50, item.limit);
             }
         },
-        changeContentEvent() {
-            const content = wp.editor.getContent(this.editor_id);
-            this.settings.custom_redirect.redirect_url = content;
-        },
-        initEditor() {
-            wp.editor.remove(this.editor_id);
-            const that = this;
-            wp.editor.initialize(this.editor_id, {
-                mediaButtons: true,
-                tinymce: {
-                    height : 300,
-                    toolbar1: 'formatselect,table,bold,italic,bullist,numlist,link,hr,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo',
-                    setup(editor) {
-                        editor.on('change', function (ed, l) {
-                            that.changeContentEvent();
-                        });
-                    }
-                },
-                quicktags: true
-            });
-            jQuery('#'+this.editor_id).on('change', function(e) {
-                that.changeContentEvent();
-            });
-        },
         checkValidation() {
             if (this.settings.custom_redirect?.enabled && !this.calendar_event.settings.custom_redirect?.redirect_url) {
                 this.$handleError(this.$t('Redirect URL field is required'));
@@ -494,9 +468,6 @@ export default {
     mounted() {
         if (!this.disabled) {
             this.fetchSettings();
-            if (this.hasWpEditor) {
-                this.initEditor();
-            }
         }
     }
 }

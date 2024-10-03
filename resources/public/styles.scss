@@ -831,11 +831,12 @@ body >.fcal_calendar_wrap {
           }
           .fcal_uploaded_files {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 6px;
             margin-top: 0.5rem;
             .fcal_uploaded_file {
               display: flex;
+              gap: 4px;
               align-items: center;
               width: max-content;
               border-radius: 8px;
@@ -2712,6 +2713,21 @@ input.fcal_input:disabled {
       fill: #697483;
     }
   }
+}
+
+.fcal_spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--fcal_primary_color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes skeleton-loading {
