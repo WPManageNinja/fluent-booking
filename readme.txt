@@ -301,9 +301,10 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 
 == Changelog ==
 
-= 1.5.22 (Date: 02 Oct 2024) =
+= 1.5.22 (Date: 03 Oct 2024) =
 - Elementor Integration Available for Free Version
 - Added File Input Field in Booking Question
+- Added Hidden Input Field in Booking Question
 - Updated Checkbox Field Value to yes/no
 - Updated Heading h1, h2 to h3, h4 for Fluentform
 - Fixed About Field Always Showing in Manual Booking
