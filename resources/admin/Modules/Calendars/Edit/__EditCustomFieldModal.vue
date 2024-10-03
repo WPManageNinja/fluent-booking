@@ -24,12 +24,13 @@
             </el-form-item>
             <el-form-item :label="$t('Label *')">
                 <el-input v-model="fieldData.label" type="text" :placeholder="$t('Label')"/>
+                <span v-if="isHiddenField">{{ $t('This label will only be visible for admin.') }}</span>
             </el-form-item>
             <el-form-item v-if="fieldData.limit" :label="$t('Maximum Guest Limit') + ' *'">
                 <el-input v-model="fieldData.limit" type="number" @change="validateLimit(fieldData.limit)"/>
             </el-form-item>
             <el-form-item v-if="hasPlaceHolder" :label="$t('Placeholder')">
-                <el-input v-model="fieldData.placeholder" :placeholder="$t('Placeholder')" />
+                <el-input v-model="fieldData.placeholder" :placeholder="$t('Placeholder')"/>
             </el-form-item>
             <el-form-item v-show="isOptionRequired" :label="$t('Options *')" class="fcal_question_options">
                 <div class="fcal_question_option" v-for="(option, index) in fieldData.options" :key="index">
@@ -94,10 +95,36 @@
                     </el-checkbox-group>
                 </el-form-item>
             </template>
+            <template v-if="isHiddenField">
+                <el-form-item :label="$t('Default Value')">
+                    <popover
+                        :groupTitle="$t('Shortcodes')"
+                        :data="smartCodes.texts"
+                        placement="bottom-end"
+                        :isVisible="defaultValuePopupVisible"
+                        class="fcal_popover_shortcode"
+                        @command="handleDefaultValueCommand">
+                        <template #popoverButton>
+                            <el-input
+                                type="text"
+                                :placeholder="$t('Default Value')"
+                                v-model="fieldData.default_value">
+                                <template #append>
+                                    <el-button :icon="MoreIcon" @click="toggleDefaultValuePopup"></el-button>
+                                </template>
+                            </el-input>
+                        </template>
+                    </popover>
+                </el-form-item>
+                <el-form-item :label="$t('Name Attribute') + ' *'">
+                    <el-input v-model="fieldData.name" type="text" :placeholder="$t('Name Attribute')"/>
+                    <span>{{$t('The value must be unique.')}}</span>
+                </el-form-item>
+            </template>
             <el-form-item v-if="isPhoneField">
                 <el-checkbox v-model="fieldData.is_sms_number">{{ $t('Use this number for sending sms notification') }}</el-checkbox>
             </el-form-item>
-            <el-form-item :label="$t('Required')">
+            <el-form-item v-if="!isHiddenField" :label="$t('Required')">
                 <el-radio-group :disabled="fieldData.disable_alter" v-model="fieldData.required" class="radio_desc_group radio_required_field">
                     <el-radio :label="true">{{ $t('Yes') }}</el-radio>
                     <el-radio :label="false">{{ $t('No') }}</el-radio>
@@ -119,18 +146,25 @@
 
 <script>
 import { markRaw } from "vue";
-import { CloseBold } from '@element-plus/icons-vue';
+import { CloseBold, More } from '@element-plus/icons-vue';
+import Popover from "@/Components/Popover";
+
 export default {
     name: 'EditCustomFieldModal',
-    props: ['field', 'fields', 'showModal'],
+    props: ['field', 'fields', 'smartCodes', 'showModal'],
     emits: ['closeModal', 'updateFieldData'],
+    components: {
+        Popover
+    },
     data() {
         return {
             openModal: this.showModal,
+            defaultValuePopupVisible: false,
             fieldsTypes: this.appVars.custom_field_types,
             dateFormats: this.appVars.available_date_formats,
             defaultOptions: ['Option 1', 'Option 2'],
             CloseBoldIcon: markRaw(CloseBold),
+            MoreIcon: markRaw(More),
             isNewEntry: false,
             fieldData: {},
             newField: {
@@ -196,11 +230,14 @@ export default {
         isFileField() {
             return this.fieldData.type == 'file';
         },
+        isHiddenField() {
+            return this.fieldData.type == 'hidden';
+        },
         hasPlaceHolder() {
             return ['text', 'textarea', 'message', 'number', 'email', 'date'].includes(this.fieldData.type);
         },
         hasHelpText() {
-            return !['guests', 'payment_method', 'location'].includes(this.fieldData.name);
+            return !['guests', 'payment_method', 'location'].includes(this.fieldData.name) && !this.isHiddenField;
         }
     },
     methods: {
@@ -218,6 +255,14 @@ export default {
         },
         removeOption(index) {
             this.fieldData.options.splice(index, 1);
+        },
+        toggleDefaultValuePopup() {
+            this.defaultValuePopupVisible = !this.defaultValuePopupVisible;
+        },
+        handleDefaultValueCommand(command) {
+            this.fieldData.default_value = this.fieldData.default_value || '';
+            this.fieldData.default_value += command;
+            this.defaultValuePopupVisible = false;
         },
         getFieldIndex() {
             let index = 0;
