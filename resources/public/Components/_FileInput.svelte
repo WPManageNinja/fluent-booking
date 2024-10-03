@@ -1,4 +1,12 @@
 <div class="fcal_input_content">
+    {#if field.label}
+        <div class="fcal_input_label">
+            {field.label}
+            {#if field.required}
+                <span>*</span>
+            {/if}
+        </div>
+    {/if}
     <div class="fcal_input_file_wrap">
         <button class="fcal_input_btn" type="button" on:click={()=>openFileUpload()} aria-label="Open File Upload">
             {i18('Choose File')}
@@ -13,8 +21,16 @@
                 {/each}
             </div>
         {/if}
+        {#if uploadingFile}
+            <div class="fcal_uploaded_files">
+                <div class="fcal_uploaded_file">
+                    <span class="fcal_spinner"></span>
+                    <span>{uploadingFile.name}</span>
+                </div>
+            </div>
+        {/if}
     </div>
-    {#if hasError && errorText}
+    {#if errorText && hasError}
         <div class="fcal_validation_error">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 ltr:mr-2 rtl:ml-2">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -32,13 +48,13 @@
     export let slot;
     export let form;
     export let field;
-    export let validating;
     export let hasError;
+    export let validating;
 
     let errorText = false;
     let uploadedFiles = [];
     let uploadedFileUrls = [];
-    let isFileUploading = false;
+    let uploadingFile = null;
 
     $: if (validating || !validating) {
         updateValidationError();
@@ -72,12 +88,13 @@
                 uploadFile(file);
                 continue;
             }
+            hasError = true;
             errorText = i18("File size should be less than") + field.file_size_value + ' ' + field.file_size_unit;
         }
     }
 
     function uploadFile(file) {
-        isFileUploading = true;
+        uploadingFile = file;
 
         util.$post(window.fluentCalendarPublicVars.ajaxurl, {
             event_id: slot.id,
@@ -86,13 +103,14 @@
             action: 'fluent_booking_file_upload'
         })
         .then(response => {
+            errorText = false;
             addFile(file, response);
         })
         .catch((error) => {
             console.log(error);
         })
         .finally(() => {
-            isFileUploading = false;
+            uploadingFile = null;
         });
     }
 

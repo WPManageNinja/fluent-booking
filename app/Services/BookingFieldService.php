@@ -273,31 +273,20 @@ class BookingFieldService
         $formattedData = [];
 
         foreach ($customFormData as $dataKey => $value) {
-            if (isset($labels[$dataKey])) {
-                $label = $labels[$dataKey];
-            } else {
-                $label = $dataKey;
+            $label = $labels[$dataKey] ?? $dataKey;
+    
+            $formattedValue = is_array($value) ? implode(', ', $value) : $value;
+            
+            $field = self::getBookingFieldByName($booking->calendar_event, $dataKey);
+        
+            if (Arr::get($field, 'type') == 'file' && is_array($value)) {
+                $formattedValue = self::getUploadedFiles($value, $htmlSupport);
             }
+        
             $formattedData[$dataKey] = [
                 'label' => $label,
-                'value' => is_array($value) ? implode(', ', $value) : $value
+                'value' => $formattedValue
             ];
-            $field = self::getBookingFieldByName($booking->calendar_event, $dataKey);
-            if ($field['type'] == 'file') {
-                $files = [];
-                foreach ($value as $key => $file) {
-                    if ($htmlSupport) {
-                        $files[] = '<a href="' . $file . '" target="_blank" download="' . $file . '">' . basename($file) . '</a>';
-                    } else {
-                        $files[] = $file;
-                    }
-                }
-                if ($htmlSupport) {
-                    $formattedData[$dataKey]['value'] = implode('<br>', $files);
-                } else {
-                    $formattedData[$dataKey]['value'] = implode(PHP_EOL, $files);
-                }
-            }
         }
 
         return $formattedData;
@@ -360,5 +349,19 @@ class BookingFieldService
             }
         }
         return false;
+    }
+
+    public static function getUploadedFiles($fieldValue, $htmlSupport = true)
+    {
+        $files = array_map(function($file) use ($htmlSupport) {
+            if ($htmlSupport) {
+                return '<a href="' . esc_url($file) . '" target="_blank" download="' . esc_attr(basename($file)) . '">' . esc_html(basename($file)) . '</a>';
+            }
+            return $file;
+        }, $fieldValue);
+    
+        $separator = $htmlSupport ? '<br>' : PHP_EOL;
+
+        return implode($separator, $files);
     }
 }
