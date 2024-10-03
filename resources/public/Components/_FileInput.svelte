@@ -72,7 +72,13 @@
         input.type = 'file';
         input.multiple = field.max_file_allow > 1;
         input.style.display = 'none';
-        input.accept = field.allow_file_types.map(type => `.${type}`).join(',');
+
+        let fileTypes = field.allow_file_types;
+        if (fileTypes.includes('image')) {
+            fileTypes = [...fileTypes, 'jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'];
+        }
+
+        input.accept = fileTypes.map(type => `.${type}`).join(',');
         input.addEventListener('change', handleFileUpload);
 
         document.body.appendChild(input);
@@ -89,7 +95,7 @@
                 continue;
             }
             hasError = true;
-            errorText = i18("File size should be less than") + field.file_size_value + ' ' + field.file_size_unit;
+            errorText = i18("File size should be less than") + ' ' + field.file_size_value + ' ' + field.file_size_unit;
         }
     }
 
