@@ -34,13 +34,15 @@ export const LandingPage = props => {
     }, []);
 
     useEffect(() => {
-        if (slotId) {
-            maybeUpdateEventHash();
-            getCalendarEvent();
-        } else if (eventHash) {
-            updateSlotId();
+        if (allCalendars.length) {
+            if (slotId) {
+                updateEventHash();
+                getCalendarEvent();
+            } else if (eventHash) {
+                updateSlotId();
+            }
         }
-    }, [slotId, eventHash, allCalendars]);
+    }, [slotId, allCalendars]);
 
     const getCalendars = (queryArgs) => {
         setLoading(true);
@@ -80,23 +82,27 @@ export const LandingPage = props => {
             });
     }
 
-    const maybeUpdateEventHash = () => {
-        if (allCalendars.length) {
-            const selectedSlot = allCalendars.find(cal => cal.id == calendarId).slots.find(slot => slot.id == slotId);
+    const updateEventHash = () => {
+        const selectedSlot = allCalendars
+            .flatMap(cal => cal.slots?.length ? cal.slots : [])
+            .find(slot => slot.id == slotId);
+        if (selectedSlot) {
             setAttributes({ eventHash: selectedSlot.hash });
         }
     }
 
     const updateSlotId = () => {
-        if (allCalendars.length) {
-            const selectedSlot = allCalendars.find(cal => cal.id == calendarId).slots.find(slot => slot.hash == eventHash);
+        const selectedSlot = allCalendars
+            .flatMap(cal => cal.slots?.length ? cal.slots : [])
+            .find(slot => slot.hash == eventHash);
+        if (selectedSlot) {
             setAttributes({ slotId: selectedSlot.id });
         }
     }
 
     const handleCalendar = (e) => {
         const ids = e.target.value.split(",");
-        const selectedSlot = allCalendars.find(cal => cal.id == ids[1]).slots.find(slot => slot.id == ids[0]);
+        const selectedSlot = allCalendars.find(cal => cal.id == ids[1])?.slots.find(slot => slot.id == ids[0]);
         setAttributes({ slotId: ids[0], calendarId: ids[1], eventHash: selectedSlot.hash });
     }
 
