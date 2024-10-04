@@ -35,9 +35,12 @@ export const LandingPage = props => {
 
     useEffect(() => {
         if (slotId) {
+            maybeUpdateEventHash();
             getCalendarEvent();
+        } else if (eventHash) {
+            updateSlotId();
         }
-    }, [slotId]);
+    }, [slotId, eventHash, allCalendars]);
 
     const getCalendars = (queryArgs) => {
         setLoading(true);
@@ -77,6 +80,19 @@ export const LandingPage = props => {
             });
     }
 
+    const maybeUpdateEventHash = () => {
+        if (allCalendars.length) {
+            const selectedSlot = allCalendars.find(cal => cal.id == calendarId).slots.find(slot => slot.id == slotId);
+            setAttributes({ eventHash: selectedSlot.hash });
+        }
+    }
+
+    const updateSlotId = () => {
+        if (allCalendars.length) {
+            const selectedSlot = allCalendars.find(cal => cal.id == calendarId).slots.find(slot => slot.hash == eventHash);
+            setAttributes({ slotId: selectedSlot.id });
+        }
+    }
 
     const handleCalendar = (e) => {
         const ids = e.target.value.split(",");
