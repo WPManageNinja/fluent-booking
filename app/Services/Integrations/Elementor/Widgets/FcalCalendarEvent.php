@@ -288,8 +288,9 @@ class FcalCalendarEvent extends \Elementor\Widget_Base
         if (empty($eventId)) {
             return [];
         }
-        $event    = CalendarSlot::query()->findOrFail($eventId);
-        if (empty($event)) {
+
+        $event = CalendarSlot::find($eventId);
+        if (!$event || !$event->calendar) {
             return [];
         }
 
