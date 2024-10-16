@@ -92,6 +92,7 @@
                         <el-checkbox label="pdf">{{ $t('PDF') }}</el-checkbox>
                         <el-checkbox label="doc">{{ $t('Doc') }}</el-checkbox>
                         <el-checkbox label="zip">{{ $t('Zip') }}</el-checkbox>
+                        <el-checkbox label="image">{{ $t('Image') }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </template>
