@@ -49,16 +49,20 @@ class FrontEndHandler
         $atts = shortcode_atts([
             'id'             => 0,
             'theme'          => 'light',
-            'disable_author' => 'no'
+            'disable_author' => 'no',
+            'hash'           => ''
         ], $atts);
 
-        if (!$atts['id']) {
+        if (!$atts['id'] || !$atts['hash']) {
             return '';
         }
 
-        $calendarEvent = CalendarSlot::query()->find($atts['id']);
+        $calendarEvent = CalendarSlot::find($atts['id']);
         if (!$calendarEvent) {
-            return '';
+            $calendarEvent = CalendarSlot::where('hash', $atts['hash'])->first();
+            if (!$calendarEvent) {
+                return __('Calendar event not found', 'fluent-booking');
+            }
         }
 
         $calendar = $calendarEvent->calendar;
