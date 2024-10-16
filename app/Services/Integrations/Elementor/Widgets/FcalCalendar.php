@@ -37,7 +37,7 @@ class FcalCalendar extends \Elementor\Widget_Base
      */
     public function get_icon()
     {
-        return 'eicon-calendar';
+        return 'fluent-booking-icon';
     }
 
     /**
@@ -313,15 +313,21 @@ class FcalCalendar extends \Elementor\Widget_Base
             return [];
         }
 
-        $calendar = Calendar::findOrFail($selectedCalId);
-        $events   = CalendarSlot::where('calendar_id', $selectedCalId)
+        $events = CalendarSlot::where('calendar_id', $selectedCalId)
             ->whereIn('id', $eventIds)
             ->get();
+
+        $calendar = Calendar::find($selectedCalId);
+
+        if (!$calendar || !$events) {
+            return [];
+        }
 
         $formattedData = [
             'user_profile' => $calendar->getAuthorProfile(),
             'events'       => $this->formatEvents($events),
         ];
+
         $formattedData['user_profile']['description'] = $calendar->description;
 
         return $formattedData;

@@ -681,6 +681,8 @@ class FrontEndHandler
                 'Email'                                => __('Email', 'fluent-booking'),
                 'Date'                                 => __('Date', 'fluent-booking'),
                 'Time'                                 => __('Time', 'fluent-booking'),
+                'per guest'                            => __('per guest', 'fluent-booking'),
+                'Add guest'                            => __('Add guest', 'fluent-booking'),
                 'Add guests'                           => __('Add guests', 'fluent-booking'),
                 'Add another'                          => __('Add another', 'fluent-booking'),
                 'This field is required.'              => __('This field is required.', 'fluent-booking'),
