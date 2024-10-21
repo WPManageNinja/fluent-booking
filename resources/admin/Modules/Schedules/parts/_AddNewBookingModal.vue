@@ -141,7 +141,7 @@
             </el-form-item>
             <div v-for="field in formFields" :key="field.name">
                 <div v-if="field.enabled && !field.system_defined">
-                    <el-form-item v-if="['text', 'email', 'phone', 'textarea'].includes(field.type)" :label="field.label + (field.required ? ' *' : '')">
+                    <el-form-item v-if="['text', 'email', 'phone', 'number', 'textarea'].includes(field.type)" :label="field.label + (field.required ? ' *' : '')">
                         <el-input v-model="customFields[field.name]" :type="field.type" :placeholder="field.placeholder"/>
                     </el-form-item>
                     <el-form-item v-if="field.type === 'checkbox'">
