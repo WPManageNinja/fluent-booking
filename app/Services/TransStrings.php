@@ -775,6 +775,7 @@ class TransStrings
             'No Data match'                                                                    => __('No Data match', 'fluent-booking'),
             'No Data'                                                                          => __('No Data', 'fluent-booking'),
             'System Enabled'                                                                   => __('System Enabled', 'fluent-booking'),
+            'Enable'                                                                           => __('Enable', 'fluent-booking'),
             'Enabled'                                                                          => __('Enabled', 'fluent-booking'),
             'Install'                                                                          => __('Install', 'fluent-booking'),
             'This only applies to your public landing pages'                                   => __('This only applies to your public landing pages', 'fluent-booking'),
