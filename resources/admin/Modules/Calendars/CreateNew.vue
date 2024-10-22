@@ -220,12 +220,12 @@ export default {
         },
         getEventType(eventType) {
             const typeMap = {
-                'single': 'One-to-One',
-                'group': 'Group',
-                'round_robin': 'Round Robin',
-                'collective': 'Collective',
-                'single_event': 'Single Event',
-                'group_event': 'Group Event'
+                'single': this.$t('One-to-One'),
+                'group': this.$t('Group'),
+                'round_robin': this.$t('Round Robin'),
+                'collective': this.$t('Collective'),
+                'single_event': this.$t('Single Event'),
+                'group_event': this.$t('Group Event')
             };
             return typeMap[eventType];
         }
