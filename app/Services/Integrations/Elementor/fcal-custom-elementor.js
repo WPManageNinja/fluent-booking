@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const css = `
+    const fluentBookingIconStyles = `
         .fluent-booking-icon {
             width: 28px;
             height: 28px;
@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
 
-    const style = document.createElement('style');
+    const styleElement = document.createElement('style');
 
-    style.appendChild(document.createTextNode(css));
+    styleElement.appendChild(document.createTextNode(fluentBookingIconStyles));
 
-    document.head.appendChild(style);
+    document.head.appendChild(styleElement);
 
     elementor.hooks.addAction('panel/open_editor/widget', (panel, model, view) => {
 
@@ -63,8 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (eventControl) {
                         eventControl.innerHTML = '';
 
+                        const currentSelectedIds = elementor.getPanelView().getCurrentPageView().getControlViewByName('selected_event_ids').getControlValue();
+
                         Object.entries(result.data).forEach(([key, value]) => {
                             const option = document.createElement('option');
+                            if (currentSelectedIds && currentSelectedIds.includes(key)) {
+                                option.selected = true;
+                            }
                             option.value = key;
                             option.textContent = value;
                             eventControl.appendChild(option);
