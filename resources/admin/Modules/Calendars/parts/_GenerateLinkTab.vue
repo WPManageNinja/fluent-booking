@@ -34,16 +34,18 @@
                     <table class="fcal_table">
                         <thead>
                             <tr>
-                                <th>{{ $t('Field')}}</th>
-                                <th>{{$t('Value')}}</th>
+                                <th>{{ $t('Field') }}</th>
+                                <th>{{ $t('Value') }}</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(field, indx) in paramFields" :key="'field_' + indx">
                                 <td>
-                                    <el-select v-model="field.name"
-                                               popper-class="fcal_select">
+                                    <el-select
+                                        v-model="field.name"
+                                        popper-class="fcal_select"
+                                        :placeholder="$t('Select')">
                                         <el-option
                                             v-for="option in fieldTypes"
                                             :disabled="alreadyExists(option.value)"
