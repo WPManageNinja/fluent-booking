@@ -814,6 +814,15 @@ class FrontEndHandler
             return;
         }
 
+        $validateDateFields = BookingFieldService::validateDateFields($customFieldsData, $calendarEvent);
+
+        if (is_wp_error($validateDateFields)) {
+            wp_send_json([
+                'message' => $validateDateFields->get_error_message(),
+            ], 422);
+            return;
+        }
+
         $startDate = Arr::get($postedData, 'start_date');
         $timezone = sanitize_text_field(Arr::get($postedData, 'timezone', 'UTC'));
 
