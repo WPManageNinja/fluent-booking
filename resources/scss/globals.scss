@@ -1502,6 +1502,9 @@
                 padding: 0;
                 .el-form-item {
                   .el-form-item__content {
+                    span {
+                      line-height: 24px;
+                    }
                     .fcal_popover_shortcode {
                       width: 100%;
                       .el-input {
@@ -1510,6 +1513,9 @@
                           border-bottom-right-radius: 0;
                         }
                       }
+                    }
+                    .el-date-editor {
+                      width: 100%;
                     }
                   }
                 }

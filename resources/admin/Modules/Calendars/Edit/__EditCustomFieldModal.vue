@@ -50,22 +50,46 @@
                     {{ '+ ' + $t('Add new option') }}
                 </el-link>
             </el-form-item>
-            <el-form-item v-if="isDateField" :label="$t('Format')">
-                <el-select
-                    popper-class="fcal_select"
-                    v-model="fieldData.date_format"
-                    :clearable="true"
-                    :placeholder="$t('Select Format')">
-                    <el-option
-                        v-for="(type, index) in dateFormats"
-                        :key="index"
-                        :label="type.label"
-                        :value="type.value"
-                    >
-                    </el-option>
-                </el-select>
-                <span>{{ $t('The default date format will be applied if no format is chosen.') }}</span>
-            </el-form-item>
+            <template v-if="isDateField">
+                <el-form-item :label="$t('Minimum Date')">
+                    <el-date-picker
+                        v-model="fieldData.min_date"
+                        type="date"
+                        size="small"
+                        :default-value="new Date()"
+                        value-format="YYYY-MM-DD"
+                        :placeholder="$t('Select Date')"
+                    />
+                    <span>{{ $t('If no date is set, default date 1900-01-01 will be used as the minimum date.') }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('Maximum Date')">
+                    <el-date-picker
+                        v-model="fieldData.max_date"
+                        type="date"
+                        size="small"
+                        :default-value="new Date()"
+                        value-format="YYYY-MM-DD"
+                        :placeholder="$t('Select Date')"
+                    />
+                    <span>{{ $t('If no date is set, current date will be used as the maximum date.') }}</span>
+                </el-form-item>
+                <el-form-item :label="$t('Format')">
+                    <el-select
+                        popper-class="fcal_select"
+                        v-model="fieldData.date_format"
+                        :clearable="true"
+                        :placeholder="$t('Select Format')">
+                        <el-option
+                            v-for="(type, index) in dateFormats"
+                            :key="index"
+                            :label="type.label"
+                            :value="type.value"
+                        >
+                        </el-option>
+                    </el-select>
+                    <span>{{ $t('The default date format will be applied if no format is chosen.') }}</span>
+                </el-form-item>
+            </template>
             <el-form-item v-if="hasHelpText" :label="$t('Help Message')">
                 <el-input v-model="fieldData.help_text" type="text"/>
             </el-form-item>

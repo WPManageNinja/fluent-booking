@@ -52,8 +52,14 @@ class BookingFieldService
         return $formattedValues;
     }
 
-    public static function getBookingFields(CalendarSlot $calendarSlot)
+    public static function getBookingFields(CalendarSlot $calendarSlot, $cached = false)
     {
+        static $bookingFields = null;
+
+        if ($cached && $bookingFields) {
+            return $bookingFields;
+        }
+
         $requiredIndexes = ['name', 'email', 'message', 'cancellation_reason', 'rescheduling_reason'];
 
         $defaultFields = [
@@ -224,14 +230,16 @@ class BookingFieldService
 
         $existingFields['email']['disabled'] = false;
 
-        return array_values($existingFields);
+        $bookingFields = apply_filters('fluent_booking/booking_fields', array_values($existingFields), $calendarSlot);
+
+        return $bookingFields;
     }
 
     public static function getBookingFieldLabels(CalendarSlot $calendarSlot, $enabledOnly = false)
     {
-        $fields = self::getBookingFields($calendarSlot);
-        $labels = [];
+        $fields = self::getBookingFields($calendarSlot, true);
 
+        $labels = [];
         foreach ($fields as $field) {
             if ($enabledOnly && !Arr::isTrue($field, 'enabled')) {
                 continue;
@@ -338,7 +346,7 @@ class BookingFieldService
 
     public static function getBookingFieldByName($calendarEvent, $name)
     {
-        $fields = self::getBookingFields($calendarEvent);
+        $fields = self::getBookingFields($calendarEvent, true);
 
         foreach ($fields as $field) {
             if (Arr::get($field, 'name') == $name) {
@@ -387,5 +395,28 @@ class BookingFieldService
         $separator = $htmlSupport ? '<br>' : PHP_EOL;
 
         return implode($separator, $files);
+    }
+
+    public static function validateDateFields($customFieldsData, $calendarEvent)
+    {
+        foreach ($customFieldsData as $fieldKey => $fieldValue) {
+            $field = self::getBookingFieldByName($calendarEvent, $fieldKey);
+            if (Arr::get($field, 'type') == 'date') {
+                $minDate = Arr::get($field, 'min_date');
+                $maxDate = Arr::get($field, 'max_date');
+
+                $fieldValue = date('Y-m-d', strtotime($fieldValue));
+                $minDate = date('Y-m-d', strtotime($minDate ?: '1900-01-01'));
+                $maxDate = date('Y-m-d', strtotime($maxDate ?: 'today'));
+
+                if ($minDate && $fieldValue < $minDate) {
+                    return new \WP_Error('invalid_date', sprintf(__('The date for %s cannot be earlier than %s.', 'fluent-booking'), $field['label'], $minDate));
+                }
+                if ($maxDate && $fieldValue > $maxDate) {
+                    return new \WP_Error('invalid_date', sprintf(__('The date for %s cannot be later than %s.', 'fluent-booking'), $field['label'], $maxDate));
+                }
+            }
+        }
+        return true;
     }
 }

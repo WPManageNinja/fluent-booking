@@ -923,7 +923,7 @@ class Booking extends Model
     {
         $customFormData = $this->getCustomFormData(false);
 
-        $customFields = BookingFieldService::getBookingFields($calendarEvent);
+        $customFields = BookingFieldService::getBookingFields($calendarEvent, true);
 
         foreach ($customFields as $field) {
             $fieldValue = Arr::get($customFormData, $field['name']);
