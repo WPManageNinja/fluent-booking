@@ -174,6 +174,8 @@ class TransStrings
             'All Data'                                                                         => __('All Data', 'fluent-booking'),
             'Selected Fields'                                                                  => __('Selected Fields', 'fluent-booking'),
             'Request Fields'                                                                   => __('Request Fields', 'fluent-booking'),
+            'Value'                                                                            => __('Value', 'fluent-booking'),
+            'Field'                                                                            => __('Field', 'fluent-booking'),
             'Field Name'                                                                       => __('Field Name', 'fluent-booking'),
             'Field Value'                                                                      => __('Field Value', 'fluent-booking'),
             'Enter Name'                                                                       => __('Enter Name', 'fluent-booking'),
@@ -913,7 +915,7 @@ class TransStrings
             'Minimum Date'                                                                     => __('Minimum Date', 'fluent-booking'),
             'Select Date'                                                                      => __('Select Date', 'fluent-booking'),
             'If no date is set, default date 1900-01-01 will be used as the minimum date.'     => __('If no date is set, default date 1900-01-01 will be used as the minimum date.', 'fluent-booking'),
-            'If no date is set, current date will be used as the maximum date.'                => __('If no date is set, current date will be used as the maximum date.', 'fluent-booking'),
+            'If no date is set, current date will be used as the maximum date.'                => __('If no date is set, current date will be used as the maximum date.', 'fluent-booking')
         );
     }
 }

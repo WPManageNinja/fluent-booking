@@ -18,6 +18,14 @@ function handleEventBlockClick(link) {
     bookingWrap.style.marginLeft = '-100%';
     bookingWrap.style.height = 0;
 
+    const targetElement = wrap.querySelector('.fluent_booking_app');
+    if (targetElement) {
+        targetElement.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
+
     const elemItem = wrap.lastElementChild;
 
     const app = window.fluentCalBootApp(elemItem, true);
