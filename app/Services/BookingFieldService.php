@@ -407,7 +407,7 @@ class BookingFieldService
 
                 $fieldValue = date('Y-m-d', strtotime($fieldValue));
                 $minDate = date('Y-m-d', strtotime($minDate ?: '1900-01-01'));
-                $maxDate = date('Y-m-d', strtotime($maxDate ?: 'today'));
+                $maxDate = date('Y-m-d', strtotime($maxDate ?: date('Y-12-31')));
 
                 if ($minDate && $fieldValue < $minDate) {
                     return new \WP_Error('invalid_date', sprintf(__('The date for %s cannot be earlier than %s.', 'fluent-booking'), $field['label'], $minDate));
