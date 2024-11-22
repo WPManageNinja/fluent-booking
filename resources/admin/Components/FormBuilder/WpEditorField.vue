@@ -1,7 +1,7 @@
 <template>
     <div class="wp_vue_editor_wrapper">
         <popover
-            v-if="hasWpEditor"
+            v-if="hasWpEditor && editorShortcodes.length > 0"
             class="popover-wrapper"
             :groupTitle="$t('Shortcodes')"
             :data="editorShortcodes"
