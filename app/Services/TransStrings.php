@@ -907,7 +907,13 @@ class TransStrings
             'Other Page'                                                                       => __('Other Page', 'fluent-booking'),
             'Generate Link'                                                                    => __('Generate Link', 'fluent-booking'),
             'Generated Link'                                                                   => __('Generated Link', 'fluent-booking'),
-            'Generate booking link with URL parameters'                                        => __('Generate booking link with URL parameters', 'fluent-booking')
+            'Generate booking link with URL parameters'                                        => __('Generate booking link with URL parameters', 'fluent-booking'),
+            'Frontend Portal Settings'                                                         => __('Frontend Portal Settings', 'fluent-booking'),
+            'Maximum Date'                                                                     => __('Maximum Date', 'fluent-booking'),
+            'Minimum Date'                                                                     => __('Minimum Date', 'fluent-booking'),
+            'Select Date'                                                                      => __('Select Date', 'fluent-booking'),
+            'If no date is set, default date 1900-01-01 will be used as the minimum date.'     => __('If no date is set, default date 1900-01-01 will be used as the minimum date.', 'fluent-booking'),
+            'If no date is set, current date will be used as the maximum date.'                => __('If no date is set, current date will be used as the maximum date.', 'fluent-booking'),
         );
     }
 }

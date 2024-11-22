@@ -102,6 +102,8 @@
                                     <div class="fcal_date_field">
                                         <DateInput
                                             format={'MM/dd/yyyy'}
+                                            min={new Date(field.min_date || '1900-01-01')}
+                                            max={new Date(field.max_date || new Date())}
                                             dynamicPositioning={true}
                                             closeOnSelection={true}
                                             placeholder={field.placeholder}
