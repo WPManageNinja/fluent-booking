@@ -103,7 +103,7 @@
                                         <DateInput
                                             format={'MM/dd/yyyy'}
                                             min={new Date(field.min_date || '1900-01-01')}
-                                            max={new Date(field.max_date || new Date())}
+                                            max={field.max_date ? new Date(field.max_date) : undefined}
                                             dynamicPositioning={true}
                                             closeOnSelection={true}
                                             placeholder={field.placeholder}

@@ -71,7 +71,7 @@
                         value-format="YYYY-MM-DD"
                         :placeholder="$t('Select Date')"
                     />
-                    <span>{{ $t('If no date is set, current date will be used as the maximum date.') }}</span>
+                    <span>{{ $t('If no date is set, last date of current year will be used as the maximum date.') }}</span>
                 </el-form-item>
                 <el-form-item :label="$t('Format')">
                     <el-select
