@@ -97,8 +97,8 @@
                     <el-select
                         v-model="newBooking.event_time"
                         filterable
-                        :placeholder="$t('Select Time')"
                         popper-class="fcal_select"
+                        :placeholder="$t('Select Time')"
                         :disabled="!newBooking.event_date">
                         <el-option v-for="slot in daySlots"
                             :key="slot.start"
@@ -131,13 +131,19 @@
                 <el-input v-model="newBooking.message" type="textarea" :rows="3"/>
             </el-form-item>
             <el-form-item v-if="isMultiGuestEnabled" :label="multiGuestField.label + (multiGuestField.required ? ' *' : '')">
-                <div class="fcal_new_booking_guests">
+                <div v-if="newBooking.guests.length" class="fcal_new_booking_guests">
                     <div v-for="(guest, index) in newBooking.guests" class="fcal_new_booking_guest">
-                        <el-input v-model="newBooking.guests[index]" type="email"/>
+                        <template v-if="isMultiGuestEvent">
+                            <el-input v-model="newBooking.guests[index].name" type="text" :placeholder="$t('Name')"/>
+                            <el-input v-model="newBooking.guests[index].email" type="email" :placeholder="$t('Email')"/>
+                        </template>
+                        <template v-else>
+                            <el-input v-model="newBooking.guests[index]" type="email" :placeholder="$t('Email')"/>
+                        </template>
                         <el-icon v-if="isRemovable" @click="removeGuest(index)"><CloseBold/></el-icon>
                     </div>
                 </div>
-                <div v-if="isAddable" @click="addNewGuest"> + {{ $t('Add guests') }}</div>
+                <div v-if="isAddable" @click="addNewGuest" style="cursor: pointer"> + {{ $t('Add guests') }}</div>
             </el-form-item>
             <div v-for="field in formFields" :key="field.name">
                 <div v-if="field.enabled && !field.system_defined">
@@ -247,7 +253,7 @@ export default {
                 timezone: '',
                 duration: '',
                 event_date: null,
-                guests: [''],
+                guests: [],
                 event_time: '',
                 host_user_id: null,
                 source_url: window.location.href,
@@ -258,6 +264,7 @@ export default {
             eventYear: new Date().getFullYear(),
             eventMonth: new Date().getMonth(),
             selectEventDate: false,
+            remainingSpot: 1,
             teamMembers: [],
             multiGuestField: [],
             durationLookup: this.appVars.multi_duration_lookup
@@ -286,6 +293,9 @@ export default {
         },
         'newBooking.event_date': function () {
             this.updateDaySlots();
+        },
+        'newBooking.event_time': function () {
+            this.remainingSpot = this.daySlots.find(slot => slot.start == this.newBooking.event_time)?.remaining;
         }
     },
     computed: {
@@ -310,10 +320,17 @@ export default {
         },
         isAddable() {
             const length = this.newBooking.guests.length;
-            return length < this.multiGuestField.limit && this.newBooking.guests[length - 1] != '';
+            return !length || (length < (this.getLimit() - 1) && (
+                this.isMultiGuest()
+                    ? (this.newBooking.guests[length - 1]?.name?.trim() && this.newBooking.guests[length - 1]?.email?.trim())
+                    : this.newBooking.guests[length - 1]?.trim()
+            ));
         },
         isRemovable() {
             return this.newBooking.guests.length > 1;
+        },
+        isMultiGuestEvent() {
+            return ['group', 'group_event'].includes(this.event?.event_type);
         },
         isMultiGuestEnabled() {
             if (this.formFields.length) {
@@ -352,12 +369,9 @@ export default {
                 .then(response => {
                     this.formFields = response.calendar_event.form_fields;
                     this.availableSlots = response.available_slots;
-                    this.locationType = response.calendar_event.slot.location_settings[0].type;
+                    this.locationType = response.calendar_event?.slot?.location_settings[0]?.type;
                     this.teamMembers = response.calendar_event?.team_member_profiles ?? [];
-                    if (this.event?.id != response.calendar_event.slot.id) {
-                        this.event = response.calendar_event.slot;
-                        this.updateDurations();
-                    }
+                    this.maybeUpdateEvent(response);
                 })
                 .catch(errors => {
                     this.$handleError(errors);
@@ -380,6 +394,14 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        maybeUpdateEvent(res) {
+            const calendarEvent = res.calendar_event?.slot;
+            if (this.event?.id != calendarEvent?.id) {
+                this.event = calendarEvent;
+                this.newBooking.guests = [];
+                this.updateDurations();
+            }
         },
         resetSelection() {
             this.newBooking.event_date = null;
@@ -491,8 +513,21 @@ export default {
             }
             return false;
         },
+        isMultiGuest() {
+            return ['group', 'group_event'].includes(this.event?.event_type);
+        },
+        getLimit() {
+            if (this.isMultiGuest()) {
+                return Math.min(this.multiGuestField.limit, this.remainingSpot);
+            }
+            return this.multiGuestField.limit;
+        },
         addNewGuest() {
-            this.newBooking.guests.push('');
+            if (this.isMultiGuest()) {
+                this.newBooking.guests.push({ name: '', email: '' });
+            } else {
+                this.newBooking.guests.push('');
+            }
         },
         removeGuest(index) {
             this.newBooking.guests.splice(index, 1);
@@ -508,6 +543,7 @@ export default {
         updateBookingData() {
             const newBookingData = this.bookingData;
             const eventId = parseInt(newBookingData.event_id);
+            const defaultGuestValue = this.isMultiGuest(this.event) ? ['']: [{ name: '', email: '' }];
             this.newBooking = {
                 ...this.newBooking,
                 event_id: eventId,
@@ -515,7 +551,7 @@ export default {
                 email: newBookingData.email,
                 message: newBookingData.message,
                 timezone: newBookingData.person_time_zone,
-                guests: newBookingData.additional_guests.length ? newBookingData.additional_guests : [''],
+                guests: newBookingData.additional_guests.length ? newBookingData.additional_guests : defaultGuestValue,
             };
             this.customFields = this.updateCustomFieldData(newBookingData);
             this.locationType = newBookingData.location_details?.type;
