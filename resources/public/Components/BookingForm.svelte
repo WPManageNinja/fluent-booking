@@ -290,13 +290,18 @@
         validating = !validating;
         formFields.forEach((field) => {
             field.error = null;
-            if (field.enabled && field.required && !form[field.name]) {
-                if (field.name != 'location' && field.name != 'payment_method') {
+            if (field.enabled && field.required) {
+                if (!form[field.name]) {
+                    if (field.name != 'location' && field.name != 'payment_method') {
+                        hasError = true;
+                        field.error = i18('This field is required.');
+                    }
+                    if (field.name == 'payment_method' && hasPaymentItem()) {
+                        paymentError = true;
+                    }
+                } else if (field.type == 'checkbox' && form[field.name] != 'Yes') {
                     hasError = true;
                     field.error = i18('This field is required.');
-                }
-                if (field.name == 'payment_method' && hasPaymentItem()) {
-                    paymentError = true;
                 }
             }
         });
