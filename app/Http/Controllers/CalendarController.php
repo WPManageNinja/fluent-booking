@@ -678,6 +678,8 @@ class CalendarController extends Controller
 
         $clonedEvent = $originalEvent->replicate();
 
+        $clonedEvent->hash = null;
+
         $clonedEvent->calendar_id = $calendar->id;
 
         $clonedEvent->user_id = $calendar->user_id;

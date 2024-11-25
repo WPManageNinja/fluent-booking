@@ -8,11 +8,7 @@ use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
-use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\CurrenciesHelper;
-use FluentBooking\App\Services\EditorShortCodeParser;
-use FluentBooking\App\Services\LandingPage\LandingPageHandler;
-use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\Framework\Support\Arr;
 
