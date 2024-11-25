@@ -356,7 +356,7 @@ class CalendarService
 
     public static function getCalendarOptionsByTitle($condition = '')
     {
-        $calendarsQuery = Calendar::select(['id', 'title'])
+        $calendarsQuery = Calendar::select(['id', 'title', 'user_id'])
             ->where('status', '!=', 'expired')
             ->with(['slots' => function ($query) {
                 $query->where('status', '!=', 'expired');
