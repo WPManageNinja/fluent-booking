@@ -7,7 +7,6 @@ use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\BookingService;
 use FluentBooking\App\Services\DateTimeHelper;
-use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Hooks\Handlers\FrontEndHandler;
 use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
@@ -38,7 +37,7 @@ class BookingController extends Controller
         $timeSlotService = TimeSlotServiceHandler::initService($calendar, $slot);
 
         if (is_wp_error($timeSlotService)) {
-            return TimeSlotServiceHandler::sendError($timeSlotService, $slot, $timezone);
+            return TimeSlotServiceHandler::sendError($timeSlotService, $slot, $timeZone);
         }
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone);
@@ -96,9 +95,18 @@ class BookingController extends Controller
             $messages['location_description.required'] = __('Please provide attendee\'s address', 'fluent-booking');
         }
 
-        if ($additionalGuests = array_filter(Arr::get($postedData, 'guests', []))) {
-            $postedData['guests'] = array_map('sanitize_email', $additionalGuests);
+        if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
+            if ($calendarEvent->isMultiGuestEvent()) {
+                $additionalGuests = $this->sanitize_mapped_data($additionalGuests);
+                $additionalGuests = array_values(array_filter($additionalGuests, function ($guest) {
+                    return Arr::get($guest, 'name') && Arr::get($guest, 'email');
+                }));
+            } else {
+                $additionalGuests = array_filter(array_map('sanitize_email', $additionalGuests));
+            }
         }
+
+        $postedData['guests'] = $additionalGuests;
 
         $requiredFields = array_filter($calendarEvent->getMeta('booking_fields', []), function ($field) {
             return Arr::isTrue($field, 'required') && Arr::isTrue($field, 'enabled') && (Arr::get($field, 'name') == 'message' || Arr::get($field, 'name') == 'guests');
@@ -175,19 +183,13 @@ class BookingController extends Controller
         } else if (in_array($locationType, ['custom', 'in_person_organizer'])) {
             $locationDetails['description'] = $eventLocations[$locationType]['description'];
         } else if (in_array($locationType, ['google_meet', 'online_meeting', 'zoom_meeting', 'ms_teams'])) {
-            $locationDetails['description'] = $eventLocations[$locationType]['meeting_link'];
+            $locationDetails['description'] = Arr::get($eventLocations[$locationType], 'meeting_link', '');
         }
 
         $bookingData['location_details'] = $locationDetails;
 
         if ($sourceUrl = Arr::get($postedData, 'source_url', '')) {
             $bookingData['source_url'] = sanitize_url($sourceUrl);
-        }
-
-        if ($additionalGuests) {
-            $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
-            $guestLimit = Arr::get($guestField, 'limit', 10);
-            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         if ($hostUserId = Arr::get($postedData, 'host_user_id', null)) {
@@ -200,7 +202,7 @@ class BookingController extends Controller
             $bookingData['host_user_id'] = $hostIds[0];
         }
 
-        // Check if the time is available or not for this slot
+        $availableSpot = false;
         if (!Arr::isTrue($postedData, 'ignore_availability')) {
             $timeSlotService = TimeSlotServiceHandler::initService($calendarEvent->calendar, $calendarEvent);
 
@@ -219,6 +221,16 @@ class BookingController extends Controller
             if ($calendarEvent->isTeamEvent() && !$hostUserId) {
                 $bookingData['host_user_id'] = $timeSlotService->hostUserId;
             }
+        }
+
+        if ($additionalGuests) {
+            $guestField = BookingFieldService::getBookingFieldByName($calendarEvent, 'guests');
+            $guestLimit = Arr::get($guestField, 'limit', 10);
+            if ($calendarEvent->isMultiGuestEvent() && $availableSpot) {
+                $remaining = Arr::get($availableSpot, 'remaining', $calendarEvent->getMaxBookingPerSlot());
+                $guestLimit = min($remaining, $guestLimit) - 1;
+            }
+            $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
         do_action('fluent_booking/before_creating_schedule', $bookingData, $postedData, $calendarEvent);
@@ -282,7 +294,7 @@ class BookingController extends Controller
         $timeSlotService = TimeSlotServiceHandler::initService($calendar, $calendarEvent);
 
         if (is_wp_error($timeSlotService)) {
-            return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timezone);
+            return TimeSlotServiceHandler::sendError($timeSlotService, $calendarEvent, $timeZone);
         }
 
         $availableSpots = $timeSlotService->getAvailableSpots($startDate, $timeZone, $duration, $hostId);
@@ -356,5 +368,15 @@ class BookingController extends Controller
             'bookings' => $formattedBookings,
             'total'    => $totalBookings
         ];
+    }
+
+    private static function sanitize_mapped_data($settings)
+    {
+        $sanitizerMap = [
+            'name'  => 'sanitize_text_field',
+            'email' => 'sanitize_email',
+        ];
+
+        return Helper::fcal_backend_sanitizer($settings, $sanitizerMap);
     }
 }

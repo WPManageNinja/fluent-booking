@@ -14,6 +14,7 @@ class EmailNotificationService
      * @param $email
      * @param $emailTo
      * @param $actionType
+     * @param bool $resending
      * @return bool|mixed
      */
     public static function emailOnBooked(Booking $booking, $email, $emailTo, $actionType = 'scheduled', $resending = false)
@@ -425,6 +426,7 @@ class EmailNotificationService
         
         global $wp_filesystem;
         $wp_filesystem->put_contents($filePath, $icsContent);
+
         return [$filePath];
     }
 

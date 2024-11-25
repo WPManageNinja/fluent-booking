@@ -401,7 +401,7 @@ class BookingFieldService
     {
         foreach ($customFieldsData as $fieldKey => $fieldValue) {
             $field = self::getBookingFieldByName($calendarEvent, $fieldKey);
-            if (Arr::get($field, 'type') == 'date') {
+            if ($fieldValue && Arr::get($field, 'type') == 'date') {
                 $minDate = Arr::get($field, 'min_date');
                 $maxDate = Arr::get($field, 'max_date');
 
