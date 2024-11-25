@@ -169,6 +169,7 @@
 
 .fcal_event_date {
     display: flex;
+    gap: 8px;
     justify-content: space-between;
     .el-form-item__content {
         position: relative;
@@ -1337,10 +1338,10 @@
                         width: 100%;
                         .fcal_new_booking_guest {
                             display: flex;
+                            gap: 8px;
                             margin-bottom: 0.5rem;
                             .el-icon {
                                 cursor: pointer;
-                                margin-left: 0.5rem;
                                 align-self: center;
                             }
                         }

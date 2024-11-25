@@ -766,7 +766,7 @@ class FrontEndHandler
         }
 
         if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
-            if (in_array($calendarEvent->event_type, ['group', 'group_event'])) {
+            if ($calendarEvent->isMultiGuestEvent()) {
                 $additionalGuests = $this->sanitize_mapped_data($additionalGuests);
                 $additionalGuests = array_values(array_filter($additionalGuests, function ($guest) {
                     return Arr::get($guest, 'name') && Arr::get($guest, 'email');
