@@ -18,10 +18,12 @@ class BookingFieldService
 
         foreach ($customFields as $fieldKey => $customField) {
             $value = wp_unslash(Arr::get($postedData, $fieldKey));
-            if (!$value && Arr::isTrue($customField, 'required')) {
-                // translators: %s is the label of the required field
-                $errors[$fieldKey . '.required'] = sprintf(__('%s is required', 'fluent-booking'), $customField['label']);
-                continue;
+            if (Arr::isTrue($customField, 'required')) {
+                if (!$value || ($customField['type'] == 'checkbox' && $value != 'Yes')) {
+                    // translators: %s is the label of the required field
+                    $errors[$fieldKey . '.required'] = sprintf(__('%s is required', 'fluent-booking'), $customField['label']);
+                    continue;
+                }
             }
 
             if (is_array($value)) {
