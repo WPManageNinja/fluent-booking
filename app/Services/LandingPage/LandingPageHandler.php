@@ -179,12 +179,14 @@ class LandingPageHandler
         exit(200);
     }
 
-    private function renderBookingView($calendar, $calendarEvent, $existingBooking = null)
+    private function renderBookingView($calendar, $calendarEvent, $existingBooking = null, $isReschedule = false)
     {
-        $settings = LandingPageHelper::getSettings($calendar, 'public');
-        if ($settings['show_type'] != 'all') {
-            if (!in_array($calendarEvent->id, $settings['enabled_slots'])) {
-                return '';
+        if (!$isReschedule) {
+            $settings = LandingPageHelper::getSettings($calendar, 'public');
+            if ($settings['show_type'] != 'all') {
+                if (!in_array($calendarEvent->id, $settings['enabled_slots'])) {
+                    return '';
+                }
             }
         }
 
@@ -412,7 +414,7 @@ class LandingPageHandler
             <?php
         });
 
-        $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking);
+        $this->renderBookingView($booking->calendar, $booking->calendar_event, $booking, true);
     }
 
     public function getEventLandingExtraJsFiles($formFields, $calendarEvent)
