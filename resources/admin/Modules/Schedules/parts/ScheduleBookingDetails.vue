@@ -12,70 +12,60 @@
                             <el-dropdown-menu>
                                 <el-dropdown-item
                                     v-if="isSingleGuestEvent && isBookingScheduled" @click="sendConfirmationEmail('guest')">
-                                    <el-icon>
-                                        <Message/>
-                                    </el-icon>
+                                    <el-icon><Message/></el-icon>
                                     {{ $t('Send Confirmation Email') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
                                     v-if="canMarkAsPaid" @click="bookingMarkAsPaid">
-                                    <el-icon>
-                                        <Check/>
-                                    </el-icon>
+                                    <el-icon><Check/></el-icon>
                                     {{ $t('Mark As Paid') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-if="canMarkAsCompleted" @click="updateScheduleStatus('completed')">
-                                    <el-icon>
-                                        <Check/>
-                                    </el-icon>
+                                    <el-icon><Check/></el-icon>
                                     {{ $t('Mark As Completed') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-if="canMakeNoShow"
                                     @click="updateScheduleStatus('no_show')">
-                                    <el-icon>
-                                        <Hide/>
-                                    </el-icon>
+                                    <el-icon><Hide/></el-icon>
                                     {{ $t('No Show') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item
                                     v-if="isSingleGuestEvent && !isReservedBooking"
                                     @click="rebookAttendee">
-                                    <el-icon>
-                                        <RefreshRight />
-                                    </el-icon>
+                                    <el-icon><RefreshRight /></el-icon>
                                     {{ $t('Rebook') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
                                     v-if="canReschedule"
                                     @click="rescheduleBooking">
-                                    <el-icon>
-                                        <Refresh/>
-                                    </el-icon>
+                                    <el-icon><Refresh/></el-icon>
                                     {{ $t('Reschedule') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
                                     v-if="canCancel" @click="cancelDialog = true">
-                                    <el-icon>
-                                        <Close/>
-                                    </el-icon>
+                                    <el-icon><Close/></el-icon>
                                     {{ $t('Cancel') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
                                     v-if="!isBookingCompleted" @click="deleteDialog = true">
-                                    <el-icon>
-                                        <Delete/>
-                                    </el-icon>
+                                    <el-icon><Delete/></el-icon>
                                     {{ $t('Delete') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                 </div>
-                <SingleInviteeInfo v-if="!isMultiGuestEvent && !isReservedBooking" :booking="showing_booking"/>
-                <group-booking-guests v-else-if="isMultiGuestEvent && !isReservedBooking"
-                                      :group_id="showing_booking.group_id" @updateAdditionalInfo="updateAdditionalInfo"/>
+                <SingleInviteeInfo
+                    v-if="!isMultiGuestEvent && !isReservedBooking"
+                    :booking="showing_booking"
+                />
+                <group-booking-guests
+                    v-else-if="isMultiGuestEvent && !isReservedBooking"
+                    :group_id="showing_booking.group_id"
+                    @updateAdditionalInfo="updateAdditionalInfo"
+                />
                 <div class="fcal_schedule_event_infos fcal_schedule_event_infos_body">
                     <div class="fcal_schedule_details_header">
                         <h1 class="fcal_header_title">
@@ -139,7 +129,7 @@
                     <div v-if="isReservedBooking"
                         class="fcal_schedule_details_reserve_times">
                         <h3>{{ $t('Reserved Times') }}</h3>
-                        <div class="fcal_reserve_time" v-for="(times, date) in reserveTimes">
+                        <div v-for="(times, date) in reserveTimes" class="fcal_reserve_time">
                             <h4>{{ date }}</h4>
                             <p v-for="(time, indx) in times">
                                 {{ time }}<span v-if="indx < times.length - 1">,</span>
@@ -422,6 +412,7 @@ export default {
             })
                 .then(response => {
                     this.showing_booking = response.schedule;
+                    console.log("showing_booking", this.showing_booking);
 
                     this.activities = response.activities;
                     this.sidebar_contents = response.sidebar_contents;
