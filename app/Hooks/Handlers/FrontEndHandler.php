@@ -14,7 +14,6 @@ use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
 use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\LocationService;
-use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 

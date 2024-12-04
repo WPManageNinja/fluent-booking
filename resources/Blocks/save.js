@@ -1,18 +1,11 @@
-import { InnerBlocks } from '@wordpress/block-editor';
+const { InnerBlocks } = wp.blockEditor;
 
 const Save = props => {
-    const template = () => {
-        return (
-            <>
-                <InnerBlocks.Content />
-            </>
-        );
-    };
-
     return (
-        <div>
-            {template()}
-        </div>
+        <>
+            <InnerBlocks.Content />
+        </>
     );
-};
+}
+
 export default Save;
