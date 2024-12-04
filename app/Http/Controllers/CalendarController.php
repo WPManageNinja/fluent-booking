@@ -2,10 +2,8 @@
 
 namespace FluentBooking\App\Http\Controllers;
 
-use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
