@@ -55,7 +55,7 @@
                 </div>
                 <div class="fcal_schedule_details_event_item">
                     <h3>{{ $t('Booked At') }}</h3>
-                    <p>{{ bookedAtHandler(booking.created_at) }}</p>
+                    <p>{{ toDateFormat(booking.created_at, this.appVars.date_time_formatter) }}</p>
                 </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
                     <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
@@ -138,9 +138,6 @@ export default {
         }
     },
     methods: {
-        bookedAtHandler(date) {
-            return this.toCurrentTimezone(date, this.appVars.date_time_formatter);
-        },
         updateScheduleStatus(newStatus) {
             this.updating = true;
             const data = {
