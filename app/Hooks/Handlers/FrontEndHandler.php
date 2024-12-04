@@ -14,7 +14,6 @@ use FluentBooking\App\Services\LandingPage\LandingPageHandler;
 use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
 use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\LocationService;
-use FluentBooking\App\Services\TimeSlotService;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\Framework\Support\Arr;
 
@@ -677,6 +676,7 @@ class FrontEndHandler
                 'Add guest'                            => __('Add guest', 'fluent-booking'),
                 'Add guests'                           => __('Add guests', 'fluent-booking'),
                 'Add another'                          => __('Add another', 'fluent-booking'),
+                'Choose File'                          => __('Choose File', 'fluent-booking'),
                 'This field is required.'              => __('This field is required.', 'fluent-booking'),
                 'No availability in'                   => __('No availability in', 'fluent-booking'),
                 'View next month'                      => __('View next month', 'fluent-booking'),
