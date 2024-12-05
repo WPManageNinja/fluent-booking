@@ -263,6 +263,19 @@ class Booking extends Model
         return $query->where('status', $status);
     }
 
+    public function scopeApplyBookingOrderByStatus($query, $status)
+    {
+        if ($status == 'upcoming') {
+            return $query->orderBy('start_time', 'ASC');
+        }
+
+        if ($status == 'latest_bookings') {
+            return $query->orderBy('created_at', 'DESC');
+        }
+
+        return $query->orderBy('start_time', 'DESC');
+    }
+
     public function getFullBookingDateTimeText($timeZone = 'UTC', $isHtml = false)
     {
         $startDateTime = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'Y-m-d H:i:s');
