@@ -704,7 +704,6 @@
           .fcal_spot_desc {
             margin-right: auto;
             padding-left: 30px;
-            min-width: 400px;
 
             display: flex;
             flex-direction: column;
@@ -715,13 +714,6 @@
               align-items: center;
               gap: 6px;
               margin-top: 8px;
-            }
-            @media (max-width: 1096px) {
-                min-width: 250px;
-                max-width: 250px;
-            }
-            @media (max-width: 575px) {
-                min-width: inherit;
             }
             h3 {
               font-size: 14px;
