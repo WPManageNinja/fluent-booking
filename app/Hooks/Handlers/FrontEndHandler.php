@@ -334,8 +334,8 @@ class FrontEndHandler
 
         $bookingQuery = Booking::query()->with('calendar_event')
             ->where('email', $userEmail)
-            ->orderBy('start_time', 'DESC')
-            ->applyComputedStatus($bookingPeriod);
+            ->applyComputedStatus($bookingPeriod)
+            ->applyBookingOrderByStatus($bookingPeriod);
 
         if ($atts['calendar_ids'] != 'all') {
             $atts['calendar_ids'] = array_map('intval', explode(',', $atts['calendar_ids']));

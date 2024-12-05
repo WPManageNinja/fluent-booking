@@ -412,7 +412,6 @@ export default {
             })
                 .then(response => {
                     this.showing_booking = response.schedule;
-                    console.log("showing_booking", this.showing_booking);
 
                     this.activities = response.activities;
                     this.sidebar_contents = response.sidebar_contents;
