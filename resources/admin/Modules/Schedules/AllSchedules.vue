@@ -126,7 +126,7 @@
                                         :key="schedule.id"
                                         :class="{ fcal_is_current: schedule.id == booking_id }"
                                         class="fcal_each_spot">
-                                        <booking-card 
+                                        <booking-card
                                             :period="filters.period"
                                             :showing_id="booking_id"
                                             :multi_host="filters.author != 'me'"
@@ -233,23 +233,33 @@ export default {
         },
         formattedSchedules() {
             const items = {};
-            if(this.filters.period == 'latest_bookings') {
+            let compareTime = 'start_time';
+            const period = this.filters.period;
+            const isDescending = ['completed', 'cancelled'].includes(period);
+            if(period == 'latest_bookings') {
                 if (this.schedules.length) {
                     items[this.$t('Sorted by booked at date time')] = this.schedules;
                 }
                 return items;
             }
 
+            if (isDescending) {
+                compareTime = 'updated_at';
+            }
+
             each(this.schedules, (schedule) => {
-                const startTime = schedule.start_time;
-                let date = this.toCurrentTimezone(startTime, this.appVars.date_format);
+                const time = schedule[compareTime];
+                let date = this.toCurrentTimezone(time, this.appVars.date_format);
                 items[date] = items[date] || [];
                 items[date].push(schedule);
             });
 
             const sortedSchedules = {};
             Object.keys(items)
-                .sort((a, b) => new Date(a) - new Date(b))
+                .sort((a, b) => isDescending ?
+                    new Date(b) - new Date(a) :
+                    new Date(a) - new Date(b)
+                )
                 .forEach((date) => {
                     sortedSchedules[date] = items[date];
                 });
