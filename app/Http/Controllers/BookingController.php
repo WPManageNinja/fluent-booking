@@ -334,8 +334,8 @@ class BookingController extends Controller
 
         $bookingQuery = Booking::query()->with('calendar_event')
             ->where('email', $userEmail)
-            ->orderBy('start_time', 'DESC')
-            ->applyComputedStatus($bookingPeriod);
+            ->applyComputedStatus($bookingPeriod)
+            ->applyBookingOrderByStatus($bookingPeriod);
         
         $calendarIds = $request->get('calendar_ids', []);
 
