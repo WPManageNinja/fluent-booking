@@ -273,6 +273,10 @@ class Booking extends Model
             return $query->orderBy('created_at', 'DESC');
         }
 
+        if (in_array($status, ['completed', 'cancelled'])) {
+            return $query->orderBy('updated_at', 'DESC');
+        }
+
         return $query->orderBy('start_time', 'DESC');
     }
 
