@@ -93,12 +93,14 @@ class EditorShortCodeParser
             return $booking->start_time;
         }
 
-        if ($key == 'start_date_time_for_attendee') {
-            return DateTimeHelper::convertFromUtc($booking->start_time, $booking->person_time_zone, 'Y-m-d H:i:s');
+        if (str_starts_with($key, 'start_date_time_for_attendee')) {
+            $format = preg_match('/format\.([a-zA-Z\-]+)/', $key, $matches) ? $matches[1] : 'Y-m-d H:i:s';
+            return DateTimeHelper::convertFromUtc($booking->start_time, $booking->person_time_zone, $format);
         }
 
-        if ($key == 'start_date_time_for_host') {
-            return DateTimeHelper::convertFromUtc($booking->start_time, $booking->getHostTimezone(), 'Y-m-d H:i:s');
+        if (str_starts_with($key, 'start_date_time_for_host')) {
+            $format = preg_match('/format\.([a-zA-Z\-]+)/', $key, $matches) ? $matches[1] : 'Y-m-d H:i:s';
+            return DateTimeHelper::convertFromUtc($booking->start_time, $booking->getHostTimezone(), $format);
         }
 
         if ($key == 'cancel_reason') {
@@ -185,7 +187,7 @@ class EditorShortCodeParser
         if (self::$store['custom_booking_data']) {
             if (preg_match('/format\.([a-zA-Z\-]+)/', $key, $matches)) {
                 $value = Arr::get(self::$store['custom_booking_data'], preg_split('/\.format\./', $key)[0]);
-                return gmdate($matches[1], strtotime($value)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                return $value ? gmdate($matches[1], strtotime($value)) : ''; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
             }
 
             $customField = BookingFieldService::getBookingFieldByName($booking->calendar_event, $key);
