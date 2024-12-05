@@ -298,10 +298,13 @@ class Booking extends Model
     public function getShortBookingDateTime($timeZone = 'UTC')
     {
         // date format for Fri Feb 10, 2023
-        $html = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'D M d, Y');
-        $html .= ' ' . DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
+        $startDate = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'D M d, Y');
+        $startTime = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
 
-        return $html;
+        $localDate = date_i18n('D M d, Y', strtotime($startDate));
+        $localTime = date_i18n('h:ia', strtotime($startTime));
+
+        return $localDate . ' ' . $localTime;
     }
 
     public function getPreviousMeetingTime($timeZone = 'UTC')
