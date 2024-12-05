@@ -104,11 +104,11 @@ class EditorShortCodeParser
         }
 
         if ($key == 'cancel_reason') {
-            return $booking->getCancelReason(true);
+            return $booking->getCancelReason(false, true);
         }
 
         if ($key == 'reject_reason') {
-            return $booking->getRejectReason(true);
+            return $booking->getRejectReason(false, true);
         }
 
         if ($key == 'reschedule_reason') {
