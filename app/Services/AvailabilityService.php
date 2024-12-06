@@ -216,7 +216,8 @@ class AvailabilityService
             }
             
             $schedule['enabled'] = true;
-            
+
+            $nextDay = null;
             $nextDayIndex = 0;
             $dayIndex = array_search($day, $weekDays);
             foreach ($schedule['slots'] as $index => $slot) {
