@@ -355,6 +355,10 @@ class SchedulesController extends Controller
         $activities = BookingActivity::where('booking_id', $booking->id)
             ->orderBy('id', 'DESC')
             ->get();
+        
+        $activities->each(function ($activity) {
+            $activity->description = wp_unslash($activity->description);
+        });
 
         $sidebarContents = [];
         $mainBodyContents = [];
