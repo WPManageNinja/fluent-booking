@@ -376,6 +376,10 @@ class DateTimeHelper
 
         $isDstActive = $dateTimeObject->format('I');
 
+        if ($timezone == 'Europe/Dublin') {
+            return !$isDstActive;
+        }
+
         return $isDstActive;
     }
 }
