@@ -101,7 +101,7 @@
                                     <template v-else>
                                         <el-input
                                             v-model="field.value"
-                                            :type="bookingField(field.name)?.type"
+                                            :type="getFieldType(field.name)"
                                             :placeholder="field.placeholder">
                                         </el-input>
                                     </template>
@@ -182,6 +182,12 @@ export default {
             return (name) => {
                 return this.bookingFields.find(field => field.name == name);
             }
+        },
+        getFieldType() {
+            return (name) => {
+                const fieldType = this.bookingField(name)?.type;
+                return fieldType == 'hidden' ? 'text' : fieldType;
+            }
         }
     },
     methods: {
@@ -213,7 +219,7 @@ export default {
             this.$handleSuccess(this.$t('Copied to clipboard'));
         },
         updateBookingFields() {
-            const allowTypes = ['text', 'email', 'phone', 'number', 'dropdown', 'radio', 'checkbox', 'multi-select'];
+            const allowTypes = ['text', 'email', 'phone', 'number', 'hidden', 'dropdown', 'radio', 'checkbox', 'multi-select'];
             this.fieldTypes = [
                 { label: 'Date', value: 'date' },
                 { label: 'Time', value: 'time' },
