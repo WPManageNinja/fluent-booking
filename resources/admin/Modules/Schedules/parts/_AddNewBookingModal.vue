@@ -98,7 +98,7 @@
                         v-model="newBooking.event_time"
                         filterable
                         popper-class="fcal_select"
-                        :placeholder="$t('Select Time')"
+                        :placeholder="$t('Search and Select Time')"
                         :disabled="!newBooking.event_date">
                         <el-option v-for="slot in daySlots"
                             :key="slot.start"
@@ -432,7 +432,7 @@ export default {
                     remaining: false,
                 };
                 defaultSlots.push(slot);
-                startTime = startTime.add(10, 'minutes');
+                startTime = startTime.add(5, 'minutes');
             }
             return defaultSlots;
         },
