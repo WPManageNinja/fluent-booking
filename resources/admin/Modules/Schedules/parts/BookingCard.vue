@@ -111,7 +111,8 @@ export default {
             return price;
         },
         isUnconfirmed() {
-            return this.booking.status === 'pending' && this.booking.payment_status != 'pending';
+            const isConfRequired = this.booking.calendar_event?.settings?.requires_confirmation?.enabled;
+            return this.booking.status === 'pending' && this.booking.payment_status != 'pending' && isConfRequired;
         },
         getStatusClass() {
             if (['no_show', 'reserved'].includes(this.booking.status)) {
