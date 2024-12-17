@@ -129,11 +129,16 @@ export default {
             this.saveSettings();
         },
         removeTeamMember(id) {
-            if (this.calendar_event.user_id != id) {
-                this.settings.team_members = this.settings.team_members.filter(memberId => memberId !== id);
-                this.saveSettings();
+            const userId = this.calendar_event.user_id;
+            if (userId == id && this.isMultiHosts) {
+                this.$handleError({ message: this.$t('Sorry! you cannot remove the organizer') });
+                return;
             }
-            this.$handleError({ message: this.$t('You cannot remove the organizer') });
+            if (userId == id) {
+                this.calendar_event.user_id = this.settings.team_members.find(memberId => memberId !== id);
+            }
+            this.settings.team_members = this.settings.team_members.filter(memberId => memberId !== id);
+            this.saveSettings();
         },
         updatefilteredHosts() {
             this.filteredHosts = this.all_hosts

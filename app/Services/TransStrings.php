@@ -333,6 +333,7 @@ class TransStrings
             'Allow Multiple Booking'                                                           => __('Allow Multiple Booking', 'fluent-booking'),
             'Sorry! you can not cancel this'                                                   => __('Sorry! you can not cancel this', 'fluent-booking'),
             'Sorry! you can not reschedule this'                                               => __('Sorry! you can not reschedule this', 'fluent-booking'),
+            'Sorry! you cannot remove the organizer'                                           => __('Sorry! you cannot remove the organizer', 'fluent-booking'),
             'Requires Confirmation'                                                            => __('Requires Confirmation', 'fluent-booking'),
             'When booking notice is less than'                                                 => __('When booking notice is less than', 'fluent-booking'),
             'When meeting starts in less than'                                                 => __('When meeting starts in less than', 'fluent-booking'),
