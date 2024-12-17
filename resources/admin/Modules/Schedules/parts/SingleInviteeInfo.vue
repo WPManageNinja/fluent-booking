@@ -123,7 +123,8 @@ export default {
     },
     computed: {
         isUnconfirmed() {
-            return this.booking.status == 'pending' && this.booking.payment_status != 'pending';
+            const isConfRequired = this.booking.calendar_event?.settings?.requires_confirmation?.enabled;
+            return this.booking.status === 'pending' && this.booking.payment_status != 'pending' && isConfRequired;
         },
         isRefundable() {
             return this.booking.payment_method == 'stripe' && this.booking.payment_status != 'refunded';
