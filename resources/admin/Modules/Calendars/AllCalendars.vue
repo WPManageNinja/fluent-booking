@@ -170,8 +170,8 @@
                     <p>{{ $t('Please select the members you want to assign to this team') }}</p>
                 </el-form-item>
                 <el-button
-                    :disabled="!team_name || !team_members.length"
-                    @click="createTeamEvent('round_robin')">
+                    @click="createTeamEvent('round_robin')"
+                    :disabled="!team_name || !team_members.length">
                     <div class="icons-wrap">
                         <el-icon><User/></el-icon>
                         <el-icon><User/></el-icon>
@@ -180,9 +180,26 @@
                     </div>
                     <div class="content">
                         <h3>{{ $t('Round Robin') }}</h3>
-                        <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span>
-                            <strong>{{ $t('One invitee') }}</strong></h4>
+                        <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
                         <p>{{ $t('Good for: distributing incoming sales leads.') }}</p>
+                        <el-icon class="icon-right"><Right/></el-icon>
+                    </div>
+                </el-button>
+                <el-button
+                    @click="createTeamEvent('collective')"
+                    :disabled="!team_name || !team_members.length">
+                    <div class="icons-wrap">
+                        <el-icon><User/></el-icon>
+                        <el-icon><User /></el-icon>
+                        <el-icon><Right/></el-icon>
+                        <div class="icons">
+                            <el-icon><User/></el-icon>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3>{{ $t('Collective') }}</h3>
+                        <h4><strong>{{ $t('Multiple hosts') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                        <p>{{ $t('Good for: Panel interviews, group sales calls, etc.') }}</p>
                         <el-icon class="icon-right"><Right/></el-icon>
                     </div>
                 </el-button>
