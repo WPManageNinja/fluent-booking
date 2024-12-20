@@ -141,12 +141,11 @@ class AvailabilityService
             }
             
             $scheduleOptions[$hostName] = $scheduleOptions[$hostName] ?? [];
-            
-            $default = Arr::isTrue($availability, 'value.default') ? ' (Default)' : '';
-            
+
             $scheduleOptions[$hostName][] = [
-                'label' => Arr::get($availability, 'key') . $default,
-                'value' => Arr::get($availability, 'id')
+                'label'   => Arr::get($availability, 'key'),
+                'value'   => Arr::get($availability, 'id'),
+                'default' => Arr::isTrue($availability, 'value.default')
             ];
         }
 
@@ -155,14 +154,11 @@ class AvailabilityService
 
     public static function getDefaultSchedule($userId)
     {
-        $schedules = Availability::where('object_id', $userId)->get();
-
-        foreach ($schedules as $schedule) {
-            if (Arr::isTrue($schedule, 'value.default')) {
-                return $schedule;
-            }
-        }
-        return null;
+        return Availability::where('object_id', $userId)
+            ->get()
+            ->first(function ($schedule) {
+                return Arr::isTrue($schedule, 'value.default');
+            });
     }
 
     public static function createScheduleSchema($userId, $title, $default, $fromTimezone, $toTimezone = 'UTC', $weeklySchedule = [], $dateOverrides = [])
