@@ -921,7 +921,7 @@ class Booking extends Model
 
     public function isMultiHostBooking()
     {
-        return $this->event_type == 'single_event' || $this->event_type == 'group_event';
+        return in_array($this->event_type, ['single_event', 'group_event', 'collective']);
     }
 
     public function getHostProfiles($public = true)

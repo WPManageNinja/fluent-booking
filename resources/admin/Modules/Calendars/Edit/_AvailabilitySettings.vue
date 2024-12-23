@@ -118,22 +118,30 @@
                                                 </div>
                                                 <h3>{{ member.name }}</h3>
                                             </div>
-                                            <el-select v-model="hostSchedules[member.id]"
-                                                :placeholder="$t('Select Schedule')"
-                                                popper-class="fcal_select fcal_team_member_select"
-                                                class="fcal_timezone"
-                                                :no-match-text="$t('No Data match')"
-                                                :no-data-text="$t('No Data')">
-                                                <el-option v-for="schedule in getScheduleOptions(member.name)"
-                                                    :key="schedule.value"
-                                                    :label="schedule.label + ' ' + (schedule.default ? '(' + $t('Default') + ')' : '')"
-                                                    :value="schedule.value">
-                                                    {{ schedule.label }}
-                                                    <span v-if="schedule.default" class="default_schedule">
-                                                        {{ $t('Default') }}
-                                                    </span>
-                                                </el-option>
-                                            </el-select>
+                                            <div class="fcal_select_host_schedule_wrap">
+                                                <el-select v-model="hostSchedules[member.id]"
+                                                    :placeholder="$t('Select Schedule')"
+                                                    popper-class="fcal_select fcal_team_member_select"
+                                                    class="fcal_timezone"
+                                                    :no-match-text="$t('No Data match')"
+                                                    :no-data-text="$t('No Data')">
+                                                    <el-option v-for="schedule in getScheduleOptions(member.name)"
+                                                        :key="schedule.value"
+                                                        :label="schedule.label + ' ' + (schedule.default ? '(' + $t('Default') + ')' : '')"
+                                                        :value="schedule.value">
+                                                        {{ schedule.label }}
+                                                        <span v-if="schedule.default" class="default_schedule">
+                                                            {{ $t('Default') }}
+                                                        </span>
+                                                    </el-option>
+                                                </el-select>
+                                                <el-button
+                                                    v-if="hostSchedules[member.id]"
+                                                    class="fcal_plain_btn edit_schedule_btn"
+                                                    @click="goToAvailability(hostSchedules[member.id])">
+                                                    <el-icon><EditPen /></el-icon>
+                                                </el-button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -156,6 +164,8 @@ import ExistingSchedule from './_ExistingSchedule';
 import ScheduleIcon from "../../../Components/Icons/ScheduleIcon";
 import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 import SaveButton from "@/Components/Buttons/SaveButton";
+import { EditPen } from '@element-plus/icons-vue';
+
 export default {
     name: '_AvailabilitySettings',
     components: {
@@ -164,7 +174,8 @@ export default {
         ExistingSchedule,
         SaveButton,
         ScheduleIcon,
-        TimezoneIcon
+        TimezoneIcon,
+        EditPen
     },
     props: {
         calendar_event: {
@@ -204,6 +215,12 @@ export default {
         }
     },
     methods: {
+        goToAvailability(scheduleId) {
+            this.$router.push({
+                name: 'availability_details',
+                params: { schedule_id: scheduleId }
+            })
+        },
         disabledDate(time) {
             return (time.getTime() + 86400000) <= Date.now();
         },
