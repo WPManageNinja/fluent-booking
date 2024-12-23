@@ -566,7 +566,6 @@ class TimeSlotService
         $this->hostId = $hostId;
 
         $event    = $this->calendarSlot;
-        $calendar = $this->calendar;
         $duration = $event->getDuration($duration);
 
         $startDate = $this->adjustStartDate($startDate, $timeZone);

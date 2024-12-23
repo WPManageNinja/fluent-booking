@@ -402,7 +402,7 @@ class CalendarSlot extends Model
     public function getScheduleTimezone($hostId = null)
     {
         if ($hostId && !$this->isTeamCommonSchedule()) {
-            $schedule = AvailabilityService::getDefaultSchedule($hostId);
+            $schedule = $this->getHostSchedule($hostId);
             return Arr::get($schedule, 'value.timezone', 'UTC');
         }
 
@@ -963,6 +963,11 @@ class CalendarSlot extends Model
         return $this->isRoundRobin() && $this->isTeamCommonSchedule();
     }
 
+    public function isCollectiveDefaultSchedule()
+    {
+        return $this->isCollective() && $this->isTeamDefaultSchedule();
+    }
+
     private function getProcessedWeeklySlots($schedule)
     {
         $scheduleData = Arr::get($schedule, 'value.weekly_schedules', []);
@@ -984,7 +989,7 @@ class CalendarSlot extends Model
     public function getWeeklySlots($hostId = null)
     {
         if ($hostId && !$this->isTeamCommonSchedule()) {
-            $schedule = AvailabilityService::getDefaultSchedule($hostId);
+            $schedule = $this->getHostSchedule($hostId);
             return $this->getProcessedWeeklySlots($schedule);
         }
 
@@ -1001,7 +1006,7 @@ class CalendarSlot extends Model
     public function getDateOverrides($hostId = null)
     {
         if ($hostId && !$this->isTeamCommonSchedule()) {
-            $schedule = AvailabilityService::getDefaultSchedule($hostId);
+            $schedule = $this->getHostSchedule($hostId);
             return $this->getProcessedDateOverrides($schedule);
         }
 
@@ -1073,6 +1078,24 @@ class CalendarSlot extends Model
         }
 
         return wp_parse_args($settings, $defaults);
+    }
+
+    public function getHostSchedule($hostId) 
+    {
+        $hostSchedules = Arr::get($this->settings, 'hosts_schedules', []);
+        if (isset($hostSchedules[$hostId])) {
+            return Availability::find($hostSchedules[$hostId]);
+        }
+        return AvailabilityService::getDefaultSchedule($hostId);
+    }
+
+    public function getHostsSchedules() {
+        $hostIds = $this->getHostIds();
+        $hostSchedules = Arr::get($this->settings, 'hosts_schedules', []);
+        foreach ($hostIds as $hostId) {
+            $hostSchedules[$hostId] = $hostSchedules[$hostId] ?? AvailabilityService::getDefaultSchedule($hostId)['id'];
+        }
+        return $hostSchedules;
     }
 
     public function getCalendarEventsMeta()

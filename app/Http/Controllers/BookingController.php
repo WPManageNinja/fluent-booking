@@ -197,7 +197,7 @@ class BookingController extends Controller
         }
 
         $hostIds = null;
-        if ($calendarEvent->isTeamEvent() && !$hostUserId) {
+        if ($calendarEvent->isRoundRobin() && !$hostUserId) {
             $hostIds = $calendarEvent->getHostIdsSortedByBookings($startDateTime);
             $bookingData['host_user_id'] = $hostIds[0];
         }
@@ -218,7 +218,7 @@ class BookingController extends Controller
                 ], 422);
             }
 
-            if ($calendarEvent->isTeamEvent() && !$hostUserId) {
+            if ($calendarEvent->isRoundRobin() && !$hostUserId) {
                 $bookingData['host_user_id'] = $timeSlotService->hostUserId;
             }
         }
