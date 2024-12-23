@@ -27,7 +27,7 @@
                     </el-option-group>
                 </el-select>
             </el-form-item>
-            <el-form-item v-if="teamMembers.length" :label="$t('Select Host')">
+            <el-form-item v-if="isRoundRobinEvent" :label="$t('Select Host')">
                 <el-select
                     v-model="newBooking.host_user_id"
                     :clearable="true"
@@ -347,6 +347,9 @@ export default {
         },
         isAboutRequired() {
             return this.formFields.length && this.formFields.find(field => field.name === 'message' && field.required);
+        },
+        isRoundRobinEvent() {
+            return this.teamMembers.length && this.event?.event_type == 'round_robin';
         },
         getDuration() {
             return (duration) => {
