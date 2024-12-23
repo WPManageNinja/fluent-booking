@@ -963,6 +963,11 @@ class CalendarSlot extends Model
         return $this->isRoundRobin() && $this->isTeamCommonSchedule();
     }
 
+    public function isCollectiveDefaultSchedule()
+    {
+        return $this->isCollective() && $this->isTeamDefaultSchedule();
+    }
+
     private function getProcessedWeeklySlots($schedule)
     {
         $scheduleData = Arr::get($schedule, 'value.weekly_schedules', []);
