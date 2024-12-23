@@ -11,28 +11,16 @@
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item command="disable" v-if="slot.status == 'active'">
-                                    <el-icon>
-                                        <SwitchButton/>
-                                    </el-icon>
-                                    {{ $t('Disable') }}
+                                    <el-icon><SwitchButton/></el-icon> {{ $t('Disable') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item command="enable" v-else>
-                                    <el-icon>
-                                        <SwitchButton />
-                                    </el-icon>
-                                    {{ $t('Enable') }}
+                                    <el-icon><SwitchButton/></el-icon> {{ $t('Enable') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item command="clone">
-                                    <el-icon>
-                                        <CopyDocument/>
-                                    </el-icon>
-                                    {{ $t('Clone') }}
+                                    <el-icon><CopyDocument/></el-icon> {{ $t('Clone') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item command="delete">
-                                    <el-icon>
-                                        <Delete/>
-                                    </el-icon>
-                                    {{ $t('Delete') }}
+                                    <el-icon><Delete/></el-icon> {{ $t('Delete') }}
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
@@ -52,12 +40,12 @@
             <p class="fcal_slot_meta">
                 <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon>{{ getDuration(slot.duration) }}</span>
                 <span class="fcal_slot_meta_event">
-                    <span class="icons" :class="isTeam ? 'round-robin-icons' : ''">
+                    <span class="icons" :class="eventType">
                         <span class="left-icons">
                             <template v-if="!isGroupEvent">
                                 <el-icon><User/></el-icon>
                                 <el-icon v-if="isTeam || isEventCalendar"><User/></el-icon>
-                                <el-icon v-if="isTeam"><User/></el-icon>
+                                <el-icon v-if="isRoundRobin"><User/></el-icon>
                             </template>
                             <div v-else class="icons">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="-mt-px mr-1 inline h-3 w-3"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -77,7 +65,7 @@
                 </span>
                 <span v-if="slot.price_total" class="fcal_slot_meta_event">
                     <el-icon><CreditCard/></el-icon>
-                    <span>{{currencyFormat(slot.price_total)}}</span>
+                    <span>{{ currencyFormat(slot.price_total) }}</span>
                 </span>
                 <span v-else-if="slot.type == 'woo'">
                     <el-icon>
@@ -172,7 +160,10 @@ export default {
     },
     computed: {
         isTeam() {
-            return this.eventType == 'round_robin' || this.eventType == 'collective';
+            return ['round_robin', 'collective'].includes(this.eventType);
+        },
+        isRoundRobin() {
+            return this.eventType == 'round_robin';
         },
         isGroup() {
             return this.eventType == 'group';
@@ -181,7 +172,7 @@ export default {
             return this.eventType == 'group_event';
         },
         isEventCalendar() {
-            return this.eventType == 'single_event' || this.eventType == 'group_event';
+            return ['single_event', 'group_event'].includes(this.eventType);
         },
         isMultiHostEvent() {
             return this.isTeam || this.isEventCalendar;

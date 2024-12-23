@@ -41,7 +41,7 @@
                 </div>
                 <div style="color: red;" v-if="isDisabledSelected(slot.location_settings[i].type)">
                     {{ $t('LocationSelector/error_location_description') }} {{ errorText(slot.location_settings[i].type) }}
-                    <span v-if="slot.event_type != 'round_robin' && errorText(slot.location_settings[i].type)">
+                    <span v-if="!isTeamEvent && errorText(slot.location_settings[i].type)">
                         <a @click="maybeCreateAndGotoSetting(slot.location_settings[i].type)">{{ $t('click here') }}</a>
                     </span>
                 </div>
@@ -122,6 +122,9 @@ export default {
         }
     },
     computed: {
+        isTeamEvent() {
+            return ['round_robin', 'collective'].includes(this.slot.event_type);
+        },
         isDisabledSelected() {
             return (selectedType) => {
                 const locationType = this.slot.settings?.location_fields?.conferencing?.options[selectedType];

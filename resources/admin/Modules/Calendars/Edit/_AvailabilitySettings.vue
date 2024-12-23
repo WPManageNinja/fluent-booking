@@ -55,18 +55,21 @@
                                         popper-class="fcal_select"
                                         class="fcal_timezone"
                                         :no-match-text="$t('No Data match')"
-                                        :no-data-text="$t('No Data')"
-                                    >
+                                        :no-data-text="$t('No Data')">
                                         <el-option-group
                                             v-for="(schedulesHosts, host) in scheduleOptions"
-                                                :key="host"
-                                                :label="host">
-                                                <el-option
-                                                    v-for="schedule in schedulesHosts"
-                                                    :key="schedule.value"
-                                                    :label="schedule.label"
-                                                    :value="schedule.value">
-                                                </el-option>
+                                            :key="host"
+                                            :label="host">
+                                            <el-option
+                                                v-for="schedule in schedulesHosts"
+                                                :key="schedule.value"
+                                                :label="schedule.label + ' ' + (schedule.default ? '(' + $t('Default') + ')' : '')"
+                                                :value="schedule.value">
+                                                {{ schedule.label }}
+                                                <span v-if="schedule.default" class="default_schedule">
+                                                    {{ $t('Default') }}
+                                                </span>
+                                            </el-option>
                                         </el-option-group>
                                     </el-select>
                                     <ExistingSchedule
@@ -74,7 +77,6 @@
                                         :timezone="selectedSchedule.timezone"
                                         :availability_id="calendar_event.availability_id"
                                     />
-
                                 </div>
                                 <el-skeleton v-else :rows="5" animated />
                             </el-tab-pane>
@@ -93,11 +95,58 @@
                                             :settings="settings"
                                             :title="$t('Add date overrides')"
                                         />
-
                                     </div>
                                 </div>
                             </el-tab-pane>
                         </el-tabs>
+                    </el-form-item>
+                    <el-form-item v-if="!showAvailability">
+                        <div class="fcal_event_card fcal_event_card_wrap">
+                            <div class="fcal_event_card_header">
+                                <div class="card_contents">
+                                    <span class="sub-label card-title">{{ $t("Choose Host Schedules") }}</span>
+                                    <span>{{ $t("ScheduleSettings/choose_host_schedules_description") }}</span>
+                                </div>
+                            </div>
+                            <div class="fcal_event_child_card">
+                                <div v-if="!loading" class="fcal_team_members">
+                                    <div v-for="member in teamMembers" :key="member.id" class="fcal_team_member">
+                                        <div class="fcal_host_schedule_wrap">
+                                            <div class="fcal_card_wrap">
+                                                <div class="fcal_team_member_icon">
+                                                    <img :src="member.avatar"/>
+                                                </div>
+                                                <h3>{{ member.name }}</h3>
+                                            </div>
+                                            <div class="fcal_select_host_schedule_wrap">
+                                                <el-select v-model="hostSchedules[member.id]"
+                                                    :placeholder="$t('Select Schedule')"
+                                                    popper-class="fcal_select fcal_team_member_select"
+                                                    class="fcal_timezone"
+                                                    :no-match-text="$t('No Data match')"
+                                                    :no-data-text="$t('No Data')">
+                                                    <el-option v-for="schedule in getScheduleOptions(member.name)"
+                                                        :key="schedule.value"
+                                                        :label="schedule.label + ' ' + (schedule.default ? '(' + $t('Default') + ')' : '')"
+                                                        :value="schedule.value">
+                                                        {{ schedule.label }}
+                                                        <span v-if="schedule.default" class="default_schedule">
+                                                            {{ $t('Default') }}
+                                                        </span>
+                                                    </el-option>
+                                                </el-select>
+                                                <el-button
+                                                    v-if="hostSchedules[member.id]"
+                                                    class="fcal_plain_btn edit_schedule_btn"
+                                                    @click="goToAvailability(hostSchedules[member.id])">
+                                                    <el-icon><EditPen /></el-icon>
+                                                </el-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </el-form-item>
                 </el-form>
             </div>
@@ -115,6 +164,8 @@ import ExistingSchedule from './_ExistingSchedule';
 import ScheduleIcon from "../../../Components/Icons/ScheduleIcon";
 import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 import SaveButton from "@/Components/Buttons/SaveButton";
+import { EditPen } from '@element-plus/icons-vue';
+
 export default {
     name: '_AvailabilitySettings',
     components: {
@@ -123,7 +174,8 @@ export default {
         ExistingSchedule,
         SaveButton,
         ScheduleIcon,
-        TimezoneIcon
+        TimezoneIcon,
+        EditPen
     },
     props: {
         calendar_event: {
@@ -142,9 +194,12 @@ export default {
         return {
             loading: false,
             saving: false,
+            teamMembers: [],
             scheduleOptions: [],
             availableSchedules: [],
-            settings: this.calendar_event.settings
+            allHosts: this.appVars.all_hosts,
+            settings: this.calendar_event.settings,
+            hostSchedules: this.calendar_event.settings?.hosts_schedules || {},
         }
     },
     computed: {
@@ -160,8 +215,25 @@ export default {
         }
     },
     methods: {
+        goToAvailability(scheduleId) {
+            this.$router.push({
+                name: 'availability_details',
+                params: { schedule_id: scheduleId }
+            })
+        },
         disabledDate(time) {
             return (time.getTime() + 86400000) <= Date.now();
+        },
+        updateTeamMembers() {
+            this.teamMembers = this.settings.team_members.map((id) => {
+                return this.allHosts.find(host => host.id == id);
+            }).filter(host => host);
+        },
+        getScheduleOptions(hostName) {
+            if (hostName == this.appVars.me.full_name) {
+                hostName = 'My Schedules';
+            }
+            return this.scheduleOptions[hostName] || [];
         },
         getAvailabilitySettings() {
             this.loading = true;
@@ -192,6 +264,7 @@ export default {
                 common_schedule: this.settings.common_schedule,
                 availability_type: this.calendar_event.availability_type,
                 availability_id: this.calendar_event.availability_id,
+                hosts_schedules: this.hostSchedules
             })
                 .then(response => {
                     this.$handleSuccess(response);
@@ -207,7 +280,10 @@ export default {
     mounted() {
         this.getAvailabilitySettings();
         this.calendar_event.availability_id ??= this.settings.available_schedules[0].id;
-        this.calendar_event.availability_id = parseInt(this.calendar_event.availability_id);    
+        this.calendar_event.availability_id = parseInt(this.calendar_event.availability_id);
+        if (!this.disabled) {
+            this.updateTeamMembers();
+        }
     }
 }
 </script>

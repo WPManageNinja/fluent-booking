@@ -27,7 +27,7 @@
                         </el-form-item>
                         <el-form-item :label="getListLabel">
                             <div class="fcal_team_members">
-                                <div v-if="!loading" v-for="member in teamMembers" :key="member.id" class="fcal_team_member">
+                                <div v-for="member in teamMembers" :key="member.id" class="fcal_team_member">
                                     <div class="fcal_card_wrap">
                                         <div class="fcal_team_member_icon">
                                             <img :src="member.avatar"/>
@@ -54,9 +54,6 @@
                                             <el-icon><Delete/></el-icon>
                                         </el-button>
                                     </div>
-                                </div>
-                                <div v-else class="fcal_skeleton">
-                                    <el-skeleton :rows="3" animated/>
                                 </div>
                             </div>
                         </el-form-item>
@@ -88,7 +85,6 @@ export default {
     props: ['calendar_event', 'disabled'],
     data() {
         return {
-            loading: false,
             saving: false,
             all_hosts: this.appVars.all_hosts,
             filteredHosts: [],
@@ -103,7 +99,7 @@ export default {
             }
         },
         isMultiHosts() {
-            return ['single_event', 'group_event'].includes(this.calendar_event.event_type);
+            return ['single_event', 'group_event', 'collective'].includes(this.calendar_event.event_type);
         },
         getListLabel() {
             return this.isMultiHosts ? this.$t('Event Hosts') : this.$t('Team Members');

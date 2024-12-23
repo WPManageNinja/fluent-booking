@@ -903,7 +903,7 @@ class FrontEndHandler
             $bookingData['additional_guests'] = array_slice($additionalGuests, 0, $guestLimit);
         }
 
-        if ($calendarEvent->isTeamEvent()) {
+        if ($calendarEvent->isRoundRobin()) {
             $bookingData['host_user_id'] = $timeSlotService->hostUserId;
         }
 

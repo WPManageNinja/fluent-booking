@@ -59,12 +59,12 @@
                         :aria-placeholder="$t('Select Event Types')"
                         popper-class="fcal_select"
                         @change="handlePeriodChange()"
-                        placement="bottom"
-                    >
+                        placement="bottom">
                         <el-option value="all" :label="$t('All Event Types')"/>
                         <el-option value="single" :label="$t('One-to-One')"/>
                         <el-option value="group" :label="$t('Group')"/>
                         <el-option value="round_robin" :label="$t('Round Robin')"/>
+                        <el-option value="collective" :label="$t('Collective')"/>
                     </el-select>
 
                     <el-select
@@ -74,8 +74,7 @@
                         :aria-placeholder="$t('Select Event')"
                         popper-class="fcal_select"
                         @change="handlePeriodChange()"
-                        placement="bottom"
-                    >
+                        placement="bottom">
                         <template v-if="event_types.length">
                             <el-option value="all" :label="$t('All Events')" />
                             <el-option v-for="event in event_types" :key="event.id"
