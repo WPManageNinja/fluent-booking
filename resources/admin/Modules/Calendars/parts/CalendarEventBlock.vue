@@ -74,7 +74,7 @@
                         <TeamMemberSelector v-model="teamMembers"/>
                         <p>{{ $t('Please select the members you want to assign to this team') }}</p>
                     </el-form-item>
-                    <el-button @click="createRountRobinSlot()"
+                    <el-button @click="createTeamEvent('round_robin')"
                         :disabled="!teamMembers.length">
                         <div class="icons-wrap">
                             <el-icon><User /></el-icon>
@@ -88,6 +88,25 @@
                             <h3>{{ $t('Round Robin') }}</h3>
                             <h4><strong>{{ $t('One rotating host') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
                             <p>{{ $t('Good for: distributing incoming sales leads.') }}</p>
+                            <el-icon class="icon-right">
+                                <Right/>
+                            </el-icon>
+                        </div>
+                    </el-button>
+                    <el-button @click="createTeamEvent('collective')"
+                        :disabled="!teamMembers.length">
+                        <div class="icons-wrap">
+                            <el-icon><User /></el-icon>
+                            <el-icon><User /></el-icon>
+                            <el-icon><Right /></el-icon>
+                            <div class="icons">
+                                <el-icon><User /></el-icon>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h3>{{ $t('Collective') }}</h3>
+                            <h4><strong>{{ $t('Multiple hosts') }}</strong> <span>{{ $t('with') }}</span> <strong>{{ $t('One invitee') }}</strong></h4>
+                            <p>{{ $t('Good for: Panel interviews, group sales calls, etc.') }}</p>
                             <el-icon class="icon-right">
                                 <Right/>
                             </el-icon>
@@ -138,7 +157,7 @@
                     </el-button>
                 </template>
                 <template v-else>
-                    <el-button @click="createSlot('single')">
+                    <el-button @click="createCalendarEvent('single')">
                         <div class="icons-wrap">
                             <el-icon><User /></el-icon>
                             <el-icon><Right /></el-icon>
@@ -294,21 +313,21 @@ export default {
                 params: { calendar_id: this.calendar.id }
             })
         },
-        createSlot(eventType) {
+        createCalendarEvent(eventType) {
             this.$router.push({
                 name: 'create_slot_event',
                 params: {calendar_id: this.calendar.id, event_type: eventType}
             })
         },
-        createRountRobinSlot() {
+        createTeamEvent(eventType) {
             if (!this.appVars.has_pro) {
                 this.noticeModal = true;
-                this.noticeTitle = this.$t('Round Robin');
+                this.noticeTitle = eventType == 'collective' ? this.$t('Collective') : this.$t('Round Robin');
                 return;
             }
             this.$router.push({
                 name: 'create_slot_event',
-                params: {calendar_id: this.calendar.id, event_type: 'round_robin'},
+                params: {calendar_id: this.calendar.id, event_type: eventType},
                 query: {team_members: this.teamMembers}
 
             })
@@ -337,7 +356,7 @@ export default {
         },
         maybeCreateGroupSlot() {
             if (this.appVars.has_pro) {
-                this.createSlot('group');
+                this.createCalendarEvent('group');
             } else {
                 this.noticeModal = true;
                 this.noticeTitle = this.$t('Group Event');
