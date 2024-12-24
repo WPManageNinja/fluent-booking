@@ -320,6 +320,11 @@ class AdminMenuHandler
         $assets = $app['url.assets'];
         $currentUser = get_user_by('ID', get_current_user_id());
 
+        $currentUsername = trim($currentUser->first_name . ' ' . $currentUser->last_name);
+        if (!$currentUsername) {
+            $currentUsername = $currentUser->display_name;
+        }
+
         $isNew = $this->isNew();
 
         $requireSlug = false;
@@ -380,7 +385,7 @@ class AdminMenuHandler
             'me'                     => [
                 'id'          => $currentUser->ID,
                 'calendar_id' => $calendarId,
-                'full_name'   => trim($currentUser->first_name . ' ' . $currentUser->last_name),
+                'full_name'   => $currentUsername,
                 'email'       => $currentUser->user_email,
                 'is_admin'    => $hasAllAccess,
                 'permissions' => PermissionManager::getUserPermissions($currentUser, false),

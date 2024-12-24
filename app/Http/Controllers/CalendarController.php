@@ -376,6 +376,8 @@ class CalendarController extends Controller
 
         $eventSettings['location_fields'] = $calendarEvent->getLocationFields();
 
+        $eventSettings['hosts_schedules'] = $calendarEvent->getHostsSchedules();
+
         $calendarEvent->settings = apply_filters('fluent_booking/get_calendar_event_settings', $eventSettings, $calendarEvent, $calendarEvent->calendar);
 
         $data = [
@@ -595,7 +597,7 @@ class CalendarController extends Controller
 
         $event = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
-        $event->settings = [
+        $eventSettings = [
             'schedule_type'      => sanitize_text_field(Arr::get($data, 'schedule_type')),
             'weekly_schedules'   => SanitizeService::weeklySchedules(Arr::get($data, 'weekly_schedules'), $event->calendar->author_timezone, 'UTC'),
             'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides', []), $event->calendar->author_timezone, 'UTC'),
@@ -604,6 +606,15 @@ class CalendarController extends Controller
             'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data, 'range_date_between', ['', ''])),
             'common_schedule'    => Arr::isTrue($data, 'common_schedule', false)
         ];
+
+        if ($event->isTeamEvent()) {
+            $eventSettings['hosts_schedules'] = array_map('intval', array_combine(
+                array_map('intval', array_keys(Arr::get($data, 'hosts_schedules', []))),
+                array_map('intval', Arr::get($data, 'hosts_schedules', []))
+            ));
+        }
+
+        $event->settings = $eventSettings;
 
         $event->availability_id = (int)Arr::get($data, 'availability_id');
         $event->availability_type = SanitizeService::checkCollection(Arr::get($data, 'availability_type'), ['existing_schedule', 'custom']);

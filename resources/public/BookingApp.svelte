@@ -257,6 +257,10 @@
         return '';
     }
 
+    function selectNewDate() {
+        selectedDate = null;
+    }
+
     function resetSelection() {
         if (wrapperWidth < 800) {
             selectedDate = null;
@@ -509,6 +513,7 @@
                                 on:formatHours={(e) => {formatHours(e.detail)}}
                                 on:timezoneChanged={(e) => {resetSelection()}}
                                 on:resetSelection={(e) => {resetSelection()}}
+                                on:selectNewDate={(e) => {selectNewDate()}}
                             />
                         </div>
                         {#if skipCalendar && isLoadingDates}
