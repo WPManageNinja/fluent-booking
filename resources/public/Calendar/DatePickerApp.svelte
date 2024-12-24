@@ -333,11 +333,9 @@
         }
     }
 
-    function resetSelection() {
-        selectedDate = '';
-        selectedDateTime = {};
-        selectedDateTimes = [];
-        dispatch('resetSelection');
+    function selectNewDate() {
+        selectedDate = null;
+        dispatch('selectNewDate');
     }
 
     function convertTime12to24(time12h, formatHr) {
@@ -449,8 +447,8 @@
 
         <div class="fcal_slot_picker { selectedDate ? 'is_active' : ''}">
             <div class="fcal_slot_picker_header">
-                <div aria-label="Back to Date Selection" class="fcal_back" on:keypress="{(e) => {selectedDate = false}}"
-                     on:click={resetSelection}>
+                <div aria-label="Back to Date Selection" class="fcal_back" on:keypress="{(e) => {selectNewDate()}}"
+                     on:click={() => selectNewDate()}>
                     <button type="button" class="fcal_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                              viewBox="0 0 24 24">
