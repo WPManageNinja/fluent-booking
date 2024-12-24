@@ -416,6 +416,8 @@ class EmailNotificationService
 
     private static function prepareAttachments($booking)
     {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+
         if (!WP_Filesystem()) {
             return [];
         }
