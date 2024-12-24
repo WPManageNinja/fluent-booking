@@ -51,7 +51,6 @@ function handleFormScroll() {
         function preventScroll(event) {
 
             fluentFormDom.addEventListener(event, function (event) {
-                console.log('preventScroll', event.target.className);
                 if (event.target.className.includes('fcal')) {
                     event.stopImmediatePropagation();
                 }

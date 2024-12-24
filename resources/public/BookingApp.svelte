@@ -102,6 +102,11 @@
             } else {
                 wrapperClass = 'fcal_on_xs fcal_mobile';
             }
+
+            if (conversationalPage && window.innerWidth < 600) {
+                wrapperClass = 'fcal_on_xs fcal_mobile';
+            }
+
         }, timeout)
     }
 
@@ -112,6 +117,7 @@
         } else {
             timezone = guessTimezone;
         }
+
         appReady = true;
         checkDevice();
     });
@@ -310,7 +316,7 @@
 <div class="fcal_wrap">
     <div bind:this={wrapDom} class="fcal_holder" id={appData.id}>
         <div data-width="{wrapperWidth}px" bind:this={component}
-             class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} {selectedDate ? 'fcal_day_selected' : ''} { selectedDateTime.start ? 'fcal_spot_selected' : '' } {wrapperClass}">
+            class="fcal_calendar_inner { isFluentform ? 'fcal_form_calendar' : ''} {selectedDate ? 'fcal_day_selected' : ''} { selectedDateTime.start ? 'fcal_spot_selected' : '' } {wrapperClass}">
             {#if isBookingDone}
                 <div class="fcal_booking_confirmed">{@html bookingConfirmationHtml}</div>
             {:else }
@@ -320,12 +326,12 @@
                             {#if handleBack}
                                 <div class="fcal_back">
                                     <div tabindex="0" on:click={handleBackClick} on:keypress={handleBackClick}
-                                         class="fcal_back_btn" role="button"
-                                         aria-label="{i18('Go to previous page')}">
+                                        class="fcal_back_btn" role="button"
+                                        aria-label="{i18('Go to previous page')}">
                                         <svg height="512px" id="Layer_1" style="enable-background:new 0 0 512 512;"
-                                             version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve"
-                                             xmlns="http://www.w3.org/2000/svg"
-                                             xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "/></svg>
+                                            version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,128.4 319.7,96 160,256 160,256 160,256 319.7,416 352,383.6 224.7,256 "/></svg>
                                     </div>
                                 </div>
                             {/if}
@@ -361,7 +367,7 @@
                                 <FcalSkeleton rows={5}/>
                             {:else}
                                 <div class="fcal_slot_info">
-                                     {#if isFluentform}
+                                    {#if isFluentform}
                                         <h3 aria-level="3" class="fcal_slot_heading">{slot.title}</h3>
                                     {:else}
                                         <h1 aria-level="1" class="fcal_slot_heading">{slot.title}</h1>
@@ -522,7 +528,7 @@
                                             on:keypress={(e) => { resetSelection() }}>
                                             <button type="button" class="fcal_svg">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                     viewBox="0 0 24 24">
+                                                    viewBox="0 0 24 24">
                                                     <path fill="none" d="M0 0h24v24H0V0z"/>
                                                     <path d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/>
                                                 </svg>
