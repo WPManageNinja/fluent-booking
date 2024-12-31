@@ -3933,82 +3933,6 @@
         text-align: left !important;
     }
 
-
-    // wp vue editorx
-    .wp_vue_editor {
-        width: 100%;
-        min-height: 100px;
-    }
-    .wp_vue_editor_wrapper {
-        width: 100%;
-        border: 1px solid #DCDFE6;
-        border-radius: 8px;
-        overflow: hidden;
-        position: relative;
-        background-color: #fff;
-
-        .popover-wrapper {
-            z-index: 2;
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 10px;
-            &-plaintext {
-                left: auto;
-                right: 0;
-                top: -32px;
-            }
-        }
-        .wp-editor-container{
-            border: 0;
-        }
-        .wp-editor-tabs{
-            float: none;
-            padding: 8px;
-        }
-        .wp-media-buttons {
-            margin-top: 10px;
-        }
-        .wp-switch-editor, .insert-media.add_media{
-            height: auto;
-            margin: 0 0 0 4px;
-            background-color: transparent;
-            padding: 2px 12px;
-            font-size: 14px;
-            border-radius: 5px;
-            line-height: inherit;
-            border-color: transparent;
-            float: none;
-            font-weight: 500;
-        }
-        .html-active .switch-html,
-        .tmce-active .switch-tmce,
-        .editor-add-shortcode {
-            background-color: #f5f7fa;
-            border-color: #DCDFE6;
-            color: #1E1F21;
-        }
-        .switch-html{
-            margin-left: 0;
-        }
-        .mce-top-part::before{
-            box-shadow: none;
-        }
-        div.mce-toolbar-grp,
-        .quicktags-toolbar {
-            border-bottom: 0;
-            background: #f5f7fa;
-        }
-        .mce-toolbar .mce-btn-group .mce-btn.mce-listbox{
-            border: 0;
-            box-shadow: none;
-            border-radius: 4px;
-        }
-        textarea{
-            border: 0;
-            padding-top: 15px;
-        }
-    }
     .fcal_empty_inline_text {
         display: flex;
         flex-wrap: wrap;
@@ -4017,93 +3941,168 @@
     }
 }
 
-.el-popup-parent--hidden {
-    #wpadminbar {
-        z-index: 1000;
+// wp vue editorx
+.wp_vue_editor {
+  width: 100%;
+  min-height: 100px;
+}
+.wp_vue_editor_wrapper {
+  width: 100%;
+  border: 1px solid #DCDFE6;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+  .popover-wrapper {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    &-plaintext {
+      left: auto;
+      right: 0;
+      top: -32px;
     }
+  }
+  .wp-editor-container{
+    border: 0;
+  }
+  .wp-editor-tabs{
+    float: none;
+    padding: 8px;
+  }
+  .wp-media-buttons {
+    margin-top: 10px;
+  }
+  .wp-switch-editor, .insert-media.add_media{
+    height: auto;
+    margin: 0 0 0 4px;
+    background-color: transparent;
+    padding: 2px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    line-height: inherit;
+    border-color: transparent;
+    float: none;
+    font-weight: 500;
+  }
+  .html-active .switch-html,
+  .tmce-active .switch-tmce,
+  .editor-add-shortcode {
+    background-color: #f5f7fa;
+    border-color: #DCDFE6;
+    color: #1E1F21;
+  }
+  .switch-html{
+    margin-left: 0;
+  }
+  .mce-top-part::before{
+    box-shadow: none;
+  }
+  div.mce-toolbar-grp,
+  .quicktags-toolbar {
+    border-bottom: 0;
+    background: #f5f7fa;
+  }
+  .mce-toolbar .mce-btn-group .mce-btn.mce-listbox{
+    border: 0;
+    box-shadow: none;
+    border-radius: 4px;
+  }
+  textarea{
+    border: 0;
+    padding-top: 15px;
+  }
+}
+
+.el-popup-parent--hidden {
+  #wpadminbar {
+    z-index: 1000;
+  }
 }
 
 .fbs_feature_module {
-    align-items: center;
-    background: #fff;
-    border-bottom: 3px solid #f0f0f1;
+  align-items: center;
+  background: #fff;
+  border-bottom: 3px solid #f0f0f1;
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  padding: 20px;
+  transition: border-bottom .5s;
+  margin: -24px -24px 0;
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  p {
+    color: #666;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  &:hover {
+    border-bottom: 3px solid #306ae0;
+  }
+  .fbs_module_desc {
     display: flex;
     gap: 15px;
-    justify-content: space-between;
-    padding: 20px;
-    transition: border-bottom .5s;
-    margin: -24px -24px 0;
-    h4 {
-        font-size: 18px;
-        font-weight: 600;
-        margin: 0 0 10px;
+  }
+  span.fbs_addon_installed {
+    background: #306ae0;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    padding: 2px 7px;
+    &.fbs_addon_disabled {
+      background: #6d6a6a;
+      color: #f2ecec;
     }
-    p {
-        color: #666;
-        font-size: 14px;
-        margin: 5px 0;
-    }
-    &:hover {
-        border-bottom: 3px solid #306ae0;
-    }
-    .fbs_module_desc {
-        display: flex;
-        gap: 15px;
-    }
-    span.fbs_addon_installed {
-        background: #306ae0;
-        border-radius: 4px;
-        color: #fff;
-        font-size: 14px;
-        padding: 2px 7px;
-        &.fbs_addon_disabled {
-            background: #6d6a6a;
-            color: #f2ecec;
-        }
-    }
+  }
 }
 
 span.fc_space_10 {
-    width: 10px !important;
-    display: inline-block;
+  width: 10px !important;
+  display: inline-block;
 }
 p.fcal_human_text {
-    margin: 0px 0 6px !important;
-    color: #6b7280;
-    line-height: 100%;
+  margin: 0px 0 6px !important;
+  color: #6b7280;
+  line-height: 100%;
 }
 
 .fcal_showing_details {
-    .fcal_spot_line {
-        align-items: start !important;
-    }
+  .fcal_spot_line {
+    align-items: start !important;
+  }
 }
 
 .fc-connect-require {
-    img {
-        width: 20px;
-        margin-right: 5px;
-    }
+  img {
+    width: 20px;
+    margin-right: 5px;
+  }
 }
 
 .el-input-group--prepend .el-input__wrapper {
-    border-radius: 0 !important;
+  border-radius: 0 !important;
 }
 
 .fcal_secure_form {
-    padding: 20px;
-    background: #f3f4f9;
-    border-radius: 10px;
+  padding: 20px;
+  background: #f3f4f9;
+  border-radius: 10px;
 }
 
 @keyframes handAnim {
-    0% {
-        right: -22px;
-    }
-    50% {
-        right: -28px;
-    }
-    100% {
-        right: -22px;
-    }
+  0% {
+    right: -22px;
+  }
+  50% {
+    right: -28px;
+  }
+  100% {
+    right: -22px;
+  }
 }
