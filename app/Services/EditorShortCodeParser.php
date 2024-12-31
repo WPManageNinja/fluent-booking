@@ -196,6 +196,10 @@ class EditorShortCodeParser
                 return self::getUploadedFileUrl(Arr::get(self::$store['custom_booking_data'], $key));
             }
 
+            if (Arr::get($customField, 'type') == 'hidden') {
+                return self::parseShortCodes(Arr::get(self::$store['custom_booking_data'], $key));
+            }
+
             return Arr::get(self::$store['custom_booking_data'], $key);
         }
 
