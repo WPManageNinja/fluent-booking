@@ -22,7 +22,8 @@ function handleEventBlockClick(link) {
     const bookingWrap = wrap.querySelector('.fluent_booking_wrap');
     // hide .fluent_booking_wrap
     bookingWrap.style.marginLeft = '-100%';
-    bookingWrap.style.height = 0;
+    bookingWrap.style.height = '0';
+    bookingWrap.style.overflow = 'hidden';
 
     const targetElement = wrap.querySelector('.fluent_booking_app');
     if (targetElement) {
