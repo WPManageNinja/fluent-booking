@@ -862,6 +862,9 @@ class CalendarController extends Controller
             if ($value['type'] == 'hidden') {
                 $formattedField['default_value'] = sanitize_text_field(Arr::get($value, 'default_value'));
             }
+            if ($value['type'] == 'terms-and-conditions') {
+                $formattedField['terms_and_conditions'] = wp_kses_post(Arr::get($value, 'terms_and_conditions'));
+            }
 
             $formattedFields[] = $formattedField;
         }
