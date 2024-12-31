@@ -71,6 +71,14 @@
                                         <span>{field.label}</span>
                                         <span class="checkbox_mark"></span>
                                     </label>
+                                {:else if field.type === 'terms-and-conditions'}
+                                <label class="fcal_custom_checkbox fcal_terms_conditions" aria-label={field.label}>
+                                    <input type="checkbox"
+                                        checked={form[field.name] == "Accepted"}
+                                        on:change={() => form[field.name] = form[field.name] == "Accepted" ? "Not Accepted" : "Accepted"}/>
+                                    <span>{@html field.terms_and_conditions}</span>
+                                    <span class="checkbox_mark"></span>
+                                </label>
                                 {:else if field.type === 'radio'}
                                     <div role="radiogroup" aria-labelledby="{field.name}-label">
                                         {#each field.options as option}
@@ -81,7 +89,7 @@
                                             </label>
                                         {/each}
                                     </div>
-                                    {:else if field.type === 'dropdown'}
+                                {:else if field.type === 'dropdown'}
                                     <select aria-required={field.required} bind:value={form[field.name]}>
                                         <option value="" disabled selected>{field.placeholder}</option>
                                         {#each field.options as option (option)}
@@ -291,17 +299,27 @@
         formFields.forEach((field) => {
             field.error = null;
             if (field.enabled && field.required) {
-                if (!form[field.name]) {
-                    if (field.name != 'location' && field.name != 'payment_method') {
+                const value = form[field.name];
+                const isEmptyField = !value;
+                const isCheckbox = field.type === 'checkbox';
+                const isPayment = field.name === 'payment_method';
+                const isTerms = field.type === 'terms-and-conditions';
+                const isSpecialField = isPayment || field.name === 'location';
+
+                if (isEmptyField) {
+                    if (!isSpecialField) {
                         hasError = true;
                         field.error = i18('This field is required.');
                     }
-                    if (field.name == 'payment_method' && hasPaymentItem()) {
+                    if (isPayment && hasPaymentItem()) {
                         paymentError = true;
                     }
-                } else if (field.type == 'checkbox' && form[field.name] != 'Yes') {
+                } else if (isCheckbox && value != 'Yes') {
                     hasError = true;
                     field.error = i18('This field is required.');
+                } else if (isTerms && value != 'Accepted') {
+                    hasError = true;
+                    field.error = i18('You must accept the terms and conditions.');
                 }
             }
         });
@@ -380,7 +398,7 @@
     }
 
     function shouldRenderLabel(field) {
-        return !(field.type === 'checkbox' || (field.type === 'payment' && !hasPaymentItem()));
+        return !(['checkbox', 'terms-and-conditions'].includes(field.type) || (field.type === 'payment' && !hasPaymentItem()));
     }
 
     onMount(() => {

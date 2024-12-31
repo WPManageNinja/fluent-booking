@@ -645,13 +645,25 @@ body >.fcal_calendar_wrap {
         }
 
         .fcal_custom_checkbox {
-            position: relative;
-            padding-left: 1.75rem;
-            cursor: pointer;
-            font-size: 1rem;
-            line-height: 1.5;
-            color: var(--fcal_dark);
-            margin-bottom: 0.6rem;
+          position: relative;
+          padding-left: 1.75rem;
+          cursor: pointer;
+          font-size: 1rem;
+          line-height: 1.5;
+          color: var(--fcal_dark);
+          margin-bottom: 0.6rem;
+          &.fcal_terms_conditions {
+            display: flex;
+            align-items: center;
+            * {
+              margin: 0;
+              font-size: 1rem;
+            }
+            a {
+              cursor: pointer;
+              color: var(--fcal_primary_color);
+            }
+          }
           input {
             height: 0;
             width: 0;
@@ -678,7 +690,6 @@ body >.fcal_calendar_wrap {
               }
             }
           }
-
           .checkbox_mark {
             display: flex;
             justify-content: center;

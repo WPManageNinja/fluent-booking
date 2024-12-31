@@ -361,6 +361,7 @@ class AdminMenuHandler
         $weekSelectTimes = Helper::getWeekSelectTimes();
         $overrideSelectTimes = Helper::getOverrideSelectTimes();
         $statusChangingTimes = Helper::getBookingStatusChangingTimes();
+        $defaultTermsAndConditions = Helper::getDefaultTermsAndConditions();
         $locationFields = (new CalendarSlot())->getLocationFields();
 
         return apply_filters('fluent_booking/admin_vars', [
@@ -382,6 +383,7 @@ class AdminMenuHandler
             'multi_duration_lookup'  => $multiDurationLookup,
             'override_select_times'  => $overrideSelectTimes,
             'status_changing_times'  => $statusChangingTimes,
+            'default_terms'          => $defaultTermsAndConditions,
             'me'                     => [
                 'id'          => $currentUser->ID,
                 'calendar_id' => $calendarId,
