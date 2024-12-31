@@ -920,6 +920,7 @@ class TransStrings
             'Maximum Date'                                                                     => __('Maximum Date', 'fluent-booking'),
             'Minimum Date'                                                                     => __('Minimum Date', 'fluent-booking'),
             'Select Date'                                                                      => __('Select Date', 'fluent-booking'),
+            'Terms & Conditions'                                                               => __('Terms & Conditions', 'fluent-booking'),
             'If no date is set, default date 1900-01-01 will be used as the minimum date.'     => __('If no date is set, default date 1900-01-01 will be used as the minimum date.', 'fluent-booking'),
             'If no date is set, current date will be used as the maximum date.'                => __('If no date is set, current date will be used as the maximum date.', 'fluent-booking')
         );

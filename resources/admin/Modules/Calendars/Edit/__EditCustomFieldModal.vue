@@ -26,6 +26,9 @@
                 <el-input v-model="fieldData.label" type="text" :placeholder="$t('Label')"/>
                 <span v-if="isHiddenField">{{ $t('This label will only be visible for admin.') }}</span>
             </el-form-item>
+            <el-form-item v-if="isTermsField" :label="$t('Terms & Conditions') + ' *'">
+                <wp-editor v-model="fieldData.terms_and_conditions" :height="150" :mediaButtons="false"/>
+            </el-form-item>
             <el-form-item v-if="fieldData.limit" :label="$t('Maximum Guest Limit') + ' *'">
                 <el-input v-model="fieldData.limit" type="number" @change="validateLimit(fieldData.limit)"/>
             </el-form-item>
@@ -173,13 +176,15 @@
 import { markRaw } from "vue";
 import { CloseBold, More } from '@element-plus/icons-vue';
 import Popover from "@/Components/Popover";
+import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
 
 export default {
     name: 'EditCustomFieldModal',
     props: ['field', 'fields', 'smartCodes', 'showModal'],
     emits: ['closeModal', 'updateFieldData'],
     components: {
-        Popover
+        Popover,
+        wpEditor
     },
     data() {
         return {
@@ -187,6 +192,7 @@ export default {
             defaultValuePopupVisible: false,
             fieldsTypes: this.appVars.custom_field_types,
             dateFormats: this.appVars.available_date_formats,
+            defaultTerms: this.appVars.default_terms,
             defaultOptions: ['Option 1', 'Option 2'],
             CloseBoldIcon: markRaw(CloseBold),
             MoreIcon: markRaw(More),
@@ -216,6 +222,9 @@ export default {
             if (this.fieldData.type == 'file') {
                 this.maybeSetDefaultFileValues();
             }
+            if (this.fieldData.type == 'terms-and-conditions') {
+                this.maybeSetDefaultTerms();
+            }
             if (this.isOptionRequired && !this.fieldData.options) {
                 this.fieldData.options = this.defaultOptions;
             } else {
@@ -225,6 +234,9 @@ export default {
         'fieldData.type': function() {
             if (this.fieldData.type == 'file') {
                 this.maybeSetDefaultFileValues();
+            }
+            if (this.fieldData.type == 'terms-and-conditions') {
+                this.maybeSetDefaultTerms();
             }
         },
         'fieldData.is_sms_number': function (newValue, oldValue) {
@@ -257,6 +269,9 @@ export default {
         },
         isHiddenField() {
             return this.fieldData.type == 'hidden';
+        },
+        isTermsField() {
+            return this.fieldData.type == 'terms-and-conditions';
         },
         hasPlaceHolder() {
             return ['text', 'textarea', 'message', 'number', 'email', 'date'].includes(this.fieldData.type);
@@ -316,6 +331,10 @@ export default {
             this.fieldData.file_size_value = this.fieldData.file_size_value || 1;
             this.fieldData.max_file_allow = this.fieldData.max_file_allow || 1;
             this.fieldData.allow_file_types = this.fieldData.allow_file_types || ['pdf'];
+        },
+        maybeSetDefaultTerms() {
+            this.fieldData.label = this.fieldData.label || 'Terms and Conditions';
+            this.fieldData.terms_and_conditions = this.fieldData.terms_and_conditions || this.defaultTerms;
         }
     },
     mounted() {

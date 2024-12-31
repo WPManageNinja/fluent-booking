@@ -65,6 +65,10 @@ export default {
             default() {
                 return ''
             }
+        },
+        mediaButtons: {
+            type: Boolean,
+            default: true
         }
     },
     components: {
@@ -96,7 +100,7 @@ export default {
             wp.editor.remove(this.editor_id);
             const that = this;
             wp.editor.initialize(this.editor_id, {
-                mediaButtons: true,
+                mediaButtons: this.mediaButtons,
                 tinymce: {
                     height : that.height,
                     toolbar1: 'formatselect,table,bold,italic,bullist,numlist,link,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo',

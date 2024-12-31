@@ -1523,8 +1523,19 @@ class Helper
             [
                 'value' => 'hidden',
                 'label' => __('Hidden', 'fluent-booking')
+            ],
+            [
+                'value' => 'terms-and-conditions',
+                'label' => __('Terms & Conditions', 'fluent-booking')
             ]
         ]);
+    }
+
+    public static function getDefaultTermsAndConditions()
+    {
+        $termsAndConditions = __('I have read and agree to the <a href="#" target="_blank" rel="noopener">Terms and Conditions</a> and <a href="#" target="_blank" rel="noopener">Privacy Policy</a>.', 'fluent-booking');
+
+        return apply_filters('fluent_booking/default_terms_and_conditions', $termsAndConditions);
     }
 
     public static function getDefaultEmailNotificationSettings()
