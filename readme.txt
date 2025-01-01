@@ -301,7 +301,8 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 
 == Changelog ==
 
-= 1.6.0 (Date: 24 Dec 2024)
+= 1.6.0 (Date: 01 Jan 2025)
+- Added HTML Support in Calendar Event Description
 - Added Name and Email for Manual Booking Additional Guest
 - Added Hidden Field Type in Generate Link
 - Added Event Time Translation in Email Notifications
