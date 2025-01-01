@@ -121,17 +121,27 @@ $dark: var(--fcal_block_dark);
 					}
 				}
 				.fcal_slot_description {
-					p {
-						font-size: 16px;
-						font-weight: 400;
-						line-height: 24px;
-						margin: 0;
-						color: $dark;
-					}
+          margin-top: 20px;
+          font-size: 16px;
+          color: $dark;
+          p {
+            margin: 1rem 0;
+            line-height: 1.6;
+          }
+          ul {
+            list-style: disc;
+            margin: 0 0 1rem 0;
+            padding-left: 2rem;
+          }
+          ol {
+            list-style: decimal;
+            margin: 0 0 1rem 0;
+            padding-left: 2rem;
+          }
 				}
 			}
 			.fcal_block_preview_date_wrapper {
-                flex: 60%;
+        flex: 60%;
 				padding: 30px 20px;
 				img {
 					display: block;

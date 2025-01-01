@@ -23,8 +23,7 @@
                             <el-form-item :label="$t('Event Name *')" class="fcal_color_select_wrap">
                                 <el-input
                                     v-model="calendar_event.title"
-                                    :placeholder="$t('Enter Event Title')"
-                                >
+                                    :placeholder="$t('Enter Event Title')">
                                     <template #prepend>
                                         <div class="fcal_color_select">
                                             <span class="fcal_color" :style="'background:'+ calendar_event.color_schema "></span>
@@ -45,11 +44,12 @@
                             </el-form-item>
                             
                             <el-form-item :label="$t('Description')">
-                                <el-input
+                                <wp-editor
                                     v-model="calendar_event.description"
-                                    type="textarea"
-                                    :rows="2"
-                                    :placeholder="$t('Enter Description here')"
+                                    :height="120"
+                                    :media_buttons="false"
+                                    :quick_tags="false"
+                                    :toolbar="editorToolbar"
                                 />
                             </el-form-item>
                         </div>
@@ -157,6 +157,7 @@ import LocationSelector from "./_LocationSelector";
 import EventIcon from "../../../Components/Icons/EventIcon";
 import HostSelector from "@/Pieces/HostSelector";
 import SaveButton from "@/Components/Buttons/SaveButton";
+import WpEditor from '../../../Components/FormBuilder/WpEditorField.vue';
 
 export default {
     name: 'EventDetails',
@@ -166,7 +167,8 @@ export default {
         HostSelector,
         LocationSelector,
         EventIcon,
-        SaveButton
+        SaveButton,
+        WpEditor
     },
     data() {
         return {
@@ -181,6 +183,7 @@ export default {
             meetingDurations: this.appVars.meeting_durations,
             multiDurations: this.appVars.multi_durations,
             durationLookup: this.appVars.multi_duration_lookup,
+            editorToolbar: 'bold,italic,underline,bullist,numlist,link,undo,redo',
             defaultDurations: [],
             redirectRoute: ''
         }

@@ -1817,6 +1817,9 @@
                 padding: 1.5rem;
                 width: 100%;
                 border-radius: 8px;
+                .wp_vue_editor_wrapper .mce-statusbar {
+                  border-top: none;
+                }
             }
             .fcal_questions {
                 display: grid;
