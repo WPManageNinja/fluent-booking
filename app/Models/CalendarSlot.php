@@ -86,6 +86,13 @@ class CalendarSlot extends Model
         return \maybe_unserialize($locationSettings);
     }
 
+    public function getShortDescriptionAttribute()
+    {
+        $description = preg_replace('/<[^>]*>/', ' ', $this->getDescription());
+
+        return Helper::excerpt($description);
+    }
+
     public function calendar()
     {
         return $this->belongsTo(Calendar::class, 'calendar_id');

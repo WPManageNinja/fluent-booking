@@ -246,6 +246,7 @@ $border-color_1: var(--fcal_primaryColor);
   > a.fcal_card {
     text-decoration: none;
     display: flex;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
   }
