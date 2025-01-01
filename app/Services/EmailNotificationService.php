@@ -369,7 +369,7 @@ class EmailNotificationService
 
         $status = $result ? 'sent' : 'sending failed';
 
-        $title = sprintf(__('Rescheduled booking email %s to $s', 'fluent-booking'), $status, $emailTo);
+        $title = sprintf(__('Rescheduled booking email %s to %s', 'fluent-booking'), $status, $emailTo);
 
         $description = sprintf(__('Rescheduling email %s to %s', 'fluent-booking'), $status, $emailTo);
 
