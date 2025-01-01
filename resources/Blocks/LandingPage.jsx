@@ -148,7 +148,7 @@ export const LandingPage = props => {
                                             }
                                         </div>
                                         <div className="fcal_slot_description">
-                                            <p>{event.description}</p>
+                                            <div dangerouslySetInnerHTML={{ __html: event.description }}></div>
                                         </div>
                                     </div>
                                 :

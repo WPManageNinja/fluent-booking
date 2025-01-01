@@ -66,9 +66,17 @@ export default {
                 return ''
             }
         },
-        mediaButtons: {
+        media_buttons: {
             type: Boolean,
             default: true
+        },
+        quick_tags: {
+            type: Boolean,
+            default: true
+        },
+        toolbar: {
+            type: String,
+            default: 'formatselect,table,bold,italic,bullist,numlist,link,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo'
         }
     },
     components: {
@@ -100,17 +108,17 @@ export default {
             wp.editor.remove(this.editor_id);
             const that = this;
             wp.editor.initialize(this.editor_id, {
-                mediaButtons: this.mediaButtons,
+                mediaButtons: this.media_buttons,
+                quicktags: this.quick_tags,
                 tinymce: {
                     height : that.height,
-                    toolbar1: 'formatselect,table,bold,italic,bullist,numlist,link,blockquote,alignleft,aligncenter,alignright,underline,strikethrough,forecolor,removeformat,codeformat,outdent,indent,undo,redo',
+                    toolbar1: this.toolbar,
                     setup(editor) {
                         editor.on('change', function (ed, l) {
                             that.changeContentEvent();
                         });
                     }
                 },
-                quicktags: true
             });
             jQuery('#'+this.editor_id).on('change', function(e) {
                 that.changeContentEvent();

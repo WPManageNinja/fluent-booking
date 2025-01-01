@@ -27,7 +27,7 @@
                 <span v-if="isHiddenField">{{ $t('This label will only be visible for admin.') }}</span>
             </el-form-item>
             <el-form-item v-if="isTermsField" :label="$t('Terms & Conditions') + ' *'">
-                <wp-editor v-model="fieldData.terms_and_conditions" :height="150" :mediaButtons="false"/>
+                <wp-editor v-model="fieldData.terms_and_conditions" :height="150" :media_buttons="false"/>
             </el-form-item>
             <el-form-item v-if="fieldData.limit" :label="$t('Maximum Guest Limit') + ' *'">
                 <el-input v-model="fieldData.limit" type="number" @change="validateLimit(fieldData.limit)"/>
