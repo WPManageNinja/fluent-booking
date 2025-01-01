@@ -297,7 +297,8 @@ class FrontEndHandler
             'logo'          => Arr::get($headerConfig, 'logo', ''),
             'title'         => Arr::get($headerConfig, 'title', ''),
             'description'   => Arr::get($headerConfig, 'description', ''),
-            'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', '')
+            'wrapper_class' => Arr::get($headerConfig, 'wrapper_class', ''),
+            'hide_info'     => Arr::isTrue($headerConfig, 'hide_info')
         ]);
     }
 

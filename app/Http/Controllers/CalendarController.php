@@ -64,7 +64,6 @@ class CalendarController extends Controller
                 $slot->duration = $slot->getDefaultDuration();
                 $slot->price_total = $slot->getPricingTotal();
                 $slot->location_fields = $slot->getLocationFields();
-                $slot->short_description = Helper::excerpt($slot->getDescription());
                 $slot->author_profiles = $slot->isMultiHostEvent() ? $slot->getAuthorProfiles() : [];
                 do_action_ref_array('fluent_booking/calendar_slot', [&$slot]);
             }
@@ -237,7 +236,7 @@ class CalendarController extends Controller
             'calendar_id'       => $calendar->id,
             'user_id'           => $calendar->user_id,
             'duration'          => (int)$slot['duration'],
-            'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
+            'description'       => wp_kses_post(Arr::get($slot, 'description')),
             'settings'          => [
                 'team_members'     => !$isHostCalendar ? $teamMembers : [],
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
@@ -474,7 +473,7 @@ class CalendarController extends Controller
             'calendar_id'       => $calendar->id,
             'user_id'           => $calendar->user_id,
             'duration'          => (int)$slot['duration'],
-            'description'       => sanitize_textarea_field(Arr::get($slot, 'description')),
+            'description'       => wp_kses_post(Arr::get($slot, 'description')),
             'settings'          => [
                 'schedule_type'       => sanitize_text_field($slot['settings']['schedule_type']),
                 'weekly_schedules'    => SanitizeService::weeklySchedules($slot['settings']['weekly_schedules'], $calendar->author_timezone, 'UTC'),
@@ -568,7 +567,7 @@ class CalendarController extends Controller
         $event->duration = (int)$data['duration'];
         $event->status = SanitizeService::checkCollection($data['status'], ['active', 'draft']);
         $event->color_schema = sanitize_text_field(Arr::get($data, 'color_schema', '#0099ff'));
-        $event->description = sanitize_textarea_field(Arr::get($data, 'description'));
+        $event->description = wp_kses_post(Arr::get($data, 'description'));
         $event->max_book_per_slot = (int)Arr::get($data, 'max_book_per_slot');
         $event->is_display_spots = (bool)Arr::get($data, 'is_display_spots');
         $event->location_settings = SanitizeService::locationSettings(Arr::get($data, 'location_settings', []));
