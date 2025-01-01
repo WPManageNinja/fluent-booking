@@ -91,8 +91,8 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
 
-        if ($attachments) {
-            wp_delete_file($attachments[0]);
+        foreach ($attachments as $attachment) {
+            wp_delete_file($attachment);
         }
 
         $status = $result ? 'sent' : 'sending failed';
