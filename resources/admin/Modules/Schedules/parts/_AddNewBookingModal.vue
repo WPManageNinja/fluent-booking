@@ -186,6 +186,11 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item v-if="field.type === 'terms-and-conditions'">
+                        <el-checkbox v-model="customFields[field.name]" true-label="Accepted" false-label="No">
+                            <span v-html="field.terms_and_conditions"></span>
+                        </el-checkbox>
+                    </el-form-item>
                 </div>
             </div>
             <el-form-item v-if="event.location_settings" :label="$t('Location') + ' *'">
