@@ -91,8 +91,8 @@ class EmailNotificationService
 
         $result = Mailer::send($to, $emailSubject, $body, $headers, $attachments);
 
-        if ($attachments) {
-            wp_delete_file($attachments[0]);
+        foreach ($attachments as $attachment) {
+            wp_delete_file($attachment);
         }
 
         $status = $result ? 'sent' : 'sending failed';
@@ -369,7 +369,7 @@ class EmailNotificationService
 
         $status = $result ? 'sent' : 'sending failed';
 
-        $title = sprintf(__('Rescheduled booking email %s to $s', 'fluent-booking'), $status, $emailTo);
+        $title = sprintf(__('Rescheduled booking email %s to %s', 'fluent-booking'), $status, $emailTo);
 
         $description = sprintf(__('Rescheduling email %s to %s', 'fluent-booking'), $status, $emailTo);
 
