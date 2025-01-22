@@ -151,7 +151,7 @@
                         <el-input v-model="customFields[field.name]" :type="field.type" :placeholder="field.placeholder"/>
                     </el-form-item>
                     <el-form-item v-if="field.type === 'checkbox'">
-                        <el-checkbox v-model="customFields[field.name]" true-label="yes" false-label="no">
+                        <el-checkbox v-model="customFields[field.name]" true-label="Yes" false-label="No">
                             {{ field.label }}
                         </el-checkbox>
                     </el-form-item>
