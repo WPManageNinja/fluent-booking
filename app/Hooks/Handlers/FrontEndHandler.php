@@ -475,6 +475,12 @@ class FrontEndHandler
                 }
             }
 
+            if ($existingBooking->isRoundRobinBooking()) {
+                $hostId = $bookingData['host_user_id'];
+                $existingBooking->host_user_id = $hostId;
+                $existingBooking->hosts()->sync([$hostId]);
+            }
+
             $existingBooking->start_time = $bookingData['start_time'];
             $existingBooking->person_time_zone = $bookingData['person_time_zone'];
             $existingBooking->end_time = $endDateTime;
