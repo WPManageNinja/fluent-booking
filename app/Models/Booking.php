@@ -919,6 +919,11 @@ class Booking extends Model
         return $this->event_type == 'group' || $this->event_type == 'group_event';
     }
 
+    public function isRoundRobinBooking()
+    {
+        return $this->event_type == 'round_robin';
+    }
+
     public function isMultiHostBooking()
     {
         return in_array($this->event_type, ['single_event', 'group_event', 'collective']);
