@@ -5,7 +5,6 @@ namespace FluentBooking\App\Hooks\Handlers;
 use FluentBooking\App\App;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Models\User;
 use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\PermissionManager;
