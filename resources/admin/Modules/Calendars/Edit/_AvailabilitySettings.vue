@@ -145,6 +145,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <el-skeleton v-else :rows="4" animated />
                             </div>
                         </div>
                     </el-form-item>
