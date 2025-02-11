@@ -52,11 +52,11 @@ function handleEventBlockClick(link) {
             urlParams.delete('event');
 
             let ext = urlParams.toString();
-            if(ext) {
+            if (ext) {
                 ext = '?' + ext;
             }
 
-            window.history.pushState({}, '', window.fluentCalendarPublicVars.base_url + ext );
+            window.history.pushState({}, '', window.fluentCalendarPublicVars.base_url + ext);
         }
     });
 
@@ -87,7 +87,7 @@ document.cookie = "fluent_booking_user_timezone=" + timeZone + "; path=/";
 
 window.fcalBackToTeam = function (item) {
     const parentTeam = item.closest('.fcal_teams');
-    if(parentTeam) {
+    if (parentTeam) {
         parentTeam.querySelector('.fluent_booking_team_view').innerHTML = '';
         parentTeam.querySelector('.fcal_teams_wrap').classList.remove('hide');
         parentTeam.querySelector('.fcal_teams_wrap').style.marginLeft = '0';
@@ -109,7 +109,7 @@ document.querySelectorAll('.fcal_teams').forEach(function (teams) {
     const teamInner = teams.querySelectorAll('.fcal_teams_inner')
     teamInner.forEach(function (inner) {
         inner.appendChild(teamViewHtml);
-    })
+    });
 
     const teamVars = window[teams.id];
     if (!teamVars) {
@@ -126,12 +126,18 @@ document.querySelectorAll('.fcal_teams').forEach(function (teams) {
             }
 
             if (hostVars.host_html) {
-
                 teamViewHtml.innerHTML = hostVars.host_html;
-
                 teams.querySelector('.fcal_teams_wrap').style.marginLeft = '-100%';
                 teams.querySelector('.fcal_teams_wrap').classList.add('hide');
                 currentState = 'view_member';
+
+                if (hostVars.target_event_id) {
+                    // find the dom a with data-event_id=hostVars.target_event_id
+                    const eventBlock = teamViewHtml.querySelector('a[data-event_id="' + hostVars.target_event_id + '"]');
+                    if (eventBlock) {
+                        handleEventBlockClick(eventBlock);
+                    }
+                }
             }
         });
     });
