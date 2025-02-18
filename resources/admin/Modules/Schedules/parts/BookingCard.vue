@@ -104,7 +104,7 @@ export default {
             if(!this.booking.payment_order) {
                 return '';
             }
-            const price = Math.floor(this.booking.payment_order?.total_amount/100);
+            const price = (this.booking.payment_order?.total_amount / 100);
             if (!price) {
                 return '';
             }
