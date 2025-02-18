@@ -877,7 +877,7 @@ class CalendarSlot extends Model
         $total = 0;
         $items = $this->getPaymentItems();
         foreach ($items as $item) {
-            $total += (int)$item['value'];
+            $total += $item['value'];
         }
 
         return $total;
