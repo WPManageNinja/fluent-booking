@@ -90,7 +90,11 @@ class CalendarSlot extends Model
     {
         $description = preg_replace('/<[^>]*>/', ' ', $this->getDescription());
 
-        return Helper::excerpt($description);
+        $maxLength = apply_filters('fluent_booking/event_short_description_length', 160, $this);
+        
+        $description = Helper::excerpt($description, $maxLength);
+
+        return apply_filters('fluent_booking/event_short_description', $description, $this);
     }
 
     public function calendar()
