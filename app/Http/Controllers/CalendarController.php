@@ -11,6 +11,7 @@ use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\AvailabilityService;
 use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\App\Services\CalendarService;
+use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\BookingFieldService;
 use FluentBooking\App\Hooks\Handlers\AdminMenuHandler;
 use FluentBooking\Framework\Http\Request\Request;
@@ -47,7 +48,9 @@ class CalendarController extends Controller
 
         $calendarsQuery = $calendarsQuery->latest();
 
-        if (!PermissionManager::hasAllCalendarAccess(true)) {
+        $hasPermission = PermissionManager::hasAllCalendarAccess(true);
+
+        if (!$hasPermission) {
             $attachedCalendarIds = CalendarService::getAttachedCalendarIds($calendarsQuery);
             $calendarsQuery->whereIn('id', $attachedCalendarIds);
         }
@@ -58,7 +61,10 @@ class CalendarController extends Controller
             $calendar->author_profile = $calendar->getAuthorProfile();
             $calendar->public_url = $calendar->getLandingPageUrl();
             $calendar->event_order = $calendar->getMeta('event_order');
-            foreach ($calendar->slots as $slot) {
+            foreach ($calendar->slots as $key => $slot) {
+                if (!$hasPermission && !CalendarEventService::isSharedCalendarEvent($slot)) {
+                    unset($calendar->slots[$key]);
+                }
                 $slot->shortcode = '[fluent_booking id="' . $slot->id . '"]';
                 $slot->public_url = $slot->getPublicUrl();
                 $slot->duration = $slot->getDefaultDuration();
@@ -357,9 +363,9 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getEvent(Request $request, $calendarId, $slotId)
+    public function getEvent(Request $request, $calendarId, $eventId)
     {
-        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar.user'])->findOrFail($slotId);
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->with(['calendar.user'])->findOrFail($eventId);
 
         $calendarEvent->author_profile = $calendarEvent->getAuthorProfile();
 
@@ -418,7 +424,7 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getAvailabilitySettings(Request $request, $calendarId, $slotId)
+    public function getAvailabilitySettings(Request $request, $calendarId, $eventId)
     {
         $availableSchedules = AvailabilityService::availabilitySchedules();
 
@@ -659,9 +665,9 @@ class CalendarController extends Controller
         ];
     }
 
-    public function patchCalendarEvent(Request $request, $calendarId, $slotId)
+    public function patchCalendarEvent(Request $request, $calendarId, $eventId)
     {
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $status = $request->get('status');
 
@@ -748,9 +754,9 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getEventEmailNotifications(Request $request, $calendarId, $slotId)
+    public function getEventEmailNotifications(Request $request, $calendarId, $eventId)
     {
-        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         /*
          * Confirmation Email to Attendee
@@ -773,9 +779,9 @@ class CalendarController extends Controller
         return $data;
     }
 
-    public function saveEventEmailNotifications(Request $request, $calendarId, $slotId)
+    public function saveEventEmailNotifications(Request $request, $calendarId, $eventId)
     {
-        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+        $slot = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $notifications = $request->get('notifications', []);
 
@@ -797,9 +803,9 @@ class CalendarController extends Controller
         ];
     }
 
-    public function getEventBookingFields(Request $request, $calendarId, $slotId)
+    public function getEventBookingFields(Request $request, $calendarId, $eventId)
     {
-        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($slotId);
+        $calendarEvent = CalendarSlot::where('calendar_id', $calendarId)->findOrFail($eventId);
 
         $data = [
             'fields' => $calendarEvent->getBookingFields()
