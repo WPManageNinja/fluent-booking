@@ -2,11 +2,9 @@
 
 namespace FluentBooking\App\Http\Controllers;
 
-use FluentBooking\App\App;
 use FluentBooking\App\Models\Booking;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\BookingActivity;
-use FluentBooking\App\Models\Meta;
 use FluentBooking\App\Services\EmailNotificationService;
 use FluentBooking\App\Services\Helper;
 use FluentBooking\App\Services\CurrenciesHelper;
@@ -27,11 +25,11 @@ class SchedulesController extends Controller
 
         $eventType = Arr::get($filters, 'event_type');
 
-        $query = Booking::with(['calendar_event']);
-
         $author = Arr::get($filters, 'author');
 
-        if ($author !== 'all') {
+        $query = Booking::with(['calendar_event']);
+
+        if ($author !== 'all' && $author !== 'me') {
             $author = (int)$author;
         }
 
@@ -47,7 +45,11 @@ class SchedulesController extends Controller
         }
 
         if ($author && $author !== 'all') {
-            $query->where('calendar_id', $author);
+            if ($author == 'me') {
+                $query->where('host_user_id', get_current_user_id());
+            } else {
+                $query->where('calendar_id', $author);
+            }
 
             if ($eventId && $eventId !== 'all') {
                 $query->where('event_id', $eventId);
@@ -69,7 +71,6 @@ class SchedulesController extends Controller
         $search = Arr::get($filters, 'search');
 
         if (!empty($search)) {
-            $author = 'all';
             $query = $query->orderBy('start_time', 'DESC');
             $query = $query->searchBy($search);
         }
@@ -87,23 +88,25 @@ class SchedulesController extends Controller
 
         $data['calendar_event_lists'] = CalendarService::getCalendarOptionsByTitle();
 
-        if ($author && $author != 'all') {
-            $slotOptions = CalendarService::getSlotOptions($author);
+        if ($author == 'me') {
+            $slotOptions = CalendarService::getSlotOptions(null, get_current_user_id());
             $data['slot_options'] = $slotOptions;
         }
 
         if ($request->get('page') == 1) {
-            $pendingQuery = Booking::query()
+            $pendingCount = Booking::query()
                 ->whereIn('status', ['pending', 'reserved'])
-                ->distinct('group_id');
-            if ($author && $author !== 'all') {
-                $pendingCount = $pendingQuery->where('calendar_id', $author)->count('group_id');
-            } else {
-                $pendingCount = $pendingQuery->count('group_id');
-            }
+                ->distinct('group_id')
+                ->when($author == 'me', function($query) {
+                    return $query->where('host_user_id', get_current_user_id());
+                })
+                ->when($author && $author != 'all', function($query) use ($author) {
+                    return $query->where('calendar_id', $author);
+                })
+                ->count('group_id');
 
-            $data['no_show_count'] = Booking::where('status', 'no_show')->count();
             $data['pending_count'] = $pendingCount;
+            $data['no_show_count'] = Booking::where('status', 'no_show')->count();
             $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
         }
 
