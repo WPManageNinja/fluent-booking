@@ -302,10 +302,15 @@ class CalendarService
         return $formattedNotifications;
     }
 
-    public static function getSlotOptions($calendarId)
+    public static function getSlotOptions($calendarId = null, $userId = null)
     {
         $calendarSlots = CalendarSlot::select(['id', 'title'])
-            ->where('calendar_id', $calendarId)
+            ->when($calendarId, function ($query) use ($calendarId) {
+                return $query->where('calendar_id', $calendarId);
+            })
+            ->when($userId, function ($query) use ($userId) {
+                return $query->where('user_id', $userId);
+            })
             ->where('status', '!=', 'expired')
             ->latest()
             ->get();
