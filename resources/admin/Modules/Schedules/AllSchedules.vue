@@ -43,8 +43,7 @@
                         @keyup.enter="fetchSchedules"
                         clearable
                         :placeholder="$t('Search Booking')"
-                        class="fcal_search_input"
-                    >
+                        class="fcal_search_input">
                         <template #append>
                             <el-button @click="fetchSchedules">
                                 <el-icon><Search /></el-icon>
@@ -53,7 +52,7 @@
                     </el-input>
 
                     <el-select
-                        v-if="filters.author == appVars.me.calendar_id"
+                        v-if="filters.author == 'me'"
                         v-model="filters.event_type"
                         class="fcal_select"
                         :aria-placeholder="$t('Select Event Types')"
@@ -68,7 +67,7 @@
                     </el-select>
 
                     <el-select
-                        v-if="filters.author == appVars.me.calendar_id"
+                        v-if="filters.author == 'me'"
                         v-model="filters.event"
                         class="fcal_select"
                         :aria-placeholder="$t('Select Event')"
@@ -88,9 +87,8 @@
                         class="fcal_select"
                         popper-class="fcal_select"
                         @change="handlePeriodChange()"
-                        placement="bottom"
-                    >
-                        <el-option :value="appVars.me.calendar_id" :label="$t('My Meetings')" />
+                        placement="bottom">
+                        <el-option value="me" :label="$t('My Meetings')" />
                         <el-option v-if="hasAllBookingAccess" value="all" :label="$t('All Meetings')" />
                         <template v-if="Object.keys(calendarEventLists).length">
                             <el-option
@@ -187,7 +185,7 @@ export default {
             loading: true,
             filters: {
                 period: 'upcoming',
-                author: this.appVars.me.calendar_id,
+                author: 'me',
                 event: 'all',
                 event_type: 'all',
                 search: ''
@@ -364,7 +362,7 @@ export default {
             this.fetchSchedules();
         },
         handlePeriodChange() {
-            this.$router.push({query: this.filters});
+            this.$router.push({ query: this.filters });
             this.fetchSchedules();
         },
         hideSidebar() {
