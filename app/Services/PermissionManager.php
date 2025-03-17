@@ -72,7 +72,7 @@ class PermissionManager
             return true;
         }
 
-        return false;
+        return current_user_can('manage_options') || self::userCan(['manage_other_calendars']);
     }
 
     public static function canWriteCalendar($calendarId)
