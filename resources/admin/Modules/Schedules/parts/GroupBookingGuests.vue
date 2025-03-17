@@ -117,7 +117,7 @@
                 </el-table-column>
                 <el-table-column width="40" fixed="right">
                     <template #default="scope">
-                        <el-dropdown v-if="canEdit(scope.row.status)" trigger="click" popper-class="fcal_select">
+                        <el-dropdown v-if="canEdit(scope.row)" trigger="click" popper-class="fcal_select">
                             <span class="el-dropdown-link">
                                     <el-icon><MoreFilled /></el-icon>
                             </span>
@@ -174,16 +174,14 @@
               <span class="dialog-footer">
                 <el-button
                     @click="cancelDialog = false"
-                    class="fcal_plain_btn"
-                >
+                    class="fcal_plain_btn">
                     {{ $t("No, Don't cancel") }}
                 </el-button>
                 <el-button
                     v-loading="updating"
                     :disabled="updating"
                     class="fcal_primary_btn"
-                    @click="updateScheduleStatus('cancelled')"
-                >
+                    @click="updateScheduleStatus('cancelled')">
                     {{ $t('Yes, Cancel') }}
                 </el-button>
               </span>
@@ -233,8 +231,16 @@ export default {
     },
     computed: {
         canEdit() {
-            return (status) => {
-                return this.hasAccess('manage_all_bookings') && status !='cancelled' && status != 'completed';
+            return (booking) => {
+                if (['cancelled', 'completed'].includes(booking.status)) {
+                    return false;
+                }
+
+                if (this.hasAccess('manage_all_bookings')) {
+                    return true;
+                }
+
+                return booking.host_user_id == this.appVars.me.id;
             }
         },
         meetingTime() {
