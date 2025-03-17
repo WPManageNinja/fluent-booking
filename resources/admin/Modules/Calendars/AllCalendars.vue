@@ -6,15 +6,15 @@
             </div>
             <div class="fcal_actions">
                 <el-popover
-                    :title="$t('Sort By Calendar Type')"
+                    :title="$t('Filter By Calendar Type')"
                     :width="240"
                     placement="bottom"
-                    popper-class="fcal_sort_popover"
+                    popper-class="fcal_filter_popover"
                     trigger="click"
                 >
                     <template #reference>
-                        <el-button :title="$t('Sort')" class="fcal_plain_btn">
-                            <el-icon><Sort/></el-icon>
+                        <el-button :title="$t('Filter')" class="fcal_plain_btn">
+                            <el-icon><Filter/></el-icon>
                         </el-button>
                     </template>
 
@@ -357,7 +357,7 @@
 <script>
 import Pagination from "../../Pieces/Pagination";
 import CalendarEventBlock from "./parts/CalendarEventBlock";
-import { User, Right, Search, Sort, UploadFilled, MoreFilled } from '@element-plus/icons-vue';
+import { User, Right, Search, Filter, UploadFilled, MoreFilled } from '@element-plus/icons-vue';
 import HostSelector from "../../Pieces/HostSelector";
 import TimeZoneSelector from "./parts/TimeZoneSelector";
 import TeamMemberSelector from "../../Pieces/TeamMemberSelector";
@@ -374,7 +374,7 @@ export default {
         User,
         Right,
         Search,
-        Sort,
+        Filter,
         UploadFilled,
         MoreFilled,
         Pagination,
