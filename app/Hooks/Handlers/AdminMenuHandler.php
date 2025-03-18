@@ -409,6 +409,7 @@ class AdminMenuHandler
             'date_time_formatter'    => DateTimeHelper::getDateFormatter(true) . ', ' . DateTimeHelper::getTimeFormatter(true),
             'available_date_formats' => DateTimeHelper::getAvailableDateFormats(),
             'admin_url'              => admin_url(),
+            'is_rtl'                 => Helper::fluentbooking_is_rtl()
         ]);
     }
 

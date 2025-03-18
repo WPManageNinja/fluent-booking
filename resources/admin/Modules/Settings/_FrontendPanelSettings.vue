@@ -31,8 +31,8 @@
         direction="rtl"
         :title="$t('Frontend Portal Settings')"
         :zIndex="999"
+        :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
         modal-class="fcal_drawer fcal_frontend_panel_drawer">
-
         <div class="fcal_frontend_panel_settings_drawer">
             <h3>{{ $t('Frontend Panel Settings') }}</h3>
             <p>{{ $t('Add your FluentBooking to WordPress frontend / any Page via Shortcode.') }}</p>
