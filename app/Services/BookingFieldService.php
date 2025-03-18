@@ -256,7 +256,8 @@ class BookingFieldService
 
     public static function generateFieldName($calendarEvent, $fieldLabel)
     {
-        $fieldName     = 'custom_' . sanitize_title($fieldLabel);
+        $fieldLabel = str_replace(' ', '_', $fieldLabel);
+        $fieldName = 'custom_' . strtolower($fieldLabel);
         $bookingFields = self::getBookingFields($calendarEvent);
         
         $matched = 0;
