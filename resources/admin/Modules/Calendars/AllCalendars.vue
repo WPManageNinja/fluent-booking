@@ -103,6 +103,7 @@
             :title="$t('Add New Calendar Host')"
             :zIndex="999"
             label-position="top"
+            :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <el-form-item :label="$t('Select Host')">
@@ -156,6 +157,7 @@
             :title="$t('Add New Team')"
             :zIndex="999"
             label-position="top"
+            :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
             modal-class="fcal_drawer">
             <div v-if="appVars.has_pro" class="fcal_create_new_booking_type_drawer">
                 <el-form-item :label="$t('Team Name') + ' *'">
@@ -217,6 +219,7 @@
             :title="$t('Add One-off Event')"
             :zIndex="999"
             label-position="top"
+            :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
             modal-class="fcal_drawer">
             <div v-if="appVars.has_pro" class="fcal_create_new_booking_type_drawer">
                 <el-form-item :label="$t('Event Calendar Name') + ' *'">
@@ -297,6 +300,7 @@
             :title="$t('Import Calendar')"
             :zIndex="999"
             label-position="top"
+            :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <el-form-item :label="$t('Calendar Type')">

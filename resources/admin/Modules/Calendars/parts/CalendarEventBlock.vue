@@ -67,6 +67,7 @@
             v-model="isNewBookingOpen"
             :title="$t('Create New Event Type')"
             :zIndex="999"
+            :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
             modal-class="fcal_drawer">
             <div class="fcal_create_new_booking_type_drawer">
                 <template v-if="calendar.type == 'team'">
@@ -197,6 +198,7 @@
             :title="$t('Clone Calendar Event')"
             :zIndex="999"
             label-position="top"
+            :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
             modal-class="fcal_drawer">
             <div class="fcal_clone_event_drawer">
                 <el-form-item :label="$t('Select Calendar Event')">
