@@ -29,7 +29,7 @@ class SchedulesController extends Controller
 
         $query = Booking::with(['calendar_event']);
 
-        if ($author !== 'all' && $author !== 'me') {
+        if (is_numeric($author)) {
             $author = (int)$author;
         }
 
@@ -100,7 +100,7 @@ class SchedulesController extends Controller
                 ->when($author == 'me', function($query) {
                     return $query->where('host_user_id', get_current_user_id());
                 })
-                ->when($author && $author != 'all', function($query) use ($author) {
+                ->when($author && is_numeric($author), function($query) use ($author) {
                     return $query->where('calendar_id', $author);
                 })
                 ->count('group_id');
