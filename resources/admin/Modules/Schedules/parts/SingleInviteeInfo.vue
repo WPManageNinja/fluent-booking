@@ -61,7 +61,8 @@
                     <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
                         <h3>{{ field.label }}</h3>
                         <div class="fcal_spot_details_value">
-                            <p v-html="field.value"></p>
+                            <p v-if="field.type == 'date'">{{ toDateFormat(field.value, this.appVars.date_time_formatter) }}</p>
+                            <p v-else v-html="field.value"></p>
                         </div>
                     </template>
                 </div>
