@@ -317,6 +317,7 @@ class BookingFieldService
 
             $formattedData[$dataKey] = [
                 'label' => $label,
+                'type'  => $fieldType,
                 'value' => $formattedValue
             ];
         }
