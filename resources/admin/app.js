@@ -38,6 +38,24 @@ function convertToText(obj) {
     return string.join('<br />')
 }
 
+function getDateTimeStringI18(str, type) {
+    if (!str) return str;
+
+    const config = window.fluentFrameworkAdmin.i18.date_time_config;
+
+    switch (type) {
+        case 'day':
+            return config.weekdays[str] || config.weekdaysShort[str] || str;
+        case 'month':
+            return config.months[str] || config.monthsShort[str] || str;
+        case 'mNumber':
+            const numbers = config.numericSystem.split('_');
+            return str.toString().split('').map(s => numbers[s] || s).join('');
+        default:
+            return str;
+    }
+}
+
 const app = createApp(DashboardApplication);
 
 const Icons = [Plus, Delete, Location, Operation, UserFilled, Lock];
@@ -118,7 +136,16 @@ app.mixin({
             return successMsg;
         },
         toCurrentTimezone(date, format) {
-            return dayjs(date).utc('z').local().tz(this.currentTimezone).format(format);
+            const i18nConfig = window.fluentFrameworkAdmin.i18.date_time_config;
+            const convertedDate = dayjs(date).locale({
+                name: 'fluent_date_time',
+                weekdays: Object.values(i18nConfig.weekdays),
+                weekdaysShort: Object.values(i18nConfig.weekdaysShort),
+                months: Object.values(i18nConfig.months),
+                monthsShort: Object.values(i18nConfig.monthsShort)
+            }).utc('z').local().tz(this.currentTimezone).format(format);
+
+            return getDateTimeStringI18(convertedDate, 'mNumber');
         },
         isToday(date) {
             return dayjs(date).isSame(dayjs(), 'day');
@@ -130,7 +157,16 @@ app.mixin({
             return dayjs(date).isSame(dayjs().add(1, 'day'), 'day');
         },
         toDateFormat(date, format) {
-            return dayjs(date).format(format);
+            const i18nConfig = window.fluentFrameworkAdmin.i18.date_time_config;
+            const formattedDate = dayjs(date).locale({
+                name: 'fluent_date_time',
+                weekdays: Object.values(i18nConfig.weekdays),
+                weekdaysShort: Object.values(i18nConfig.weekdaysShort),
+                months: Object.values(i18nConfig.months),
+                monthsShort: Object.values(i18nConfig.monthsShort)
+            }).format(format);
+
+            return getDateTimeStringI18(formattedDate, 'mNumber');
         },
         getTextFromSlug(slug) {
             return slug.split(/-|_/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
