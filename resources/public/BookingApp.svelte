@@ -169,7 +169,7 @@
 
     function getMultiDuration(duration) {
         const durationLookup = appData.multi_duration_lookup;
-        return durationLookup[duration];
+        return durationLookup[duration] ?? formatDuration(duration);
     }
 
     function formatDuration(duration) {
@@ -298,14 +298,14 @@
 
     // detect change on form.location_config
     // and update the appData
-    $: if (appData.is_fluentform && (form.location_config || selectedDateTime.start )) {
+    $: if (appData.is_fluentform && (form.location_config || selectedDateTime.start || !selectedDateTime.start)) {
         fluentFormInput = {
             id: appData.id,
             form: form,
             timezone: timezone,
             duration: duration,
             start_time: selectedDateTime.start
-        }
+        };
 
         if (appData.isFFConversational) {
             appData.element.dispatchEvent(new CustomEvent('value.update', {
@@ -568,7 +568,6 @@
                                                 {timezone}
                                                 {dateFormatter}
                                                 {selectedDateTime}
-                                                {selectedDateTimes}
                                             />
                                         {/if}
                                     </div>
