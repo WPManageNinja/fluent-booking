@@ -400,6 +400,9 @@ class AdminMenuHandler
             'supported_features'     => apply_filters('fluent_booking/supported_featured', [
                 'multi_users' => true
             ]),
+            'i18'                    => [
+                'date_time_config' => DateTimeHelper::getI18nDateTimeConfig(),
+            ],
             'has_pro'                => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
             'require_upgrade'        => defined('FLUENT_BOOKING_PRO_DIR_FILE') && !defined('FLUENT_BOOKING_LITE'),
             'dashboard_notices'      => apply_filters('fluent_booking/dashboard_notices', []),
