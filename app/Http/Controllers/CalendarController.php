@@ -313,7 +313,8 @@ class CalendarController extends Controller
         if ($calendarDataItems) {
             $this->validate($calendarDataItems, [
                 'title'           => 'required',
-                'calendar_avatar' => 'url'
+                'calendar_avatar' => 'nullable|url',
+                'featured_image'  => 'nullable|url'
             ]);
 
             $updatedTimezone = sanitize_text_field(Arr::get($calendarDataItems, 'timezone'));
@@ -324,9 +325,9 @@ class CalendarController extends Controller
 
             $calendar->title = sanitize_text_field(Arr::get($calendarDataItems, 'title'));
             $calendar->description = wp_kses_post(Arr::get($calendarDataItems, 'description'));
-            $calendar->save();
             $calendar->updateMeta('profile_photo_url', sanitize_url(Arr::get($calendarDataItems, 'calendar_avatar')));
             $calendar->updateMeta('featured_image_url', sanitize_url(Arr::get($calendarDataItems, 'featured_image')));
+            $calendar->save();
 
             if ($calendar->user) {
                 $calendar->user->updateMeta('host_phone', sanitize_text_field(Arr::get($calendarDataItems, 'phone')));
