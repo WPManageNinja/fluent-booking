@@ -2754,7 +2754,7 @@
                 object-fit: cover;
                 border-radius: 50%;
             }
-            .el-button {
+            .fcal_upload_btn {
                 position: absolute;
                 background: $primaryColor;
                 color: #ffffff;
@@ -2770,6 +2770,39 @@
                 padding: 0;
                 font-size: 14px;
             }
+            .fcal_remove_btn {
+              position: absolute;
+              opacity: 0;
+              top: 3px;
+              right: 3px;
+              background: white;
+              color: black;
+              width: 12px;
+              font-size: 12px;
+              border-radius: 50%;
+              text-align: center;
+              justify-content: center;
+              align-items: center;
+              border: 1px solid black;
+            }
+            &:hover {
+              .fcal_remove_btn {
+                  opacity: 1;
+                  transition: .3s;
+              }
+            }
+        }
+        &.fcal_featured_image_upload {
+          .fcal_photo_holder {
+            .fcal_upload_btn {
+              right: -10px;
+              bottom: -10px;
+            }
+            .fcal_remove_btn {
+              top: -8px;
+              right: -8px;
+            }
+          }
         }
     }
     .fcal_tm20 {
