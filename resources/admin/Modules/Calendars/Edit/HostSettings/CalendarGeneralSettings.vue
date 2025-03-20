@@ -22,13 +22,31 @@
                 <el-row :gutter="30">
                     <el-col :span="12">
                         <el-form-item :label="$t('Calendar Avatar')">
-                            <photo-widget style="width: 100%;" v-model="calendar.author_profile.avatar" />
+                            <photo-widget style="width: 100%;" v-model="calendar.author_profile.avatar">
+                                <template #after>
+                                    <el-button size="small" class="fcal_remove_btn"
+                                        v-if="calendar.author_profile.avatar"
+                                        :disabled="saving"
+                                        @click="removeAvatar">
+                                        <el-icon><CloseBold /></el-icon>
+                                    </el-button>
+                                </template>
+                            </photo-widget>
                             <p class="fcal_input_desc">{{ $t('Recommended Image Size: 600x600. Square Orientation') }}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item :label="$t('Featured Image')">
-                            <photo-widget class="fcal_featured_image_upload" style="width: 100%;" v-model="calendar.author_profile.featured_image" />
+                            <photo-widget class="fcal_featured_image_upload" style="width: 100%;" v-model="calendar.author_profile.featured_image">
+                                <template #after>
+                                    <el-button size="small" class="fcal_remove_btn"
+                                        v-if="calendar.author_profile.featured_image"
+                                        :disabled="saving"
+                                        @click="removeFeaturedImage">
+                                        <el-icon><CloseBold /></el-icon>
+                                    </el-button>
+                                </template>
+                            </photo-widget>
                             <p class="fcal_input_desc">{{ $t('Will be shown on landing page social share meta or profile block') }}</p>
                         </el-form-item>
                     </el-col>
@@ -96,7 +114,7 @@
 </template>
 
 <script>
-import { Share } from '@element-plus/icons-vue';
+import { CloseBold, Share } from '@element-plus/icons-vue';
 import PhotoWidget from '@/Pieces/PhotoWidget.vue';
 import TimeZoneSelector from '../../parts/TimeZoneSelector.vue';
 export default {
@@ -105,7 +123,8 @@ export default {
     components: {
         Share,
         PhotoWidget,
-        TimeZoneSelector
+        TimeZoneSelector,
+        CloseBold
     },
     data() {
         return {
@@ -116,6 +135,14 @@ export default {
         }
     },
     methods: {
+        removeAvatar() {
+            this.calendar.author_profile.avatar = null;
+            this.saveSettings();
+        },
+        removeFeaturedImage() {
+            this.calendar.author_profile.featured_image = null;
+            this.saveSettings();
+        },
         fetchSettings() {
             this.loading = true;
             this.$get('calendars/' + this.calendar.id + '/sharing-settings', {
