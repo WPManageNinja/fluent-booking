@@ -944,7 +944,7 @@ class FrontEndHandler
             return TimeSlotServiceHandler::sendError($availableSpots, $calendarEvent, $timeZone);
         }
 
-        $availableSpots = array_filter($availableSpots);
+        $availableSpots = array_filter((array)$availableSpots);
         $availableSpots = apply_filters('fluent_booking/available_slots_for_view', $availableSpots, $calendarEvent, $calendar, $timeZone, $duration);
 
         wp_send_json([
