@@ -2,7 +2,7 @@
     <div class="fcal_photo_card">
         <div v-if="app_ready" class="fcal_photo_holder">
             <img v-if="image_url" :src="image_url" />
-            <el-button size="small" @click="initUploader">
+            <el-button size="small" class="fcal_upload_btn" @click="initUploader">
                 <el-icon><CameraFilled /></el-icon>
             </el-button>
             <slot name="after"></slot>
@@ -15,7 +15,7 @@ import { CameraFilled } from '@element-plus/icons-vue';
 
 export default {
     name: 'PhotoWidget',
-    $emits: ['update:modelValue'],
+    emits: ['update:modelValue'],
     props: {
         modelValue: {
             required: false,
@@ -29,6 +29,11 @@ export default {
         return {
             app_ready: false,
             image_url: this.modelValue
+        }
+    },
+    watch: {
+        modelValue(newVal) {
+            this.image_url = newVal;
         }
     },
     methods: {
