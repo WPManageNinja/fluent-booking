@@ -84,6 +84,7 @@
 
     function checkDevice() {
         let timeout = 0;
+        let isMultiLayout = document.querySelector('.ff_conv_media_holder');
         let conversationalPage = document.getElementsByClassName('ff_conversation_page_body');
         if (isFluentform && !conversationalPage) {
             timeout = 2000;
@@ -103,10 +104,9 @@
                 wrapperClass = 'fcal_on_xs fcal_mobile';
             }
 
-            if (conversationalPage && window.innerWidth && window.innerWidth < 600) {
+            if (conversationalPage && ((window.innerWidth && window.innerWidth < 600) || isMultiLayout)) {
                 wrapperClass = 'fcal_on_xs fcal_mobile';
             }
-
         }, timeout)
     }
 
@@ -117,7 +117,6 @@
         } else {
             timezone = guessTimezone;
         }
-
         appReady = true;
         checkDevice();
     });
