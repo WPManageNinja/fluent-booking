@@ -99,11 +99,11 @@
                 if (conversationalPage.length && appData.disable_author) {
                     wrapperClass = 'fcal_on_md';
                 }
-            } else {
+            } else if (wrapperWidth && wrapperWidth < 600) {
                 wrapperClass = 'fcal_on_xs fcal_mobile';
             }
 
-            if (conversationalPage && window.innerWidth < 600) {
+            if (conversationalPage && window.innerWidth && window.innerWidth < 600) {
                 wrapperClass = 'fcal_on_xs fcal_mobile';
             }
 
