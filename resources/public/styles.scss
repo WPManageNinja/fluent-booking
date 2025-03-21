@@ -1871,7 +1871,7 @@ body >.fcal_calendar_wrap {
       }
     }
     .calendar-container {
-      width: 100%;
+      max-width: 100%;
     }
     &.fcal_day_selected {
       .fcal_date_wrapper {
