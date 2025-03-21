@@ -3,7 +3,7 @@
         {#if submitting}
             <div class="fcal_loading_dates">
                 <div class="fcal_loading_dates_inner">
-                    <Pulse color="#0060e6"/>
+                    <Pulse color={primaryColor}/>
                 </div>
             </div>
         {/if}
@@ -220,6 +220,8 @@
     let validating = false;
 
     let submitting = false;
+
+    let primaryColor = 'var(--fcal_primary_color)';
 
     const currentUrl = window.location.href;
 
