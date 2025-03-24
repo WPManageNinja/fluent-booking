@@ -148,6 +148,7 @@ class TransStrings
             'PaymentSettings/multi_payment_description'                                        => __('Enable multiple payment options based on duration', 'fluent-booking'),
             'PaymentSettings/enable_stripe_description'                                        => __('Enable stripe payment method', 'fluent-booking'),
             'PaymentSettings/enable_paypal_description'                                        => __('Enable paypal payment method', 'fluent-booking'),
+            'PaymentSettings/enable_offline_description'                                       => __('Enable offline payment method', 'fluent-booking'),
             'PaymentSettings/enable_payment_settings'                                          => __('To accept payment for your bookings, please activate', 'fluent-booking'),
             'PaymentSettings/enable_global_payment_settings'                                   => __('To accept payment for your bookings, please enable payment from global settings', 'fluent-booking'),
             'PaymentSettings/from_global_settings'                                             => __('from global settings.', 'fluent-booking'),
