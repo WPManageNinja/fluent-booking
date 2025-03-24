@@ -17,6 +17,7 @@
 
     const slot = appData.slot;
     const author = appData.author_profile;
+    const titleTag = appData.title_tag || 'h1';
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
     const dateFormatter = appData.date_formatter;
@@ -370,8 +371,12 @@
                                 <FcalSkeleton rows={5}/>
                             {:else}
                                 <div class="fcal_slot_info">
-                                    {#if isFluentform}
+                                    {#if titleTag == 'h2'}
+                                        <h2 aria-level="2" class="fcal_slot_heading">{slot.title}</h2>
+                                    {:else if titleTag == 'h3' || isFluentform}
                                         <h3 aria-level="3" class="fcal_slot_heading">{slot.title}</h3>
+                                    {:else if titleTag == 'h4'}
+                                        <h4 aria-level="4" class="fcal_slot_heading">{slot.title}</h4>
                                     {:else}
                                         <h1 aria-level="1" class="fcal_slot_heading">{slot.title}</h1>
                                     {/if}
