@@ -153,6 +153,17 @@ class DateTimeHelper
         return $dateTime->format('Y-m-d H:i:s');
     }
 
+    public static function getIsoDurationInMinutes($duration)
+    {
+        if (!$duration) {
+            return 0;
+        }
+
+        $duration = new \DateInterval($duration);
+
+        return ($duration->d * 24 * 60) + ($duration->h * 60) + ($duration->i) + ($duration->s / 60);
+    }
+
     public static function getTimestamp($timezone = 'UTC')
     {
         $timezone = self::getValidatedTimeZone($timezone);
