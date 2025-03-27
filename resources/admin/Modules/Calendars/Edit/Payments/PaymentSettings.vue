@@ -43,7 +43,7 @@
                                             <el-checkbox v-if="paymentConfig.paypal_configured" true-label="yes" false-label="no" v-model="paymentSettings.paypal_enabled">
                                                 {{ $t('PaymentSettings/enable_paypal_description') }}
                                             </el-checkbox>
-                                            <el-checkbox v-if="paymentConfig.offline_enabled" true-label="yes" false-label="no" v-model="paymentSettings.offline_enabled">
+                                            <el-checkbox v-if="paymentConfig.offline_configured" true-label="yes" false-label="no" v-model="paymentSettings.offline_enabled">
                                                 {{ $t('PaymentSettings/enable_offline_description') }}
                                             </el-checkbox>
                                         </div>

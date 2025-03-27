@@ -41,51 +41,77 @@
                 </tfoot>
             </table>
 
-            <div v-if="payment_order.transaction && payment_order.transaction.id" class="fcal_payment_transaction_lists">
-                <h2>{{ $t('Transaction Details') }}</h2>
+            <div v-if="transaction?.id" class="fcal_payment_transaction_lists">
+                <div class="fcal_transaction_label">
+                    <h2>{{ $t('Transaction Details') }}</h2>
+                    <el-icon class="fcal_clickable" @click="editing = true"><EditPen /></el-icon>
+                </div>
                 <div class="fcal_schedule_details_event">
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Method') }}</h3>
-                        <p class="payment_method">{{ payment_order.transaction.payment_method }}</p>
+                        <p class="payment_method">{{ transaction.payment_method }}</p>
                     </div>
-                    <div v-if="payment_order.transaction.card_last_4" class="fcal_schedule_details_event_item">
+                    <div v-if="transaction.card_last_4" class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Card Last 4') }}</h3>
                         <p class="card_last_4">
-                            <span>{{ payment_order.transaction.card_brand}}</span>...{{ payment_order.transaction.card_last_4 }}
+                            <span>{{ transaction.card_brand}}</span>...{{ transaction.card_last_4 }}
                         </p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Total') }}</h3>
-                        <p>
-                            <span v-html="currencySign"></span>{{ (payment_order.transaction.total / 100) }}
-                        </p>
+                        <p><span v-html="currencySign"></span>{{ (transaction.total / 100) }}</p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Status') }}</h3>
-                        <p class="payment_status" :class="payment_order.transaction.status">
-                            {{ $t(payment_order.transaction.status) }}
+                        <p class="payment_status" :class="transaction.status">
+                            {{ $t(transaction.status) }}
                         </p>
                     </div>
-                    <div v-if="payment_order.transaction.vendor_charge_id" class="fcal_schedule_details_event_item">
+                    <div v-if="transaction.vendor_charge_id" class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Transaction ID') }}</h3>
-                        <p :class="payment_order.transaction.vendor_charge_id">
-                            <a :href="'https://dashboard.stripe.com/payments/'+payment_order.transaction.vendor_charge_id" target="_blank">{{payment_order.transaction.vendor_charge_id}}</a>
+                        <p :class="transaction.vendor_charge_id">
+                            <a v-if="payment_order.payment_method === 'stripe'" :href="'https://dashboard.stripe.com/payments/'+transaction.vendor_charge_id" target="_blank">{{transaction.vendor_charge_id}}</a>
+                            <span v-else>{{transaction.vendor_charge_id}}</span>
                         </p>
+                    </div>
+                    <div v-if="transaction?.meta?.billing_address" class="fcal_schedule_details_event_item">
+                        <h3>{{ $t('Billing Address') }}</h3>
+                        <p>{{ transaction.meta.billing_address }}</p>
+                    </div>
+                    <div v-if="transaction?.meta?.shipping_address" class="fcal_schedule_details_event_item">
+                        <h3>{{ $t('Shipping Address') }}</h3>
+                        <p>{{ transaction.meta.shipping_address }}</p>
                     </div>
                 </div>
             </div>
         </div>
+        <EditTransactionModal
+            v-if="editing"
+            :show_modal="editing"
+            :transaction="transaction"
+            :booking_id="booking.id"
+            @closeModal="editing = false"
+        />
     </div>
 </template>
 
 <script>
+import { EditPen } from "@element-plus/icons-vue";
+import EditTransactionModal from './_EditTransactionModal.vue';
+
 export default {
     name: "PaymentLogs",
     props: ['payment_order', 'booking'],
     data() {
         return {
-            currencySign: window.fluentFrameworkAdmin?.currency_sign
+            currencySign: window.fluentFrameworkAdmin?.currency_sign,
+            transaction: this.payment_order.transaction,
+            editing: false
         }
+    },
+    components: {
+        EditPen,
+        EditTransactionModal
     },
     computed: {
         multiGuestEvent() {

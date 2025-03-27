@@ -161,7 +161,7 @@
                     </div>
                 {/if}
                 <div class="fcal_form_item fcal_submit">
-                    {#if hasPaymentItem()}
+                    {#if hasPaymentItem() && form['payment_method'] != 'offline'}
                         <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                             {appData.i18n.Continue_to_Payments}

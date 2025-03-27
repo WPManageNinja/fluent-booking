@@ -23,12 +23,10 @@ import GeneralSettings from "./Modules/Settings/GeneralSettings.vue";
 import ZoomIntegrationSettings from "./Modules/Settings/ZoomIntegration/ZoomIntegrationSettings.vue";
 import TeamManagement from "./Modules/Settings/Team/TeamManagement.vue";
 
-
 import CalendarSettings from "./Modules/Calendars/Edit/CalendarSettings.vue";
 import UserZoomSettings from "./Modules/Calendars/Edit/HostSettings/UserZoomSettings.vue";
 import CalendarGeneralSettings from "./Modules/Calendars/Edit/HostSettings/CalendarGeneralSettings.vue";
 import RemoteCalendarsSettings from "./Modules/Calendars/Edit/HostSettings/RemoteCalendarsSettings";
-
 
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
