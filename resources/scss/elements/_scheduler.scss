@@ -2780,12 +2780,15 @@
     }
   }
 
+  .fcal_transaction_label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .fcal_schedule_details {
-    //display: flex;
-    //align-items: flex-start;
-    //gap: 20px;
     transition: .3s;
-	position: relative;
+	  position: relative;
     padding-right: 350px;
     padding-left: 265px;
     @media (max-width: 1340px) {
