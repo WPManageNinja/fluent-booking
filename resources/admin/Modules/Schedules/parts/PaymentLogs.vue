@@ -82,6 +82,10 @@
                         <h3>{{ $t('Shipping Address') }}</h3>
                         <p>{{ transaction.meta.shipping_address }}</p>
                     </div>
+                    <div v-if="transaction?.meta?.payment_note" class="fcal_schedule_details_event_item">
+                        <h3>{{ $t('Payment Note') }}</h3>
+                        <p>{{ transaction.meta.payment_note }}</p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -70,6 +70,7 @@ export default {
                 meta: {
                     billing_address: this.transaction.meta.billing_address,
                     shipping_address: this.transaction.meta.shipping_address,
+                    payment_note: this.transaction.meta.payment_note,
                 }
             })
                 .then(response => {
