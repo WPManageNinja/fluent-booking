@@ -22,8 +22,12 @@
                 {#each paymentMethods as method}
                     <label class="fcal_radio_group fcal_payment_label" for={field.name+'_'+method.name} aria-label={method.name}>
                         <input type="radio" bind:group={form[field.name]} id={field.name+'_'+method.name} value={method.name}>
+                        {#if method.use_icon}
                             <img src={method.icon} alt={method.name} />
                             <span class="fcal_radio_icon"></span>
+                        {:else}
+                            {method.label} <span class="fcal_radio_icon"></span>
+                        {/if}
                     </label>
                 {/each}
             </div>
