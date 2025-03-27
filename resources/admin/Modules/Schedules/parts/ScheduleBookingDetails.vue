@@ -499,7 +499,7 @@ export default {
             return myBooking || myCalendarBooking || allBookingAccess;
         },
         bookingMarkAsPaid() {
-            if (this.showing_booking.source == 'admin') {
+            if (this.showing_booking.source == 'admin' || this.showing_booking.payment_method == 'offline') {
                 this.updateScheduleStatus('paid', 'payment_status');
             } else {
                 this.updateScheduleStatus('scheduled');

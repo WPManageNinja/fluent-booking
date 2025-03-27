@@ -212,6 +212,10 @@ class SchedulesController extends Controller
             if ($value == 'pending') {
                 do_action('fluent_booking/log_booking_activity', $this->getPaymentPendingLog($booking->id));
             }
+
+            if ($booking->payment_order) {
+                do_action('fluent_booking/payment/status_changed', $booking->payment_order, $booking);
+            }
         }
 
         $updateData[$column] = $value;
@@ -431,6 +435,17 @@ class SchedulesController extends Controller
         return $booking;
     }
 
+    private function getConfirmedBy()
+    {
+        $confirmedBy = 'host';
+        $userId = get_current_user_id();
+        if ($userId && $user = get_user_by('ID', $userId)) {
+            $confirmedBy = $user->display_name;
+        }
+
+        return $confirmedBy;
+    }
+
     private function getPaymentPaidLog($bookingId)
     {
         return [
@@ -438,7 +453,7 @@ class SchedulesController extends Controller
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Payment Successfully Completed', 'fluent-booking'),
-            'description' => __('Payment marked as paid by admin', 'fluent-booking')
+            'description' => __('Payment marked as paid by ', 'fluent-booking') . $this->getConfirmedBy()
         ];
     }
 
@@ -449,24 +464,18 @@ class SchedulesController extends Controller
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Payment Successfully Marked as Pending', 'fluent-booking'),
-            'description' => __('Payment marked as pending by admin', 'fluent-booking')
+            'description' => __('Payment marked as pending by ', 'fluent-booking') . $this->getConfirmedBy()
         ];
     }
 
     private function getConfirmLog($bookingId)
     {
-        $confirmedBy = 'host';
-        $userId = get_current_user_id();
-        if ($userId && $user = get_user_by('ID', $userId)) {
-            $confirmedBy = $user->display_name;
-        }
-
         return [
             'booking_id'  => $bookingId,
             'status'      => 'closed',
             'type'        => 'success',
             'title'       => __('Booking Confirmed', 'fluent-booking'),
-            'description' => __('Booking has been confirmed by ', 'fluent-booking') . $confirmedBy
+            'description' => __('Booking has been confirmed by ', 'fluent-booking') . $this->getConfirmedBy()
         ];
     }
 }

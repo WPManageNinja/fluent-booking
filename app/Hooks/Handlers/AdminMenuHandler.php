@@ -600,6 +600,19 @@ class AdminMenuHandler
                     ]
                 ]
             ],
+            'offline'             => [
+                'title'          => __('Offline Payment', 'fluent-booking'),
+                'disable'        => true,
+                'icon_url'       => $urlAssets . 'images/payment-methods/offline.svg',
+                'component_type' => 'GlobalSettingsComponent',
+                'class'          => 'offline_payment',
+                'route'          => [
+                    'name' => 'PaymentSettingsIndex',
+                    'params' => [
+                        'settings_key' => 'offline'
+                    ]
+                ]
+            ],
             'license'             => [
                 'title'          => __('License', 'fluent-booking'),
                 'disable'        => true,
