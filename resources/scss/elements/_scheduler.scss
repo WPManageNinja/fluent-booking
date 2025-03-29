@@ -3247,6 +3247,10 @@
           color: #ffffff;
           background: #4faf83;
         }
+        &.failed {
+          color: #ffffff;
+          background: #f56c6c;
+        }
       }
       .payment_method {
         background: rgb(38 83 199 / 10%);
