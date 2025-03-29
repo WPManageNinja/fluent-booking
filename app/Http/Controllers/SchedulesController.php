@@ -33,7 +33,9 @@ class SchedulesController extends Controller
             $author = (int)$author;
         }
 
-        if (!PermissionManager::userCanSeeAllBookings()) {
+        $hasPermission = PermissionManager::userCanSeeAllBookings();
+
+        if (!$hasPermission) {
             if (!$author || $author == 'all') {
                 $authorCalendar = Calendar::where('user_id', get_current_user_id())
                     ->where('type', 'simple')
@@ -49,6 +51,9 @@ class SchedulesController extends Controller
                 $query->where('host_user_id', get_current_user_id());
             } else {
                 $query->where('calendar_id', $author);
+                if (!$hasPermission) {
+                    $query->where('host_user_id', get_current_user_id());
+                }
             }
 
             if ($eventId && $eventId !== 'all') {
