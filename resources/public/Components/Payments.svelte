@@ -12,7 +12,7 @@
         </div>
     {/if}
 
-    {#if totalMethod > 1}
+    {#if totalMethod > 1 || firstPaymentName == 'offline'}
         <div class="fcal_payment_methods">
             <div class="fcal_input_label">
                 {i18('Payment Method')}
@@ -54,8 +54,9 @@
     const multiPayments = field.multi_payment_items;
     const paymentMethods = Object.values(field?.payment_methods || {});
     const totalMethod = Object.keys(field?.payment_methods || {}).length;
+    const firstPaymentName = paymentMethods[0]?.name;
 
-    form[field.name] = form[field.name] || (totalMethod !=0 && paymentMethods[0].name);
+    form[field.name] = form[field.name] || (totalMethod !=0 && firstPaymentName);
 
     function maybeUpdateQuantity() {
         const paymentElements = document.querySelectorAll('.fcal_payment_amount');
