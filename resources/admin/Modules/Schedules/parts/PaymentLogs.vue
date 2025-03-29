@@ -117,6 +117,14 @@ export default {
         EditPen,
         EditTransactionModal
     },
+    watch: {
+        payment_order: {
+            handler() {
+                this.transaction = this.payment_order.transaction;
+            },
+            deep: true
+        }
+    },
     computed: {
         multiGuestEvent() {
             return this.booking.event_type === 'group' || this.booking.event_type === 'group_event';
