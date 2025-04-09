@@ -4,7 +4,7 @@ namespace FluentBooking\Framework\Http\Request;
 
 use FluentBooking\Framework\Support\Helper;
 
-trait FileHandler
+trait InteractsWithFilesTrait
 {
     /**
      * Prepares HTTP files for Request
@@ -49,7 +49,13 @@ trait FileHandler
                 if (UPLOAD_ERR_NO_FILE == $file['error']) {
                     $file = null;
                 } else {
-                    $file = new File($file['tmp_name'], $file['name'], $file['type'], $file['size'], $file['error']);
+                    $file = new File(
+                        $file['tmp_name'],
+                        $file['name'],
+                        $file['type'],
+                        $file['size'],
+                        $file['error']
+                    );
                 }
             } else {
                 $file = array_map(array($this, 'convertFileInformation'), $file);
@@ -82,7 +88,7 @@ trait FileHandler
     {
         $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             return $data;
         }
 
@@ -91,7 +97,11 @@ trait FileHandler
         $keys = array_keys($data);
         sort($keys);
 
-        if ($fileKeys != $keys || ! isset($data['name']) || ! is_array($data['name'])) {
+        if (
+            $fileKeys != $keys ||
+            !isset($data['name']) ||
+            !is_array($data['name'])
+        ) {
             return $data;
         }
 
@@ -123,5 +133,27 @@ trait FileHandler
     public function file($key = null, $default = null)
     {
         return Helper::dataGet($this->files(), $key, $default);
+    }
+
+    /**
+     * Get the files array from the request.
+     *
+     * @return array
+     */
+    public function files($asCollection = false)
+    {
+        return $asCollection ? Helper::collect(
+            $this->files
+        ) : $this->files;
+    }
+
+    /**
+     * Get the files as collection from the request.
+     *
+     * @return array
+     */
+    public function fileCollection()
+    {
+        return $this->files(true);
     }
 }
