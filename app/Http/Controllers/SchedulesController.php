@@ -99,23 +99,26 @@ class SchedulesController extends Controller
         }
 
         if ($request->get('page') == 1) {
-            $pendingCount = Booking::query()
-                ->whereIn('status', ['pending', 'reserved'])
-                ->distinct('group_id')
-                ->when($author == 'me', function($query) {
-                    return $query->where('host_user_id', get_current_user_id());
-                })
-                ->when($author && is_numeric($author), function($query) use ($author) {
-                    return $query->where('calendar_id', $author);
-                })
-                ->count('group_id');
-
-            $data['pending_count'] = $pendingCount;
-            $data['no_show_count'] = Booking::where('status', 'no_show')->count();
-            $data['cancelled_count'] = Booking::where('status', 'cancelled')->count();
+            $this->addCountsForFirstPage($author, $data);
         }
 
         return $data;
+    }
+
+    private function addCountsForFirstPage($author, &$data)
+    {
+        $bookingQuery = Booking::query()
+            ->when($author == 'me', function($query) {
+                return $query->where('host_user_id', get_current_user_id());
+            })
+            ->when($author && is_numeric($author), function($query) use ($author) {
+                return $query->where('calendar_id', $author);
+            })
+            ->distinct('group_id');
+
+        $data['pending_count'] = (clone $bookingQuery)->whereIn('status', ['pending', 'reserved'])->count('group_id');
+        $data['no_show_count'] = (clone $bookingQuery)->where('status', 'no_show')->count('group_id');
+        $data['cancelled_count'] = (clone $bookingQuery)->where('status', 'cancelled')->count('group_id');
     }
 
     public function patchBooking(Request $request, $bookingId)
