@@ -145,9 +145,6 @@
         &.more_icon {
           transform: rotate(90deg);
         }
-        &.delete_icon {
-          color: #98a0a6;
-        }
       }
     }
     .booking_details_content {
@@ -203,6 +200,7 @@
   }
   &.all_schedules_popover {
     padding: 8px;
+    border-radius: 12px;
     .fcal_all_schedules {
       display: flex;
       align-items: center;
@@ -258,6 +256,9 @@
             justify-content: center;
             word-break: normal;
             overflow: hidden;
+            &.cancelled {
+              text-decoration: line-through;
+            }
           }
           .schedule_title {
             margin: 0;

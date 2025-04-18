@@ -243,7 +243,6 @@ export default {
         },
         formattedSchedules() {
             const items = {};
-            let compareTime = 'start_time';
             const period = this.filters.period;
             const isDescending = ['completed', 'cancelled'].includes(period);
             if(period == 'latest_bookings') {
@@ -253,12 +252,8 @@ export default {
                 return items;
             }
 
-            if (isDescending) {
-                compareTime = 'updated_at';
-            }
-
             each(this.schedules, (schedule) => {
-                const time = schedule[compareTime];
+                const time = schedule.start_time;
                 let date = this.toCurrentTimezone(time, this.appVars.date_format);
                 items[date] = items[date] || [];
                 items[date].push(schedule);

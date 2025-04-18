@@ -185,6 +185,9 @@
                   display: flex;
                   align-items: flex-start;
                   overflow: hidden;
+                  &.cancelled {
+                    text-decoration: line-through;
+                  }
                 }
                 .booking_title {
                   margin: 0;
@@ -199,6 +202,17 @@
                   height: 10px;
                   border-radius: 50%;
                   position: absolute;
+                }
+              }
+              .fcal_more_wrap {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 8px;
+                margin: 2px;
+                gap: 4px;
+                &:hover {
+                  background: #e5e7eb;
                 }
               }
             }
