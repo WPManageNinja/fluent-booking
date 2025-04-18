@@ -27,6 +27,8 @@ class SchedulesController extends Controller
 
         $author = Arr::get($filters, 'author');
 
+        $range = Arr::get($filters, 'range');
+
         $search = Arr::get($filters, 'search');
 
         $query = Booking::with(['calendar_event']);
@@ -68,6 +70,8 @@ class SchedulesController extends Controller
         }
 
         do_action_ref_array('fluent_booking/schedules_query', [&$query]);
+
+        $query->applyDateRangeFilter($range);
 
         $query->applyComputedStatus($period);
 
@@ -430,6 +434,7 @@ class SchedulesController extends Controller
 
         $booking->title               = $booking->getBookingTitle(true);
         $booking->author              = $booking->getHostDetails(false);
+        $booking->details             = $booking->getConfirmationData(true);
         $booking->location            = $booking->getLocationDetailsHtml();
         $booking->reschedule_url      = $booking->getRescheduleUrl();
         $booking->happening_status    = $booking->getOngoingStatus();
