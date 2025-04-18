@@ -41,96 +41,242 @@
 
 // el-popover-dropdown
 .el-dropdown-list-wrapper {
-    &.el-popover {
-        z-index: 9999999999999 !important;
-    }
+  &.el-popover {
+    z-index: 9999999999999 !important;
+  }
 }
-.el-popover {
-    &.fcal_filter_popover {
-        padding: 20px !important;
-        border-radius: 8px !important;
-        box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1) !important;
-        border: 1px solid #EAECF0 !important;
-
-        * {
-            box-sizing: border-box;
-        }
-        .el-popover__title {
-            margin: 0 0 16px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #1B2533;
-        }
-        .fcal_sorting_action_wrap {
-            .el-radio-group {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-                margin-bottom: 16px;
-                width: 100%;
-                border-bottom: 1px solid #dddfe6;
-                padding-bottom: 16px;
-                .el-radio {
-                    height: auto;
-                    margin: 0;
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-                    .el-radio__input {
-                        &.is-checked {
-                            .el-radio__inner {
-                                border-color: #416ddd;
-                                background: #416ddd;
-                            }
-                        }
-                        .el-radio__inner {
-                            width: 16px;
-                            height: 16px;
-                            &:after {
-                                width: 6px;
-                                height: 6px;
-                            }
-                        }
-                    }
-                    .el-radio__label {
-                        font-size: 14px;
-                        color: #1B2533;
-                    }
-                }
-                &:nth-child(2) {
-                    flex-wrap: nowrap;
-                    gap: 0;
-                    border: 1px solid #dddfe6;
-                    border-radius: 6px;
-                    flex-direction: row;
-                    padding-bottom: 0;
-                    .el-radio {
-                        flex: 1;
-                        align-items: center;
-                        justify-content: center;
-                        line-height: 1;
-                        &.is-checked {
-                            .el-radio__label {
-                                background: rgb(98 104 241 / 10%);
-                                color: #6268f1;
-                            }
-                        }
-                        .el-radio__inner {
-                            width: 0;
-                            height: 0;
-                            opacity: 0;
-                            position: absolute;
-                        }
-                        .el-radio__label {
-                            width: 100%;
-                            text-align: center;
-                            padding: 9px 8px;
-                        }
-                    }
-                }
-            }
-        }
+.el-popover.el-popper {
+  &.fcal_filter_popover {
+    padding: 20px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 30px rgba(27, 37, 51, 0.1) !important;
+    border: 1px solid #EAECF0 !important;
+    * {
+      box-sizing: border-box;
     }
+    .el-popover__title {
+      margin: 0 0 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1B2533;
+    }
+    .fcal_sorting_action_wrap {
+      .el-radio-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+        width: 100%;
+        border-bottom: 1px solid #dddfe6;
+        padding-bottom: 16px;
+        .el-radio {
+          height: auto;
+          margin: 0;
+          &:last-child {
+            margin-bottom: 0;
+          }
+          .el-radio__input {
+            &.is-checked {
+              .el-radio__inner {
+                border-color: #416ddd;
+                background: #416ddd;
+              }
+            }
+            .el-radio__inner {
+              width: 16px;
+              height: 16px;
+              &:after {
+                width: 6px;
+                height: 6px;
+              }
+            }
+          }
+          .el-radio__label {
+            font-size: 14px;
+            color: #1B2533;
+          }
+        }
+        &:nth-child(2) {
+          flex-wrap: nowrap;
+          gap: 0;
+          border: 1px solid #dddfe6;
+          border-radius: 6px;
+          flex-direction: row;
+          padding-bottom: 0;
+          .el-radio {
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            &.is-checked {
+              .el-radio__label {
+                background: rgb(98 104 241 / 10%);
+                color: #6268f1;
+              }
+            }
+            .el-radio__inner {
+              width: 0;
+              height: 0;
+              opacity: 0;
+              position: absolute;
+            }
+            .el-radio__label {
+              width: 100%;
+              text-align: center;
+              padding: 9px 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+  &.schedule_details_popover {
+    padding: 16px 24px 24px 24px;
+    border-radius: 12px;
+    .booking_details_header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 8px 0 16px 0;
+      gap: 16px;
+      .el-icon {
+        cursor: pointer;
+        font-size: 16px;
+        &.more_icon {
+          transform: rotate(90deg);
+        }
+        &.delete_icon {
+          color: #98a0a6;
+        }
+      }
+    }
+    .booking_details_content {
+      .booking_item {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        &:last-child {
+          margin-bottom: 1px;
+        }
+        &:first-child {
+          align-items: flex-start;
+        }
+        &.booking_details {
+          margin-bottom: 0;
+        }
+        .left_side {
+          display: flex;
+          flex: none;
+          font-size: 20px;
+          max-height: 39px;
+          align-items: center;
+        }
+        .right_side {
+          display: block;
+          overflow: hidden;
+          flex-grow: 1;
+        }
+        .booking_heading {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #1B2533;
+        }
+        .booking_time {
+          font-size: 13px;
+          color: #667085;
+        }
+        .booking_color {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          transform: translateY(4px);
+        }
+        .booking_location {
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+  &.all_schedules_popover {
+    padding: 8px;
+    .fcal_all_schedules {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+      gap: 8px;
+      .fcal_all_schedules_header {
+        .el-icon {
+          right: 0;
+          top: 2px;
+          font-size: 16px;
+          position: absolute;
+          border-radius: 50%;
+          padding: 4px;
+          cursor: pointer;
+          &:hover {
+            background: #f5f7fa;
+          }
+        }
+        .el-button {
+          height: auto;
+          padding: 6px 12px;
+          border-radius: 8px;
+        }
+      }
+      .fcal_all_schedules_body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+        .fcal_all_schedules_wrap {
+          display: flex;
+          padding-left: 18px;
+          padding-right: 6px;
+          position: relative;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          margin: 4px 2px;
+          gap: 4px;
+          cursor: pointer;
+          &:last-child {
+            margin-bottom: 0;
+          }
+          &:hover {
+            background: #e5e7eb;
+          }
+          .schedule_info {
+            gap: 4px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: normal;
+            overflow: hidden;
+          }
+          .schedule_title {
+            margin: 0;
+            line-height: 1.4;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+          .schedule_color {
+            left: 5px;
+            top: 4.5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+          }
+        }
+      }
+    }
+  }
 }
 .fcal_inline_items {
     display: flex;
@@ -342,12 +488,8 @@
     &.fcal_select {
         padding: 8px !important;
         border-radius: 8px;
-        //border: none !important;
         box-shadow: 0 8px 30px rgb(27 37 51 / 10%) !important;
         border: 1px solid #EAECF0 !important;
-        .el-popper__arrow {
-            display: none;
-        }
         &.fcal_location_select {
             border: 1px solid #EAECF0 !important;
             ul {
@@ -399,6 +541,13 @@
             padding: 6px 16px;
           }
         }
+        &.select_view {
+          .el-select-dropdown__item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          }
+        }
         ul {
             margin: 0;
             padding: 0;
@@ -425,7 +574,11 @@
                 height: auto;
                 line-height: 24px;
                 text-align: left;
+                margin-bottom: 4px;
                 gap: 4px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
                 &.selected,
                 &:hover {
                     color: $dark;
@@ -475,6 +628,9 @@
                     }
                 }
             }
+        }
+        .el-popper__arrow {
+          display: none;
         }
         .default_schedule {
           background: rgba(38, 83, 199, 0.1);

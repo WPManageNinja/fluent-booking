@@ -32,6 +32,10 @@
     }
 
     .fcal_title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       h3 {
         margin: 0;
         padding: 0;
@@ -116,6 +120,90 @@
 
       .el-dropdown {
         cursor: pointer;
+      }
+    }
+
+  }
+  
+  .fcal_calendar_view {
+    margin-top: 12px;
+    .el-calendar {
+      border-radius: 8px;
+      .el-calendar__header {
+        background: #FAFAFA;
+        border-radius: 8px;
+        .header_date {
+          display: flex;
+          align-items: center;
+          font-size: 15px;
+          font-weight: 500;
+        }
+        .el-button-group {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          .el-button {
+            border-radius: 8px;
+          }
+        }
+      }
+      .el-calendar__body {
+        .el-calendar-table {
+          .el-calendar-table__row {
+            .el-calendar-day {
+              display: flex;
+              justify-content: flex-start;
+              flex-direction: column;
+              padding: 8px 0;
+              height: 120px;
+              &:hover {
+                background: transparent;
+              }
+              .day_number {
+                align-self: center;
+              }
+              .fcal_booking_wrap {
+                display: flex;
+                padding-left: 18px;
+                padding-right: 6px;
+                position: relative;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                margin: 2px;
+                border-radius: 8px;
+                &:last-child {
+                  margin-bottom: 0;
+                }
+                &:hover {
+                  background: #e5e7eb;
+                }
+                .booking_info {
+                  gap: 4px;
+                  font-size: 12px;
+                  display: flex;
+                  align-items: flex-start;
+                  overflow: hidden;
+                }
+                .booking_title {
+                  margin: 0;
+                  line-height: 1.4;
+                  white-space: nowrap;
+                  overflow: hidden;
+                }
+                .booking_color {
+                  left: 5px;
+                  top: 4.5px;
+                  width: 10px;
+                  height: 10px;
+                  border-radius: 50%;
+                  position: absolute;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
