@@ -227,8 +227,8 @@ class Booking extends Model
         }
 
         if (!empty($range['time_zone']) && $range['time_zone'] != 'UTC') {
-            $range['start_date'] = DateTimeHelper::convertToUtc($range['start_date'], $range['time_zone']);
-            $range['end_date'] = DateTimeHelper::convertToUtc($range['end_date'], $range['time_zone']);
+            $range['start_date'] = date('Y-m-d H:i:s', strtotime($range['start_date'] . ' -1 day'));
+            $range['end_date'] = date('Y-m-d H:i:s', strtotime($range['end_date'] . ' +1 day'));
         }
 
         return $query->whereBetween('start_time', [$range['start_date'], $range['end_date']]);

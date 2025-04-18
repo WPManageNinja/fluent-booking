@@ -4,21 +4,18 @@
             <el-icon class="top_right_icon" @click="openFullScreen(schedule.id)">
                 <FullScreen />
             </el-icon>
-            <el-icon class="delete_icon" @click="confirmDeleteBooking">
-                <Delete />
-            </el-icon>
             <el-dropdown trigger="click" popper-class="fcal_select">
                 <el-icon class="more_icon">
                     <More />
                 </el-icon>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item 
+                        <el-dropdown-item
                             @click="openFullScreen(schedule.id)">
                             <el-icon><View/></el-icon>
                             {{ $t('View Booking') }}
                         </el-dropdown-item>
-                        <el-dropdown-item 
+                        <el-dropdown-item
                             v-if="canMarkAsPaid(schedule)" @click="bookingMarkAsPaid(schedule)">
                             <el-icon><Check/></el-icon>
                             {{ $t('Mark As Paid') }}
@@ -34,13 +31,13 @@
                             <el-icon><Hide/></el-icon>
                             {{ $t('No Show') }}
                         </el-dropdown-item>
-                        <el-dropdown-item 
+                        <el-dropdown-item
                             v-if="canCancelOrReschedule(schedule)"
                             @click="rescheduleBooking(schedule)">
                             <el-icon><Refresh/></el-icon>
                             {{ $t('Reschedule') }}
                         </el-dropdown-item>
-                        <el-dropdown-item 
+                        <el-dropdown-item
                             v-if="canCancelOrReschedule(schedule)" @click="cancelDialog = true">
                             <el-icon><Close/></el-icon>
                             {{ $t('Cancel') }}
@@ -230,6 +227,7 @@ export default {
             this.$del('schedules/' + this.schedule.id)
                 .then(response => {
                     this.$handleSuccess(response);
+                    this.$emit('update');
                 })
                 .catch(errors => {
                     this.$handleError(errors);
