@@ -236,7 +236,7 @@
         />
         <ProNoticeDialog 
             v-if="noticeModal" 
-            :openModal="noticeModal" 
+            :openModal="noticeModal"
             :title="noticeTitle"
             @update:openModal="noticeModal = $event"
         />

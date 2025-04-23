@@ -194,10 +194,10 @@ export default {
             return time.getTime() > Date.now();
         },
         convertDate(date) {
-            if (date) {
-                return this.toCurrentTimezone(date, 'YYYY-MM-DD HH:MM:ss')
+            if (!date) {
+                return '';
             }
-            return '';
+            return this.toCurrentTimezone(date, 'YYYY-MM-DD HH:MM:ss')
         },
         viewMeetingDetails(scheduleId) {
             this.$router.push({

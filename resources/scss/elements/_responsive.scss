@@ -1,0 +1,32 @@
+@media (max-width: 485px) {
+  #fluent-booking-app {    
+    .fcal_calendar_view {
+      .el-calendar {
+        .el-calendar__header {
+          flex-wrap: nowrap;
+          .header_date_picker {
+            width: min-content;
+          }
+          .el-radio-group.fcal_radio_switch {
+            width: min-content;
+          }
+        }
+        .el-calendar__body {
+          padding: 0;
+        }
+      }
+      .weekly_calendar_view {
+        .weekly_header {
+          .day_column_header .day_number {
+            .el-button {
+              padding: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .el-popover.el-popper.schedule_details_popover {
+    width: 80% !important;
+  }
+}

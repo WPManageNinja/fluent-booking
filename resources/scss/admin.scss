@@ -5,7 +5,6 @@
 @import "elements/scheduler";
 @import "elements/notification";
 @import "elements/settings";
-@import "elements/responsive";
 @import "elements/wp";
 
 .toplevel_page_fluent-booking {
@@ -32,6 +31,10 @@
     }
 
     .fcal_title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       h3 {
         margin: 0;
         padding: 0;
@@ -39,13 +42,22 @@
         font-size: 24px;
         line-height: 1.4;
       }
-
       p {
         margin: 0;
         padding: 0;
         color: $lightDark;
         font-size: 13px;
         line-height: 1.4;
+      }
+      .fcal_add .el-icon {
+        padding: 2px;
+        font-size: 16px;
+        margin-top: 6px;
+        color: #000;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid;
+        background: white;
       }
     }
 
@@ -84,6 +96,9 @@
             max-width: 100%;
           }
         }
+        .el-select {
+          max-width: 100%;
+        }
       }
     }
 
@@ -118,23 +133,258 @@
         cursor: pointer;
       }
     }
+
+  }
+  
+  .fcal_calendar_view {
+    margin-top: 12px;
+    .el-calendar {
+      border-radius: 8px;
+      &.weekly_view {
+        .el-calendar__body {
+          display: none;
+        }
+      }
+      .el-calendar__header {
+        background: #FAFAFA;
+        border-radius: 8px;
+        flex-wrap: wrap;
+        gap: 12px;
+        .header_date_picker {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          .header_date {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 400;
+            margin: 0;
+          }
+          .date_picker_input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+        }
+        .el-button-group {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          .el-button {
+            border-radius: 8px;
+          }
+        }
+        .el-select {
+          width: 100px;
+          flex: none;
+          .el-input__wrapper {
+            border-radius: 8px;
+            padding: 2px 10px;
+          }
+        }
+      }
+      .el-calendar__body {
+        .el-calendar-table {
+          .el-calendar-table__row {
+            .el-calendar-day {
+              display: flex;
+              justify-content: flex-start;
+              flex-direction: column;
+              padding: 8px 0;
+              height: 120px;
+              &:hover {
+                background: transparent;
+              }
+              .day_number {
+                align-self: center;
+                .el-button {
+                  padding: 4px;
+                  border-radius: 50%;
+                  height: fit-content;
+                  font-size: 13px;
+                  font-weight: 400;
+                }
+              }
+              .fcal_booking_wrap {
+                display: flex;
+                padding-left: 18px;
+                padding-right: 6px;
+                position: relative;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                margin: 2px;
+                border-radius: 8px;
+                &:last-child {
+                  margin-bottom: 0;
+                }
+                &:hover {
+                  background: #e5e7eb;
+                }
+                .booking_info {
+                  gap: 4px;
+                  font-size: 12px;
+                  display: flex;
+                  align-items: flex-start;
+                  overflow: hidden;
+                  &.cancelled {
+                    text-decoration: line-through;
+                  }
+                }
+                .booking_title {
+                  margin: 0;
+                  line-height: 1.4;
+                  white-space: nowrap;
+                  overflow: hidden;
+                }
+                .booking_color {
+                  left: 5px;
+                  top: 4.5px;
+                  width: 10px;
+                  height: 10px;
+                  border-radius: 50%;
+                  position: absolute;
+                }
+              }
+              .fcal_more_wrap {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 8px;
+                margin: 2px;
+                gap: 4px;
+                &:hover {
+                  background: #e5e7eb;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
+  .weekly_calendar_view {
+    height: calc(100vh - 200px);
+    color: black;
+    background-color: #fff;
+    overflow-x: hidden;
+    position: relative;
+    border-radius: 8px;
+
+    .weekly_header {
+      top: 0;  
+      z-index: 9;
+      display: flex;
+      position: sticky;
+      background: #fff;
+      border-bottom: 1px solid #D6DAE1;
+      .time_column_header {
+        width: 60px;
+        flex-shrink: 0;
+      }  
+      .day_column_header {
+        flex: 1;
+        min-width: 0;
+        padding: 8px;
+        text-align: center;
+        border-left: 1px solid #D6DAE1;
+        .day_name {
+          color: #888;
+          font-size: 12px;
+          margin-bottom: 4px;
+        }
+        .day_number {
+          .el-button {
+            margin: 0;
+            padding: 8px;
+            height: 36px;
+            font-size: 20px;
+            font-weight: 400;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+    .weekly_grid {
+      display: flex;
+      .time_column {
+        width: 60px;
+        flex-shrink: 0;
+        .time_slot {
+          height: 60px;
+          padding: 8px;
+          color: #888;
+          font-size: 12px;
+          text-align: right;
+          position: relative;
+          top: -14px;
+        }
+      }
+      .days_grid {
+        flex: 1;
+        display: flex;
+        position: relative;
+        .day_column {
+          flex: 1;
+          min-width: 0;
+          border-left: 1px solid #D6DAE1;
+          position: relative;
+          .hour_cell {
+            height: 60px;
+            border-bottom: 1px solid #D6DAE1;
+          }
+        }
+      }
+      .calendar_event {
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        border-radius: 8px;
+        padding: 4px 6px;
+        font-size: 12px;
+        z-index: 1;
+        border-bottom: 2px solid #fff;
+        overflow: hidden;
+        cursor: pointer;
+        &:last-child {
+          border-bottom: none;
+        }
+        &:hover {
+          filter: brightness(1.1);
+        }
+        .event_content {
+          height: 100%;
+          display: block;
+          font-size: 12px;
+          overflow: hidden;
+          .event_title {
+            display: inline;
+            overflow: hidden;
+          }
+          .event_time {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
   .fcal_section {
     display: block;
     width: 100%;
-
   }
 
   .fcal_webhook_request_header_table {
     border-spacing: 0;
     border-collapse: collapse;
-
     thead {
       tr {
         th {
           text-align: left;
-
           &:last-child {
             padding-left: 5px;
           }
@@ -145,22 +395,18 @@
     tr {
       td {
         padding: 5px 5px 5px 0;
-
         &:last-child {
           padding-left: 5px;
           padding-right: 0;
         }
-
         .right-field {
           display: flex;
           align-items: center;
           gap: 8px;
-
           .action-btn {
             display: flex;
             align-items: center;
             gap: 6px;
-
             .el-button {
               margin: 0;
               padding: 8px 16px;
@@ -173,44 +419,35 @@
 
   .fcal_all_schediles {
     display: flex;
-
     .fcal_schedules {
       flex: 1;
     }
-
     .fcal_spot_details {
       flex: 3;
       margin: 0;
     }
-
     &.fcal_showing_details {
       .fcal_spot_actions {
         display: none;
       }
-
       .fcal_spot_color {
         display: none;
       }
-
       .fcal_spot_line {
         flex-direction: column;
         margin-bottom: 0;
       }
-
       .fcal_schedule {
         margin: 0;
       }
-
       .fcal_schedules {
         max-height: calc(100% - 10px);
         overflow-y: scroll;
-
         &::-webkit-scrollbar {
           width: 6px;
           background: transparent;
           border-radius: 10px;
         }
-
         &::-webkit-scrollbar-thumb {
           background: #e5e8eb;
           border-radius: 10px;
@@ -223,13 +460,10 @@
     b {
       font-weight: 500;
     }
-
     p {
       margin: 0;
     }
   }
-
-  // Dashboard
   .fcal_dashboard_box {
     background: #ffffff;
     border-radius: 8px;
@@ -1203,3 +1437,5 @@ table.shop_table.order_details {
   max-width: 850px;
   margin: 0 auto;
 }
+
+@import "elements/responsive";

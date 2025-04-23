@@ -24,7 +24,7 @@
                             {#if !form[field.name]}
                                 {form[field.name] = field.default_value}
                             {/if}
-                            <input type="hidden" bind:value={form[field.name]}/>
+                            <input name={field.name} type="hidden" bind:value={form[field.name]}/>
                         {:else}
                             <label class="fcal_input_content" aria-label={field?.label} id="{field.name}-label">
                                 {#if field.label}

@@ -27,33 +27,37 @@ class SchedulesController extends Controller
 
         $author = Arr::get($filters, 'author');
 
+        $range = Arr::get($filters, 'range');
+
+        $search = Arr::get($filters, 'search');
+
         $query = Booking::with(['calendar_event']);
 
         if (is_numeric($author)) {
             $author = (int)$author;
         }
 
+        $currentHostId = get_current_user_id();
+
         $hasPermission = PermissionManager::userCanSeeAllBookings();
 
-        if (!$hasPermission) {
-            if (!$author || $author == 'all') {
-                $authorCalendar = Calendar::where('user_id', get_current_user_id())
-                    ->where('type', 'simple')
-                    ->first();
-                if($authorCalendar) {
-                    $author = $authorCalendar->id;
-                }
+        if (!$hasPermission && (!$author || $author == 'all')) {
+            $authorCalendar = Calendar::where('user_id', $currentHostId)
+                ->where('type', 'simple')
+                ->first();
+
+            if ($authorCalendar) {
+                $author = $authorCalendar->id;
             }
         }
 
         if ($author && $author !== 'all') {
-            if ($author == 'me') {
-                $query->where('host_user_id', get_current_user_id());
-            } else {
+            if ($author == 'me' || !$hasPermission) {
+                $query->where('host_user_id', $currentHostId);
+            } 
+
+            if ($author != 'me') {
                 $query->where('calendar_id', $author);
-                if (!$hasPermission) {
-                    $query->where('host_user_id', get_current_user_id());
-                }
             }
 
             if ($eventId && $eventId !== 'all') {
@@ -67,17 +71,16 @@ class SchedulesController extends Controller
 
         do_action_ref_array('fluent_booking/schedules_query', [&$query]);
 
+        $query->applyDateRangeFilter($range);
+
         $query->applyComputedStatus($period);
 
         $query->applyBookingOrderByStatus($period);
 
         $query->groupBy('group_id');
 
-        $search = Arr::get($filters, 'search');
-
         if (!empty($search)) {
-            $query = $query->orderBy('start_time', 'DESC');
-            $query = $query->searchBy($search);
+            $query->searchBy($search);
         }
 
         $schedules = $query->paginate();
@@ -94,7 +97,7 @@ class SchedulesController extends Controller
         $data['calendar_event_lists'] = CalendarService::getCalendarOptionsByTitle();
 
         if ($author == 'me') {
-            $slotOptions = CalendarService::getSlotOptions(null, get_current_user_id());
+            $slotOptions = CalendarService::getSlotOptions(null, $currentHostId);
             $data['slot_options'] = $slotOptions;
         }
 
@@ -431,6 +434,7 @@ class SchedulesController extends Controller
 
         $booking->title               = $booking->getBookingTitle(true);
         $booking->author              = $booking->getHostDetails(false);
+        $booking->details             = $booking->getConfirmationData(true);
         $booking->location            = $booking->getLocationDetailsHtml();
         $booking->reschedule_url      = $booking->getRescheduleUrl();
         $booking->happening_status    = $booking->getOngoingStatus();
