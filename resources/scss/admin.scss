@@ -42,13 +42,22 @@
         font-size: 24px;
         line-height: 1.4;
       }
-
       p {
         margin: 0;
         padding: 0;
         color: $lightDark;
         font-size: 13px;
         line-height: 1.4;
+      }
+      .fcal_add .el-icon {
+        padding: 2px;
+        font-size: 16px;
+        margin-top: 6px;
+        color: #000;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid;
+        background: white;
       }
     }
 
