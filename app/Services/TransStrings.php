@@ -677,6 +677,7 @@ class TransStrings
             'Last 3 months'                                                                    => __('Last 3 months', 'fluent-booking'),
             'Month'                                                                            => __('Month', 'fluent-booking'),
             'Week'                                                                             => __('Week', 'fluent-booking'),
+            'Day'                                                                              => __('Day', 'fluent-booking'),
             'Edit:'                                                                            => __('Edit:', 'fluent-booking'),
             'booked a new meeting at'                                                          => __('booked a new meeting at', 'fluent-booking'),
             'Booking Details'                                                                  => __('Booking Details', 'fluent-booking'),

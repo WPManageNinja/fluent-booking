@@ -18,7 +18,9 @@
       .weekly_calendar_view {
         .weekly_header {
           .day_column_header .day_number {
-            font-size: 18px;
+            .el-button {
+              padding: 4px;
+            }
           }
         }
       }

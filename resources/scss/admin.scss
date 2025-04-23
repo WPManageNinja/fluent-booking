@@ -192,6 +192,13 @@
               }
               .day_number {
                 align-self: center;
+                .el-button {
+                  padding: 4px;
+                  border-radius: 50%;
+                  height: fit-content;
+                  font-size: 13px;
+                  font-weight: 400;
+                }
               }
               .fcal_booking_wrap {
                 display: flex;
@@ -258,6 +265,7 @@
     background-color: #fff;
     overflow-x: hidden;
     position: relative;
+    border-radius: 8px;
 
     .weekly_header {
       top: 0;  
@@ -279,12 +287,17 @@
         .day_name {
           color: #888;
           font-size: 12px;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
         .day_number {
-          margin: 4px 0;
-          font-size: 24px;
-          font-weight: 400;
+          .el-button {
+            margin: 0;
+            padding: 8px;
+            height: 36px;
+            font-size: 20px;
+            font-weight: 400;
+            border-radius: 50%;
+          }
         }
       }
     }
