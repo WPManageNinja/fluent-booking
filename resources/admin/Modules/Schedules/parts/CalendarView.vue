@@ -1,16 +1,17 @@
 <template>
     <div class="fcal_calendar_view">
-        <el-calendar v-model="selectedDate" :class="{ 'monthly_view': isMonthlyView, 'weekly_view': isWeeklyView }">
+        <el-calendar v-model="selectedDate" :class="{ 'monthly_view': isMonthlyView, 'weekly_view': isWeeklyOrDailyView }">
             <template #header="{ date }">
-                <el-radio-group v-model="viewMode" class="fcal_radio_switch">
+                <el-radio-group v-model="viewMode" @change="changeViewMode" class="fcal_radio_switch">
                     <el-radio-button label="month">{{ $t('Month') }}</el-radio-button>
                     <el-radio-button label="week">{{ $t('Week') }}</el-radio-button>
+                    <el-radio-button label="day">{{ $t('Day') }}</el-radio-button>
                 </el-radio-group>
                 <div class="header_date_picker" @click="$refs.datePicker.focus()">
                     <h3 class="header_date">{{ date }}</h3>
                     <el-date-picker
-                        v-model="selectedRange" 
-                        :type="viewMode || 'month'"
+                        v-model="selectedRange"
+                        :type="datePickerType"
                         class="date_picker_input"
                         ref="datePicker">
                     </el-date-picker>
@@ -28,7 +29,11 @@
                 </el-button-group>
             </template>
             <template v-if="isMonthlyView" #date-cell="{ data }">
-                <span class="day_number">{{ data.day.split('-')[2] }}</span>
+                <span class="day_number">
+                    <el-button text @click="selectCurrentDay(data.day)">
+                        {{ data.day.split('-')[2] }}
+                    </el-button>
+                </span>
                 <template v-if="hasSchedulesForDay(data.day)">
                     <div v-for="schedule in firstThreeSchedules(data.day)" :key="schedule.id" class="fcal_booking_wrap">
                         <span class="booking_color" :style="{ background: schedule.calendar_event?.color_schema }"></span>
@@ -73,8 +78,12 @@
                         <template #default>
                             <div class="fcal_all_schedules">
                                 <div class="fcal_all_schedules_header">
-                                    <el-button text>{{ this.toDateFormat(data.day, 'ddd, D MMMM') }}</el-button>
-                                    <el-icon @click="closeAllSchedules(data.day)"><Close /></el-icon>
+                                    <el-button text @click="selectCurrentDay(data.day)">
+                                        {{ this.toDateFormat(data.day, 'ddd, D MMMM') }}
+                                    </el-button>
+                                    <el-icon @click="closeAllSchedules(data.day)">
+                                        <Close />
+                                    </el-icon>
                                 </div>
                                 <div class="fcal_all_schedules_body">
                                     <div v-for="booking in formattedSchedules[data.day]" :key="booking.id" class="fcal_all_schedules_wrap">
@@ -108,12 +117,16 @@
                 </template>
             </template>
         </el-calendar>
-        <div v-if="isWeeklyView" class="weekly_calendar_view">
+        <div v-if="isWeeklyOrDailyView" class="weekly_calendar_view">
             <div class="weekly_header">
                 <div class="time_column_header"></div>
                 <div v-for="day in formattedWeekDays" :key="day.date" class="day_column_header">
                     <div class="day_name">{{ day.dayName }}</div>
-                    <div class="day_number">{{ day.dayNumber }}</div>
+                    <div class="day_number">
+                        <el-button text @click="selectCurrentDay(day.date)">
+                            {{ day.dayNumber }}
+                        </el-button>
+                    </div>
                 </div>
             </div>
             <div class="weekly_grid" ref="weeklyGrid">
@@ -149,7 +162,7 @@
                                 </template>
                                 <template #default>
                                     <BookingDetails
-                                        :schedule="event" 
+                                        :schedule="event"
                                         @update="updateSchedule"
                                         @close="closeBookingModal"
                                     />
@@ -211,16 +224,6 @@ export default {
                 this.currentSchedules = newSchedules;
             },
             deep: true
-        },
-        viewMode(newVal, oldVal) {
-            if (newVal == oldVal) {
-                return;
-            }
-            if (oldVal) {
-                this.selectedDate = new Date();
-                this.$emit('dateUpdated', this.selectedDate, newVal);
-            }
-            localStorage.setItem('fcal_calendar_view_mode', newVal);
         }
     },
     computed: {
@@ -229,6 +232,18 @@ export default {
         },
         isWeeklyView() {
             return this.viewMode == 'week';
+        },
+        isDailyView() {
+            return this.viewMode == 'day';
+        },
+        isWeeklyOrDailyView() {
+            return ['day', 'week'].includes(this.viewMode);
+        },
+        datePickerType() {
+            if (this.isDailyView) {
+                return 'date';
+            }
+            return this.viewMode || 'month';
         },
         isVisible() {
             return (schedule) => {
@@ -271,8 +286,9 @@ export default {
         },
         formattedWeekDays() {
             const days = [];
-            const startDate = dayjs(this.selectedDate).startOf('week');
-            for (let i = 0; i < 7; i++) {
+            const range = this.isDailyView ? 1 : 7;
+            const startDate = dayjs(this.selectedDate).startOf(this.viewMode);
+            for (let i = 0; i < range; i++) {
                 const date = startDate.clone().add(i, 'days');
                 days.push({
                     date: date.format('YYYY-MM-DD'),
@@ -295,6 +311,9 @@ export default {
             }
         },
         popoverPlacement() {
+            if (this.isDailyView) {
+                return 'top-start';
+            }
             return window.innerWidth <= 485 ? 'top' : 'right';
         },
         getEventStyle() {
@@ -313,14 +332,17 @@ export default {
                     top: `${top}px`,
                     height: `${height}px`
                 };
+
                 if (duration < 30) {
                     style.lineHeight = '1.2';
                     style.paddingTop = '0';
                     style.paddingBottom = '0';
                 }
+
                 if (event.status == 'cancelled') {
                     style.textDecoration = 'line-through';
                 }
+
                 return style;
             }
         }
@@ -333,6 +355,10 @@ export default {
             const div = document.createElement('div');
             div.innerHTML = htmlTitle;
             return div.textContent || div.innerText || '';
+        },
+        changeViewMode(newVal) {
+            this.$emit('dateUpdated', this.selectedDate, newVal);
+            localStorage.setItem('fcal_calendar_view_mode', newVal);
         },
         hasSchedulesForDay(date) {
             const hasSchedules = this.formattedSchedules[date]?.length;
@@ -349,6 +375,10 @@ export default {
             const navStep = isPrev ? -1 : 1;
             const currentDate = dayjs(this.selectedDate);
             this.selectedDate = currentDate.add(navStep, this.viewMode).toDate();
+        },
+        selectCurrentDay(date) {
+            this.viewMode = 'day';
+            this.selectedDate = dayjs(date).toDate();
         },
         showDetails(schedule) {
             this.selectedSchedule = schedule;
