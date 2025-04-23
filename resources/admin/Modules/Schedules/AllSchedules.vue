@@ -184,7 +184,7 @@ import CalendarView from "./parts/CalendarView";
 import AddNewBookingModal from "./parts/_AddNewBookingModal";
 import ScheduleBookingDetails from './parts/ScheduleBookingDetails';
 import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
-import { Back, Filter, CircleClose, CirclePlus, ArrowLeft, Search, MoreFilled, Calendar } from '@element-plus/icons-vue';
+import { Back, Filter, ArrowLeft, Search, Calendar } from '@element-plus/icons-vue';
 import each from 'lodash/each';
 
 export default {
@@ -198,12 +198,9 @@ export default {
         CalendarView,
         Filter,
         Back,
-        CircleClose,
         ArrowLeft,
         Search,
-        MoreFilled,
-        Calendar,
-        CirclePlus
+        Calendar
     },
     data() {
         return {
