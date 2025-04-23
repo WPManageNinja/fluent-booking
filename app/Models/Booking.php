@@ -666,9 +666,15 @@ class Booking extends Model
         do_action('fluent_booking/booking_schedule_rejected', $this, $this->calendar_event);
     }
 
-    public function getRescheduleReason()
+    public function getRescheduleReason($html = false)
     {
-        return $this->getMeta('reschedule_reason', '');
+        $rescheduleReason = $this->getMeta('reschedule_reason', '');
+
+        if ($rescheduleReason && $html) {
+            return wp_unslash($rescheduleReason);
+        }
+
+        return $rescheduleReason;
     }
 
     private function generateBookingTitle($eventTitle, $authorName, $guestName)
