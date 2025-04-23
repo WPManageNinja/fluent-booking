@@ -357,12 +357,12 @@ export default {
                 per_page: perPage
             }
         },
-        initRange(date) {
+        initRange(date, viewMode) {
             return {
-                start_date: dayjs(date).startOf('month').format('YYYY-MM-DD'),
-                end_date: dayjs(date).endOf('month').format('YYYY-MM-DD'),
+                start_date: dayjs(date).startOf(viewMode).format('YYYY-MM-DD'),
+                end_date: dayjs(date).endOf(viewMode).format('YYYY-MM-DD'),
                 time_zone: this.currentTimezone
-            }
+            };
         },
         changePeriod(period) {
             if (this.filters.period != period) {
@@ -401,10 +401,9 @@ export default {
             }
             this.current_schedule = newSchedule;
         },
-        handleDateUpdated(date) {
-            this.pagination = this.initPagination(1000);
-            this.filters.range = this.initRange(date);
-            this.filters.author = 'me';
+        handleDateUpdated(date, viewMode) {
+            this.pagination = this.initPagination(500);
+            this.filters.range = this.initRange(date, viewMode);
             this.fetchSchedules();
         },
         closeModal() {

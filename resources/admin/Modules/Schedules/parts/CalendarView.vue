@@ -1,21 +1,33 @@
 <template>
     <div class="fcal_calendar_view">
-        <el-calendar v-model="selectedDate">
+        <el-calendar v-model="selectedDate" :class="{ 'monthly_view': isMonthlyView, 'weekly_view': isWeeklyView }">
             <template #header="{ date }">
-                <span class="header_date">{{ date }}</span>
+                <el-radio-group v-model="viewMode" class="fcal_radio_switch">
+                    <el-radio-button label="month">{{ $t('Month') }}</el-radio-button>
+                    <el-radio-button label="week">{{ $t('Week') }}</el-radio-button>
+                </el-radio-group>
+                <div class="header_date_picker" @click="$refs.datePicker.focus()">
+                    <h3 class="header_date">{{ date }}</h3>
+                    <el-date-picker
+                        v-model="selectedRange" 
+                        :type="viewMode || 'month'"
+                        class="date_picker_input"
+                        ref="datePicker">
+                    </el-date-picker>
+                </div>
                 <el-button-group>
-                    <el-button @click="selectDate('prev-month')">
+                    <el-button @click="selectDate('prev')">
                         <el-icon><ArrowLeftBold /></el-icon>
                     </el-button>
                     <el-button @click="selectDate('today')">
                         {{ $t('Today') }}
                     </el-button>
-                    <el-button @click="selectDate('next-month')">
+                    <el-button @click="selectDate('next')">
                         <el-icon><ArrowRightBold /></el-icon>
                     </el-button>
                 </el-button-group>
             </template>
-            <template #date-cell="{ data }">
+            <template v-if="isMonthlyView" #date-cell="{ data }">
                 <span class="day_number">{{ data.day.split('-')[2] }}</span>
                 <template v-if="hasSchedulesForDay(data.day)">
                     <div v-for="schedule in firstThreeSchedules(data.day)" :key="schedule.id" class="fcal_booking_wrap">
@@ -23,7 +35,7 @@
                         <el-popover
                             :width="420"
                             trigger="click"
-                            placement="right"
+                            :placement="popoverPlacement"
                             :persistent="false"
                             popper-class="schedule_details_popover"
                             :visible="isVisible(schedule)">
@@ -36,7 +48,7 @@
                             <template #default>
                                 <BookingDetails
                                     :schedule="schedule" 
-                                    @update="updateSchedule" 
+                                    @update="updateSchedule"
                                     @close="closeBookingModal" 
                                 />
                             </template>
@@ -61,7 +73,7 @@
                         <template #default>
                             <div class="fcal_all_schedules">
                                 <div class="fcal_all_schedules_header">
-                                    <el-button text>{{ dayjs(data.day).format('ddd, D MMMM') }}</el-button>
+                                    <el-button text>{{ this.toDateFormat(data.day, 'ddd, D MMMM') }}</el-button>
                                     <el-icon @click="closeAllSchedules(data.day)"><Close /></el-icon>
                                 </div>
                                 <div class="fcal_all_schedules_body">
@@ -96,6 +108,58 @@
                 </template>
             </template>
         </el-calendar>
+        <div v-if="isWeeklyView" class="weekly_calendar_view">
+            <div class="weekly_header">
+                <div class="time_column_header"></div>
+                <div v-for="day in formattedWeekDays" :key="day.date" class="day_column_header">
+                    <div class="day_name">{{ day.dayName }}</div>
+                    <div class="day_number">{{ day.dayNumber }}</div>
+                </div>
+            </div>
+            <div class="weekly_grid" ref="weeklyGrid">
+                <div class="time_column">
+                    <div v-for="(hour, index) in formattedTimeSlots"
+                        :key="hour"
+                        class="time_slot">
+                        <span v-if="index != 0">
+                            {{ formatHour(hour) }}
+                        </span>
+                    </div>
+                </div>
+                <div class="days_grid">
+                    <div v-for="day in formattedWeekDays" :key="day.date" class="day_column">
+                        <div v-for="hour in formattedTimeSlots" :key="hour" class="hour_cell"></div>
+                        <div v-for="event in getEventsForDay(day.date)"
+                            :key="event.id"
+                            :style="getEventStyle(event)"
+                            @click="showDetails(event)"
+                            class="calendar_event">
+                            <el-popover
+                                :width="420"
+                                trigger="click"
+                                :placement="popoverPlacement"
+                                :persistent="false"
+                                popper-class="schedule_details_popover"
+                                :visible="isVisible(event)">
+                                <template #reference>
+                                    <div class="event_content" :class="event.status" @click="showDetails(event)">
+                                        <span class="event_time">{{ formatTime(event.start_time) }}</span>
+                                        <div class="event_title" v-html="event.title" :title="htmlTitle(event.title)"></div>
+                                    </div>
+                                </template>
+                                <template #default>
+                                    <BookingDetails
+                                        :schedule="event" 
+                                        @update="updateSchedule"
+                                        @close="closeBookingModal"
+                                    />
+                                </template>
+                            </el-popover>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -121,7 +185,9 @@ export default {
     },
     data() {
         return {
+            viewMode: '',
             selectedDate: null,
+            selectedRange: null,
             selectedSchedule: null,
             selectedAllSchedules: null,
             selectedDetailsSchedule: null,
@@ -130,20 +196,40 @@ export default {
     },
     watch: {
         selectedDate(newVal, oldVal) {
-            const newDate = this.toCurrentTimezone(newVal, 'YYYY-MM-DD');
-            const oldDate = this.toCurrentTimezone(oldVal, 'YYYY-MM-DD');
+            const compareDate = this.isMonthlyView ? 'YYYY-MM' : 'YYYY-MM-DD';
+            const newDate = this.toCurrentTimezone(newVal, compareDate);
+            const oldDate = this.toCurrentTimezone(oldVal, compareDate);
             if (newDate !== oldDate) {
-                this.$emit('dateUpdated', newDate);
+                this.$emit('dateUpdated', newDate, this.viewMode);
             }
+        },
+        selectedRange(newVal) {
+            this.selectedDate = newVal;
         },
         schedules: {
             handler(newSchedules) {
                 this.currentSchedules = newSchedules;
             },
             deep: true
+        },
+        viewMode(newVal, oldVal) {
+            if (newVal == oldVal) {
+                return;
+            }
+            if (oldVal) {
+                this.selectedDate = new Date();
+                this.$emit('dateUpdated', this.selectedDate, newVal);
+            }
+            localStorage.setItem('fcal_calendar_view_mode', newVal);
         }
     },
     computed: {
+        isMonthlyView() {
+            return this.viewMode == 'month';
+        },
+        isWeeklyView() {
+            return this.viewMode == 'week';
+        },
         isVisible() {
             return (schedule) => {
                 return this.selectedSchedule?.id === schedule.id;
@@ -161,27 +247,87 @@ export default {
         },
         showMore() {
             return (date) => {
-                return this.formattedSchedules[date].length > 3;
+                return this.formattedSchedules[date]?.length > 3;
             }
-        },
-        formattedSchedules() {
-            const events = {};
-            each(this.currentSchedules, (schedule) => {
-                const date = this.toCurrentTimezone(schedule.start_time, 'YYYY-MM-DD');
-                events[date] = events[date] || [];
-                events[date].push(schedule);
-            });
-            return events;
         },
         firstThreeSchedules() {
             return (date) => {
                 return this.formattedSchedules[date].slice(0, 3);
             }
+        },
+        formattedSchedules() {
+            const schedules = {};
+            each(this.currentSchedules, (schedule) => {
+                const date = this.toCurrentTimezone(schedule.start_time, 'YYYY-MM-DD');
+                schedules[date] = schedules[date] || [];
+                schedules[date].push(schedule);
+            });
+            for (const date in schedules) {
+                schedules[date].sort((a, b) => 
+                    new Date(a.start_time) - new Date(b.start_time)
+                );
+            }
+            return schedules;
+        },
+        formattedWeekDays() {
+            const days = [];
+            const startDate = dayjs(this.selectedDate).startOf('week');
+            for (let i = 0; i < 7; i++) {
+                const date = startDate.clone().add(i, 'days');
+                days.push({
+                    date: date.format('YYYY-MM-DD'),
+                    dayName: date.format('ddd'),
+                    dayNumber: date.format('D')
+                });
+            }
+            return days;
+        },
+        formattedTimeSlots() {
+            const slots = [];
+            for (let i = 0; i < 24; i++) {
+                slots.push(i);
+            }
+            return slots;
+        },
+        getEventsForDay() {
+            return (date) => {
+                return this.formattedSchedules[date] || [];
+            }
+        },
+        popoverPlacement() {
+            return window.innerWidth <= 485 ? 'top' : 'right';
+        },
+        getEventStyle() {
+            return (event) => {
+                const startTime = this.convertToCurrentTimezone(event.start_time);
+                const endTime = this.convertToCurrentTimezone(event.end_time);
+
+                const topPosition = this.calculateMinutesSinceMidnight(startTime);
+                const duration = endTime.diff(startTime, 'minutes');
+                const top = (topPosition / 60) * 60; // 60px per hour
+                const height = (duration / 60) * 60;
+                const bgColor = event.calendar_event?.color_schema || 'rgb(10, 232, 240)';
+
+                const style = {
+                    background: bgColor,
+                    top: `${top}px`,
+                    height: `${height}px`
+                };
+                if (duration < 30) {
+                    style.lineHeight = '1.2';
+                    style.paddingTop = '0';
+                    style.paddingBottom = '0';
+                }
+                if (event.status == 'cancelled') {
+                    style.textDecoration = 'line-through';
+                }
+                return style;
+            }
         }
     },
     methods: {
         formatTime(time) {
-            return dayjs(time).format('HH:mm');
+            return this.toCurrentTimezone(time, 'HH:mm');
         },
         htmlTitle(htmlTitle) {
             const div = document.createElement('div');
@@ -190,20 +336,19 @@ export default {
         },
         hasSchedulesForDay(date) {
             const hasSchedules = this.formattedSchedules[date]?.length;
-            const currentMonth = dayjs(this.selectedDate).format('YYYY-MM');
-            const scheduleMonth = dayjs(date).format('YYYY-MM');
+            const currentMonth = this.toCurrentTimezone(this.selectedDate, 'YYYY-MM');
+            const scheduleMonth = this.toCurrentTimezone(date, 'YYYY-MM');
             return hasSchedules && currentMonth === scheduleMonth;
         },
         selectDate(action) {
-            const currentDate = new Date(this.selectedDate);
-            if (action === 'prev-month') {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-            } else if (action === 'next-month') {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-            } else {
-                currentDate.setTime(Date.now());
+            if (action === 'today') {
+                this.selectedDate = new Date();
+                return;
             }
-            this.selectedDate = currentDate;
+            const isPrev = action === 'prev';
+            const navStep = isPrev ? -1 : 1;
+            const currentDate = dayjs(this.selectedDate);
+            this.selectedDate = currentDate.add(navStep, this.viewMode).toDate();
         },
         showDetails(schedule) {
             this.selectedSchedule = schedule;
@@ -229,18 +374,20 @@ export default {
         updateSchedule() {
             this.$emit('updateSchedule');
         },
-        formatSchedules(schedules) {
-            const events = {};
-            each(schedules, (schedule) => {
-                const date = this.toCurrentTimezone(schedule.start_time, 'YYYY-MM-DD');
-                events[date] = events[date] || [];
-                events[date].push(schedule);
-            });
-            return events;
+        calculateMinutesSinceMidnight(time) {
+            const midnight = dayjs(time).startOf('day');
+            return time.diff(midnight, 'minutes');
+        },
+        formatHour(hour) {
+            return dayjs().startOf('hour').hour(hour).format('h A');
+        },
+        convertToCurrentTimezone(time) {
+            return dayjs(time).utc('z').local().tz(this.currentTimezone);
         }
     },
     mounted() {
         this.selectedDate = new Date();
+        this.viewMode = localStorage.getItem('fcal_calendar_view_mode') || 'month';
     }
 };
 </script>

@@ -1116,7 +1116,7 @@ class Booking extends Model
             ],
             'when'  => [
                 'title'   => __('When', 'fluent-booking'),
-                'content' => $this->getFullBookingDateTimeText($this->person_time_zone, true) . ' (' . $this->person_time_zone . ')',
+                'content' => $this->getFullBookingDateTimeText($this->person_time_zone, !$html) . ' (' . $this->person_time_zone . ')',
             ],
             'who'   => [
                 'title'   => __('Who', 'fluent-booking'),
