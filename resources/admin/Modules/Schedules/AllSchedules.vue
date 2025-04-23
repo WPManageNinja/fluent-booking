@@ -12,8 +12,8 @@
                 <template v-else>
                     <h3>{{ $t('Bookings') }}</h3>
                     <el-dropdown trigger="click" popper-class="fcal_select">
-                        <span class="fcal_more el-dropdown-link">
-                            <el-icon><MoreFilled/></el-icon>
+                        <span class="fcal_add el-dropdown-link">
+                            <el-icon><Plus /></el-icon>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
@@ -31,7 +31,7 @@
                     <el-radio-button label="list">
                         {{ $t('List View') }}
                     </el-radio-button>
-                    <el-radio-button label="calendar">
+                    <el-radio-button @click="maybeOpenProNotice" label="calendar" :disabled="!appVars.has_pro">
                         {{ $t('Calendar View') }}
                     </el-radio-button>
                 </el-radio-group>
@@ -168,6 +168,12 @@
             @closeModal="closeModal"
             @addNewBooking="fetchSchedules"
         />
+        <ProNoticeDialog 
+            v-if="noticeModal" 
+            :openModal="noticeModal" 
+            :title="$t('Calendar View')"
+            @update:openModal="noticeModal = $event"
+        />
     </div>
 </template>
 
@@ -177,8 +183,9 @@ import BookingCard from "./parts/BookingCard";
 import CalendarView from "./parts/CalendarView";
 import AddNewBookingModal from "./parts/_AddNewBookingModal";
 import ScheduleBookingDetails from './parts/ScheduleBookingDetails';
+import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
+import { Back, Filter, CircleClose, CirclePlus, ArrowLeft, Search, MoreFilled, Calendar } from '@element-plus/icons-vue';
 import each from 'lodash/each';
-import { Back, Filter, CircleClose, ArrowLeft, Search, MoreFilled, Calendar } from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
@@ -187,6 +194,7 @@ export default {
         Pagination,
         ScheduleBookingDetails,
         AddNewBookingModal,
+        ProNoticeDialog,
         CalendarView,
         Filter,
         Back,
@@ -194,7 +202,8 @@ export default {
         ArrowLeft,
         Search,
         MoreFilled,
-        Calendar
+        Calendar,
+        CirclePlus
     },
     data() {
         return {
@@ -211,6 +220,7 @@ export default {
             currentEventTitle: '',
             search: '',
             viewType: 'list',
+            noticeModal: false,
             isNewBookingOpen: false,
             pagination: this.initPagination(),
             filters: this.initFilters()
@@ -406,13 +416,20 @@ export default {
             this.filters.range = this.initRange(date, viewMode);
             this.fetchSchedules();
         },
+        maybeOpenProNotice() {
+            if (!this.appVars.has_pro) {
+                this.noticeModal = true;
+            }
+        },
         closeModal() {
             this.isNewBookingOpen = false;
         }
     },
     mounted() {
         Object.assign(this.filters, this.$route.query);
-        this.viewType = localStorage.getItem('fcal_view_type') || 'list';
+        if (this.appVars.has_pro) {
+            this.viewType = localStorage.getItem('fcal_view_type') || 'list';
+        }
         if (this.viewType != 'calendar' || this.$route.query.booking_id) {
             this.fetchSchedules();
         }
