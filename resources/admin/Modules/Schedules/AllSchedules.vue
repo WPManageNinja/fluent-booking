@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ fcal_showing_details: booking_id }" class="fcal_section fcal_schedlues fcal_section_narrow">
+    <div :class="{ fcal_showing_details: booking_id }" class="fcal_section fcal_section_narrow">
         <div class="fcal_section_header">
             <div class="fcal_title">
                 <div v-if="booking_id" class="fcal_back_btn">
@@ -11,22 +11,30 @@
                 </div>
                 <template v-else>
                     <h3>{{ $t('Bookings') }}</h3>
+                    <el-dropdown trigger="click" popper-class="fcal_select">
+                        <span class="fcal_add el-dropdown-link">
+                            <el-icon><Plus /></el-icon>
+                        </span>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item
+                                    @click="isNewBookingOpen = true">
+                                    {{ $t('Create Booking Manually') }}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
                 </template>
             </div>
             <div v-if="!booking_id" class="fcal_actions">
-                <el-dropdown trigger="click" popper-class="fcal_select">
-                    <span class="el-dropdown-link">
-                        <el-icon><MoreFilled/></el-icon>
-                    </span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item
-                                @click="isNewBookingOpen = true">
-                                {{ $t('Create Booking Manually') }}
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
+                <el-radio-group v-model="viewType" class="fcal_radio_btn_group">
+                    <el-radio-button label="list">
+                        {{ $t('List View') }}
+                    </el-radio-button>
+                    <el-radio-button @click="maybeOpenProNotice" label="calendar" :disabled="!appVars.has_pro">
+                        {{ $t('Calendar View') }}
+                    </el-radio-button>
+                </el-radio-group>
             </div>
         </div>
 
@@ -103,7 +111,7 @@
             </div>
         </template>
 
-        <div class="fcal_schedule_meetings_body">
+        <div class="fcal_schedule_meetings_body" v-if="viewType != 'calendar' || booking_id">
             <div v-if="!loading" class="fcal_section_body" style="padding: 0;" :class="isHideSidebar ? 'hide_sidebar' : ''">
                 <div v-if="schedules" :class="{ fcal_showing_details: booking_id }" class="fcal_all_schediles">
                     <el-button class="fcal_hide_schedule_sidebar" @click="hideSidebar">
@@ -145,8 +153,14 @@
                 </div>
             </div>
             <el-skeleton v-else :rows="5" animated/>
-            <p>{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
         </div>
+        <div v-else-if="viewType == 'calendar'">
+            <CalendarView
+                :schedules="schedules"
+                @dateUpdated="handleDateUpdated"
+                @updateSchedule="fetchSchedules"/>
+        </div>
+        <p>{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
         <AddNewBookingModal
             v-if="isNewBookingOpen"
             :showModal="isNewBookingOpen"
@@ -154,16 +168,24 @@
             @closeModal="closeModal"
             @addNewBooking="fetchSchedules"
         />
+        <ProNoticeDialog 
+            v-if="noticeModal" 
+            :openModal="noticeModal" 
+            :title="$t('Calendar View')"
+            @update:openModal="noticeModal = $event"
+        />
     </div>
 </template>
 
 <script>
 import Pagination from "../../Pieces/Pagination";
 import BookingCard from "./parts/BookingCard";
+import CalendarView from "./parts/CalendarView";
 import AddNewBookingModal from "./parts/_AddNewBookingModal";
 import ScheduleBookingDetails from './parts/ScheduleBookingDetails';
+import ProNoticeDialog from "@/Components/Common/ProNoticeDialog.vue";
+import { Back, Filter, ArrowLeft, Search, Calendar } from '@element-plus/icons-vue';
 import each from 'lodash/each';
-import { Back, Filter, CircleClose, ArrowLeft, Search, MoreFilled } from '@element-plus/icons-vue';
 
 export default {
     name: 'AllSchedules',
@@ -172,39 +194,21 @@ export default {
         Pagination,
         ScheduleBookingDetails,
         AddNewBookingModal,
+        ProNoticeDialog,
+        CalendarView,
         Filter,
         Back,
-        CircleClose,
         ArrowLeft,
         Search,
-        MoreFilled
+        Calendar
     },
     data() {
         return {
             schedules: [],
             loading: true,
-            filters: {
-                period: 'upcoming',
-                author: 'me',
-                event: 'all',
-                event_type: 'all',
-                search: ''
-            },
-            pagination: {
-                total: 0,
-                current_page: 1,
-                per_page: 10
-            },
             booking_id: false,
             current_schedule: null,
-            loadingHosts: false,
             event_types: [],
-            showAdvancedFilter: false,
-            query: {
-                date_to_date: '',
-                eventType: '',
-                status: ''
-            },
             pendingCount: 0,
             cancelledCount: 0,
             noShowCount: 0,
@@ -212,7 +216,23 @@ export default {
             isHideSidebar: false,
             currentEventTitle: '',
             search: '',
-            isNewBookingOpen: false
+            viewType: 'list',
+            noticeModal: false,
+            isNewBookingOpen: false,
+            pagination: this.initPagination(),
+            filters: this.initFilters()
+        }
+    },
+    watch: {
+        viewType: {
+            handler(newVal) {
+                if (newVal == 'list') {
+                    this.pagination = this.initPagination();
+                    delete this.filters.range;
+                    this.fetchSchedules();
+                }
+                localStorage.setItem('fcal_view_type', newVal);
+            }
         }
     },
     computed: {
@@ -230,7 +250,6 @@ export default {
         },
         formattedSchedules() {
             const items = {};
-            let compareTime = 'start_time';
             const period = this.filters.period;
             const isDescending = ['completed', 'cancelled'].includes(period);
             if(period == 'latest_bookings') {
@@ -240,12 +259,8 @@ export default {
                 return items;
             }
 
-            if (isDescending) {
-                compareTime = 'updated_at';
-            }
-
             each(this.schedules, (schedule) => {
-                const time = schedule[compareTime];
+                const time = schedule.start_time;
                 let date = this.toCurrentTimezone(time, this.appVars.date_format);
                 items[date] = items[date] || [];
                 items[date].push(schedule);
@@ -288,8 +303,9 @@ export default {
             if(this.noShowCount) {
                 statuses.no_show = this.$t('No Show');
             }
-
-            statuses.latest_bookings = this.$t('Latest Bookings');
+            if (this.viewType == 'list') {
+                statuses.latest_bookings = this.$t('Latest Bookings');
+            }
             statuses.all = this.$t('All');
             return statuses;
         },
@@ -333,6 +349,28 @@ export default {
                     this.loading = false;
                 });
         },
+        initFilters() {
+            return {
+                period: 'upcoming',
+                author: 'me',
+                event: 'all',
+                event_type: 'all',
+                search: ''
+            }
+        },
+        initPagination(perPage = 10) {
+            return {
+                current_page: 1,
+                per_page: perPage
+            }
+        },
+        initRange(date, viewMode) {
+            return {
+                start_date: dayjs(date).startOf(viewMode).format('YYYY-MM-DD'),
+                end_date: dayjs(date).endOf(viewMode).format('YYYY-MM-DD'),
+                time_zone: this.currentTimezone
+            };
+        },
         changePeriod(period) {
             if (this.filters.period != period) {
                 this.$router.push({query: {period}});
@@ -346,12 +384,6 @@ export default {
             this.booking_id = schedule.id;
             this.currentEventTitle = schedule.calendar_event?.title;
         },
-        handleDiscard() {
-            this.query.eventType = '';
-            this.query.status = '';
-            this.showAdvancedFilter = false;
-            this.fetchSchedules();
-        },
         goBackToList() {
             this.booking_id = null;
             this.current_schedule = null;
@@ -362,7 +394,8 @@ export default {
             this.fetchSchedules();
         },
         handlePeriodChange() {
-            this.$router.push({ query: this.filters });
+            const { range, ...filtersWithoutRange } = this.filters;
+            this.$router.push({ query: filtersWithoutRange });
             this.fetchSchedules();
         },
         hideSidebar() {
@@ -375,24 +408,32 @@ export default {
             }
             this.current_schedule = newSchedule;
         },
+        handleDateUpdated(date, viewMode) {
+            this.pagination = this.initPagination(500);
+            this.filters.range = this.initRange(date, viewMode);
+            this.fetchSchedules();
+        },
+        maybeOpenProNotice() {
+            if (!this.appVars.has_pro) {
+                this.noticeModal = true;
+            }
+        },
         closeModal() {
             this.isNewBookingOpen = false;
         }
     },
     mounted() {
         Object.assign(this.filters, this.$route.query);
-        this.fetchSchedules();
+        if (this.appVars.has_pro) {
+            this.viewType = localStorage.getItem('fcal_view_type') || 'list';
+        }
+        if (this.viewType != 'calendar' || this.$route.query.booking_id) {
+            this.fetchSchedules();
+        }
         if (this.$route.query.booking_id) {
             this.booking_id = this.$route.query.booking_id;
         }
-
-        const hideSidebarVar = localStorage.getItem("hide_schedule_details_sidebar");
-        if (hideSidebarVar == 'true') {
-            this.isHideSidebar = true;
-        } else {
-            this.isHideSidebar = false;
-        }
-
+        this.isHideSidebar = localStorage.getItem("hide_schedule_details_sidebar") == 'true';
     }
 }
 </script>
