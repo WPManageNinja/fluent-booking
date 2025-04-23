@@ -113,9 +113,12 @@
                                         {{ $t('PaymentSettings/enable_payment_settings') }}
                                         <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">
                                             {{ $t('Stripe') }}
-                                        </router-link> {{ $t('or') }}
+                                        </router-link> /
                                         <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'paypal'}}">
                                             {{ $t('PayPal') }}
+                                        </router-link> {{ $t('or') }}
+                                        <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'offline'}}">
+                                            {{ $t('Offline') }}
                                         </router-link>
                                         {{ $t('PaymentSettings/from_global_settings') }}
                                     </p>
@@ -214,7 +217,8 @@ export default {
             return this.paymentConfig.native_enabled || this.paymentConfig.woo_enabled;
         },
         isPaymentConfigured() {
-            return this.paymentConfig.stripe_configured || this.paymentConfig.paypal_configured;
+            const { stripe_configured, paypal_configured, offline_configured } = this.paymentConfig;
+            return stripe_configured || paypal_configured || offline_configured;
         },
         displayMultiEnabled() {
             return this.paymentSettings?.enabled == 'yes' && this.multiDuration?.enabled;
