@@ -5,7 +5,6 @@
 @import "elements/scheduler";
 @import "elements/notification";
 @import "elements/settings";
-@import "elements/responsive";
 @import "elements/wp";
 
 .toplevel_page_fluent-booking {
@@ -88,6 +87,9 @@
             max-width: 100%;
           }
         }
+        .el-select {
+          max-width: 100%;
+        }
       }
     }
 
@@ -129,14 +131,34 @@
     margin-top: 12px;
     .el-calendar {
       border-radius: 8px;
+      &.weekly_view {
+        .el-calendar__body {
+          display: none;
+        }
+      }
       .el-calendar__header {
         background: #FAFAFA;
         border-radius: 8px;
-        .header_date {
+        flex-wrap: wrap;
+        gap: 12px;
+        .header_date_picker {
           display: flex;
           align-items: center;
-          font-size: 15px;
-          font-weight: 500;
+          justify-content: center;
+          cursor: pointer;
+          .header_date {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 400;
+            margin: 0;
+          }
+          .date_picker_input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
         }
         .el-button-group {
           display: flex;
@@ -145,6 +167,14 @@
           gap: 12px;
           .el-button {
             border-radius: 8px;
+          }
+        }
+        .el-select {
+          width: 100px;
+          flex: none;
+          .el-input__wrapper {
+            border-radius: 8px;
+            padding: 2px 10px;
           }
         }
       }
@@ -222,21 +252,117 @@
     }
   }
 
+  .weekly_calendar_view {
+    height: calc(100vh - 200px);
+    color: black;
+    background-color: #fff;
+    overflow-x: hidden;
+    position: relative;
+
+    .weekly_header {
+      top: 0;  
+      z-index: 9;
+      display: flex;
+      position: sticky;
+      background: #fff;
+      border-bottom: 1px solid #D6DAE1;
+      .time_column_header {
+        width: 60px;
+        flex-shrink: 0;
+      }  
+      .day_column_header {
+        flex: 1;
+        min-width: 0;
+        padding: 8px;
+        text-align: center;
+        border-left: 1px solid #D6DAE1;
+        .day_name {
+          color: #888;
+          font-size: 12px;
+          margin-bottom: 6px;
+        }
+        .day_number {
+          margin: 4px 0;
+          font-size: 24px;
+          font-weight: 400;
+        }
+      }
+    }
+    .weekly_grid {
+      display: flex;
+      .time_column {
+        width: 60px;
+        flex-shrink: 0;
+        .time_slot {
+          height: 60px;
+          padding: 8px;
+          color: #888;
+          font-size: 12px;
+          text-align: right;
+          position: relative;
+          top: -14px;
+        }
+      }
+      .days_grid {
+        flex: 1;
+        display: flex;
+        position: relative;
+        .day_column {
+          flex: 1;
+          min-width: 0;
+          border-left: 1px solid #D6DAE1;
+          position: relative;
+          .hour_cell {
+            height: 60px;
+            border-bottom: 1px solid #D6DAE1;
+          }
+        }
+      }
+      .calendar_event {
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        border-radius: 8px;
+        padding: 4px 6px;
+        font-size: 12px;
+        z-index: 1;
+        border-bottom: 2px solid #fff;
+        overflow: hidden;
+        cursor: pointer;
+        &:last-child {
+          border-bottom: none;
+        }
+        &:hover {
+          filter: brightness(1.1);
+        }
+        .event_content {
+          height: 100%;
+          display: block;
+          font-size: 12px;
+          overflow: hidden;
+          .event_title {
+            display: inline;
+            overflow: hidden;
+          }
+          .event_time {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
   .fcal_section {
     display: block;
     width: 100%;
-
   }
 
   .fcal_webhook_request_header_table {
     border-spacing: 0;
     border-collapse: collapse;
-
     thead {
       tr {
         th {
           text-align: left;
-
           &:last-child {
             padding-left: 5px;
           }
@@ -247,22 +373,18 @@
     tr {
       td {
         padding: 5px 5px 5px 0;
-
         &:last-child {
           padding-left: 5px;
           padding-right: 0;
         }
-
         .right-field {
           display: flex;
           align-items: center;
           gap: 8px;
-
           .action-btn {
             display: flex;
             align-items: center;
             gap: 6px;
-
             .el-button {
               margin: 0;
               padding: 8px 16px;
@@ -275,44 +397,35 @@
 
   .fcal_all_schediles {
     display: flex;
-
     .fcal_schedules {
       flex: 1;
     }
-
     .fcal_spot_details {
       flex: 3;
       margin: 0;
     }
-
     &.fcal_showing_details {
       .fcal_spot_actions {
         display: none;
       }
-
       .fcal_spot_color {
         display: none;
       }
-
       .fcal_spot_line {
         flex-direction: column;
         margin-bottom: 0;
       }
-
       .fcal_schedule {
         margin: 0;
       }
-
       .fcal_schedules {
         max-height: calc(100% - 10px);
         overflow-y: scroll;
-
         &::-webkit-scrollbar {
           width: 6px;
           background: transparent;
           border-radius: 10px;
         }
-
         &::-webkit-scrollbar-thumb {
           background: #e5e8eb;
           border-radius: 10px;
@@ -325,13 +438,10 @@
     b {
       font-weight: 500;
     }
-
     p {
       margin: 0;
     }
   }
-
-  // Dashboard
   .fcal_dashboard_box {
     background: #ffffff;
     border-radius: 8px;
@@ -1305,3 +1415,5 @@ table.shop_table.order_details {
   max-width: 850px;
   margin: 0 auto;
 }
+
+@import "elements/responsive";

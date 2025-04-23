@@ -263,7 +263,7 @@ export default {
         openFullScreen(bookingId) {
             this.$router.push({
                 name: 'scheduled_events',
-                query: {booking_id: bookingId}
+                query: { ...this.$route.query, booking_id: bookingId }
             });
             setTimeout(() => {
                 window.location.reload();
