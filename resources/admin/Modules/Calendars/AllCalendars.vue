@@ -65,7 +65,7 @@
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
-                <el-dropdown @command="handleCommand" popper-class="fcal_select" trigger="click">
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" @command="handleCommand" popper-class="fcal_select" trigger="click">
                     <span class="el-dropdown-link fcal_more">
                         <el-icon><MoreFilled /></el-icon>
                     </span>
