@@ -84,6 +84,10 @@ class CalendarPolicy extends Policy
 
         $calendar = Calendar::find($calendarId);
 
+        if (!$calendar) {
+            return false;
+        }
+
         return $calendar->user_id == get_current_user_id();
     }
 
