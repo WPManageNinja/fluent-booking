@@ -129,6 +129,7 @@ export default {
             this.saving = true;
             this.$post('calendars/' + this.calendar.id + '/event-order', {
                 event_order: this.eventOrder,
+                calendar_id: this.calendar.id
             })
                 .then(response => {
                     this.showModal = false;
