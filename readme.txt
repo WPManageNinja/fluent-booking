@@ -306,7 +306,9 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 - Resolved Text Domain Warning
 - Resolved Issue with FluentForm Field Mapping
 - Fixed Last Day of the Month Not Displaying Issue
+- Fixed Outlook Holiday Not Syncing Issue
 - Fixed Delete Calendar/Event Permission Issue
+- Fixed Last Name Not Generating for Additional Guests in Group Events
 - Fixed Offline Payment Not Displaying When Stripe or PayPal Are Disabled
 
 = 1.7.2 (Date: 09 Apr 2025)
