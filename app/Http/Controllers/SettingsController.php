@@ -196,7 +196,6 @@ class SettingsController extends Controller
 
     public function getPages(Request $request)
     {
-
         $db = App::getInstance('db');
 
         $allPages = $db->table('posts')->where('post_type', 'page')
@@ -210,7 +209,7 @@ class SettingsController extends Controller
             $pages[] = [
                 'id'    => $page->ID,
                 'name'  => $page->post_name,
-                'title' => $page->post_title ? $page->post_title : __('(no title)', 'fluent-boards')
+                'title' => $page->post_title ? $page->post_title : __('(no title)', 'fluent-booking')
             ];
         }
 
