@@ -16,7 +16,3 @@ export default {
     name: "PartyIcon"
 }
 </script>
-
-<style scoped>
-
-</style>
