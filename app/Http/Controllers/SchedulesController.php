@@ -193,21 +193,20 @@ class SchedulesController extends Controller
             if ($value == 'cancelled') {
                 $cancelReason = sanitize_text_field($data['cancel_reason']);
                 $booking->cancelMeeting($cancelReason, 'host', get_current_user_id());
-                return [
-                    'message' => __('The booking has been cancelled', 'fluent-booking')
-                ];
             }
 
             if ($value == 'rejected') {
                 $rejectReason = sanitize_text_field($data['reject_reason']);
                 $booking->rejectMeeting($rejectReason, get_current_user_id());
-                return [
-                    'message' => __('The booking has been rejected', 'fluent-booking')
-                ];
             }
 
-            if ($booking->payment_method && Arr::get($data, 'refund_payment') == 'yes' && in_array($value, ['cancelled', 'rejected'])) {
-                do_action('fluent_booking/refund_payment_' . $booking->payment_method, $booking, $booking->calendar_event);
+            if (in_array($value, ['cancelled', 'rejected'])) {
+                if ($booking->payment_method && Arr::get($data, 'refund_payment') == 'yes') {
+                    do_action('fluent_booking/refund_payment_' . $booking->payment_method, $booking, $booking->calendar_event);
+                }
+                return [
+                    'message' => sprintf(__('The booking has been %s', 'fluent-booking'), $value)
+                ];
             }
         }
 
