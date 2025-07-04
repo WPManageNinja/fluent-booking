@@ -50,9 +50,10 @@ export default {
             updating: false,
             modalVisible: this.show_modal,
             statuses: {
-                paid: 'Paid',
-                pending: 'Pending',
-                failed: 'Failed'
+                paid: this.$t('Paid'),
+                pending: this.$t('Pending'),
+                failed: this.$t('Failed'),
+                refunded: this.$t('Refunded')
             }
         }
     },
