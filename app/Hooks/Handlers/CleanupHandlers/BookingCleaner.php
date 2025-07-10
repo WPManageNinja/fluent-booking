@@ -2,10 +2,7 @@
 
 namespace FluentBooking\App\Hooks\Handlers\CleanupHandlers;
 
-use FluentBooking\App\Models\Booking;
-use FluentBooking\App\Models\BookingActivity;
 use FluentBooking\App\Models\BookingHost;
-use FluentBooking\App\Models\BookingMeta;
 
 class BookingCleaner
 {

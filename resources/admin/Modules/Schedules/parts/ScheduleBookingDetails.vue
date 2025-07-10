@@ -3,7 +3,7 @@
         <div class="fcal_schedule_details_content">
             <div v-if="showing_booking" class="fcal_schedule_event_infos">
                 <div :class="'fcal_event_status_' + showing_booking.status" class="fcal_schedule_header_bar">
-                    <div><span v-html="meetingDetails"></span> - {{ $t(ucFirst(showing_booking.status)) }}</div> 
+                    <div><span v-html="meetingDetails"></span> - {{ $t(ucFirst(showing_booking.status)) }}</div>
                     <el-dropdown v-if="hasWriteAccess" trigger="click" popper-class="fcal_select">
                         <span class="el-dropdown-link">
                             <el-icon><MoreFilled/></el-icon>
@@ -412,7 +412,6 @@ export default {
             })
                 .then(response => {
                     this.showing_booking = response.schedule;
-
                     this.activities = response.activities;
                     this.sidebar_contents = response.sidebar_contents;
                     this.payment_order = response.payment_order;
@@ -547,7 +546,6 @@ export default {
             this.fetchBooking();
         }
         this.updateDurationLookup();
-        this.getAdditionalData();
     }
 }
 </script>
