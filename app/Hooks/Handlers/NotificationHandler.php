@@ -36,6 +36,8 @@ class NotificationHandler
 
     private function pushRemindersToQueue($booking, $reminderTimes, $emailTo)
     {
+        $this->clearGroupRemindersForHost($booking, $emailTo);
+
         foreach ($reminderTimes as $time) {
             $reminderTimestamp = $this->getReminderTime($time);
 
@@ -49,6 +51,19 @@ class NotificationHandler
                     $emailTo
                 ], 'fluent-booking');
             }
+        }
+    }
+
+    private function clearGroupRemindersForHost($booking, $emailTo)
+    {
+        if (!$booking->isMultiGuestBooking() || $emailTo != 'host') {
+            return;
+        }
+
+        $otherBookingIds = Booking::where('group_id', $booking->group_id)->where('id', '!=', $booking->id)->pluck('id')->toArray();
+
+        foreach ($otherBookingIds as $otherBookingId) {
+            as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$otherBookingId, 'host'], 'fluent-booking');
         }
     }
 
