@@ -175,6 +175,16 @@ class Booking extends Model
         return $additionalGuests;
     }
 
+    public function getTotalGuestCount()
+    {
+        $additionalGuests = $this->getAdditionalGuests();
+        $mainGuests = 1;
+        if ($this->isMultiGuestBooking()) {
+            $mainGuests = self::where('group_id', $this->group_id)->where('status', 'scheduled')->count();
+        }
+        return count($additionalGuests) + $mainGuests;
+    }
+
     public function getHostEmails($excludeHostId = null)
     {
         $hostIds = $this->getHostIds();

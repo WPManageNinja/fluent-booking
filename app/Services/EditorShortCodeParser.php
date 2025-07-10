@@ -254,6 +254,10 @@ class EditorShortCodeParser
         if ('note' == $key) {
             return $guest->getMessage();
         }
+        
+        if ($key == 'total_guest') {
+            return $booking->getTotalGuestCount();
+        }
 
         if ($key == 'form_data_html') {
             return __('will be available soon', 'fluent-booking');
