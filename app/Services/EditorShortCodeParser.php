@@ -218,7 +218,7 @@ class EditorShortCodeParser
 
         if ($key == 'timezone') {
             $booking = static::$store['booking'];
-            return $booking->getHostTimezone();
+            return $booking ? $booking->getHostTimezone() : null;
         }
 
         return Arr::get($host, $key, '');
@@ -248,15 +248,14 @@ class EditorShortCodeParser
             return $guest['first_name'] . ' ' . $guest['last_name'];
         }
         if ('timezone' == $key) {
-            $booking = static::$store['booking'];
-            return $booking->person_time_zone;
+            return $guest->person_time_zone;
         }
         if ('note' == $key) {
             return $guest->getMessage();
         }
-        
+
         if ($key == 'total_guest') {
-            return $booking->getTotalGuestCount();
+            return $guest->getTotalGuestCount();
         }
 
         if ($key == 'form_data_html') {
@@ -322,7 +321,7 @@ class EditorShortCodeParser
 
         $order = static::$store['payment_order'];
 
-        if ($key == 'payment_total') {
+        if ($key == 'payment_total' && $order) {
             $isZeroDecimal = CurrenciesHelper::isZeroDecimal($order->currency);
             if ($isZeroDecimal) {
                 return $order->total_amount;
@@ -336,21 +335,21 @@ class EditorShortCodeParser
         }
 
         if ($key == 'payment_status') {
-            return $order->status;
+            return $order ? $order->status : '';
         }
 
         if ($key == 'payment_currency') {
-            return $order->currency;
+            return $order ? $order->currency : '';
         }
 
         if ($key == 'payment_date') {
-            return $order->created_at;
+            return $order ? $order->created_at : '';
         }
 
         $fillables = (new \FluentBookingPro\App\Models\Order())->getFillable();
 
         if (in_array($key, $fillables)) {
-            return $order->{$key};
+            return $order ? $order->{$key} : '';
         }
 
         return '';
@@ -358,10 +357,11 @@ class EditorShortCodeParser
 
     protected static function getUserData($key)
     {
-        if (is_null(static::$store['user'])) {
-            static::$store['user'] = wp_get_current_user();
+        $user = static::$store['user'];
+        if (is_null($user)) {
+            $user = wp_get_current_user();
         }
-        return static::$store['user']->{$key};
+        return $user ? $user->{$key} : '';
     }
 
     protected static function getWPData($key)
@@ -380,7 +380,12 @@ class EditorShortCodeParser
 
     protected static function getOtherData($key)
     {
-        self::$store['meeting_bookmarks'] ??= static::$store['booking']->getMeetingBookmarks();
+        $meetingBookmarks = self::$store['meeting_bookmarks'];
+        if (!$meetingBookmarks) {
+            $booking = static::$store['booking'];
+            $meetingBookmarks = $booking ? $booking->getMeetingBookmarks() : null;
+            self::$store['meeting_bookmarks'] = $meetingBookmarks;
+        }
 
         if (0 === strpos($key, 'date.')) {
             $format = str_replace('date.', '', $key);
@@ -388,13 +393,13 @@ class EditorShortCodeParser
         } elseif ('add_booking_to_calendar' === $key) {
             return static::parseShortCodes(Helper::getAddToCalendarHtml());
         } elseif ('add_to_g_calendar_url' === $key) {
-            return Arr::get(self::$store['meeting_bookmarks'], 'google.url');
+            return Arr::get($meetingBookmarks, 'google.url');
         } elseif ('add_to_ol_calendar_url' === $key) {
-            return Arr::get(self::$store['meeting_bookmarks'], 'outlook.url');
+            return Arr::get($meetingBookmarks, 'outlook.url');
         } elseif ('add_to_ms_calendar_url' === $key) {
-            return Arr::get(self::$store['meeting_bookmarks'], 'msoffice.url');
+            return Arr::get($meetingBookmarks, 'msoffice.url');
         } elseif ('add_to_ics_calendar_url' === $key) {
-            return Arr::get(self::$store['meeting_bookmarks'], 'other.url');
+            return Arr::get($meetingBookmarks, 'other.url');
         }
 
         return $key;
