@@ -55,13 +55,13 @@
                 </div>
                 <div class="fcal_schedule_details_event_item">
                     <h3>{{ $t('Booked At') }}</h3>
-                    <p>{{ toDateFormat(booking.created_at, this.appVars.date_time_formatter) }}</p>
+                    <p>{{ toCurrentTimezone(booking.created_at, this.appVars.date_time_formatter) }}</p>
                 </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
                     <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
                         <h3>{{ field.label }}</h3>
                         <div class="fcal_spot_details_value">
-                            <p v-if="field.type == 'date'">{{ toDateFormat(field.value, this.appVars.date_time_formatter) }}</p>
+                            <p v-if="field.type == 'date'">{{ toCurrentTimezone(field.value, this.appVars.date_time_formatter) }}</p>
                             <p v-else v-html="field.value"></p>
                         </div>
                     </template>
