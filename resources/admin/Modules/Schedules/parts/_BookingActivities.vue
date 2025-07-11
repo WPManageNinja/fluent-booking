@@ -9,7 +9,7 @@
             <div class="fcal_booking_activities_list">
                 <div v-if="activities.length" v-for="activity in activities" :key="activity.id" class="fcal_booking_activity" :class="activity.type">
                     <el-icon class="fcal_activity_complete_icon">
-                        <Close v-if="activity.type=='cancel_reason' || activity.type=='error'" />
+                        <Close v-if="activity.type == 'cancel_reason' || activity.type == 'error'" />
                         <Check v-else />
                     </el-icon>
 
@@ -31,7 +31,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 import { Check, Close } from '@element-plus/icons-vue';
 
 export default {
