@@ -1686,14 +1686,14 @@ class Helper
                     'title'      => __('Attendee Data', 'fluent-booking'),
                     'key'        => 'guest',
                     'shortcodes' => [
-                        '{{guest.first_name}}'    => __('Guest First Name', 'fluent-booking'),
-                        '{{guest.last_name}}'     => __('Guest Last Name', 'fluent-booking'),
-                        '{{guest.full_name}}'     => __('Guest Full Name', 'fluent-booking'),
-                        '{{guest.email}}'         => __('Guest Email', 'fluent-booking'),
-                        '{{guest.note}}'          => __('Guest Note', 'fluent-booking'),
-                        '{{booking.phone}}'       => __('Guest Main Phone Number (if provided)', 'fluent-booking'),
-                        '{{guest.timezone}}'      => __('Guest Timezone', 'fluent-booking'),
-                        '{{booking.total_guest}}' => __('Total Guest Count', 'fluent-booking')
+                        '{{guest.first_name}}'  => __('Guest First Name', 'fluent-booking'),
+                        '{{guest.last_name}}'   => __('Guest Last Name', 'fluent-booking'),
+                        '{{guest.full_name}}'   => __('Guest Full Name', 'fluent-booking'),
+                        '{{guest.email}}'       => __('Guest Email', 'fluent-booking'),
+                        '{{guest.note}}'        => __('Guest Note', 'fluent-booking'),
+                        '{{booking.phone}}'     => __('Guest Main Phone Number (if provided)', 'fluent-booking'),
+                        '{{guest.timezone}}'    => __('Guest Timezone', 'fluent-booking'),
+                        '{{guest.total_guest}}' => __('Total Guest Count', 'fluent-booking')
                     ]
                 ],
                 'booking' => [
@@ -1758,7 +1758,7 @@ class Helper
                         '{{booking.phone}}'        => __('Guest Main Phone Number (if provided)', 'fluent-booking'),
                         '{{guest.note}}'           => __('Guest Note', 'fluent-booking'),
                         '{{guest.timezone}}'       => __('Guest Timezone', 'fluent-booking'),
-                        '{{booking.total_guest}}'  => __('Total Guest Count', 'fluent-booking'),
+                        '{{guest.total_guest}}'    => __('Total Guest Count', 'fluent-booking'),
                         '{{guest.form_data_html}}' => __('Guest Form Submitted Data (HTML)', 'fluent-booking')
                     ]
                 ],
