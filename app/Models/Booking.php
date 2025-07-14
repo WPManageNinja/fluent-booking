@@ -319,11 +319,10 @@ class Booking extends Model
         return $html;
     }
 
-    public function getShortBookingDateTime($timeZone = 'UTC')
+    protected function formatBookingDateTime($dateTime, $timeZone = 'UTC')
     {
-        // date format for Fri Feb 10, 2023
-        $startDate = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'D M d, Y');
-        $startTime = DateTimeHelper::convertFromUtc($this->start_time, $timeZone, 'h:ia');
+        $startDate = DateTimeHelper::convertFromUtc($dateTime, $timeZone, 'D M d, Y');
+        $startTime = DateTimeHelper::convertFromUtc($dateTime, $timeZone, 'h:ia');
 
         $localDate = date_i18n('D M d, Y', strtotime($startDate));
         $localTime = date_i18n('h:ia', strtotime($startTime));
@@ -331,13 +330,15 @@ class Booking extends Model
         return $localDate . ' ' . $localTime;
     }
 
+    public function getShortBookingDateTime($timeZone = 'UTC')
+    {
+        return $this->formatBookingDateTime($this->start_time, $timeZone);
+    }
+
     public function getPreviousMeetingTime($timeZone = 'UTC')
     {
         $previousMeetingTime = $this->getMeta('previous_meeting_time');
-        $html = DateTimeHelper::convertFromUtc($previousMeetingTime, $timeZone, 'D M d, Y');
-        $html .= ' ' . DateTimeHelper::convertFromUtc($previousMeetingTime, $timeZone, 'h:ia');
-
-        return $html;
+        return $this->formatBookingDateTime($previousMeetingTime, $timeZone);
     }
 
     public function getAttendeeStartTime($format = 'Y-m-d H:i:s')
