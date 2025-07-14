@@ -102,12 +102,12 @@ app.mixin({
                 errorMessage = convertToText(response);
             }
             if (!errorMessage) {
-                errorMessage = 'Something is wrong!';
+                errorMessage = this.$t('Something is wrong!');
             }
 
             this.$notify({
                 type: 'error',
-                title: 'Error',
+                title: this.$t('Error'),
                 offset: 20,
                 message: errorMessage,
                 dangerouslyUseHTMLString: true
@@ -116,7 +116,7 @@ app.mixin({
             return errorMessage;
         },
         $handleSuccess(response) {
-            let successMsg = 'Success';
+            let successMsg = this.$t('Success');
             if (typeof response === 'string') {
                 successMsg = response;
             } else if (response && response.message) {
@@ -127,7 +127,7 @@ app.mixin({
 
             this.$notify({
                 type: 'success',
-                title: 'Success',
+                title: this.$t('Success'),
                 offset: 20,
                 message: successMsg,
                 dangerouslyUseHTMLString: true
