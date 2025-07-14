@@ -744,6 +744,8 @@ class TransStrings
             'connect_your_stripe_desc'                                                         => __('Connect Your Stripe Account to your website to accept Payments', 'fluent-booking'),
             'Integration Feed'                                                                 => __('Integration Feed', 'fluent-booking'),
             'Error on integration settings'                                                    => __('Error on integration settings', 'fluent-booking'),
+            'Success'                                                                          => __('Success', 'fluent-booking'),
+            'Error'                                                                            => __('Error', 'fluent-booking'),
             'Field Label'                                                                      => __('Field Label', 'fluent-booking'),
             'Jan'                                                                              => __('Jan', 'fluent-booking'),
             'jan'                                                                              => __('jan', 'fluent-booking'),
