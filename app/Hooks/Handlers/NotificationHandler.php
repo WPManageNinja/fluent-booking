@@ -63,7 +63,7 @@ class NotificationHandler
         $otherBookingIds = Booking::where('group_id', $booking->group_id)->where('id', '!=', $booking->id)->pluck('id')->toArray();
 
         foreach ($otherBookingIds as $otherBookingId) {
-            as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$otherBookingId, 'host'], 'fluent-booking');
+            \as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$otherBookingId, 'host'], 'fluent-booking');
         }
     }
 
@@ -262,8 +262,8 @@ class NotificationHandler
         }
 
         // Remove all reminders
-        as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$oldBooking->id, 'host'], 'fluent-booking');
-        as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$oldBooking->id, 'guest'], 'fluent-booking');
+        \as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$oldBooking->id, 'host'], 'fluent-booking');
+        \as_unschedule_all_actions('fluent_booking/booking_schedule_reminder', [$oldBooking->id, 'guest'], 'fluent-booking');
 
         if (Arr::isTrue($notifications, 'reminder_to_attendee.enabled')) {
             $reminderTimes = Arr::get($notifications, 'reminder_to_attendee.email.times', []);
