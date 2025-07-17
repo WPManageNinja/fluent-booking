@@ -715,6 +715,7 @@ class Helper
         static $index = 0;
 
         $index += 1;
+
         return $index;
     }
 
@@ -728,19 +729,12 @@ class Helper
 
         $settings = get_option('fluent_booking_global_payment_settings', []);
 
-        if (!$settings) {
-            $settings = [
-                'currency'  => 'USD',
-                'is_active' => 'no'
-            ];
-        }
-
         return $settings;
     }
 
     public static function isPaymentEnabled($calendarEvent = null)
     {
-        $settings = self::getGlobalPaymentSettings();
+        $settings = CurrenciesHelper::getGlobalCurrencySettings();
         if (Arr::get($settings, 'is_active') == 'yes') {
             return true;
         }
@@ -1961,11 +1955,7 @@ class Helper
             $settings = [];
         }
 
-        $paymentSettings = get_option('fluent_booking_global_payment_settings', []);
-
-        if ($paymentSettings) {
-            $settings['payments'] = $paymentSettings;
-        }
+        $settings['payments'] = CurrenciesHelper::getGlobalCurrencySettings();
 
         $settings = wp_parse_args($settings, $defaults);
 

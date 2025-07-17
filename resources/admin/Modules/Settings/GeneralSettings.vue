@@ -112,11 +112,8 @@
                                         </el-form-item>
                                     </el-col>
                                     <el-col :sm="24" :md="12">
-                                        <el-form-item v-if="administration.notification_frequency == 'weekly'"
-                                                      :label="$t('In which day to send the email?')">
-                                            <el-select v-model="administration.notification_day"
-                                                       :placeholder="$t('Select Day')"
-                                                       popper-class="fcal_select" placement="bottom">
+                                        <el-form-item v-if="administration.notification_frequency == 'weekly'" :label="$t('In which day to send the email?')">
+                                            <el-select v-model="administration.notification_day" :placeholder="$t('Select Day')" popper-class="fcal_select" placement="bottom">
                                                 <el-option value="mon" :label="$t('Monday')"></el-option>
                                                 <el-option value="tue" :label="$t('Tuesday')"></el-option>
                                                 <el-option value="wed" :label="$t('Wednesday')"></el-option>
@@ -134,8 +131,7 @@
                     </el-form>
 
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
-                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
-                                   class="fcal_primary_btn">
+                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()" class="fcal_primary_btn">
                             {{ $t('Save Settings') }}
                         </el-button>
                     </div>
@@ -163,17 +159,34 @@
                                 </el-checkbox>
                             </el-form-item>
                         </el-row>
-                        <el-row>
+                        <el-row :gutter="30">
                             <el-col :sm="24" :md="8">
                                 <el-form-item :label="$t('Currency')">
-                                    <el-select filterable v-model="payments.currency" popper-class="fcal_select"
-                                               :placeholder="$t('Select')" placement="bottom">
+                                    <el-select filterable v-model="payments.currency" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
                                         <el-option
                                             v-for="currency in all_currencies"
                                             :key="currency.value"
                                             :label="currency.label"
                                             :value="currency.value"
                                         />
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item :label="$t('Number Format')">
+                                    <el-select v-model="payments.number_format" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
+                                        <el-option value="comma_separated" :label="`${$t('US Style')} (1,000,00.00)`"></el-option>
+                                        <el-option value="dot_separated" :label="`${$t('EU Style')} (1.000.00,00)`"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :sm="24" :md="8">
+                                <el-form-item :label="$t('Currency Position')">
+                                    <el-select v-model="payments.currency_position" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
+                                        <el-option value="left" :label="`${$t('Left')} (${appVars.currency_sign}100)`"></el-option>
+                                        <el-option value="right" :label="`${$t('Right')} (100${appVars.currency_sign})`"></el-option>
+                                        <el-option value="left_space" :label="`${$t('Left Space')} (${appVars.currency_sign} 100)`"></el-option>
+                                        <el-option value="right_space" :label="`${$t('Right Space')} (100 ${appVars.currency_sign})`"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
@@ -206,8 +219,7 @@
                 <div v-else class="fcal_configure_integration_body">
                     <form-builder :formData="emailing" :fields="emailingFields"/>
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
-                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()"
-                                   class="fcal_primary_btn">
+                        <el-button :disabled="saving" v-loading="saving" @click="saveSettings()" class="fcal_primary_btn">
                             {{ $t('Save Settings') }}
                         </el-button>
                     </div>
@@ -244,8 +256,7 @@
                     </el-radio-group>
 
                     <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
-                        <el-button :disabled="themeSaving" v-loading="themeSaving" @click="saveThemeSettings()"
-                                   class="fcal_primary_btn">
+                        <el-button :disabled="themeSaving" v-loading="themeSaving" @click="saveThemeSettings()" class="fcal_primary_btn">
                             {{ $t('Save Settings') }}
                         </el-button>
                     </div>
