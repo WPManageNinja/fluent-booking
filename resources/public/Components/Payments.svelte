@@ -3,7 +3,7 @@
     {#if multiPayments}
         <div class="fcal_payment_items">
             <p class="fcal_payment_item_single">{multiPayments[duration]?.title}
-                <span class="amount"> {@html field.currency_sign}{multiPayments[duration]?.value}</span>
+                {@html getCurrencyFormat(multiPayments[duration]?.value)}
             </p>
         </div>
     {:else}
@@ -39,7 +39,7 @@
     {/if}
 </div>
 <script>
-    import { i18 } from '../util.js';
+    import { i18, getCurrencyFormat } from '../util.js';
     import { onMount, afterUpdate } from "svelte";
 
     export let field;
@@ -60,12 +60,19 @@
 
     function maybeUpdateQuantity() {
         const paymentElements = document.querySelectorAll('.fcal_payment_amount');
-        paymentElements.forEach((element, index) => {
-            if (initialValues[index] && quantity > 1) {
-                element.textContent = initialValues[index] * quantity;
+        paymentElements.forEach((el, i) => {
+            let val = initialValues[i];
+            if (!val) return;
+            if (quantity > 1) {
+                let num = parseFloat(val.replace(/[^0-9.\-]/g, ''));
+                let sign = val.replace(/[\d\.\-,\s]/g, '');
+                let total = (num * quantity).toFixed(2);
+                el.textContent = val.trim().startsWith(sign) ? `${sign} ${total}` : `${total}${sign ? ' ' + sign : ''}`;
+            } else {
+                el.textContent = val;
             }
         });
-    };
+    }
 
     onMount(() => {
         const paymentElements = document.querySelectorAll('.fcal_payment_amount');

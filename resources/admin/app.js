@@ -188,23 +188,32 @@ app.mixin({
             }
             return str.charAt(0).toUpperCase() + str.slice(1);
         },
-        currencyFormat(amount, isCents = false) {
-            if (!amount) {
-                return '';
-            }
+        $currencyFormat(amount, isCents = false) {
+            const currency_sign = window.fluentFrameworkAdmin.currency_sign;
+            const {currency_position, decimal_points, number_format} = window.fluentFrameworkAdmin.currency_settings;
 
-            const currencySign = window.fluentFrameworkAdmin.currency_sign;
+            if (!amount) {
+                amount = 0;
+            }
 
             if (isCents) {
                 amount = amount / 100;
             }
 
-            // if amount is float then convert it to 2 decimal
-            if (amount % 1 !== 0) {
-                amount = parseFloat(amount).toFixed(2);
-            }
+            amount = parseFloat(amount).toFixed(decimal_points);
 
-            return currencySign + amount;
+            const numberFormat = number_format == 'comma_separated'? 'en-US' : 'es-ES';
+
+            amount = new Intl.NumberFormat(numberFormat, { minimumFractionDigits: decimal_points }).format(amount);
+
+            const formatters = {
+                'left': () => currency_sign + amount,
+                'left_space': () => currency_sign + ' ' + amount,
+                'right': () => amount + currency_sign,
+                'right_space': () => amount + ' ' + currency_sign
+            };
+            
+            return formatters[currency_position] ? formatters[currency_position]() : amount;
         },
         hasAccess(permission) {
             if (window.fluentFrameworkAdmin.me.is_admin) {

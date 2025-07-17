@@ -65,7 +65,7 @@
                 </span>
                 <span v-if="slot.price_total" class="fcal_slot_meta_event">
                     <el-icon><CreditCard/></el-icon>
-                    <span>{{ currencyFormat(slot.price_total) }}</span>
+                    <span>{{ $currencyFormat(slot.price_total) }}</span>
                 </span>
                 <span v-else-if="slot.type == 'woo'">
                     <el-icon>

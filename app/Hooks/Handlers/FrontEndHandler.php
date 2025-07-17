@@ -15,6 +15,7 @@ use FluentBooking\App\Hooks\Handlers\TimeSlotServiceHandler;
 use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\PermissionManager;
+use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class FrontEndHandler
@@ -587,11 +588,11 @@ class FrontEndHandler
         $startDay = Arr::get($globalSettings, 'administration.start_day', 'mon');
 
         $data = [
-            'ajaxurl'        => admin_url('admin-ajax.php'),
-            'timezones'      => DateTimeHelper::getFlatGroupedTimeZones(),
-            'current_person' => $currentPerson,
-            'start_day'      => $startDay,
-            'i18'            => [
+            'ajaxurl'           => admin_url('admin-ajax.php'),
+            'timezones'         => DateTimeHelper::getFlatGroupedTimeZones(),
+            'current_person'    => $currentPerson,
+            'start_day'         => $startDay,
+            'i18'               => [
                 'Timezone'                      => __('Timezone', 'fluent-booking'),
                 'Day'                           => __('Day', 'fluent-booking'),
                 'Days'                          => __('Days', 'fluent-booking'),
@@ -648,7 +649,8 @@ class FrontEndHandler
                 'Something is wrong!'                  => __('Something is wrong!', 'fluent-booking'),
                 'Requires Confirmation'                => __('Requires Confirmation', 'fluent-booking'),
             ],
-            'theme'          => Arr::get(get_option('_fluent_booking_settings'), 'theme','system-default')
+            'theme'             => Arr::get(get_option('_fluent_booking_settings'), 'theme', 'system-default'),
+            'currency_settings' => CurrenciesHelper::getGlobalCurrencySettings()
         ];
 
         if (isset($_SERVER['HTTP_CF_IPCOUNTRY'])) {
