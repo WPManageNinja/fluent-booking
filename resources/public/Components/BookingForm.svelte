@@ -152,7 +152,7 @@
                 {#if hasPaymentItem()}
                     <div class="fluent_booking_payment_processor" style="display:none;">
                         <h3 class="label">{i18('Total Payment')}
-                            : {@html appData?.currency_sign}{getSubTotal(appData?.payment_items, quantity)}</h3>
+                            : {@html getCurrencyFormat(getSubTotal(appData?.payment_items, quantity))}</h3>
                         {#if appData?.payment_methods?.template}
                             <div class="fcal_form_payment_item">
                                 {@html appData.payment_methods.template}
@@ -191,7 +191,7 @@
 </div>
 <script>
     import { Pulse } from 'svelte-loading-spinners';
-    import { util, i18, getErrorText } from '../util.js';
+    import { util, i18, getErrorText, getCurrencyFormat } from '../util.js';
     import { createEventDispatcher, onMount } from 'svelte';
     import { DateInput } from 'date-picker-svelte';
     import Payments from "./Payments.svelte";

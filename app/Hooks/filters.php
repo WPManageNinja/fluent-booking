@@ -142,8 +142,8 @@ $app->addFilter('fluent_booking/calendar_setting_menu_items', function ($items, 
 }, 10, 1);
 
 $app->addFilter('fluent_booking/admin_vars', function ($vars) {
-    $vars['currency'] = CurrenciesHelper::getGlobalCurrency();
-    $vars['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
+    $vars['currency_settings'] = CurrenciesHelper::getGlobalCurrencySettings();
+    $vars['currency_sign'] = Arr::get($vars['currency_settings'], 'currency_sign');
     return $vars;
 });
 

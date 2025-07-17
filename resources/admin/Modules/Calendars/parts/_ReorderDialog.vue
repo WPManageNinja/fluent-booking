@@ -33,7 +33,7 @@
                                 <el-icon><Location/></el-icon> {{ event.location_settings[0].title }}
                             </span>
                             <span v-if="event.price_total" class="fcal_event_info">
-                                <el-icon><CreditCard/></el-icon> {{ currencyFormat(event.price_total) }}
+                                <el-icon><CreditCard/></el-icon> {{ $currencyFormat(event.price_total) }}
                             </span>
                         </div>
                     </div>
