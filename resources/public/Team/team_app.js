@@ -9,12 +9,10 @@ function handleEventBlockClick(link) {
     let event_id = elem.dataset.event_id;
     let eventSlug = elem.dataset.event_slug;
 
-    // crelate html like this
-    // <div className="fluent_booking_app fcal_loading" data-calendar_id="1" data-event_id="1">
 
     const html = '<div class="fluent_booking_app fcal_loading" data-calendar_id="' + calendarId + '" data-event_id="' + event_id + '"><h3>Loading</h3></div>';
 
-    const wrap = document.querySelector('.fcal_calendar_wrap');
+    const wrap = elem.closest('.fcal_calendar_wrap');
 
     // append the html to .fcal_calendar_wrap element do not replace it
     wrap.insertAdjacentHTML('beforeend', html);
@@ -33,7 +31,7 @@ function handleEventBlockClick(link) {
     }
 
     // get the element of the inserted html
-    const elemItem = document.querySelector('.fcal_calendar_wrap').lastElementChild;
+    const elemItem = wrap.lastElementChild;
 
     const app = window.fluentCalBootApp(elemItem, true);
 
