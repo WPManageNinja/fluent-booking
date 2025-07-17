@@ -119,4 +119,26 @@ export const getDateTimeStringI18 = function (str, type) {
     return str;
 }
 
+export const getCurrencyFormat = function (amount) {
+    const { currency_sign, currency_position, decimal_points, number_format } = window.fluentCalendarPublicVars.currency_settings;
+    if (!amount) {
+        amount = 0;
+    }
+
+    amount = parseFloat(amount).toFixed(decimal_points);
+
+    const numberFormat = number_format === 'comma_separated' ? 'en-US' : 'es-ES';
+
+    amount = new Intl.NumberFormat(numberFormat, { minimumFractionDigits: decimal_points }).format(amount);
+
+    const formatters = {
+        'left': () => currency_sign + amount,
+        'left_space': () => currency_sign + ' ' + amount,
+        'right': () => amount + currency_sign,
+        'right_space': () => amount + ' ' + currency_sign
+    };
+
+    return formatters[currency_position] ? formatters[currency_position]() : amount;
+}
+
 export {dateTimeI18};

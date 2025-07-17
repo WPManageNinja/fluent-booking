@@ -149,14 +149,14 @@ function applyModeClasses(element, darkMode) {
 
 if (themeMode === 'system-default') {
     runColorMode((isDarkMode) => {
-        const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+        const elementsToApplyClasses = [calwrap, fcalLanding_page];
         elementsToApplyClasses.forEach((element) => applyModeClasses(element, isDarkMode));
     });
 } else if (themeMode === 'dark-mode') {
-    const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+    const elementsToApplyClasses = [calwrap, fcalLanding_page];
     elementsToApplyClasses.forEach((element) => applyModeClasses(element, true));
 } else {
-    const elementsToApplyClasses             = [calwrap, fcalLanding_page];
+    const elementsToApplyClasses = [calwrap, fcalLanding_page];
     elementsToApplyClasses.forEach((element) => applyModeClasses(element, false));
 }
 

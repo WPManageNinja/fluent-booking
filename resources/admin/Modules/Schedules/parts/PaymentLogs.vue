@@ -29,14 +29,14 @@
                     <tr v-for="item in payment_order.items" :key="item.id">
                         <td>{{ item.item_name }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td><span v-html="currencySign"></span>{{ (item.item_price / 100) }}</td>
+                        <td>{{ $currencyFormat(item.item_price, true) }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th></th>
-                        <th>{{ $t('Total:') }}</th>
-                        <td><span v-html="currencySign"></span>{{ (payment_order.total_amount / 100) }}</td>
+                        <th>{{ $t('Totall:') }}</th>
+                        <td>{{ $currencyFormat(payment_order.total_amount, true) }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Total') }}</h3>
-                        <p><span v-html="currencySign"></span>{{ (transaction.total / 100) }}</p>
+                        <p>{{ $currencyFormat(transaction.total, true) }}</p>
                     </div>
                     <div class="fcal_schedule_details_event_item">
                         <h3>{{ $t('Payment Status') }}</h3>
@@ -108,7 +108,6 @@ export default {
     props: ['payment_order', 'booking'],
     data() {
         return {
-            currencySign: window.fluentFrameworkAdmin?.currency_sign,
             transaction: this.payment_order.transaction,
             editing: false
         }
