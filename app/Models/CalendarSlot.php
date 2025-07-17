@@ -915,7 +915,7 @@ class CalendarSlot extends Model
             $product = wc_get_product($productId);
             if ($product) {
                 $productPrices[$duration] = [
-                    'value' => $product->get_price()
+                    'value' => wc_price($product->get_price())
                 ];
             }
         }
