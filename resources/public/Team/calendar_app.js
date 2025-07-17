@@ -9,14 +9,15 @@ function handleEventBlockClick(link) {
 
     const html = '<div class="fluent_booking_app fcal_loading" data-calendar_id="' + calendarId + '" data-event_id="' + event_id + '"><h3>Loading</h3></div>';
 
-    const wrap = document.querySelector('.fcal_calendar_wrap_block');
+    const wrap = elem.closest('.fcal_calendar_wrap_block');
 
     wrap.insertAdjacentHTML('beforeend', html);
 
     const bookingWrap = wrap.querySelector('.fluent_booking_wrap');
 
     bookingWrap.style.marginLeft = '-100%';
-    bookingWrap.style.height = 0;
+    bookingWrap.style.height = '0';
+    bookingWrap.style.overflow = 'hidden';
 
     const targetElement = wrap.querySelector('.fluent_booking_app');
     if (targetElement) {
@@ -75,22 +76,25 @@ const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 document.cookie = "fluent_booking_user_timezone=" + timeZone + "; path=/";
 
-const calendar = document.querySelector('.fcal_calendar_wrapper');
+document.querySelectorAll('.fcal_calendars').forEach(function (calendars) {
 
-const teamVars = window[calendar?.id];
+    const calendar = calendars.closest('.fcal_calendar_wrapper');
 
-if (teamVars) {
-    const calendarVars = teamVars['fcal_host_calendar'];
+    const calendarVars = window[calendar?.id];
 
-    let teamViewHtml = document.createElement('div');
+    if (calendarVars) {
+        const calVars = calendarVars['fcal_host_calendar'];
 
-    teamViewHtml.className = 'fluent_booking_team_view';
+        let calendarViewHtml = document.createElement('div');
 
-    teamViewHtml.innerHTML = calendarVars?.calendar_html;
+        calendarViewHtml.className = 'fluent_booking_calendar_view';
 
-    calendar.querySelector('.fcal_cals_wrap').style.display = 'block';
+        calendarViewHtml.innerHTML = calVars?.calendar_html;
 
-    calendar.querySelector('.fcal_calendar_loading').remove();
+        calendar.querySelector('.fcal_cals_wrap').style.display = 'block';
 
-    calendar.querySelector('.fcal_calendar_block_inner').appendChild(teamViewHtml);
-}
+        calendar.querySelector('.fcal_calendar_loading').remove();
+
+        calendar.querySelector('.fcal_calendar_block_inner').appendChild(calendarViewHtml);
+    }
+});

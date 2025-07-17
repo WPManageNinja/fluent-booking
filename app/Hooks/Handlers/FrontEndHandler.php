@@ -258,7 +258,7 @@ class FrontEndHandler
 
     public function renderCalendarBlock($calendar, $headerConfig = [])
     {
-        $wrapperId = 'fcal_team_' . Helper::getNextIndex();
+        $wrapperId = 'fcal_calendar_' . Helper::getNextIndex();
         wp_enqueue_script('fluent-booking-calendar', App::getInstance('url.assets') . 'public/js/calendar_app.js', [], FLUENT_BOOKING_ASSETS_VERSION, true);
 
         $calendarHtml = (string)(string)\FluentBooking\App\App::getInstance('view')->make('landing.author_html', [
