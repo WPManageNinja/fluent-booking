@@ -438,8 +438,9 @@ class EmailNotificationService
 
         $icsContent = BookingService::generateBookingICS($booking);
     
-        $filePath = wp_tempnam(null, 'event') . '.ics';
-        
+        $icsFileName = 'fcal-' . md5(wp_generate_uuid4()) . '.ics';
+        $filePath = trailingslashit(wp_upload_dir()['path']) . $icsFileName;
+
         global $wp_filesystem;
         $wp_filesystem->put_contents($filePath, $icsContent);
 
