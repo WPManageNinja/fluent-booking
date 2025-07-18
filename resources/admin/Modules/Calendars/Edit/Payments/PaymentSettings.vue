@@ -70,9 +70,9 @@
                                                                 <el-input :placeholder="$t('Item Name')" v-model="item.title"></el-input>
                                                             </el-col>
                                                             <el-col :span="6">
-                                                                <el-input class="fcal_group_input" min="0" type="number"
-                                                                    v-model="item.value">
-                                                                    <template #prepend>{{ appVars.currency_sign }}</template>
+                                                                <el-input class="fcal_group_input" min="0" type="number" v-model="item.value">
+                                                                    <template v-if="isCurrencyPositionLeft()" #prepend>{{ appVars.currency_sign }}</template>
+                                                                    <template v-else #append>{{ appVars.currency_sign }}</template>
                                                                 </el-input>
                                                             </el-col>
                                                         </el-row>
@@ -86,7 +86,8 @@
                                                         </el-col>
                                                         <el-col :span="10">
                                                             <el-input class="fcal_group_input" min="0" type="number" v-model="item.value">
-                                                                <template #prepend>{{ appVars.currency_sign }}</template>
+                                                                <template v-if="isCurrencyPositionLeft()" #prepend>{{ appVars.currency_sign }}</template>
+                                                                <template v-else #append>{{ appVars.currency_sign }}</template>
                                                             </el-input>
                                                         </el-col>
                                                         <el-col :span="2" class="action_btn">
@@ -262,6 +263,9 @@ export default {
                 .finally(() => {
                     this.saving = false;
                 });
+        },
+        isCurrencyPositionLeft() {
+            return ['left', 'left_space'].includes(this.appVars.currency_settings?.currency_position);
         },
         isDurationAvailable(duration) {
             return this.multiDuration.available_durations.includes(duration);
