@@ -91,7 +91,7 @@
             timeout = 2000;
         }
         setTimeout(() => {
-            wrapperWidth = wrapDom.parentNode.offsetWidth;
+            wrapperWidth = wrapDom?.parentNode?.offsetWidth || 800;
             if (wrapperWidth >= 900) {
                 wrapperClass = 'fcal_on_lg';
             } else if (wrapperWidth >= 800) {
