@@ -3508,6 +3508,18 @@
                                 }
                             }
                         }
+                        &.el-input-group--append {
+                            &.fcal_group_input {
+                                .el-input-group__append {
+                                    border-top-right-radius: 8px;
+                                    border-bottom-right-radius: 8px;
+                                }
+                                .el-input__wrapper {
+                                    border-top-right-radius: 0px;
+                                    border-bottom-right-radius: 0px;
+                                }
+                            }
+                        }
                     }
                     .action_btn {
                         > span {
