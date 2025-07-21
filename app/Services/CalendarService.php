@@ -209,8 +209,8 @@ class CalendarService
 
         $preparedEventData['settings'] = [
             'schedule_type'       => sanitize_text_field(Arr::get($eventSettings, 'schedule_type')),
-            'weekly_schedules'    => SanitizeService::weeklySchedules(Arr::get($eventSettings, 'weekly_schedules', []), $calendar->author_timezone, 'UTC'),
-            'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($eventSettings, 'date_overrides', []), $calendar->author_timezone, 'UTC'),
+            'weekly_schedules'    => SanitizeService::weeklySchedules(Arr::get($eventSettings, 'weekly_schedules', []), $calendar->author_timezone, 'UTC', true),
+            'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($eventSettings, 'date_overrides', []), $calendar->author_timezone, 'UTC', null, true),
             'range_type'          => sanitize_text_field(Arr::get($eventSettings, 'range_type')),
             'range_days'          => (int)(Arr::get($eventSettings, 'range_days', 60)) ?: 60,
             'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($eventSettings, 'range_date_between', ['', ''])),

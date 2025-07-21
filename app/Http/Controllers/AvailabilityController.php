@@ -184,8 +184,8 @@ class AvailabilityController extends Controller
         $scheduleData = [
             'default'          => Arr::isTrue($schedule, 'value.default'),
             'timezone'         => $timezone,
-            'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($data, 'schedule.settings.date_overrides', []), $timezone, 'UTC'),
-            'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($data, 'schedule.settings.weekly_schedules', []), $timezone, 'UTC'),
+            'date_overrides'   => SanitizeService::slotDateOverrides(Arr::get($data, 'schedule.settings.date_overrides', []), $timezone, 'UTC', null, true),
+            'weekly_schedules' => SanitizeService::weeklySchedules(Arr::get($data, 'schedule.settings.weekly_schedules', []), $timezone, 'UTC', true),
         ];
 
         $schedule->value = $scheduleData;
