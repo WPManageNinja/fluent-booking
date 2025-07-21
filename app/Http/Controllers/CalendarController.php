@@ -246,7 +246,7 @@ class CalendarController extends Controller
             'settings'          => [
                 'team_members'     => !$isHostCalendar ? $teamMembers : [],
                 'schedule_type'    => sanitize_text_field($slot['schedule_type']),
-                'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC')
+                'weekly_schedules' => SanitizeService::weeklySchedules($slot['weekly_schedules'], $calendar->author_timezone, 'UTC', true)
             ],
             'status'            => SanitizeService::checkCollection($slot['status'], ['active', 'draft']),
             'color_schema'      => sanitize_text_field(Arr::get($slot, 'color_schema', '#0099ff')),
@@ -483,8 +483,8 @@ class CalendarController extends Controller
             'description'       => wp_kses_post(Arr::get($slot, 'description')),
             'settings'          => [
                 'schedule_type'       => sanitize_text_field($slot['settings']['schedule_type']),
-                'weekly_schedules'    => SanitizeService::weeklySchedules($slot['settings']['weekly_schedules'], $calendar->author_timezone, 'UTC'),
-                'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($slot['settings'], 'date_overrides', []), $calendar->author_timezone, 'UTC'),
+                'weekly_schedules'    => SanitizeService::weeklySchedules($slot['settings']['weekly_schedules'], $calendar->author_timezone, 'UTC', true),
+                'date_overrides'      => SanitizeService::slotDateOverrides(Arr::get($slot['settings'], 'date_overrides', []), $calendar->author_timezone, 'UTC', null, true),
                 'range_type'          => sanitize_text_field(Arr::get($slot['settings'], 'range_type')),
                 'range_days'          => (int)(Arr::get($slot['settings'], 'range_days', 60)) ?: 60,
                 'range_date_between'  => SanitizeService::rangeDateBetween(Arr::get($slot['settings'], 'range_date_between', ['', ''])),
@@ -605,8 +605,8 @@ class CalendarController extends Controller
 
         $eventSettings = [
             'schedule_type'      => sanitize_text_field(Arr::get($data, 'schedule_type')),
-            'weekly_schedules'   => SanitizeService::weeklySchedules(Arr::get($data, 'weekly_schedules'), $event->calendar->author_timezone, 'UTC'),
-            'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides', []), $event->calendar->author_timezone, 'UTC'),
+            'weekly_schedules'   => SanitizeService::weeklySchedules(Arr::get($data, 'weekly_schedules'), $event->calendar->author_timezone, 'UTC', true),
+            'date_overrides'     => SanitizeService::slotDateOverrides(Arr::get($data, 'date_overrides', []), $event->calendar->author_timezone, 'UTC', null, true),
             'range_type'         => sanitize_text_field(Arr::get($data, 'range_type')),
             'range_days'         => (int)(Arr::get($data, 'range_days', 60)) ?: 60,
             'range_date_between' => SanitizeService::rangeDateBetween(Arr::get($data, 'range_date_between', ['', ''])),

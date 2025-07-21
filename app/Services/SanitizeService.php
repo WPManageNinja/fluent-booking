@@ -6,7 +6,7 @@ use FluentBooking\Framework\Support\Arr;
 
 class SanitizeService
 {
-    public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false, $fromUser = true)
+    public static function weeklySchedules($schedules, $fromTimeZone = '', $toTimeZone = false, $fromUser = false)
     {
         $dstTimeZone = $fromTimeZone == 'UTC' ? $toTimeZone : $fromTimeZone;
 
@@ -22,14 +22,14 @@ class SanitizeService
 
             $schedule['enabled'] = true;
 
-            foreach ($schedule['slots'] as $index => $slot) {
+            $cleanedSlots = [];
+            foreach ($schedule['slots'] as $slot) {
                 if ($fromUser) {
                     $slot['start'] = sanitize_text_field($slot['start']);
                     $slot['end'] = sanitize_text_field($slot['end']);
                 }
 
                 if (!$slot['start'] || !$slot['end']) {
-                    unset($schedule['slots'][$index]);
                     continue;
                 }
 
@@ -38,16 +38,22 @@ class SanitizeService
                     $slot['end'] = DateTimeHelper::convertToTimeZone($slot['end'], $fromTimeZone, $toTimeZone, 'H:i', $dateWithoutDST);
                 }
 
-                $schedule['slots'][$index] = $slot;
+                $cleanedSlots[] = $slot;
             }
 
-            $schedule['slots'] = array_values($schedule['slots']);
+            if ($fromUser) {
+                usort($cleanedSlots, function ($a, $b) {
+                    return strcmp($a['start'], $b['start']);
+                });
+            }
+
+            $schedule['slots'] = array_values($cleanedSlots);
         }
 
         return $schedules;
     }
 
-    public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $event = null)
+    public static function slotDateOverrides($overrides, $fromTimeZone = '', $toTimeZone = false, $event = null, $fromUser = false)
     {
         $todayTimeStamp = strtotime(gmdate('Y-m-d')); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
@@ -68,8 +74,10 @@ class SanitizeService
 
             $utcSlots = [];
             foreach ($slots as $index => $slot) {
-                $slot['start'] = sanitize_text_field($slot['start']);
-                $slot['end'] = sanitize_text_field($slot['end']);
+                if ($fromUser) {
+                    $slot['start'] = sanitize_text_field($slot['start']);
+                    $slot['end'] = sanitize_text_field($slot['end']);
+                }
 
                 if (empty($slot['start']) || empty($slot['end'])) {
                     unset($slots[$index]);
