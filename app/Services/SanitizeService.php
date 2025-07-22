@@ -97,9 +97,17 @@ class SanitizeService
                 $updatedOverRides[$date] = $utcSlots;
             }
 
-            if ($slots) {
-                $validOverrides[$date] = array_values($slots);
+            if (!$slots) {
+                continue;
             }
+
+            if ($fromUser) {
+                usort($slots, function ($a, $b) {
+                    return strcmp($a['start'], $b['start']);
+                });
+            }
+
+            $validOverrides[$date] = array_values($slots);
         }
 
         if ($isSkipped && $fromTimeZone == 'UTC' && $event) {
