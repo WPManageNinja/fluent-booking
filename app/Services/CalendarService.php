@@ -460,12 +460,12 @@ class CalendarService
         foreach ($calendarEvents as $event) {
             if ($weeklySchedule = Arr::get($event->settings, 'weekly_schedules', [])) {
                 $originalSchedule = SanitizeService::weeklySchedules($weeklySchedule, 'UTC', $oldTimezone);
-                $weeklySchedule = SanitizeService::weeklySchedules($originalSchedule, $updatedTimezone, 'UTC');
+                $weeklySchedule = SanitizeService::weeklySchedules($originalSchedule, $updatedTimezone, 'UTC', true);
             }
 
             if ($dateOverride = Arr::get($event->settings, 'date_overrides', [])) {
                 $originalOverride = SanitizeService::slotDateOverrides($dateOverride, 'UTC', $oldTimezone);
-                $dateOverride = SanitizeService::slotDateOverrides($originalOverride, $updatedTimezone, 'UTC');
+                $dateOverride = SanitizeService::slotDateOverrides($originalOverride, $updatedTimezone, 'UTC', null, true);
             }
 
             $event->settings = [
