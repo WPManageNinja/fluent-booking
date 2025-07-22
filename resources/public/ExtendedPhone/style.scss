@@ -34,7 +34,7 @@
   }
 
   .svelte-select-list {
-    min-width: 300px !important;
+    min-width: fit-content !important;
     padding-left: 0 !important;
     .list-item{
       div[slot="item"]{

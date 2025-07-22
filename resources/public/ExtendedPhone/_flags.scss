@@ -2,8 +2,8 @@
   .fcal_country_select {
 
     span.flag {
-      width: 28px !important;
       height: 19px !important;
+      min-width: 28px !important;
       display: inline-block !important;
     }
 
