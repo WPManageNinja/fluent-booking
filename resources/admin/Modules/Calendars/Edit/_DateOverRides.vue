@@ -86,19 +86,17 @@
     </div>
 </template>
 
-<script type="text/babel">
-import {ArrowRight, ArrowLeft } from '@element-plus/icons-vue';
+<script>
+import { Delete, ArrowRight, ArrowLeft } from '@element-plus/icons-vue';
 import DayOverRideConfig from './__DayOverRideConfig.vue';
 import each from 'lodash/each';
-import {
-    Delete
-} from '@element-plus/icons-vue'
-import {markRaw} from "vue";
+import { markRaw } from 'vue';
 
 
 export default {
     name: 'DateOverRides',
     props: ['settings', 'title'],
+    emits: ['overridesUpdated'],
     components: {
         ArrowRight,
         ArrowLeft,
@@ -222,6 +220,7 @@ export default {
                 {}
             );
             this.resetOverRide();
+            this.$emit('overridesUpdated');
         },
         toggleDateOverRide() {
             if (!this.modal_visible) {
