@@ -236,7 +236,7 @@ class TimeSlotService
         }
 
         $currentDate = strtotime($startDate);
-        $endDate = strtotime($endDate);
+        $endDate = strtotime($endDate) + 1; // add 1s in case end is 23:59:59
         $oneDay = 24 * 60 * 60;
 
         $dateArray = [];

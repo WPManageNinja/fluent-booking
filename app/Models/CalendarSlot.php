@@ -549,6 +549,7 @@ class CalendarSlot extends Model
             if (is_array($range) && count(array_filter($range)) == 2) {
                 if (strtotime($range[0]) >= strtotime($startDate)) {
                     $startDate = gmdate('Y-m-d H:i:s', strtotime($range[0])); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+                    $startDate = DateTimeHelper::convertToTimeZone($startDate, $this->calendar->author_timezone, 'UTC');
                 }
             }
         }
