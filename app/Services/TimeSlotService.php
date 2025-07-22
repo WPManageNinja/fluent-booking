@@ -648,7 +648,7 @@ class TimeSlotService
         }
 
         $convertedSpots = array_map(function ($spots) {
-            return array_values($spots);
+            return array_values(ksort($spots) ? $spots : $spots);
         }, $convertedSpots);
 
         return $convertedSpots;
