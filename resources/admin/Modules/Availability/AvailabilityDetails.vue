@@ -65,6 +65,7 @@
                                 v-if="scheduleInfo?.settings"
                                 :settings="scheduleInfo?.settings"
                                 :title="$t('Add date overrides')"
+                                @overridesUpdated="updateSchedule"
                             />
                         </div>
                     </div>
