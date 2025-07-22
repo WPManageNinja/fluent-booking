@@ -94,6 +94,7 @@
                                         <date-over-rides
                                             :settings="settings"
                                             :title="$t('Add date overrides')"
+                                            @overridesUpdated="saveSettings"
                                         />
                                     </div>
                                 </div>
@@ -152,7 +153,7 @@
                 </el-form>
             </div>
             <div class="fcal_create_calendar_form_footer">
-                <SaveButton :saving="saving" :label="$t('Save Changes')" @click="saveSettings"/>
+                <SaveButton :saving="saving" :label="$t('Save Changes')" @save="saveSettings"/>
             </div>
         </div>
     </div>
