@@ -31,7 +31,9 @@ import RemoteCalendarsSettings from "./Modules/Calendars/Edit/HostSettings/Remot
 import AvailabilityRoute from "./Modules/Availability/AvailabilityRoute.vue";
 import AllAvailabilities from "./Modules/Availability/AllAvailabilities.vue";
 import AvailabilityDetails from "./Modules/Availability/AvailabilityDetails.vue";
-import PaymentSettingsIndex from "./Modules/Calendars/integrations/Payments/PaymentSettingsIndex.vue";
+import GlobalPaymentSettings from "./Modules/Settings/Payment/GlobalPaymentSettings.vue";
+import PaymentMethodsSettings from "./Modules/Settings/Payment/PaymentMethodsSettings.vue";
+import PaymentCouponsSettings from "./Modules/Settings/Payment/PaymentCouponsSettings.vue";
 import GeneralIntegrationFeedSettings from "./Modules/Calendars/integrations/GeneralIntegrationFeedSettings.vue";
 import GloablModules from "./Modules/Settings/GloablModules.vue";
 import License from "./Modules/Settings/License.vue";
@@ -291,6 +293,39 @@ export var routes = [
                 }
             },
             {
+                name: 'global_payment_settings',
+                path: 'global-payment-settings',
+                props: true,
+                component: GlobalPaymentSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Payment Settings',
+                    children: true
+                },
+            },
+            {
+                name: 'payment_methods',
+                path: 'payment-methods/:settings_key',
+                props: true,
+                component: PaymentMethodsSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Payment Methods',
+                    parent: 'global_payment_settings'
+                },
+            },
+            {
+                name: 'payment_coupons',
+                path: 'payment-coupons',
+                props: true,
+                component: PaymentCouponsSettings,
+                meta: {
+                    active_menu: 'settings',
+                    title: 'Payment Coupons',
+                    parent: 'global_payment_settings'
+                },
+            },
+            {
                 name: 'team_members',
                 path: 'team-members',
                 component: TeamManagement,
@@ -325,16 +360,6 @@ export var routes = [
                 meta: {
                     active_menu: 'settings',
                     title: 'Configure Calendar'
-                },
-            },
-            {
-                name: 'PaymentSettingsIndex',
-                path: 'configure-integrations/payment/:settings_key',
-                props: true,
-                component: PaymentSettingsIndex,
-                meta: {
-                    active_menu: 'settings',
-                    title: 'Payment Settings'
                 },
             },
             {
