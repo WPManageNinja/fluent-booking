@@ -542,6 +542,10 @@ class CalendarSlot extends Model
     {
         $startDate = $startDate ?: gmdate('Y-m-d H:i:s'); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 
+        if ($timeZone) {
+            $startDate = DateTimeHelper::convertToTimeZone($startDate, $timeZone, 'UTC');
+        }
+
         $rangeType = Arr::get($this->settings, 'range_type', 'range_days');
 
         if ($rangeType == 'range_date_between') {
