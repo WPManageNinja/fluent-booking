@@ -300,20 +300,16 @@
 import SaveButton from "@/Components/Buttons/SaveButton";
 import ProNotice from "@/Components/Common/ProNotice.vue";
 import Popover from "@/Components/Popover";
-import { CloseBold, Operation, More, EditPen } from '@element-plus/icons-vue';
+import { CloseBold, More } from '@element-plus/icons-vue';
 import { markRaw } from "vue";
 
 export default {
     name: '_AdvancedSettings',
     components: {
-    SaveButton,
-    CloseBold,
-    Operation,
-    More,
-    EditPen,
-    Popover,
-    ProNotice
-},
+        SaveButton,
+        Popover,
+        ProNotice
+    },
     props: ['calendar_event', 'disabled'],
     data() {
         return {

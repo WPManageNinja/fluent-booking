@@ -2105,7 +2105,7 @@ class Helper
         return apply_filters('fluent_booking/author_photo', get_avatar_url($id_or_email), $args);
     }
 
-    public static function getPrefSettins($cached = true)
+    public static function getPrefSettings($cached = true)
     {
         static $pref = null;
 
@@ -2119,6 +2119,9 @@ class Helper
                 'slug'        => 'my-bookings',
                 'render_type' => 'standalone',
                 'page_id'     => ''
+            ],
+            'coupon' => [
+                'enabled'     => 'no'
             ]
         ];
 

@@ -72,15 +72,12 @@
 import UsersIcon from "../../../Components/Icons/UsersIcon";
 import SaveButton from "@/Components/Buttons/SaveButton";
 import ProNotice from "@/Components/Common/ProNotice.vue";
-import { Edit, Delete } from '@element-plus/icons-vue';
 export default {
     name: '_Assignment',
     components: {
         SaveButton,
         ProNotice,
-        UsersIcon,
-        Edit,
-        Delete
+        UsersIcon
     },
     props: ['calendar_event', 'disabled'],
     data() {

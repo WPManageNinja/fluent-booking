@@ -161,7 +161,7 @@ import BtnGroup from '@/Components/Common/BtnGroup/BtnGroup.vue';
 import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 import IntegrationEditor from './IntegrationEditor.vue';
 
-import { ArrowDown, Back, Edit, Delete, MoreFilled } from '@element-plus/icons-vue';
+import { ArrowDown, Back, MoreFilled } from '@element-plus/icons-vue';
 import QuestionIcon from "@/Components/Icons/QuestionIcon.vue";
 import EventIcon from "@/Components/Icons/EventIcon.vue";
 import CloneDrawer from '@/Components/Common/CloneDrawer.vue';
@@ -183,8 +183,6 @@ export default {
         Back,
         IntegrationEditor,
         CloneDrawer,
-        Edit,
-        Delete,
         MoreFilled
     },
     data() {

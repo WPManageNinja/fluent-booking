@@ -50,6 +50,9 @@ export default {
     },
     methods: {
         handleClick(val) {
+            if (this.route_name == val) {
+                return;
+            }
             this.route_name = val;
             this.$router.push({
                 name: 'payment_methods',

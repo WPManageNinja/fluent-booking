@@ -13,6 +13,7 @@
 
             <div v-else>
                 <fronend-panel-settings @save="saveFeatureModules" :featureModules="featureModules" />
+                <coupon-module-settings @save="saveFeatureModules" :featureModules="featureModules" />
             </div>
 
         </div>
@@ -69,8 +70,8 @@
     </div>
 </template>
 
-<script type="text/babel">
-
+<script>
+import CouponModuleSettings from './_CouponModuleSettings.vue';
 import FronendPanelSettings from './_FrontendPanelSettings.vue';
 
 export default {
@@ -86,12 +87,16 @@ export default {
                     enabled: 'no',
                     slug: 'all-booking',
                     panel_url: ''
+                },
+                coupon: {
+                    enabled: 'no'
                 }
             }
         }
     },
     components: {
-        FronendPanelSettings
+        FronendPanelSettings,
+        CouponModuleSettings
     },
     methods: {
         fetchModules() {

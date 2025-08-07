@@ -1106,7 +1106,6 @@
     }
 }
 
-
 .el {
     // Notification
     &-notification {
@@ -1380,28 +1379,6 @@
                         color: #445164;
                         margin-bottom: 10px;
                     }
-                    .el-form-item__content {
-                      .fcal_input_with_select {
-                        .el-input__wrapper {
-                          border-top-right-radius: 0 !important;
-                          border-bottom-right-radius: 0 !important;
-                        }
-                        .el-input-group__append {
-                          padding: 0;
-                          max-width: 120px;
-                          border: none;
-                          box-shadow: none;
-                          background: transparent;
-                          .el-select {
-                            .el-input__wrapper {
-                              border-radius: 0 !important;
-                              border-top-right-radius: 8px !important;
-                              border-bottom-right-radius: 8px !important;
-                            }
-                          }
-                        }
-                      }
-                    }
                     .fcal_time_zone_selector {
                         width: 100%;
                     }
@@ -1453,8 +1430,8 @@
                             .el-radio {
                                 .el-radio__input {
                                     input {
-                                        width: 24px;
-                                        height: 24px;
+                                        width: 20px;
+                                        height: 20px;
                                         border: 1.5px solid #D1D5DB;
                                     }
                                     &.is-checked {
@@ -1467,12 +1444,12 @@
                                         }
                                     }
                                     .el-radio__inner {
-                                        width: 24px;
-                                        height: 24px;
+                                        width: 20px;
+                                        height: 20px;
                                         border: 1.5px solid #D1D5DB;
                                         &:after {
-                                            width: 12px;
-                                            height: 12px;
+                                            width: 10px;
+                                            height: 10px;
                                             background: $primaryColor;
                                         }
                                     }
@@ -1633,13 +1610,13 @@
                 }
           
                 .el-radio__inner {
-                  width: 22px;
-                  height: 22px;
+                  width: 20px;
+                  height: 20px;
                   border: 1.5px solid #D1D5DB;
           
                   &:after {
-                    width: 12px;
-                    height: 12px;
+                    width: 10px;
+                    height: 10px;
                     background: $primaryColor;
                   }
                 }
@@ -2619,6 +2596,33 @@
     }
 }
 
+.el-form-item__content {
+  .fcal_input_with_select {
+    .el-input__wrapper {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+    .el-input-group__append {
+      padding: 0;
+      max-width: 160px;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      .el-select {
+        .el-input__wrapper {
+          box-shadow: none !important;
+          border-radius: 0 !important;
+          border-top-right-radius: 8px !important;
+          border-bottom-right-radius: 8px !important;
+          .el-input__inner {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
+
 .fcal_questions_wrapper {
     padding: 1.5rem;
     border: 1px solid #EAECF0;
@@ -3129,9 +3133,13 @@
             background: #fafafa;
             margin: -24px -24px 25px;
             padding: 20px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
             border-bottom: 0;
+            &.breadcrump_header {
+              border-radius: 8px;
+              margin-bottom: 1rem;
+            }
             .left {
                 display: flex;
                 align-items: center;
@@ -3211,7 +3219,6 @@
                     }
                 }
             }
-
             .el-switch {
                 &.is-checked {
                     .el-switch__core {
@@ -4224,7 +4231,7 @@
   }
 }
 
-.fbs_feature_module {
+.fcal_feature_module {
   align-items: center;
   background: #fff;
   border-bottom: 3px solid #f0f0f1;
@@ -4247,17 +4254,24 @@
   &:hover {
     border-bottom: 3px solid #306ae0;
   }
-  .fbs_module_desc {
+  .fcal_module_desc {
     display: flex;
     gap: 15px;
   }
-  span.fbs_addon_installed {
+  .fcal_module_actions {
+    .upgrade_btn {
+      display: inline-flex;
+      text-decoration: none;
+      min-width: max-content;
+    }
+  }
+  span.fcal_addon_installed {
     background: #306ae0;
     border-radius: 4px;
     color: #fff;
     font-size: 14px;
     padding: 2px 7px;
-    &.fbs_addon_disabled {
+    &.fcal_addon_disabled {
       background: #6d6a6a;
       color: #f2ecec;
     }

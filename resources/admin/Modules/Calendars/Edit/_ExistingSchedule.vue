@@ -53,14 +53,12 @@
 
 <script>
 import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
-import { Edit } from '@element-plus/icons-vue';
 import each from 'lodash/each';
 
 export default {
     name: "_ExistingSchedule.vue",
     props: ['existing_schedules', 'timezone', 'availability_id'],
     components: {
-        Edit,
         TimezoneIcon
     },
     computed: {
