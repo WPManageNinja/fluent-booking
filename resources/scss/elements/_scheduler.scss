@@ -827,13 +827,13 @@
       }
 
       .el-radio__inner {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
         border: 1.5px solid #D1D5DB;
 
         &:after {
-          width: 12px;
-          height: 12px;
+          width: 10px;
+          height: 10px;
           background: $primaryColor;
         }
       }
@@ -1613,19 +1613,19 @@
                         margin: 4px 0 0 0;
                     }
                     .fcal_inline_items {
-                    margin-bottom: 0.5rem;
-                    .el-select {
-                        width: 170px;
-                    }
-                    .fcal_booking_duration {
-                        width: 170px;
-                    }
+                        margin-bottom: 0.5rem;
+                        .el-select {
+                            width: 170px;
+                        }
+                        .fcal_booking_duration {
+                            width: 170px;
+                        }
                     }
                     .fcal_event_input_hint {
-                    margin-top: 0.25rem;
+                        margin-top: 0.25rem;
                     }
                     .el-checkbox {
-                    margin-bottom: 0.5rem;
+                        margin-bottom: 0.5rem;
                     }
                     .fcal_time_zone_selector {
                         display: flex;

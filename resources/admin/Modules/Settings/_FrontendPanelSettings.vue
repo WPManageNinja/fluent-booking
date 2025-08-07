@@ -1,10 +1,10 @@
 <template>
-    <div class="fbs_feature_module">
-        <div class="fbs_module_desc">
+    <div class="fcal_feature_module">
+        <div class="fcal_module_desc">
             <div>
                 <h4>{{ $t('Frontend Portal') }}
-                    <span v-if="featureModules.frontend.enabled == 'yes'" class="fbs_addon_installed">{{ $t('Enabled') }}</span>
-                    <span v-else class="fbs_addon_installed fbs_addon_disabled">{{ $t('Disabled') }}</span>
+                    <span v-if="featureModules.frontend.enabled == 'yes'" class="fcal_addon_installed">{{ $t('Enabled') }}</span>
+                    <span v-else class="fcal_addon_installed fcal_addon_disabled">{{ $t('Disabled') }}</span>
                 </h4>
                 <p>{{ $t('Load FluentBooking in the frontend of the website') }}
                     <a target="_blank" rel="noopener" href="https://fluentbooking.com/docs/fluentbooking-frontend-panel/">
@@ -20,9 +20,9 @@
                 </p>
             </div>
         </div>
-        <div class="fbs_module_actions">
+        <div class="fcal_module_actions">
             <el-button @click="showSettings = true" v-if="appVars.has_pro" class="fcal_plain_btn">{{ $t('Settings') }}</el-button>
-            <el-button type="primary" class="fcal_primary_btn" v-else disabled>{{ $t('Upgrade to Pro') }}</el-button>
+            <a :href="appVars.upgrade_url" target="_blank" type="primary" class="fcal_primary_btn upgrade_btn" v-else>{{ $t('Upgrade to Pro') }}</a>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
             <p>{{ $t('Add your FluentBooking to WordPress frontend / any Page via Shortcode.') }}</p>
             <hr/>
 
-            <el-form class="fbs_form" v-model="featureModules.frontend" label-position="top">
+            <el-form class="fcal_form" v-model="featureModules.frontend" label-position="top">
                 <el-form-item>
                     <el-checkbox 
                         v-model="featureModules.frontend.enabled"
@@ -83,7 +83,7 @@
     </el-drawer>
 
 </template>
-<script type="text/babel">
+<script>
 import { copyToClipBoard } from '@/Bits/data_config.js';
 
 export default {
@@ -126,7 +126,7 @@ export default {
 </script>
 
 <style lang="scss">
-.fbs_form {
+.fcal_form {
     .el-form-item__label {
         font-weight: bold;
     }

@@ -99,7 +99,8 @@ export default {
         },
         isActive(current) {
             const activeRoute = this.$route?.name;
-            return activeRoute === current ? 'router-link-active router-link-exact-active' : '';
+            const isParentRoute = this.$route?.meta?.children_of === current;
+            return (activeRoute === current) || isParentRoute ? 'router-link-active router-link-exact-active' : '';
         },
         isExpanded(current) {
             return this.expandedMenu === current && this.isChildrenActive(current);

@@ -146,7 +146,6 @@
 
 <script>
 import TeamIcon from '@/Components/Icons/TeamIcon.vue';
-import { Edit, Lock, Delete, Plus } from '@element-plus/icons-vue';
 import HostSelector from "@/Pieces/HostSelector";
 import ProNotice from '@/Components/Common/ProNotice.vue';
 
@@ -156,10 +155,6 @@ export default {
     components: {
     HostSelector,
     TeamIcon,
-    Edit,
-    Lock,
-    Delete,
-    Plus,
     ProNotice
 },
     data() {

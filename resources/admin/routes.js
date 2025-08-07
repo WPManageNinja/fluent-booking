@@ -40,6 +40,7 @@ import License from "./Modules/Settings/License.vue";
 
 import IntegrationEditor from "./Modules/Calendars/Edit/GeneralIntegration/IntegrationEditor.vue";
 import ConfigureGoogleCalendarSettings from "@/Modules/Settings/ConfigureGoogleCalendarSettings.vue";
+import AddOrEditCoupon from "./Modules/Settings/Payment/_AddOrEditCoupon.vue";
 
 export var routes = [
     {
@@ -284,8 +285,8 @@ export var routes = [
         },
         children: [
             {
-                name: 'general_settings',
                 path: 'general-settings',
+                name: 'general_settings',
                 component: GeneralSettings,
                 meta: {
                     active_menu: 'settings',
@@ -293,8 +294,8 @@ export var routes = [
                 }
             },
             {
-                name: 'global_payment_settings',
                 path: 'global-payment-settings',
+                name: 'global_payment_settings',
                 props: true,
                 component: GlobalPaymentSettings,
                 meta: {
@@ -304,8 +305,8 @@ export var routes = [
                 },
             },
             {
-                name: 'payment_methods',
                 path: 'payment-methods/:settings_key',
+                name: 'payment_methods',
                 props: true,
                 component: PaymentMethodsSettings,
                 meta: {
@@ -315,8 +316,8 @@ export var routes = [
                 },
             },
             {
-                name: 'payment_coupons',
                 path: 'payment-coupons',
+                name: 'payment_coupons',
                 props: true,
                 component: PaymentCouponsSettings,
                 meta: {
@@ -324,6 +325,32 @@ export var routes = [
                     title: 'Payment Coupons',
                     parent: 'global_payment_settings'
                 },
+                children: [
+                    {
+                        path: 'add',
+                        name: 'add_payment_coupon',
+                        props: true,
+                        component: AddOrEditCoupon,
+                        meta: {
+                            active_menu: 'settings',
+                            title: 'Add Payment Coupon',
+                            parent: 'global_payment_settings',
+                            children_of: 'payment_coupons'
+                        }
+                    },
+                    {
+                        path: ':coupon_id',
+                        name: 'edit_payment_coupon',
+                        props: true,
+                        component: AddOrEditCoupon,
+                        meta: {
+                            active_menu: 'settings',
+                            title: 'Edit Payment Coupon',
+                            parent: 'global_payment_settings',
+                            children_of: 'payment_coupons'
+                        }
+                    }
+                ]
             },
             {
                 name: 'team_members',
@@ -344,8 +371,8 @@ export var routes = [
                 }
             },
             {
-                name: 'configure-google',
                 path: 'configure-integrations/google',
+                name: 'configure-google',
                 component: ConfigureGoogleCalendarSettings,
                 meta: {
                     active_menu: 'settings',
@@ -353,8 +380,8 @@ export var routes = [
                 },
             },
             {
-                name: 'configure-integrations',
                 path: 'configure-integrations/:settings_key',
+                name: 'configure-integrations',
                 props: true,
                 component: ConfigureIntegrationSettings,
                 meta: {
@@ -363,8 +390,8 @@ export var routes = [
                 },
             },
             {
-                name: 'globalModules',
                 path: 'configure-integrations/global-modules',
+                name: 'globalModules',
                 component: GloablModules,
                 meta: {
                     active_menu: 'settings',
@@ -372,8 +399,8 @@ export var routes = [
                 },
             },
             {
-                name: 'license',
                 path: 'license',
+                name: 'license',
                 props: true,
                 component: License,
                 meta: {
@@ -393,8 +420,8 @@ export var routes = [
         },
         children: [
             {
-                name: 'availability',
                 path: '',
+                name: 'availability',
                 component: AllAvailabilities,
                 meta: {
                     active_menu: 'availability',

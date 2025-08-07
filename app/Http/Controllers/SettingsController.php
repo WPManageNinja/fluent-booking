@@ -161,7 +161,7 @@ class SettingsController extends Controller
             $settings = (object)[];
         }
 
-        $featuresPrefs = Helper::getPrefSettins(false);
+        $featuresPrefs = Helper::getPrefSettings(false);
 
         if (empty($featuresPrefs['frontend']['render_type'])) {
             $featuresPrefs['frontend']['render_type'] = 'standalone';
@@ -232,7 +232,7 @@ class SettingsController extends Controller
 
         $settings = $request->get('settings', []);
 
-        $prefSettings = Helper::getPrefSettins(false);
+        $prefSettings = Helper::getPrefSettings(false);
 
         $settings = wp_parse_args($settings, $prefSettings);
 

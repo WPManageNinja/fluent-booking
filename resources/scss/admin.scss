@@ -815,8 +815,6 @@
     }
   }
 
-
-  //
   .fcal_tabs {
     overflow: inherit;
     display: flex;
@@ -893,6 +891,105 @@
       box-shadow: none;
     }
   }
+
+  .el-table.fcal_table {
+    border-radius: 8px;
+    border-spacing: 0;
+    box-shadow: 0 0 0 1px #D6DAE1;
+
+    .el-table__inner-wrapper {
+      &:before {
+        display: none;
+      }
+    }
+
+    thead {
+      tr {
+        background: #EAECF0;
+        th {
+          background: none;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 20px;
+          color: #323232;
+          padding: 8px 0;
+          .cell {
+            padding: 0 20px;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          td {
+            background: transparent;
+          }
+        }
+        &:last-child {
+          td {
+            border-bottom: none;
+          }
+        }
+        td {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 20px;
+          padding: 16px 0;
+          color: #5D5D7A;
+          border-color: #D6DAE1;
+          .cell {
+            padding: 0 20px;
+          }
+          a {
+            text-decoration: none;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    .fcal_table_action {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      .fcal_action {
+        color: #fff;
+        padding: 7px;
+        height: auto;
+        &:hover {
+          opacity: 0.8;
+        }
+        &.edit_btn {
+          background-color: #306ae0;
+          border-color: #306ae0;
+        }
+        &.danger_btn {
+          background-color: #ff6154;
+          border-color: #ff6154;
+          margin-left: 2px;
+        }
+      }
+    }
+  }
+
+  .el-input-group.fcal_input_with_copy {
+    .el-input__wrapper {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+    .el-input-group__append {
+      color: #445164;
+      background: transparent;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      .el-icon {
+        cursor: pointer;
+        font-size: 20px;
+      }
+    }
+  }
 }
 
 .fcal_create_event_selector {
@@ -905,7 +1002,6 @@
     margin: 5px 0 0;
   }
 }
-
 
 .fcal_remote_calendar_block {
   border: 1px solid #e5e7eb;
@@ -984,7 +1080,6 @@
     }
   }
 }
-
 
 .fcal_card_items {
   display: block;
@@ -1160,7 +1255,6 @@
   cursor: pointer;
   width: 100%;
 }
-
 
 @keyframes animateSvg {
   from {
@@ -1373,7 +1467,6 @@ table.shop_table.order_details {
   cursor: pointer;
 }
 
-
 .el-form-item__error {
   display: block;
   position: relative;
@@ -1385,11 +1478,9 @@ table.shop_table.order_details {
   }
 }
 
-
 .fcal_event_status_pending.fcal_schedule_header_bar {
   background: #747474 !important;
 }
-
 
 .fcal_box_padded {
   max-width: 700px;
@@ -1436,6 +1527,35 @@ table.shop_table.order_details {
 .fcal_create_calendar_wrap.fcal_onboard_wrap {
   max-width: 850px;
   margin: 0 auto;
+}
+
+.fcal_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 10px;
+  text-transform: capitalize;
+  line-height: 1.5;
+  border-radius: 6px;
+  color: #306ae0;
+  background-color: rgba(38, 83, 199, 0.1);
+  &.active {
+    color: #16896b;
+    background-color: #e8f5f1;
+  }
+  &.inactive {
+    color: #222530;
+    background-color: #E1E4EA;
+  }
+  &.expired {
+    color: #f56c6c;
+    background-color: #fde2e2;
+  }
 }
 
 @import "elements/responsive";

@@ -251,7 +251,7 @@
 </template>
 
 <script>
-import { Back, MoreFilled, Message, Refresh, RefreshRight, Close, Delete, EditPen, Check, Hide } from '@element-plus/icons-vue';
+import { MoreFilled, Message, Refresh, RefreshRight, Close, Check, Hide } from '@element-plus/icons-vue';
 import BookingActivities from "./_BookingActivities";
 import GroupBookingGuests from './GroupBookingGuests';
 import SingleInviteeInfo from './SingleInviteeInfo';
@@ -272,15 +272,12 @@ export default {
         EditableBookingData,
         AddNewBookingModal,
         Message,
-        Back,
         MoreFilled,
         Refresh,
         RefreshRight,
         Close,
-        EditPen,
         Check,
-        Hide,
-        Delete
+        Hide
     },
     data() {
         return {

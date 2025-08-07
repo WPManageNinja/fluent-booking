@@ -2,7 +2,6 @@
 import { getCurrentInstance, defineProps, onMounted, ref, defineEmits, nextTick } from "vue";
 import ConnectAccount from "../Parts/_connect_account.vue";
 import Tabs from './Tabs.vue';
-import { InfoFilled } from "@element-plus/icons-vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import { CopyDocument } from '@element-plus/icons-vue';
 

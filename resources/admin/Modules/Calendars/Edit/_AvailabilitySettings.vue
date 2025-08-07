@@ -166,7 +166,6 @@ import ExistingSchedule from './_ExistingSchedule';
 import ScheduleIcon from "../../../Components/Icons/ScheduleIcon";
 import TimezoneIcon from "../../../Components/Icons/TimezoneIcon";
 import SaveButton from "@/Components/Buttons/SaveButton";
-import { EditPen } from '@element-plus/icons-vue';
 
 export default {
     name: '_AvailabilitySettings',
@@ -177,7 +176,6 @@ export default {
         SaveButton,
         ScheduleIcon,
         TimezoneIcon,
-        EditPen
     },
     props: {
         calendar_event: {

@@ -100,7 +100,6 @@
 </template>
 
 <script>
-import { EditPen } from "@element-plus/icons-vue";
 import EditTransactionModal from './_EditTransactionModal.vue';
 
 export default {
@@ -113,7 +112,6 @@ export default {
         }
     },
     components: {
-        EditPen,
         EditTransactionModal
     },
     watch: {
