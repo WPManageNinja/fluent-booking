@@ -178,6 +178,7 @@
             discount -= amount;
             delete form[couponField.name][couponCode];
             delete appliedCoupons[couponCode];
+            appliedCoupons = { ...appliedCoupons };
         }
     }
 
