@@ -410,7 +410,7 @@ class BookingFieldService
                 $minDate = Arr::get($field, 'min_date');
                 $maxDate = Arr::get($field, 'max_date');
 
-                $fieldValue = static::getFormattedDate($fieldValue, Arr::get($field, 'date_format'));
+                $fieldValue = DateTimeHelper::getFormattedDate($fieldValue, Arr::get($field, 'date_format'));
                 $minDate = date('Y-m-d', strtotime($minDate ?: '1900-01-01'));
                 $maxDate = date('Y-m-d', strtotime($maxDate ?: date('Y-12-31')));
 
@@ -423,15 +423,5 @@ class BookingFieldService
             }
         }
         return true;
-    }
-
-    protected static function getFormattedDate($date, $format)
-    {
-        if (!$format) {
-            $format = get_option('date_format');
-        }
-
-        $date = \DateTime::createFromFormat($format, $date);
-        return $date->format('Y-m-d');
     }
 }
