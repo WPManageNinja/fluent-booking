@@ -209,7 +209,7 @@ export default {
                 .then(response => {
                     this.isCouponEnabled = true;
                     this.$handleSuccess(this.$t('Coupon Module is enabled'));
-                    this.getCoupons();
+                    location.reload(true);
                 })
                 .catch(error => {
                     this.$handleError(error);
