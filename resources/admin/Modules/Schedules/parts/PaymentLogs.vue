@@ -33,9 +33,19 @@
                     </tr>
                 </tbody>
                 <tfoot>
+                    <tr v-if="payment_order.subtotal">
+                        <th></th>
+                        <th>{{ $t('Subtotal:') }}</th>
+                        <td>{{ $currencyFormat(payment_order.subtotal, true) }}</td>
+                    </tr>
+                    <tr v-for="discount in payment_order.discounts" :key="discount.id">
+                        <th></th>
+                        <th>{{ $t('Discount') }}({{ discount.item_name }}):</th>
+                        <td>{{ '-' + $currencyFormat(discount.item_total, true) }}</td>
+                    </tr>
                     <tr>
                         <th></th>
-                        <th>{{ $t('Totall:') }}</th>
+                        <th>{{ $t('Total:') }}</th>
                         <td>{{ $currencyFormat(payment_order.total_amount, true) }}</td>
                     </tr>
                 </tfoot>
@@ -100,7 +110,6 @@
 </template>
 
 <script>
-import { EditPen } from "@element-plus/icons-vue";
 import EditTransactionModal from './_EditTransactionModal.vue';
 
 export default {
@@ -113,7 +122,6 @@ export default {
         }
     },
     components: {
-        EditPen,
         EditTransactionModal
     },
     watch: {

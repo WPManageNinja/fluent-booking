@@ -167,3 +167,24 @@ $app->addFilter('fluent_booking/create_calendar_event_data', function ($slotData
     }
     return $slotData;
 }, 10, 2);
+
+if (!defined('FLUENT_BOOKING_PRO_DIR_FILE')) {
+    $app->addFilter('fluent_booking/payment/get_all_methods', function () {
+        $methods['stripe'] = [
+            'title' => __('Stripe', 'fluent-booking'),
+            'image' => '',
+            'status' => false
+        ];
+        $methods['paypal'] = [
+            'title' => __('Paypal', 'fluent-booking'),
+            'image' => '',
+            'status' => false
+        ];
+        $methods['offline'] = [
+            'title' => __('Offline Payment', 'fluent-booking'),
+            'image' => '',
+            'status' => false
+        ];
+        return $methods;
+    });
+}

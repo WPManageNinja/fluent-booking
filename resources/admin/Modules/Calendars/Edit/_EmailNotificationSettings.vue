@@ -117,7 +117,7 @@
 
 <script>
 import EditEmailNotificationSettings from './__EditEmailNotificationSettings.vue';
-import { EditPen, Close, Message, MoreFilled } from '@element-plus/icons-vue';
+import { Close, Message, MoreFilled } from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import CloneDrawer from '../../../Components/Common/CloneDrawer.vue';
 
@@ -127,7 +127,6 @@ export default {
     components: {
         EditEmailNotificationSettings,
         SaveButton,
-        EditPen,
         Close,
         Message,
         MoreFilled,

@@ -46,18 +46,18 @@ if (!$order->items) {
         </tbody>
         <tfoot>
         <?php $discountTotal = 0;
-        if (isset($order->discounts['applied']) && count($order->discounts['applied'])) : ?>
+        if (isset($order->discounts) && count($order->discounts)) : ?>
             <tr class="fluent_booking_total_row">
                 <th style="text-align: right" colspan="3"><?php esc_html_e('Sub-Total', 'fluent-booking'); ?></th>
                 <td><?php echo esc_html(fluentbookingFormattedAmount($subTotal, $currency_settings)); ?></td>
             </tr>
             <?php
-            foreach ($order->discounts['applied'] as $discount) :
+            foreach ($order->discounts as $discount) :
                 $discountTotal += $discount->item_total;
                 ?>
                 <tr class="fluent_booking_discount_row">
                     <th style="text-align: right"
-                        colspan="3"><?php echo 'Discounts (' . esc_html($discount->item_name) . ' )'; ?></th>
+                        colspan="3"><?php printf(esc_html__('Discounts(%s)', 'fluent-booking'), esc_html($discount->item_name)); ?></th>
                     <td><?php echo '-' . esc_html(fluentbookingFormattedAmount($discount->item_total, $currency_settings)); ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -68,7 +68,7 @@ if (!$order->items) {
                 <?php if (isset($hasSubscription) && $hasSubscription) : ?> 
                     <?php echo esc_attr(fluentbookingFormattedAmount($order->total_amount, $currency_settings)); ?>
                 <?php else:  ?> 
-                    <?php echo esc_attr(fluentbookingFormattedAmount($order->total_amount - $discountTotal, $currency_settings)); ?>
+                    <?php echo esc_attr(fluentbookingFormattedAmount($order->total_amount, $currency_settings)); ?>
                 <?php endif; ?>
             </td>
         </tr>

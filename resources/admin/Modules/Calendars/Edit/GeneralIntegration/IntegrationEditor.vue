@@ -309,7 +309,7 @@ import BtnGroupItem from '@/Components/Common/BtnGroup/BtnGroupItem.vue';
 
 import Notice from '@/Components/Notice/Notice.vue';
 import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
-import { InfoFilled, SuccessFilled } from '@element-plus/icons-vue';
+import { SuccessFilled } from '@element-plus/icons-vue';
 
 export default {
     name: 'general_notification_edit',
@@ -328,7 +328,6 @@ export default {
         BtnGroup,
         BtnGroupItem,
         Notice,
-        InfoFilled,
         'wp_editor': wpEditor,
         SuccessFilled
     },

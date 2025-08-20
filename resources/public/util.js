@@ -63,7 +63,7 @@ export const convertToText = function (obj) {
     return string.join('<br />')
 }
 
-export const getErrorText = function (response) {
+export const getErrorText = function (response, defaultMessage = 'Something is wrong!') {
     let errorMessage = '';
     if (typeof response === 'string') {
         errorMessage = response;
@@ -73,7 +73,7 @@ export const getErrorText = function (response) {
         errorMessage = convertToText(response);
     }
     if (!errorMessage) {
-        errorMessage = i18('Something is wrong!');
+        errorMessage = i18(defaultMessage);
     }
 
     console.log(errorMessage, response);

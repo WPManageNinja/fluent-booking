@@ -1,9 +1,9 @@
 <template>
     <el-form-item :class="field.wrapper_class">
         <template #label>
-            <div v-if="field.label">
+            <div v-if="field.label" :class="field.label_class">
                 {{ field.label }}
-                <el-tooltip v-if="field.help" popper-class="sidebar-popper" effect="dark" placement="top">
+                <el-tooltip v-if="field.help" popper-class="fcal_input_popper" effect="dark" placement="top">
                     <template #content>
                         <div v-html="field.help"></div>
                     </template>
@@ -16,13 +16,9 @@
     </el-form-item>
 </template>
 
-<script type="text/babel">
-import {InfoFilled} from '@element-plus/icons-vue';
+<script>
 export default {
     name: 'withLabelField',
-    props: ['field'],
-    components: {
-        InfoFilled
-    }
+    props: ['field']
 }
 </script>

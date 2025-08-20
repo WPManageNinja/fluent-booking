@@ -21,14 +21,10 @@
 </template>
 
 <script>
-import { EditPen } from "@element-plus/icons-vue";
 
 export default {
     name: 'EditableSpotData',
     $emits: ['dataUpdated'],
-    components: {
-        EditPen
-    },
     props: ['booking', 'data_key', 'input_type', 'input_label'],
     data() {
         return {

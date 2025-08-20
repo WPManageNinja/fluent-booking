@@ -4,7 +4,7 @@
         :title="modalTitle"
         :append-to-body="true"
         class="fcal_dialog fcal_question_dialog">
-        <p v-if="fieldData.system_defined">{{ $t('EditCustomFieldModal/system_defined_field_label') }}</p>
+        <p v-if="fieldData.system_defined">{{ $t('EditQuestionField/system_defined_field_label') }}</p>
         <el-form v-if="openModal" label-position="top" >
             <el-form-item :label="$t('Field Type')">
                 <el-select
@@ -26,6 +26,17 @@
                 <el-input v-model="fieldData.label" type="text" :placeholder="$t('Label')"/>
                 <span v-if="isHiddenField">{{ $t('This label will only be visible for admin.') }}</span>
             </el-form-item>
+            <template v-if="fieldData.coupon">
+                <el-form-item :label="$t('Coupon Label')">
+                    <el-input v-model="fieldData.coupon.label" :placeholder="$t('Enter Coupon Label')"/>
+                </el-form-item>
+                <el-form-item :label="$t('Apply Coupon Button')">
+                    <el-input v-model="fieldData.coupon.apply_button" :placeholder="$t('Enter Apply Button Text')"/>
+                </el-form-item>
+                <el-form-item :label="$t('Coupon Field Placeholder')">
+                    <el-input v-model="fieldData.coupon.placeholder" :placeholder="$t('Enter Coupon Field Placeholder')"/>
+                </el-form-item>
+            </template>
             <el-form-item v-if="isTermsField" :label="$t('Terms & Conditions') + ' *'">
                 <wp-editor v-model="fieldData.terms_and_conditions" :height="150" :media_buttons="false"/>
             </el-form-item>
@@ -179,7 +190,7 @@ import Popover from "@/Components/Popover";
 import wpEditor from '@/Components/FormBuilder/WpEditorField.vue';
 
 export default {
-    name: 'EditCustomFieldModal',
+    name: 'EditQuestionFieldModal',
     props: ['field', 'fields', 'smartCodes', 'showModal'],
     emits: ['closeModal', 'updateFieldData'],
     components: {

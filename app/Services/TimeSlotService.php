@@ -1030,7 +1030,7 @@ class TimeSlotService
 
     protected function getMaxBookingTimestamp($fromDate, $toDate, $timeZone)
     {
-        $maxBookingTime = $this->calendarSlot->getMaxBookableDateTime($fromDate, $timeZone, 'Y-m-d H:i:s');
+        $maxBookingTime = $this->calendarSlot->getMaxBookableDateTime($toDate, $timeZone, 'Y-m-d H:i:s');
 
         return strtotime($maxBookingTime);
     }

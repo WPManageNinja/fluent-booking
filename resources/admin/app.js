@@ -1,14 +1,14 @@
-import {createApp} from 'vue'
-import {createRouter, createWebHashHistory} from 'vue-router';
-import {routes} from './routes';
+import { createApp } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { routes } from './routes';
 import DashboardApplication from "./Application.vue";
 import Rest from './Bits/Rest.js';
-import {ElNotification, ElLoading, ElMessageBox} from 'element-plus'
+import { ElNotification, ElLoading, ElMessageBox } from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
-import {Plus, Delete, Location, Operation, UserFilled, Lock} from "@element-plus/icons-vue";
+import { Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen }  from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
-import {applyFilters, addFilter} from '@wordpress/hooks';
+import { applyFilters, addFilter } from '@wordpress/hooks';
 
 global.Errors = Errors;
 
@@ -58,7 +58,7 @@ function getDateTimeStringI18(str, type) {
 
 const app = createApp(DashboardApplication);
 
-const Icons = [Plus, Delete, Location, Operation, UserFilled, Lock];
+const Icons = [Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen];
 Icons.forEach((icon) => {
     app.component(icon.name, icon);
 });
