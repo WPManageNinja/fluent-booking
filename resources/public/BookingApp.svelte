@@ -3,8 +3,8 @@
     import { onMount, createEventDispatcher } from "svelte";
     import DayPickerApp from "./Calendar/DatePickerApp.svelte";
     import BookingForm from "./Components/BookingForm.svelte";
-    import Summary from "./Fluentform/Summary.svelte";
     import FcalSkeleton from './Components/FcalSkeleton.svelte';
+    import Summary from "./Fluentform/Summary.svelte";
 
     window['fcal_translate'] = i18;
 
@@ -457,7 +457,7 @@
                                                     {util.dateTimeI18(selectedTime.start, timeFormat)}{maybeDisplayDate(selectedTime)}
                                                     - {util.dateTimeI18(selectedTime.end, timeFormat)}, {util.dateTimeI18(selectedTime.end, dateFormatter)}
                                                     {#if selectedDateTimes.length > 1}
-                                                        <span class="fcal_remove_time"
+                                                        <span class="fcal_inline_remove"
                                                             on:click={() => spotClicked(selectedTime)}
                                                             on:keypress={(e) => { spotClicked(selectedTime) }}>
                                                             +

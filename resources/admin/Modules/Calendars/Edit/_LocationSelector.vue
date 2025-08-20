@@ -96,17 +96,12 @@
 </template>
 
 <script>
-import { EditPen, Delete } from '@element-plus/icons-vue';
 
 
 export default {
     name: 'LocationSelector',
     props: ['slot'],
     emits: ['saveAndGotoSetting'],
-    components: {
-        EditPen,
-        Delete
-    },
     data() {
         return {
             locationSettings: {},

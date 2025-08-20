@@ -1,23 +1,91 @@
 <div class="fcal_payment_items_wrapper">
     <div class="fcal_payment_items_provider_script"></div>
-    {#if multiPayments}
-        <div class="fcal_payment_items">
-            <p class="fcal_payment_item_single">{multiPayments[duration]?.title}
-                {@html getCurrencyFormat(multiPayments[duration]?.value)}
-            </p>
-        </div>
-    {:else}
-        <div class="fcal_payment_items">
-            {@html field?.payment_items?.template}
-        </div>
-    {/if}
-
+    <div class="fcal_payment_items">
+        <table class="fcal_payment_items_table">
+            <thead>
+                <tr>
+                    <th>{i18('Item')}</th>
+                    <th>{i18('Price')}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each paymentItems as item}
+                    <tr>
+                        <td>
+                            {getItemTitle(item)}
+                        </td>
+                        <td>
+                            <span class="fcal_payment_amount">{@html getCurrencyFormat(getItemPrice(item) * (quantity || 1))}</span>
+                        </td>
+                    </tr>
+                {/each}
+            </tbody>
+            <tfoot>
+                {#if couponField}
+                    <tr>
+                        <th>{i18('Subtotal:')}</th>
+                        <th>
+                            <span class="fcal_payment_amount">
+                                {@html getCurrencyFormat(subTotal)}
+                            </span>
+                        </th>
+                    </tr>
+                    {#each Object.values(appliedCoupons || {}) as coupon}
+                        <tr class="fcal_applied_coupon">
+                            <th>
+                                <div class="fcal_coupon_badge">
+                                    {coupon.code}
+                                    {#if coupon.type == 'percentage'}
+                                        ({coupon.rate}%)
+                                    {/if}
+                                </div>
+                                <span class="fcal_inline_remove"
+                                    on:click={() => removeCoupon(coupon.code)}
+                                    on:keypress={(e) => { removeCoupon(coupon.code) }}>
+                                    +
+                                </span>
+                            </th>
+                            <th>
+                               - {@html getCurrencyFormat(coupon.amount)}
+                            </th>
+                        </tr>
+                    {/each}
+                    <tr class="fcal_payment_coupon">
+                        <td colspan="2">
+                            <div class="fcal_coupon_label"
+                                on:click={() => showCouponInput = !showCouponInput}
+                                on:keypress={() => showCouponInput = !showCouponInput}>
+                                {couponField.label}
+                            </div>
+                            {#if showCouponInput}
+                                <div class="fcal_coupon_input_wrapper">
+                                    <CouponIcon />
+                                    <input type="text" id="fcal_coupon_input" bind:value={couponCode} placeholder={couponField.placeholder} />
+                                    <button type="button" class="fcal_coupon_btn" on:click={applyCoupon} disabled={submitting}>{couponField.apply_button}</button>
+                                </div>
+                                {#if couponError}
+                                    <div class="fcal_validation_error">
+                                        <ErrorIcon/>
+                                        <p>{couponError}</p>
+                                    </div>
+                                {/if}
+                            {/if}
+                        </td>
+                    </tr>
+                {/if}
+                <tr class="fcal_payment_total">
+                    <th>{i18('Total:')}</th>
+                    <th>
+                        <span class="fcal_payment_amount">
+                            {@html getCurrencyFormat(Math.max(0, total))}
+                        </span>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
     {#if totalMethod > 1 || firstPaymentName == 'offline'}
         <div class="fcal_payment_methods">
-            <div class="fcal_input_label">
-                {i18('Payment Method')}
-                <span>*</span>
-            </div>
             <div class="fcal_payment_radio">
                 {#each paymentMethods as method}
                     <label class="fcal_radio_group fcal_payment_label" for={field.name+'_'+method.name} aria-label={method.name}>
@@ -39,49 +107,131 @@
     {/if}
 </div>
 <script>
-    import { i18, getCurrencyFormat } from '../util.js';
-    import { onMount, afterUpdate } from "svelte";
+    import { i18, getCurrencyFormat, getErrorText, util } from '../util.js';
+    import { onMount } from "svelte";
+    import CouponIcon from './Icons/CouponIcon.svelte';
+    import ErrorIcon from './Icons/ErrorIcon.svelte';
 
     export let field;
     export let form;
+    export let slotId;
     export let duration;
     export let quantity;
+    export let discount;
 
-    let initialValues = [];
+    let couponCode = '';
+    let couponError = '';
+    let submitting = false;
+    let showCouponInput = false;
+    let appliedCoupons = {};
 
-    $: quantity, maybeUpdateQuantity();
+    $: subTotal = getSubTotal() * (quantity || 1);
+    $: total = subTotal - discount;
 
-    const multiPayments = field.multi_payment_items;
+    const multiPayments = !!field.multi_payment_items;
+    const paymentItems = multiPayments ? [field.multi_payment_items] : field.payment_items || [];
     const paymentMethods = Object.values(field?.payment_methods || {});
     const totalMethod = Object.keys(field?.payment_methods || {}).length;
     const firstPaymentName = paymentMethods[0]?.name;
+    const couponField = field.coupon;
 
     form[field.name] = form[field.name] || (totalMethod !=0 && firstPaymentName);
 
-    function maybeUpdateQuantity() {
-        const paymentElements = document.querySelectorAll('.fcal_payment_amount');
-        paymentElements.forEach((el, i) => {
-            let val = initialValues[i];
-            if (!val) return;
-            if (quantity > 1) {
-                let num = parseFloat(val.replace(/[^0-9.\-]/g, ''));
-                let sign = val.replace(/[\d\.\-,\s]/g, '');
-                let total = (num * quantity).toFixed(2);
-                el.textContent = val.trim().startsWith(sign) ? `${sign} ${total}` : `${total}${sign ? ' ' + sign : ''}`;
-            } else {
-                el.textContent = val;
-            }
-        });
+    function maybeApplyCoupon() {
+        if (!couponField) {
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const coupon = urlParams.get('fcal_coupon');
+        if (coupon) {
+            couponCode = coupon;
+            applyCoupon();
+        }
+    }
+
+    function addCoupon(coupon) {
+        if (!coupon?.discount_amount) {
+            return;
+        }
+        if (!form[couponField.name]) {
+            form[couponField.name] = [];
+        }
+        const code = coupon.coupon_code;
+        const amount = parseFloat(coupon.discount_amount) || 0;
+        form[couponField.name][code] = amount;
+        appliedCoupons[code] = {
+            'amount': amount,
+            'code': coupon.coupon_code,
+            'type': coupon.discount_type,
+            'rate': coupon.discount
+        };
+        discount += amount;
+        couponCode = '';
+        couponError = '';
+        showCouponInput = false;
+    }
+
+    function removeCoupon(couponCode) {
+        if (form[couponField.name] && form[couponField.name][couponCode]) {
+            const amount = parseFloat(appliedCoupons[couponCode].amount) || 0;
+            discount -= amount;
+            delete form[couponField.name][couponCode];
+            delete appliedCoupons[couponCode];
+        }
+    }
+
+    function getItemTitle(item) {
+        if (multiPayments) {
+            return item[duration].title;
+        }
+        return item.title;
+    }
+
+    function getItemPrice(item) {
+        if (multiPayments) {
+            return item[duration].value;
+        }
+        return item.value;
+    }
+
+    function getSubTotal() {
+        return (paymentItems || []).reduce(
+            (sum, item) => sum + parseFloat(getItemPrice(item) || 0),
+            0
+        );
+    }
+
+    function applyCoupon() {
+        if (submitting) {
+            return;
+        }
+
+        const postdata = {
+            coupon: couponCode,
+            event_id: slotId,
+            quantity: quantity || 1,
+            other_coupons: Object.keys(form[couponField.name] || {}),
+            action: 'fluent_booking_apply_coupon'
+        }
+
+        submitting = true;
+        util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
+            .then(res => {
+                const coupon = res.coupon;
+                addCoupon(coupon);
+            })
+            .catch(err => {
+                if (err.response) {
+                    couponError = getErrorText(err.response, 'Invalid coupon code');
+                }
+            })
+            .finally(() => {
+                submitting = false;
+            });
     }
 
     onMount(() => {
-        const paymentElements = document.querySelectorAll('.fcal_payment_amount');
-        paymentElements.forEach(element => {
-            initialValues.push(element.textContent);
-        });
-    });
-
-    afterUpdate(() => {
-        maybeUpdateQuantity();
+        maybeApplyCoupon();
     });
 </script>

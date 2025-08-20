@@ -130,7 +130,7 @@
 
 <script>
 import EditSmsNotificationSettings from './__EditSmsNotificationSettings.vue';
-import { EditPen, Close, Notification, MoreFilled } from '@element-plus/icons-vue';
+import { Close, Notification, MoreFilled } from '@element-plus/icons-vue';
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon.vue';
 import ProNotice from '@/Components/Common/ProNotice.vue';
@@ -144,7 +144,6 @@ export default {
         SaveButton,
         NoficationIcon,
         Notification,
-        EditPen,
         Close,
         ProNotice,
         MoreFilled,

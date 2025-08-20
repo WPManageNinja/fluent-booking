@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { StarFilled, Setting, Delete, EditPen, Location, MoreFilled, CopyDocument } from '@element-plus/icons-vue';
+import { StarFilled, Setting, Location, MoreFilled, CopyDocument } from '@element-plus/icons-vue';
 import WeeklySchedules from "../Calendars/parts/WeeklySchedules";
 import DateOverRides from "../Calendars/Edit/_DateOverRides";
 import ScheduleIcon from "../../Components/Icons/ScheduleIcon";
@@ -147,8 +147,6 @@ export default {
         TimeZoneSelector,
         StarFilled,
         Setting,
-        Delete,
-        EditPen,
         Location,
         MoreFilled,
         CopyDocument

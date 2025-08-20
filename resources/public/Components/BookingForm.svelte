@@ -127,18 +127,14 @@
                                         </svg>
                                     </div>
                                 {:else if field.type === 'payment' && slot.type === 'paid' && hasPaymentItem()}
-                                    <Payments {field} bind:form={form} {duration} {quantity}/>
+                                    <Payments {field} bind:form={form} bind:discount={discount} slotId={slot.id} {duration} {quantity}/>
                                 {/if}
                                 {#if field.help_text}
                                     <p class="fcal_help_text">{field.help_text}</p>
                                 {/if}
                                 {#if hasError && field.error}
                                     <div class="fcal_validation_error">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 ltr:mr-2 rtl:ml-2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <line x1="12" x2="12" y1="16" y2="12"></line>
-                                            <line x1="12" x2="12.01" y1="8" y2="8"></line>
-                                        </svg>
+                                        <ErrorIcon/>
                                         <p>{field.error}</p>
                                     </div>
                                 {/if}
@@ -152,7 +148,7 @@
                 {#if hasPaymentItem()}
                     <div class="fluent_booking_payment_processor" style="display:none;">
                         <h3 class="label">{i18('Total Payment')}
-                            : {@html getCurrencyFormat(getSubTotal(appData?.payment_items, quantity))}</h3>
+                            : {@html getCurrencyFormat(getTotal(appData?.payment_items, quantity, discount))}</h3>
                         {#if appData?.payment_methods?.template}
                             <div class="fcal_form_payment_item">
                                 {@html appData.payment_methods.template}
@@ -200,6 +196,7 @@
     import MultiSelect from "./_MultiSelect.svelte";
     import PhoneFieldSkeleton from "./PhoneFieldSkeleton.svelte";
     import FileInput from "./_FileInput.svelte";
+    import ErrorIcon from "./Icons/ErrorIcon.svelte";
 
     export let timezone;
     export let duration;
@@ -220,6 +217,8 @@
     let validating = false;
 
     let submitting = false;
+
+    let discount = 0;
 
     let primaryColor = 'var(--fcal_primary_color)';
 
@@ -268,6 +267,10 @@
             return spots.map(spot => spot.start);
         }
         return spot.start;
+    }
+
+    let getTotal = (items, qty, dis) => {
+        return getSubTotal(items, qty) - dis;
     }
 
     let getSubTotal = (items, qty) => {

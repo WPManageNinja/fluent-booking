@@ -117,8 +117,7 @@
 </template>
 
 <script>
-import { ArrowRight, ArrowLeft, Check } from '@element-plus/icons-vue';
-import { Delete, Edit } from '@element-plus/icons-vue'
+import { ArrowRight, ArrowLeft, Delete, Check } from '@element-plus/icons-vue';
 import { markRaw } from "vue";
 
 export default {

@@ -139,72 +139,6 @@
             </div>
         </div>
 
-        <div v-if="appVars.has_pro" style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
-            <div class="fcal_configure_integration_card">
-                <div class="fcal_configure_integration_card_header">
-                    <div class="left">
-                        <div class="content">
-                            <h3>{{ $t('Payment Settings') }}</h3>
-                            <p>{{ $t('GeneralSettings/payment_settings_description') }}</p>
-                        </div>
-                    </div>
-                </div>
-                <el-skeleton animated v-if="loading"></el-skeleton>
-                <div v-else class="fcal_configure_integration_body">
-                    <el-form v-model="payments" label-position="top">
-                        <el-row>
-                            <el-form-item>
-                                <el-checkbox v-model="payments.is_active" true-label="yes" false-label="no">
-                                    {{ $t('Enable Payment Module') }}
-                                </el-checkbox>
-                            </el-form-item>
-                        </el-row>
-                        <el-row :gutter="30">
-                            <el-col :sm="24" :md="8">
-                                <el-form-item :label="$t('Currency')">
-                                    <el-select filterable v-model="payments.currency" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
-                                        <el-option
-                                            v-for="currency in all_currencies"
-                                            :key="currency.value"
-                                            :label="currency.label"
-                                            :value="currency.value"
-                                        />
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :sm="24" :md="8">
-                                <el-form-item :label="$t('Number Format')">
-                                    <el-select v-model="payments.number_format" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
-                                        <el-option value="comma_separated" :label="`${$t('US Style')} (1,000,00.00)`"></el-option>
-                                        <el-option value="dot_separated" :label="`${$t('EU Style')} (1.000.00,00)`"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :sm="24" :md="8">
-                                <el-form-item :label="$t('Currency Position')">
-                                    <el-select v-model="payments.currency_position" popper-class="fcal_select" :placeholder="$t('Select')" placement="bottom">
-                                        <el-option value="left" :label="`${$t('Left')} (${appVars.currency_sign}100)`"></el-option>
-                                        <el-option value="right" :label="`${$t('Right')} (100${appVars.currency_sign})`"></el-option>
-                                        <el-option value="left_space" :label="`${$t('Left Space')} (${appVars.currency_sign} 100)`"></el-option>
-                                        <el-option value="right_space" :label="`${$t('Right Space')} (100 ${appVars.currency_sign})`"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <div v-if="payments.is_active == 'no'" class="fcal_tips_error">
-                            <p> {{ $t('GeneralSettings/payment_tips_error') }} </p>
-                        </div>
-                    </el-form>
-                    <div style="margin-top: 20px; text-align: right;" class="fcal_settings_footer">
-                        <el-button :disabled="paymentSaving" v-loading="paymentSaving" @click="savePaymentSettings()"
-                                   class="fcal_primary_btn">
-                            {{ $t('Save Settings') }}
-                        </el-button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div style="margin-bottom: 25px;" class="fcal_settings_body_inner fcal_settings_general">
             <div class="fcal_configure_integration_card">
                 <div class="fcal_configure_integration_card_header">
@@ -283,7 +217,6 @@ export default {
     data() {
         return {
             emailing: {},
-            payments: {},
             emailingFields: {},
             administration: {},
             theme: '',
@@ -319,7 +252,6 @@ export default {
             ],
             loading: false,
             saving: false,
-            paymentSaving: false,
             themeSaving: false,
             timeFormat: '12',
             all_countries: {},
@@ -333,7 +265,6 @@ export default {
             this.$get('settings/general')
                 .then(response => {
                     this.emailing = response.emailing;
-                    this.payments = response.payments;
                     this.administration = response.administration;
                     this.emailingFields = response.emailingFields;
                     this.theme = response.theme;
@@ -352,7 +283,6 @@ export default {
             this.saving = true;
             this.$post('settings/general', {
                 emailing: this.emailing,
-                payments: this.payments,
                 administration: this.administration,
                 timeFormat: this.timeFormat
             })
@@ -364,21 +294,6 @@ export default {
                 })
                 .finally(() => {
                     this.saving = false;
-                });
-        },
-        savePaymentSettings() {
-            this.paymentSaving = true;
-            this.$post('settings/payment', {
-                payments: this.payments
-            })
-                .then(response => {
-                    this.$notify.success(response.message);
-                })
-                .catch(error => {
-                    this.$handleError(error);
-                })
-                .finally(() => {
-                    this.paymentSaving = false;
                 });
         },
         saveThemeSettings() {

@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { Plus, Link, Edit, Delete, Back, MoreFilled } from '@element-plus/icons-vue';
+import { Link, Back, MoreFilled } from '@element-plus/icons-vue';
 import Editor from "./Editor";
 import ProNotice from '@/Components/Common/ProNotice.vue';
 import CloneDrawer from '@/Components/Common/CloneDrawer.vue';
@@ -134,10 +134,7 @@ export default {
     props: ['calendar_event', 'disabled', 'event_lists'],
     components: {
         Editor,
-        Plus,
         Link,
-        Edit,
-        Delete,
         Back,
         MoreFilled,
         ProNotice,

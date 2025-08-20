@@ -117,14 +117,11 @@
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import {
     CopyDocument,
-    More,
     Share,
     ArrowDown,
     User,
     Clock,
     Right,
-    EditPen,
-    Delete,
     SwitchButton,
     CreditCard
 } from '@element-plus/icons-vue';
@@ -136,14 +133,11 @@ export default {
     $emits: ['slotDeleted'],
     components: {
         CopyDocument,
-        More,
         Share,
         ArrowDown,
         User,
         Clock,
         Right,
-        EditPen,
-        Delete,
         SwitchButton,
         CreditCard,
         ShareCalendarBlock
