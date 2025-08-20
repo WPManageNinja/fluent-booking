@@ -2138,6 +2138,11 @@ class Helper
         return $settings;
     }
 
+    public static function getPrefSettins($cached = true)
+    {
+        return self::getPrefSettings($cached);
+    }
+
     public static function getActiveThemeName()
     {
         $ins = get_option('_fb_ins_by');
