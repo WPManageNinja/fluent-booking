@@ -70,16 +70,13 @@
                                 <div class="fcal_question_actions">
                                     <el-switch v-if="isHideable(field)" v-model="field.enabled" @change="saveSettings"/>
                                     <el-button class="fcal_plain_btn" @click="editField(field)">{{ $t('Edit') }}</el-button>
-                                    <el-button v-if="!isMandatoryField(field.name)" type="danger" class="fcal_danger_btn" @click="deleteField(field.index)">
-                                        <el-icon><Delete /></el-icon>
-                                    </el-button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <EditCustomFieldModal 
+            <EditQuestionFieldModal
                 v-if="showModal"
                 :field="field"
                 :fields="fields"
@@ -106,7 +103,7 @@
 
 <script>
 import QuestionIcon from "../../../Components/Icons/QuestionIcon";
-import EditCustomFieldModal from "./__EditCustomFieldModal";
+import EditQuestionFieldModal from "./__EditQuestionFieldModal";
 import SaveButton from '../../../Components/Buttons/SaveButton.vue';
 import { Delete, Bottom, Top } from '@element-plus/icons-vue';
 
@@ -115,7 +112,7 @@ export default {
     props: ['calendar_event'],
     components: {
         QuestionIcon,
-        EditCustomFieldModal,
+        EditQuestionFieldModal,
         SaveButton,
         Delete,
         Bottom,
@@ -187,7 +184,7 @@ export default {
             this.showModal = false;
         },
         isMandatoryField(name) {
-            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number'];
+            const allowedFields = ['name', 'email', 'message', 'guests', 'address', 'location', 'phone_number', 'payment_method'];
             allowedFields.push(...this.otherFieldNames);
             return allowedFields.includes(name);
         },

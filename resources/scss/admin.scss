@@ -1529,6 +1529,13 @@ table.shop_table.order_details {
   margin: 0 auto;
 }
 
+.fcal_text_with_copy {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .fcal_badge {
   display: inline-flex;
   align-items: center;

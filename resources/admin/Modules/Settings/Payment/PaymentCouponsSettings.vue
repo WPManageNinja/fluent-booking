@@ -18,7 +18,7 @@
                         </div>
                         <div class="fcal_subheader_right">
                             <el-button :disabled="saving" v-loading="saving" @click="redirectToAddCoupon" class="fcal_primary_btn2">
-                                {{ $t('Add Coupon') }}
+                                <span>+</span> {{ $t('Add Coupon') }}
                             </el-button>
                         </div>
                     </div>
@@ -33,17 +33,11 @@
                             </el-table-column>
                             <el-table-column :label="$t('Coupon Code')" width="200">
                                 <template #default="scope">
-                                    <el-popover
-                                        :content="$t('Click to copy code')"
-                                        placement="top">
-                                        <template #reference>
-                                            <span
-                                                style="cursor: pointer;"
-                                                @click="copyContent(scope.row.coupon_code)">
-                                                {{ scope.row.coupon_code }}
-                                            </span>
-                                        </template>
-                                    </el-popover>
+                                    <span
+                                        class="fcal_text_with_copy"
+                                        @click="copyContent(scope.row.coupon_code)">
+                                        {{ scope.row.coupon_code }} <el-icon><CopyDocument /></el-icon>
+                                    </span>
                                 </template>
                             </el-table-column>
                             <el-table-column :label="$t('Discount')" width="120">
@@ -107,7 +101,7 @@
 <script>
 import ProNotice from "@/Components/Common/ProNotice.vue";
 import AddOrEditCoupon from "./_AddOrEditCoupon.vue";
-import { CircleCheckFilled } from '@element-plus/icons-vue';
+import { CircleCheckFilled, CopyDocument } from '@element-plus/icons-vue';
 import Pagination from '@/Pieces/Pagination.vue';
 import { copyToClipBoard } from '@/Bits/data_config';
 
@@ -118,7 +112,8 @@ export default {
         ProNotice,
         AddOrEditCoupon,
         CircleCheckFilled,
-        Pagination
+        Pagination,
+        CopyDocument
     },
     data() {
         return {
@@ -131,7 +126,7 @@ export default {
             },
             coupons: [],
             eventLists: [],
-            coupon: this.appVars.default_coupon,
+            coupon: null,
             isCouponEnabled: this.appVars.pref_settings?.coupon?.enabled == 'yes'
         }
     },
@@ -242,8 +237,9 @@ export default {
             if (this.$route.params.coupon_id) {
                 this.getCoupon(this.$route.params.coupon_id);
             } else {
-                this.getCoupons();
+                this.coupon = this.appVars.default_coupon;
             }
+            this.getCoupons();
         }
     }
 }

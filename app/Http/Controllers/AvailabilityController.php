@@ -5,12 +5,10 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Models\Availability;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
-use FluentBooking\App\Services\Helper;
 use FluentBooking\Framework\Http\Request\Request;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\App\Services\AvailabilityService;
-use FluentBooking\App\Services\DateTimeHelper;
 use FluentBooking\Framework\Support\Arr;
 
 class AvailabilityController extends Controller

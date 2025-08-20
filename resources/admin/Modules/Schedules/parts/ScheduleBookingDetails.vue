@@ -177,13 +177,12 @@
             v-model="cancelDialog"
             width="30%"
             :title="$t('Cancel Meeting')"
-            class="fcal_modal"
-        >
+            class="fcal_modal">
             <div style="text-align: center;">
                 <h3>{{ showing_booking.calendar_event.title }}</h3>
-                <p class="fcal_meeting_with">{{ $t('with') }} <b>{{ showing_booking.first_name }} {{
-                        showing_booking.last_name
-                    }}</b></p>
+                <p class="fcal_meeting_with">{{ $t('with') }}
+                    <b>{{ showing_booking.first_name }} {{ showing_booking.last_name }}</b>
+                </p>
                 <p class="fcal_meeting_time">{{ meetingTime }}</p>
                 <p>{{ $t('ScheduleBookingDetails/cancel_event_desc') }}</p>
                 <el-input type="textarea" v-model="cancel_reason" :placeholder="$t('Reason for cancellation')"></el-input>
@@ -541,6 +540,8 @@ export default {
     mounted() {
         if (!this.booking) {
             this.fetchBooking();
+        } else {
+            this.getAdditionalData();
         }
         this.updateDurationLookup();
     }

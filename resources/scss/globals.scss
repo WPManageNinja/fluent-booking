@@ -1052,6 +1052,17 @@
             }
         }
     }
+    &.fcal_input_popper {
+      font-size: 13px;
+      max-width: 240px;
+      color: #2f3448 !important;
+      border-color: #eaecf0 !important;
+      background-color: #f9fafb !important;
+      .el-popper__arrow::before {
+        border-color: #eaecf0 !important;
+        background-color: #f9fafb !important;
+      }
+    }
 }
 
 
@@ -2662,6 +2673,7 @@
         }
     }
 }
+
 .fcal_questions {
     border: 1px solid #EAECF0;
     border-radius: 8px;
@@ -2671,6 +2683,7 @@
         }
     }    
 }
+
 .fcal_question {
     border-bottom: 1px solid #EAECF0;
     position: relative;

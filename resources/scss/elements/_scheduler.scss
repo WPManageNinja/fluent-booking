@@ -913,7 +913,8 @@
             &.fcal_is_current {
               &:before {
                 background: $primaryColor;
-                width: 1px;
+                border-radius: 8px;
+                width: 3px;
               }
               .fcal_spot_wrapper {
                 position: relative;
@@ -921,7 +922,8 @@
                   position: static;
                   &:before {
                     background: $primaryColor;
-                    width: 1px;
+                    border-radius: 8px;
+                    width: 3px;
                   }
 
                 }
@@ -937,7 +939,7 @@
                   position: absolute;
                   background: $primaryColor;
                   left: -10px;
-                  top: 0;
+                  top: 0px;
                 }
               }
             }
