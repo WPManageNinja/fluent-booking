@@ -187,9 +187,12 @@ class EditorShortCodeParser
         }
 
         if (self::$store['custom_booking_data']) {
-            if (preg_match('/format\.([a-zA-Z\-]+)/', $key, $matches)) {
-                $value = Arr::get(self::$store['custom_booking_data'], preg_split('/\.format\./', $key)[0]);
-                return $value ? gmdate($matches[1], strtotime($value)) : ''; // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            if (preg_match('/format\.([a-zA-Z\-: ]+)/', $key, $matches)) {
+                $fieldKey = preg_split('/\.format\./', $key)[0];
+                $value = Arr::get(self::$store['custom_booking_data'], $fieldKey);
+                $customField = BookingFieldService::getBookingFieldByName($booking->calendar_event, $fieldKey);
+                $formattedDate = DateTimeHelper::getFormattedDate($value, Arr::get($customField, 'date_format'));
+                return $formattedDate ? date_i18n($matches[1], strtotime($formattedDate)) : '';
             }
 
             $customField = BookingFieldService::getBookingFieldByName($booking->calendar_event, $key);
