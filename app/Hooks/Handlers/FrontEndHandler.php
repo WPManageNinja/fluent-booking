@@ -837,8 +837,12 @@ class FrontEndHandler
             $bookingData['source_url'] = sanitize_url($sourceUrl);
         }
 
+        if (!empty($postedData['coupon_codes'])) {
+            $bookingData['coupon_codes'] = array_map('sanitize_text_field', array_keys($postedData['coupon_codes']));
+        }
+
         if (!empty($postedData['payment_method'])) {
-            $customFieldsData['payment_method'] = $postedData['payment_method'];
+            $customFieldsData['payment_method'] = sanitize_text_field($postedData['payment_method']);
         }
 
         $timeSlotService = TimeSlotServiceHandler::initService($calendarEvent->calendar, $calendarEvent);

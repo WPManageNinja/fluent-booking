@@ -5,7 +5,6 @@ namespace FluentBooking\App\Http\Controllers;
 use FluentBooking\App\Models\Calendar;
 use FluentBooking\App\Models\CalendarSlot;
 use FluentBooking\App\Services\Helper;
-use FluentBooking\App\Services\CurrenciesHelper;
 use FluentBooking\App\Services\LandingPage\LandingPageHelper;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\AvailabilityService;
@@ -850,27 +849,27 @@ class CalendarController extends Controller
 
             $formattedField = array_merge($textValues, $booleanValues);
 
+            $fieldType = Arr::get($value, 'type');
+
             $formattedField['index'] = (int)Arr::get($value, 'index');
-            if (in_array(Arr::get($value, 'type'), $optionRequiredFields)) {
+            if (in_array($fieldType, $optionRequiredFields)) {
                 $sanitizedOptions = array_map('sanitize_text_field', Arr::get($value, 'options'));
                 $formattedField['options'] = $sanitizedOptions;
             }
-            if ($value['type'] == 'payment' && $calendarEvent->type === 'paid') {
-                $formattedField['payment_items'] = Arr::get($value, 'payment_items');
-                $formattedField['currency_sign'] = CurrenciesHelper::getGlobalCurrencySign();
-            }
-            if ($value['type'] == 'file') {
+            if ($fieldType == 'file') {
                 $formattedField['max_file_allow'] = intval(Arr::get($value, 'max_file_allow'));
                 $formattedField['allow_file_types'] = array_map('sanitize_text_field', Arr::get($value, 'allow_file_types'));
                 $formattedField['file_size_value'] = intval(Arr::get($value, 'file_size_value'));
                 $formattedField['file_size_unit'] = SanitizeService::checkCollection(Arr::get($value, 'file_size_unit'), ['kb','mb']);
             }
-            if ($value['type'] == 'hidden') {
+            if ($fieldType == 'hidden') {
                 $formattedField['default_value'] = sanitize_text_field(Arr::get($value, 'default_value'));
             }
-            if ($value['type'] == 'terms-and-conditions') {
+            if ($fieldType == 'terms-and-conditions') {
                 $formattedField['terms_and_conditions'] = wp_kses_post(Arr::get($value, 'terms_and_conditions'));
             }
+
+            $formattedField = apply_filters('fluent_booking/save_event_booking_field_' . $fieldType, $formattedField, $value, $calendarEvent);
 
             $formattedFields[] = $formattedField;
         }

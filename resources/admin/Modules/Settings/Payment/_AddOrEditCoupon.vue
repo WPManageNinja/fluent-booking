@@ -133,11 +133,11 @@
                         help: $t('Select the events that this coupon can be applied to. Empty for all events')
                     }">
                         <el-select
-                            v-model="coupon.event_ids"
+                            v-model="coupon.allowed_event_ids"
                             filterable
                             clearable
                             multiple
-                            popper-class="fcal_select fcal_select_event"
+                            popper-class="fcal_select"
                             :no-match-text="$t('No Data match')"
                             :no-data-text="$t('No Data')"
                             :placeholder="$t('Select Event')">
@@ -213,7 +213,6 @@
                             <el-radio label="expired">{{ $t('Expired') }}</el-radio>
                             <el-radio label="stackable">{{ $t('Stackable') }}</el-radio>
                             <el-radio label="min_purchase">{{ $t('Minimum Purchase') }}</el-radio>
-                            <el-radio label="max_discount">{{ $t('Maximum Discount') }}</el-radio>
                             <el-radio label="limit_reached">{{ $t('Limit Reached') }}</el-radio>
                         </el-radio-group>
                     </el-form-item>
@@ -223,7 +222,7 @@
                     <with-label :field="{
                             label: $t('Stackable'),
                             label_class: 'fcal_form_label',
-                            help: $t('Can this coupon code can be used with other coupon code')
+                            help: $t('Can this coupon code be used with other coupon code')
                         }">
                         <el-radio-group v-model="coupon.stackable">
                             <el-radio label="yes">{{ $t('Yes') }}</el-radio>
@@ -364,6 +363,7 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response.message);
+                    this.$emit('updated');
                     this.$router.push({ name: 'payment_coupons' });
                 })
                 .catch(error => {
@@ -384,6 +384,7 @@ export default {
             })
                 .then(response => {
                     this.$handleSuccess(response.message);
+                    this.$emit('updated');
                 })
                 .catch(error => {
                     this.$handleError(error);
@@ -412,9 +413,6 @@ export default {
             }
             this.coupon[name] = Math.min(999999, value);
         }
-    },
-    unmounted() {
-        this.$emit('updated');
     }
 }
 </script>

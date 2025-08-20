@@ -16,7 +16,7 @@
 .el {
   &-select {
     width: 100%;
-    input {
+    input, input:focus {
       background: transparent;
       border: none;
       box-shadow: none;
