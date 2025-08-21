@@ -143,23 +143,41 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const coupon = urlParams.get('fcal_coupon');
-        if (coupon) {
-            couponCode = coupon;
-            applyCoupon();
+        const coupons = urlParams.get('fcal_coupons');
+        if (coupons) {
+            const couponList = [];
+            coupons.split(',').forEach(coupon => {
+                couponList.push(coupon.trim());
+            });
+            applyBulkCoupons(couponList);
         }
     }
 
+    function resetCouponInput() {
+        couponCode = '';
+        couponError = '';
+        showCouponInput = false;
+    }
+
+    function resetAppliedCoupons() {
+        discount = 0;
+        appliedCoupons = {};
+        form[couponField.name] = [];
+    }
+
     function addCoupon(coupon) {
-        if (!coupon?.discount_amount) {
+        const amount = Number(coupon?.discount_amount) || 0;
+        const code = coupon?.coupon_code;
+        if (!amount || !code) {
             return;
         }
-        if (!form[couponField.name]) {
-            form[couponField.name] = [];
+
+        form[couponField.name] = form[couponField.name] || [];
+        if (form[couponField.name].includes(code)) {
+            return;
         }
-        const code = coupon.coupon_code;
-        const amount = parseFloat(coupon.discount_amount) || 0;
-        form[couponField.name][code] = amount;
+
+        form[couponField.name].push(code);
         appliedCoupons[code] = {
             'amount': amount,
             'code': coupon.coupon_code,
@@ -167,19 +185,20 @@
             'rate': coupon.discount
         };
         discount += amount;
-        couponCode = '';
-        couponError = '';
-        showCouponInput = false;
+        resetCouponInput();
     }
 
-    function removeCoupon(couponCode) {
-        if (form[couponField.name] && form[couponField.name][couponCode]) {
-            const amount = parseFloat(appliedCoupons[couponCode].amount) || 0;
-            discount -= amount;
-            delete form[couponField.name][couponCode];
-            delete appliedCoupons[couponCode];
-            appliedCoupons = { ...appliedCoupons };
+    function removeCoupon(code) {
+        if (!appliedCoupons[code]) {
+            return;
         }
+
+        const amount = parseFloat(appliedCoupons[code].amount) || 0;
+        discount -= amount;
+        delete appliedCoupons[code];
+        appliedCoupons = { ...appliedCoupons };
+        form[couponField.name] = form[couponField.name].filter(c => c !== code);
+        applyBulkCoupons(form[couponField.name]);
     }
 
     function getItemTitle(item) {
@@ -208,24 +227,41 @@
             return;
         }
 
-        const postdata = {
-            coupon: couponCode,
+        submitting = true;
+        util.$post(window.fluentCalendarPublicVars.ajaxurl, {
             event_id: slotId,
             quantity: quantity || 1,
-            other_coupons: Object.keys(form[couponField.name] || {}),
+            coupon_code: couponCode,
+            other_coupons: form[couponField.name] || [],
             action: 'fluent_booking_apply_coupon'
-        }
-
-        submitting = true;
-        util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
+        })
             .then(res => {
-                const coupon = res.coupon;
-                addCoupon(coupon);
+                addCoupon(res.coupon);
             })
             .catch(err => {
-                if (err.response) {
-                    couponError = getErrorText(err.response, 'Invalid coupon code');
-                }
+                couponError = getErrorText(err?.response, 'Invalid coupon code');
+            })
+            .finally(() => {
+                submitting = false;
+            });
+    }
+
+    function applyBulkCoupons(couponList) {
+        submitting = true;
+        util.$post(window.fluentCalendarPublicVars.ajaxurl, {
+            event_id: slotId,
+            quantity: quantity || 1,
+            coupon_codes: couponList,
+            action: 'fluent_booking_apply_bulk_coupons'
+        })
+            .then(res => {
+                resetAppliedCoupons();
+                (res.coupons || []).forEach(coupon => {
+                    addCoupon(coupon);
+                });
+            })
+            .catch(err => {
+                console.log(err);
             })
             .finally(() => {
                 submitting = false;
