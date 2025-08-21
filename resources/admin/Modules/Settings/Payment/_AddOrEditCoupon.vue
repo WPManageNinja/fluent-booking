@@ -169,7 +169,7 @@
                                     v-model="coupon.start_date"
                                     type="datetime"
                                     format="YYYY-MM-DD HH:mm"
-                                    value-format="YYYY-MM-DD"
+                                    value-format="YYYY-MM-DD HH:mm"
                                     :placeholder="$t('Start Date & Time')"
                                     :disabled-date="disabledStartDate">
                                 </el-date-picker>
