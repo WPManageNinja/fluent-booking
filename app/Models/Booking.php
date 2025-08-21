@@ -360,6 +360,19 @@ class Booking extends Model
         })->toArray();
     }
 
+    public function getAllBookingShortTimes($timeZone = 'UTC')
+    {
+        $otherBookings = self::where('parent_id', $this->id)->get();
+
+        $otherTimes = $otherBookings->map(function ($otherBooking) use ($timeZone) {
+            return $otherBooking->formatBookingDateTime($otherBooking->start_time, $timeZone);
+        })->toArray();
+
+        return array_merge($otherTimes, [
+            $this->formatBookingDateTime($this->start_time, $timeZone)
+        ]);
+    }
+
     public function getHostAndGuestDetailsHtml()
     {
         $authors = $this->getHostsDetails();
