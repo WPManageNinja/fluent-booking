@@ -486,6 +486,7 @@ class TransStrings
             'Quantity'                                                                         => __('Quantity', 'fluent-booking'),
             'Price'                                                                            => __('Price', 'fluent-booking'),
             'Total:'                                                                           => __('Total:', 'fluent-booking'),
+            'Subtotal:'                                                                        => __('Subtotal:', 'fluent-booking'),
             'Payment Method'                                                                   => __('Payment Method', 'fluent-booking'),
             'Transaction Details'                                                              => __('Transaction Details', 'fluent-booking'),
             'Card Last 4'                                                                      => __('Card Last 4', 'fluent-booking'),
