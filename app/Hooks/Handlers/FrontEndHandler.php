@@ -838,7 +838,7 @@ class FrontEndHandler
         }
 
         if (!empty($postedData['coupon_codes'])) {
-            $bookingData['coupon_codes'] = array_map('sanitize_text_field', array_keys($postedData['coupon_codes']));
+            $bookingData['coupon_codes'] = array_map('sanitize_text_field', array_unique($postedData['coupon_codes']));
         }
 
         if (!empty($postedData['payment_method'])) {
