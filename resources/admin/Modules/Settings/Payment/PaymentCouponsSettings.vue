@@ -31,7 +31,7 @@
                                     </span>
                                 </template>
                             </el-table-column>
-                            <el-table-column :label="$t('Coupon Code')" width="200">
+                            <el-table-column :label="$t('Coupon Code')" width="180">
                                 <template #default="scope">
                                     <span
                                         class="fcal_text_with_copy"
@@ -55,7 +55,7 @@
                                     {{ scope.row.usage_count }} / {{ getTotalLimit(scope.row.total_limit) }}
                                 </template>
                             </el-table-column>
-                            <el-table-column :label="$t('Status')" width="120">
+                            <el-table-column :label="$t('Status')" width="140">
                                 <template #default="scope">
                                     <div class="fcal_badge" :class="scope.row.status">
                                         {{ scope.row.status }}
