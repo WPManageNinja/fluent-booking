@@ -126,7 +126,7 @@ class AdminMenuHandler
             [
                 'key'       => 'scheduled-events',
                 'label'     => __('Bookings', 'fluent-booking'),
-                'permalink' => $baseUrl . 'scheduled-events?period=upcoming&author=me',
+                'permalink' => $baseUrl . 'scheduled-events',
             ],
             [
                 'key'       => 'availability',
@@ -403,19 +403,20 @@ class AdminMenuHandler
             'i18'                    => [
                 'date_time_config' => DateTimeHelper::getI18nDateTimeConfig(),
             ],
-            'has_pro'                => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
-            'require_upgrade'        => defined('FLUENT_BOOKING_PRO_DIR_FILE') && !defined('FLUENT_BOOKING_LITE'),
-            'dashboard_notices'      => apply_filters('fluent_booking/dashboard_notices', []),
-            'payment_methods'        => apply_filters('fluent_booking/payment/get_all_methods', []),
-            'trans'                  => TransStrings::getStrings(),
-            'date_format'            => DateTimeHelper::getDateFormatter(true),
-            'time_format'            => DateTimeHelper::getTimeFormatter(true),
-            'date_time_formatter'    => DateTimeHelper::getDateFormatter(true) . ', ' . DateTimeHelper::getTimeFormatter(true),
-            'available_date_formats' => DateTimeHelper::getAvailableDateFormats(),
-            'default_paginations'    => Helper::getDefaultPaginations(),
-            'pref_settings'          => Helper::getPrefSettings(),
-            'admin_url'              => admin_url(),
-            'is_rtl'                 => Helper::fluentbooking_is_rtl()
+            'has_pro'                 => defined('FLUENT_BOOKING_PRO_DIR_FILE'),
+            'require_upgrade'         => defined('FLUENT_BOOKING_PRO_DIR_FILE') && !defined('FLUENT_BOOKING_LITE'),
+            'dashboard_notices'       => apply_filters('fluent_booking/dashboard_notices', []),
+            'payment_methods'         => apply_filters('fluent_booking/payment/get_all_methods', []),
+            'trans'                   => TransStrings::getStrings(),
+            'date_format'             => DateTimeHelper::getDateFormatter(true),
+            'time_format'             => DateTimeHelper::getTimeFormatter(true),
+            'date_time_formatter'     => DateTimeHelper::getDateFormatter(true) . ', ' . DateTimeHelper::getTimeFormatter(true),
+            'available_date_formats'  => DateTimeHelper::getAvailableDateFormats(),
+            'default_booking_filters' => Helper::getDefaultBookingFilters(),
+            'default_paginations'     => Helper::getDefaultPaginations(),
+            'pref_settings'           => Helper::getPrefSettings(),
+            'admin_url'               => admin_url(),
+            'is_rtl'                  => Helper::fluentbooking_is_rtl()
         ]);
     }
 
