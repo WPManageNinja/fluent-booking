@@ -114,7 +114,7 @@ onMounted(() => {
                 <div class="fc-payment-col" v-else-if="field.type === 'provider'">
                     <template v-if="field.value == 'connect'">
                         <template v-if="settings.payment_mode == 'test'">
-                            <span v-if="fetching_connect">Connecting...</span>
+                            <span v-if="fetching_connect">{{ $t('Connecting') }}...</span>
                             <ConnectAccount
                                 @reload_settings="getConnectConfig()"
                                 :method="route_name"
@@ -201,8 +201,8 @@ onMounted(() => {
               </div><!-- .fc-payment-col -->
     
                 <div class="fc-payment-col" v-else-if="field.type === 'verify_button'">
-                    <p v-if="verifiedStatus" style="color:green;">Authenticated: {{ verifiedMessage }}</p>
-                    <el-button style="margin: 0;" v-loading="verifying" element-loading-text="verifying..."
+                    <p v-if="verifiedStatus" style="color:green;">{{ $t('Authenticated') }}: {{ verifiedMessage }}</p>
+                    <el-button style="margin: 0;" v-loading="verifying" element-loading-text="{{ $t('verifying') }}..."
                                element-loading-spinner="el-icon-loading"
                                @click="verifyKeys(field.req_type, field.method)"
                                class="fct_new_ui_button">
