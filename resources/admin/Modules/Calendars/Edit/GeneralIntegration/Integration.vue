@@ -245,15 +245,14 @@ export default {
             this.getFeeds();
         },
         getEventName(name) {
-            if (name == 'after_booking_scheduled') {
-                return this.$t('Booking Confirmed');
+            const eventNames = {
+                'after_booking_scheduled' : this.$t('Booking Confirmed'),
+                'booking_schedule_completed' : this.$t('Booking Completed'),
+                'booking_schedule_cancelled' : this.$t('Booking Cancelled'),
+                'after_booking_rescheduled' : this.$t('Booking Rescheduled'),
+                'booking_schedule_rejected' : this.$t('Booking Rejected'),
             }
-            if (name == 'booking_schedule_completed') {
-                return this.$t('Booking Completed');
-            }
-            if (name == 'booking_schedule_cancelled') {
-                return this.$t('Booking Cancelled');
-            }
+            return eventNames[name] || name;
         },
         handleActive(row) {
             this.errors.clear();
