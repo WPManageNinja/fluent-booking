@@ -412,6 +412,7 @@ class AdminMenuHandler
             'time_format'            => DateTimeHelper::getTimeFormatter(true),
             'date_time_formatter'    => DateTimeHelper::getDateFormatter(true) . ', ' . DateTimeHelper::getTimeFormatter(true),
             'available_date_formats' => DateTimeHelper::getAvailableDateFormats(),
+            'default_paginations'    => Helper::getDefaultPaginations(),
             'pref_settings'          => Helper::getPrefSettings(),
             'admin_url'              => admin_url(),
             'is_rtl'                 => Helper::fluentbooking_is_rtl()

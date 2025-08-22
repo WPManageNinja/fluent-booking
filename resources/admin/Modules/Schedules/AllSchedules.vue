@@ -358,10 +358,11 @@ export default {
                 search: ''
             }
         },
-        initPagination(perPage = 10) {
+        initPagination(perPage = null) {
+            const defaultPerPage = this.appVars.default_paginations?.bookings || 10;
             return {
                 current_page: 1,
-                per_page: perPage
+                per_page: perPage || defaultPerPage
             }
         },
         initRange(date, viewMode) {
