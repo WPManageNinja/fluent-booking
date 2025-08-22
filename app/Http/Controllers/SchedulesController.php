@@ -19,22 +19,24 @@ class SchedulesController extends Controller
     {
         $filters = $request->get('filters', []);
 
-        $period = Arr::get($filters, 'period', 'upcoming');
+        $search = $request->getSafe('search', '');
 
         $eventId = Arr::get($filters, 'event');
 
-        $eventType = Arr::get($filters, 'event_type');
-
         $author = Arr::get($filters, 'author');
 
-        $range = Arr::get($filters, 'range');
+        $eventType = sanitize_text_field(Arr::get($filters, 'event_type'));
 
-        $search = Arr::get($filters, 'search');
+        $period = sanitize_text_field(Arr::get($filters, 'period', 'upcoming'));
+
+        $range = array_map('sanitize_text_field', Arr::get($filters, 'range', []));
 
         $query = Booking::with(['calendar_event']);
 
         if (is_numeric($author)) {
             $author = (int)$author;
+        } else {
+            $author = sanitize_text_field($author);
         }
 
         $currentHostId = get_current_user_id();
@@ -61,7 +63,7 @@ class SchedulesController extends Controller
             }
 
             if ($eventId && $eventId !== 'all') {
-                $query->where('event_id', $eventId);
+                $query->where('event_id', (int) $eventId);
             }
 
             if ($eventType && $eventType !== 'all') {
