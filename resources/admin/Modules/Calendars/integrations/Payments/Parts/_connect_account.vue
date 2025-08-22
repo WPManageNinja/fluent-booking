@@ -27,7 +27,7 @@
     </div>
 </template>
 
-<script type="text/babel">
+<script>
 export default {
     name: 'ConnectAccount',
     props: ['connect', 'connect_config', 'mode', 'method'],
