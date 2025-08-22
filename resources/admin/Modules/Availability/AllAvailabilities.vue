@@ -128,7 +128,7 @@ export default {
             availabilities: [],
             pagination: {
                 current_page: 1,
-                per_page: 10,
+                per_page: this.appVars.default_paginations?.availabilities || 10,
                 total: 0,
             },
             filters: {
