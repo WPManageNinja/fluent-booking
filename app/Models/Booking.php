@@ -319,6 +319,20 @@ class Booking extends Model
         return $html;
     }
 
+    public function getPreviousMeetingDateTimeText($timeZone = 'UTC')
+    {
+        $previousStartTime = $this->getMeta('previous_meeting_time');
+        $previousEndTime = gmdate('Y-m-d H:i:s', strtotime($previousStartTime) + ($this->slot_minutes * 60)); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+
+        $startDateTime = DateTimeHelper::convertFromUtc($previousStartTime, $timeZone, 'Y-m-d H:i:s');
+        $endDateTime = DateTimeHelper::convertFromUtc($previousEndTime, $timeZone, 'Y-m-d H:i:s');
+
+        $text = DateTimeHelper::formatToLocale($startDateTime, 'time') . ' - ' . DateTimeHelper::formatToLocale($endDateTime, 'time') . ', ';
+        $text .= DateTimeHelper::formatToLocale($startDateTime, 'date');
+
+        return $text;
+    }
+
     protected function formatBookingDateTime($dateTime, $timeZone = 'UTC')
     {
         $startDate = DateTimeHelper::convertFromUtc($dateTime, $timeZone, 'D M d, Y');
