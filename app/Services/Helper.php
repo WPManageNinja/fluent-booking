@@ -2028,6 +2028,16 @@ class Helper
         return $format;
     }
 
+    public static function getDefaultBookingFilters()
+    {
+        return apply_filters('fluent_booking/default_booking_filters', [
+            'period' => 'upcoming',
+            'author' => 'me', // me, all, calendar_id
+            'event' => 'all',
+            'event_type' => 'all'
+        ]);
+    }
+
     public static function getDefaultPaginations()
     {
         return apply_filters('fluent_booking/default_paginations', [

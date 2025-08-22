@@ -47,7 +47,7 @@
                 </div>
                 <div class="fcal_section_actions">
                     <el-input
-                        v-model="filters.search"
+                        v-model="search"
                         @keyup.enter="fetchSchedules"
                         clearable
                         :placeholder="$t('Search Booking')"
@@ -220,7 +220,7 @@ export default {
             noticeModal: false,
             isNewBookingOpen: false,
             pagination: this.initPagination(),
-            filters: this.initFilters()
+            filters: this.appVars.default_booking_filters || this.initFilters()
         }
     },
     watch: {
@@ -323,6 +323,7 @@ export default {
             this.$get('schedules', {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
+                search: this.search,
                 filters: this.filters
             })
                 .then(response => {
@@ -354,8 +355,7 @@ export default {
                 period: 'upcoming',
                 author: 'me',
                 event: 'all',
-                event_type: 'all',
-                search: ''
+                event_type: 'all'
             }
         },
         initPagination(perPage = null) {
@@ -425,6 +425,11 @@ export default {
     },
     mounted() {
         Object.assign(this.filters, this.$route.query);
+        ['author', 'event'].forEach(key => {
+            if (!isNaN(this.filters[key])) {
+                this.filters[key] = parseInt(this.filters[key]);
+            }
+        });
         if (this.appVars.has_pro) {
             this.viewType = localStorage.getItem('fcal_view_type') || 'list';
         }
