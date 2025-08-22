@@ -390,7 +390,7 @@ export default {
             loading: false,
             pagination: {
                 total: 0,
-                per_page: 10,
+                per_page: this.appVars.default_paginations?.calendars || 10,
                 current_page: 1
             },
             noticeModal: false,
