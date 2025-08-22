@@ -1622,7 +1622,7 @@ class Helper
                 'title'   => __('Booking Rescheduled by Organizer (email to Attendee)', 'fluent-booking'),
                 'email'   => [
                     'subject' => 'Your booking was rescheduled with {{host.name}}',
-                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $scheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking') . '</a></p><hr/>' . self::getAddToCalendarHtml($assetUrl)
+                    'body'    => '<p style="text-align: center;"><img class="alignnone  wp-image-76" src="' . $scheduleImage . '" alt="" width="60" height="60" /></p><h2 style="text-align: center;">Booking Rescheduled</h2><hr /><p>Your scheduled meeting has been rescheduled. Here are the details:</p><p><strong>Event Name</strong></p><p>{{booking.event_name}} with {{guest.full_name}}</p><p><strong>When</strong></p><p>New Time: {{booking.full_start_end_host_timezone}} <span style="color: #ff0000;"><strong>(new)</strong></span></p><p>Previous Time: {{booking.previous_meeting_time_guest_timezone}}</p><p><strong>Rescheduling Reason</strong></p><p>{{booking.reschedule_reason}}</p><hr /><p style="text-align: center;">' . __('Need to make a change?', 'fluent-booking') . ' <a href="##booking.reschedule_url##">' . __('Reschedule', 'fluent-booking') . '</a> or <a href="##booking.cancelation_url##">' . __('Cancel', 'fluent-booking') . '</a></p><hr/>' . self::getAddToCalendarHtml($assetUrl)
                 ],
             ],
             'booking_request_host'     => [
@@ -1714,7 +1714,9 @@ class Helper
                         '##booking.reschedule_url##'                            => __('Booking Reschedule URL', 'fluent-booking'),
                         '##booking.admin_booking_url##'                         => __('Booking Details Admin URL', 'fluent-booking'),
                         '{{booking.booking_hash}}'                              => __('Unique Booking Hash', 'fluent-booking'),
-                        '{{booking.reschedule_reason}}'                         => __('Event Reschedule Reason', 'fluent-booking')
+                        '{{booking.reschedule_reason}}'                         => __('Event Reschedule Reason', 'fluent-booking'),
+                        '{{booking.previous_meeting_date_time_host_timezone}}'  => __('Previous Meeting Date & Time (with host timezone)', 'fluent-booking'),
+                        '{{booking.previous_meeting_date_time_guest_timezone}}' => __('Previous Meeting Date & Time (with guest timezone)', 'fluent-booking'),
                     ]
                 ],
                 'host'    => [
@@ -1780,7 +1782,9 @@ class Helper
                         '##booking.reschedule_url##'                            => __('Booking Reschedule URL', 'fluent-booking'),
                         '##booking.admin_booking_url##'                         => __('Booking Details Admin URL', 'fluent-booking'),
                         '{{booking.booking_hash}}'                              => __('Unique Booking Hash', 'fluent-booking'),
-                        '{{booking.reschedule_reason}}'                         => __('Event Reschedule Reason', 'fluent-booking')
+                        '{{booking.reschedule_reason}}'                         => __('Event Reschedule Reason', 'fluent-booking'),
+                        '{{booking.previous_meeting_date_time_host_timezone}}'  => __('Previous Meeting Date & Time (with host timezone)', 'fluent-booking'),
+                        '{{booking.previous_meeting_date_time_guest_timezone}}' => __('Previous Meeting Date & Time (with guest timezone)', 'fluent-booking'),
                     ]
                 ],
                 'host'    => [

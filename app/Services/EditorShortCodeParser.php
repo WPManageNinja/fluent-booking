@@ -121,6 +121,18 @@ class EditorShortCodeParser
             return $booking->getPreviousMeetingTime($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
         }
 
+        if ($key == 'previous_meeting_time_guest_timezone') {
+            return $booking->getPreviousMeetingTime($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')';
+        }
+
+        if ($key == 'previous_meeting_date_time_host_timezone') {
+            return $booking->getPreviousMeetingDateTimeText($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
+        }
+
+        if ($key == 'previous_meeting_date_time_guest_timezone') {
+            return $booking->getPreviousMeetingDateTimeText($booking->person_time_zone) . ' (' . $booking->person_time_zone . ')';
+        }
+
         if ($key == 'start_time_human_format') {
             if (time() > strtotime($booking->start_time)) {
                 $suffix = __(' ago', 'fluent-booking');
