@@ -6,7 +6,7 @@ import Rest from './Bits/Rest.js';
 import { ElNotification, ElLoading, ElMessageBox } from 'element-plus'
 import Storage from '@/Bits/Storage';
 import * as dayjs from 'dayjs'
-import { Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen }  from "@element-plus/icons-vue";
+import { Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen, CopyDocument }  from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
 import { applyFilters, addFilter } from '@wordpress/hooks';
 
@@ -58,7 +58,7 @@ function getDateTimeStringI18(str, type) {
 
 const app = createApp(DashboardApplication);
 
-const Icons = [Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen];
+const Icons = [Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen, CopyDocument];
 Icons.forEach((icon) => {
     app.component(icon.name, icon);
 });

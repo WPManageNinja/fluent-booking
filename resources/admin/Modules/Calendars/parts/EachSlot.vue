@@ -116,7 +116,6 @@
 <script>
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import {
-    CopyDocument,
     Share,
     ArrowDown,
     User,
@@ -132,7 +131,6 @@ export default {
     props: ['slot', 'calendarId'],
     $emits: ['slotDeleted'],
     components: {
-        CopyDocument,
         Share,
         ArrowDown,
         User,

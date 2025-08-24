@@ -136,14 +136,13 @@
 </template>
 
 <script>
-import { Link, CopyDocument } from '@element-plus/icons-vue';
+import { Link } from '@element-plus/icons-vue';
 import { copyToClipBoard } from '@/Bits/data_config.js';
 export default {
     name: 'GenerateLinkTab',
     props: ['slot'],
     components: {
-        Link,
-        CopyDocument
+        Link
     },
     data() {
         return {

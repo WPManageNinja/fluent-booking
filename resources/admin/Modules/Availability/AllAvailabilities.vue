@@ -116,12 +116,12 @@
 <script>
 import SaveButton from "../../Components/Buttons/SaveButton.vue";
 import TimeZoneSelector from "../Calendars/parts/TimeZoneSelector.vue";
-import { StarFilled, MoreFilled, CopyDocument, Delete, Plus } from "@element-plus/icons-vue";
+import { StarFilled, MoreFilled } from "@element-plus/icons-vue";
 import Pagination from "../../Pieces/Pagination.vue";
 
 export default {
     name: 'AllAvailabilities',
-    components: { Pagination, StarFilled, MoreFilled, CopyDocument, Delete, TimeZoneSelector, SaveButton, Plus },
+    components: { Pagination, StarFilled, MoreFilled, TimeZoneSelector, SaveButton },
     data() {
         return {
             loading: false,

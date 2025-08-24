@@ -101,7 +101,7 @@
 <script>
 import ProNotice from "@/Components/Common/ProNotice.vue";
 import AddOrEditCoupon from "./_AddOrEditCoupon.vue";
-import { CircleCheckFilled, CopyDocument } from '@element-plus/icons-vue';
+import { CircleCheckFilled } from '@element-plus/icons-vue';
 import Pagination from '@/Pieces/Pagination.vue';
 import { copyToClipBoard } from '@/Bits/data_config';
 
@@ -112,8 +112,7 @@ export default {
         ProNotice,
         AddOrEditCoupon,
         CircleCheckFilled,
-        Pagination,
-        CopyDocument
+        Pagination
     },
     data() {
         return {

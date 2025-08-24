@@ -94,7 +94,7 @@
 </template>
 
  <script>
-import { Clock, Link, CopyDocument } from '@element-plus/icons-vue';
+import { Clock, Link } from '@element-plus/icons-vue';
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import GenerateLinkTab from './_GenerateLinkTab.vue';
 export default {
@@ -104,7 +104,6 @@ export default {
     components: {
         Clock,
         Link,
-        CopyDocument,
         GenerateLinkTab
     },
     data() {

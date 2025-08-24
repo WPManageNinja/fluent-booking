@@ -245,7 +245,7 @@
 
 <script>
 import EachSlot from "./EachSlot";
-import { Setting, User, Right, MoreFilled, Delete, Rank, CopyDocument, Download, Link } from '@element-plus/icons-vue';
+import { Setting, User, Right, MoreFilled, Rank, Download, Link } from '@element-plus/icons-vue';
 import CalendarSettings from "./CalendarSettings";
 import SaveButton from "../../../Components/Buttons/SaveButton.vue";
 import { copyToClipBoard } from '@/Bits/data_config.js';
@@ -264,9 +264,7 @@ export default {
         CalendarSettings,
         TeamMemberSelector,
         MoreFilled,
-        Delete,
         Rank,
-        CopyDocument,
         Download,
         Link,
         SaveButton,

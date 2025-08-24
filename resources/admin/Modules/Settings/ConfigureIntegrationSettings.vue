@@ -90,7 +90,7 @@
 import SaveButton from '../../Components/Buttons/SaveButton';
 import { copyToClipBoard } from '@/Bits/data_config.js';
 import ProNotice from '@/Components/Common/ProNotice.vue';
-import { Calendar, ArrowRight, CopyDocument, CircleCheckFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue';
+import { Calendar, ArrowRight, CircleCheckFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue';
 export default {
     name: 'ConfigureIntegrationSettings',
     props: ['settings_key', 'disabled'],
@@ -98,7 +98,6 @@ export default {
     Calendar,
     SaveButton,
     ArrowRight,
-    CopyDocument,
     CircleCheckFilled,
     CircleCloseFilled,
     Lock,

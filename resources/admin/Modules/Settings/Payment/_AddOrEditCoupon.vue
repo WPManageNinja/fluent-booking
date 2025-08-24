@@ -240,13 +240,13 @@
 </template>
 
 <script>
-import { ArrowRight, CopyDocument } from '@element-plus/icons-vue';
+import { ArrowRight } from '@element-plus/icons-vue';
 import { markRaw } from 'vue';
 import WithLabel from '@/Components/FormBuilder/WithLabel.vue';
 import { copyToClipBoard } from '@/Bits/data_config';
 
 export default {
-    components: { WithLabel, CopyDocument },
+    components: { WithLabel },
     name: 'AddOrEditCoupon',
     props: ['coupon', 'loading', 'eventLists'],
     emits: ['updated'],
