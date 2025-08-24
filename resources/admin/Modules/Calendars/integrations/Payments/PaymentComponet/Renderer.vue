@@ -3,7 +3,6 @@ import { getCurrentInstance, defineProps, onMounted, ref, defineEmits, nextTick 
 import ConnectAccount from "../Parts/_connect_account.vue";
 import Tabs from './Tabs.vue';
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { CopyDocument } from '@element-plus/icons-vue';
 
 const selfRef = getCurrentInstance().ctx;
 const connect_config = ref({});

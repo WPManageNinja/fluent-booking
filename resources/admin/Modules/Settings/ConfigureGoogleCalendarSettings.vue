@@ -114,7 +114,7 @@
 import SaveButton from '../../Components/Buttons/SaveButton';
 import ProNotice from '@/Components/Common/ProNotice.vue';
 import { copyToClipBoard } from '@/Bits/data_config.js';
-import { Calendar, ArrowRight, CopyDocument, CircleCheckFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue';
+import { Calendar, ArrowRight, CircleCheckFilled, CircleCloseFilled, Lock } from '@element-plus/icons-vue';
 export default {
     name: 'ConfigureGoogleCalendarSettings',
     props: ['disabled'],
@@ -122,7 +122,6 @@ export default {
         Calendar,
         SaveButton,
         ArrowRight,
-        CopyDocument,
         CircleCheckFilled,
         CircleCloseFilled,
         Lock,
