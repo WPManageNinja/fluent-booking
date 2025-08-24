@@ -315,6 +315,9 @@ export default {
         },
         getStartTime() {
             return (slot) => {
+                if (this.event?.time_format === '24') {
+                    return this.dayjs(slot.start).format('HH:mm');
+                }
                 return this.dayjs(slot.start).format('hh:mm A');
             }
         },
