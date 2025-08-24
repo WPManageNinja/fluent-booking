@@ -23,12 +23,16 @@ function handleEventBlockClick(link) {
     bookingWrap.style.height = '0';
     bookingWrap.style.overflow = 'hidden';
 
-    const targetElement = wrap.querySelector('.fluent_booking_app');
-    if (targetElement) {
-        targetElement.scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
+    setTimeout(() => {
+        const targetElement = wrap.querySelector('.fluent_booking_app');
+        if (targetElement) {
+            const scrollTo = targetElement.getBoundingClientRect().top + window.pageYOffset - 55;
+            window.scrollTo({
+                top: scrollTo,
+                behavior: 'smooth'
+            });
+        }
+    }, 50);
 
     // get the element of the inserted html
     const elemItem = wrap.lastElementChild;
