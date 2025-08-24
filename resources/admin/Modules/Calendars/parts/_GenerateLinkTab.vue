@@ -44,6 +44,7 @@
                                 <td>
                                     <el-select
                                         v-model="field.name"
+                                        filterable
                                         popper-class="fcal_select"
                                         :placeholder="$t('Select')">
                                         <el-option
@@ -96,6 +97,16 @@
                                                 :label="option"
                                                 :value="option">
                                             </el-option>
+                                        </el-select>
+                                    </template>
+                                    <template v-else-if="field.name == 'fcal_coupons'">
+                                        <el-select
+                                            v-model="field.value"
+                                            multiple
+                                            :placeholder="$t('Select Coupon')"
+                                            popper-class="fcal_select"
+                                        >
+                                            <el-option v-for="coupon in couponCodes" :key="coupon" :label="coupon" :value="coupon"/>
                                         </el-select>
                                     </template>
                                     <template v-else>
@@ -154,7 +165,9 @@ export default {
             bookingFields: [],
             fieldTypes: [],
             paramFields: [{ name: '', value: '' }],
-            pageType: this.slot.public_url ? 'landing_page' : 'other_page'
+            pageType: this.slot.public_url ? 'landing_page' : 'other_page',
+            isCouponEnabled: this.appVars.pref_settings?.coupon?.enabled == 'yes' && this.slot?.type == 'paid',
+            couponCodes: []
         }
     },
     watch: {
@@ -207,7 +220,7 @@ export default {
             this.paramFields.forEach(field => {
                 if (field.name && field.value) {
                     const param = field.name.replace(/custom_/i, '').replace(/-/g, '_');
-                    const prefix = ['date', 'time'].includes(field.name) ? '' : 'invitee_';
+                    const prefix = ['date', 'time', 'fcal_coupons'].includes(field.name) ? '' : 'invitee_';
                     url.searchParams.set(prefix + param, field.value);
                 }
             });
@@ -220,8 +233,7 @@ export default {
         updateBookingFields() {
             const allowTypes = ['text', 'email', 'phone', 'number', 'hidden', 'dropdown', 'radio', 'checkbox', 'multi-select'];
             this.fieldTypes = [
-                { label: 'Date', value: 'date' },
-                { label: 'Time', value: 'time' },
+                ...this.getOtherFields(),
                 ...this.bookingFields
                 .filter(field => {
                     return field.enabled  && field.name !== 'location' && (allowTypes.includes(field.type) || field.name == 'message');
@@ -232,6 +244,16 @@ export default {
                         value: field.name
                     }
             })];
+        },
+        getOtherFields() {
+            const fields = [
+                { label: 'Date', value: 'date' },
+                { label: 'Time', value: 'time' }
+            ];
+            if (this.isCouponEnabled) {
+                fields.push({ label: 'Coupon', value: 'fcal_coupons' });
+            }
+            return fields;
         },
         getPages() {
             this.loading = true;
@@ -262,11 +284,28 @@ export default {
                     this.loading = false;
                 });
         },
+        getCoupons() {
+            this.loading = true;
+            this.$get('coupons/event/' + this.slot.id)
+                .then(response => {
+                    this.couponCodes = response.coupon_codes;
+                    this.updateBookingFields();
+                })
+                .catch(errors => {
+                    this.$handleError(errors);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        }
     },
     mounted() {
         this.updateLink();
         this.getPages();
         this.fetchFields();
+        if (this.isCouponEnabled) {
+            this.getCoupons();
+        }
     }
 }
 </script>
