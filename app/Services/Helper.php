@@ -2047,6 +2047,7 @@ class Helper
         return apply_filters('fluent_booking/default_paginations', [
             'bookings'  => 10,
             'calendars' => 10,
+            'coupons'   => 10,
             'availabilities' => 10
         ]);
     }
