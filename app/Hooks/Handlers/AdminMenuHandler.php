@@ -96,6 +96,7 @@ class AdminMenuHandler
         }
 
         $this->changeFooter();
+
         $app = App::getInstance();
 
         $config = $app->config;
@@ -162,6 +163,8 @@ class AdminMenuHandler
             'baseUrl'   => $baseUrl,
             'logo'      => $assets . 'images/logo.svg',
         ]);
+
+        do_action('fluent_booking/admin_app_rendering');
 
         $app->view->render('admin.menu', $portalVars);
     }
