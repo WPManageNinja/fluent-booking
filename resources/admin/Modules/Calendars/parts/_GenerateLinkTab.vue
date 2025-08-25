@@ -99,7 +99,7 @@
                                             </el-option>
                                         </el-select>
                                     </template>
-                                    <template v-else-if="field.name == 'fcal_coupons'">
+                                    <template v-else-if="field.name == 'booking_coupons'">
                                         <el-select
                                             v-model="field.value"
                                             multiple
@@ -220,7 +220,7 @@ export default {
             this.paramFields.forEach(field => {
                 if (field.name && field.value) {
                     const param = field.name.replace(/custom_/i, '').replace(/-/g, '_');
-                    const prefix = ['date', 'time', 'fcal_coupons'].includes(field.name) ? '' : 'invitee_';
+                    const prefix = ['date', 'time', 'booking_coupons'].includes(field.name) ? '' : 'invitee_';
                     url.searchParams.set(prefix + param, field.value);
                 }
             });
@@ -251,7 +251,7 @@ export default {
                 { label: 'Time', value: 'time' }
             ];
             if (this.isCouponEnabled) {
-                fields.push({ label: 'Coupon', value: 'fcal_coupons' });
+                fields.push({ label: 'Coupon', value: 'booking_coupons' });
             }
             return fields;
         },

@@ -143,7 +143,7 @@
         }
 
         const urlParams = new URLSearchParams(window.location.search);
-        const coupons = urlParams.get('fcal_coupons');
+        const coupons = urlParams.get('booking_coupons');
         if (coupons) {
             const couponList = [];
             coupons.split(',').forEach(coupon => {
