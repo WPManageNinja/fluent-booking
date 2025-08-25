@@ -313,6 +313,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 - Added: Hook for Paginations
 - Added: Default Booking Filter Hook
 - Added: Missing Translations
+- Applied Time Format in Manual Booking
 - Resolved: Multi Booking Issue with Remote Calendars
 - Fixed: Temp File for ICS Attachment Not Deleting
 - Fixed: Some Country Flags Not Displaying in Phone Field
