@@ -16,6 +16,7 @@ use FluentBooking\App\Services\CalendarEventService;
 use FluentBooking\App\Services\LocationService;
 use FluentBooking\App\Services\PermissionManager;
 use FluentBooking\App\Services\CurrenciesHelper;
+use FluentBooking\App\Services\SanitizeService;
 use FluentBooking\Framework\Support\Arr;
 
 class FrontEndHandler
@@ -818,7 +819,11 @@ class FrontEndHandler
             'status'           => 'scheduled',
             'source'           => 'web',
             'event_type'       => $calendarEvent->event_type,
-            'slot_minutes'     => $duration
+            'slot_minutes'     => $duration,
+            'utm_source'       => SanitizeService::sanitizeUtmData(Arr::get($postedData, 'utm_source', '')),
+            'utm_medium'       => SanitizeService::sanitizeUtmData(Arr::get($postedData, 'utm_medium', '')),
+            'utm_campaign'     => SanitizeService::sanitizeUtmData(Arr::get($postedData, 'utm_campaign', '')),
+            'utm_term'         => SanitizeService::sanitizeUtmData(Arr::get($postedData, 'utm_term', ''))
         ];
 
         if ($calendarEvent->isConfirmationRequired($startDateTime)) {
