@@ -396,7 +396,11 @@ class SchedulesController extends Controller
         $order = null;
         if ($booking->payment_method && $booking->payment_order) {
             $order = $booking->payment_order;
-            $order->load(['items', 'discounts', 'transaction']);
+            $relations = ['items', 'transaction'];
+            if (method_exists($order, 'discounts')) {
+                $relations[] = 'discounts';
+            }
+            $order->load($relations);
             $order->currency_sign = CurrenciesHelper::getCurrencySign($order->currency);
         }
 

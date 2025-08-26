@@ -111,13 +111,13 @@
                                     </template>
                                     <p v-else class="fcal_empty_text">
                                         {{ $t('PaymentSettings/enable_payment_settings') }}
-                                        <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'stripe'}}">
+                                        <router-link :to="{name: 'payment_methods',params:{settings_key:'stripe'}}">
                                             {{ $t('Stripe') }}
                                         </router-link> /
-                                        <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'paypal'}}">
+                                        <router-link :to="{name: 'payment_methods',params:{settings_key:'paypal'}}">
                                             {{ $t('PayPal') }}
                                         </router-link> {{ $t('or') }}
-                                        <router-link :to="{name: 'PaymentSettingsIndex',params:{settings_key:'offline'}}">
+                                        <router-link :to="{name: 'payment_methods',params:{settings_key:'offline'}}">
                                             {{ $t('Offline') }}
                                         </router-link>
                                         {{ $t('PaymentSettings/from_global_settings') }}
@@ -125,7 +125,7 @@
                                 </template>
                                 <p v-else class="fcal_empty_text">
                                     {{ $t('PaymentSettings/enable_global_payment_settings') }}
-                                    <router-link :to="{name: 'general_settings'}">
+                                    <router-link :to="{name: 'global_payment_settings'}">
                                         {{ $t('Go to Payment Settings') }}. <span class="anim-icon">👈</span>
                                     </router-link>
                                 </p>
@@ -162,7 +162,7 @@
                 <div v-else class="fcal_settings_body">
                     <p class="fcal_empty_text">
                         {{ $t('PaymentSettings/enable_global_payment_settings') }}
-                        <router-link :to="{name: 'general_settings'}">
+                        <router-link :to="{name: 'global_payment_settings'}">
                             {{ $t('Go to Payment Settings') }}. <span class="anim-icon">👈</span>
                         </router-link>
                     </p>
