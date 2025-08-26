@@ -418,6 +418,7 @@ class AdminMenuHandler
             'default_booking_filters' => Helper::getDefaultBookingFilters(),
             'default_paginations'     => Helper::getDefaultPaginations(),
             'pref_settings'           => Helper::getPrefSettings(),
+            'settings_menu_items'     => static::settingsMenuItems(),
             'admin_url'               => admin_url(),
             'is_rtl'                  => Helper::fluentbooking_is_rtl()
         ]);
@@ -626,7 +627,7 @@ class AdminMenuHandler
                 'route'          => [
                     'name' => 'license'
                 ]
-            ],
+            ]
         ]);
     }
 
