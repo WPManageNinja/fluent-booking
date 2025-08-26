@@ -82,7 +82,7 @@ export default {
     },
     data() {
         return {
-            fetching: true,
+            fetching: false,
             verifying: false,
             licenseData: {},
             licenseKey: '',
