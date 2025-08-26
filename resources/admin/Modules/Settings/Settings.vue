@@ -65,10 +65,18 @@ export default {
     },
     data() {
         return {
-            loading: true,
+            loading: false,
             menuDisabled: false,
-            menuItems: {},
-            expandedMenu: null
+            expandedMenu: null,
+            hasPro: this.appVars.has_pro,
+            settingsMenuItems: this.appVars.settings_menu_items
+        }
+    },
+    computed: {
+        menuItems() {
+            return Object.values(this.settingsMenuItems).filter(menu => {
+                return !!menu.route;
+            });
         }
     },
     methods: {
@@ -81,7 +89,7 @@ export default {
         updateMenuStatus() {
             const currentRouteName = this.$route.name;
             const currentMenu = Object.values(this.menuItems).find(menu => {
-                if (menu.route.name === currentRouteName) {
+                if (menu.route?.name === currentRouteName) {
                     return menu;
                 }
                 if (menu.children) {
@@ -106,7 +114,7 @@ export default {
             return this.expandedMenu === current && this.isChildrenActive(current);
         },
         setMenuStatus(menu) {
-            this.menuDisabled = menu?.disable || false;
+            this.menuDisabled = menu?.disable && !this.hasPro;
         },
         toggleSubMenu(menu) {
             this.setMenuStatus(menu);
@@ -116,25 +124,10 @@ export default {
             }
             const current = menu.route?.name;
             this.expandedMenu = this.expandedMenu === current ? null : current;
-        },
-        fetchMenuItems() {
-            this.loading = true;
-            this.$get('settings/menu')
-                .then(response => {
-                    this.menuItems = response.menu_items;
-                    this.updateMenuStatus();
-                })
-                .catch(error => {
-                    this.$handleError(error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
         }
     },
     mounted() {
         this.maybeExpandedMenu();
-        this.fetchMenuItems();
     }
 }
 </script>
