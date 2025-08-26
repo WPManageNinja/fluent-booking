@@ -59,6 +59,7 @@
 
     function getPreSelectsFormData() {
         const currentPerson = window.fluentCalendarPublicVars.current_person || {};
+        const utm_data = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term'];
         const urlParams = new URLSearchParams(window.location.search);
 
         const formFields = {};
@@ -69,15 +70,16 @@
             }
         })
         for (const [key, value] of urlParams.entries()) {
-            if (!key.startsWith('invitee_')) {
-                continue;
-            }
-            const fieldKey = key.replace(/invitee_/i, '');
-            if (formFields[fieldKey]) {
-                const field = formFields[fieldKey];
-                if (!currentPerson[field.name]) {
-                    currentPerson[field.name] = value;
+            if (key.startsWith('invitee_')) {
+                const fieldKey = key.replace(/invitee_/i, '');
+                if (formFields[fieldKey]) {
+                    const field = formFields[fieldKey];
+                    if (!currentPerson[field.name]) {
+                        currentPerson[field.name] = value;
+                    }
                 }
+            } else if (utm_data.includes(key)) {
+                currentPerson[key] = value;
             }
         }
         return currentPerson;

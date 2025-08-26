@@ -57,6 +57,10 @@
                     <h3>{{ $t('Booked At') }}</h3>
                     <p>{{ toCurrentTimezone(booking.created_at, this.appVars.date_time_formatter) }}</p>
                 </div>
+                <div v-for="utm in getUtmData(booking)" class="fcal_schedule_details_event_item">
+                    <h3>{{ utm.label }}</h3>
+                    <p>{{ utm.value }}</p>
+                </div>
                 <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
                     <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
                         <h3>{{ field.label }}</h3>
@@ -140,6 +144,28 @@ export default {
         }
     },
     methods: {
+        getUtmData(booking) {
+            const utmData = [];
+            const utmDataMap = {
+                utm_source: this.$t('UTM Source'),
+                utm_medium: this.$t('UTM Medium'),
+                utm_campaign: this.$t('UTM Campaign'),
+                utm_term: this.$t('UTM Term')
+            }
+            Object.keys(utmDataMap).forEach(key => {
+                if (booking[key]) {
+                    let value = booking[key];
+                    if (Array.isArray(value)) {
+                        value = value.join(', ');
+                    }
+                    utmData.push({
+                        label: utmDataMap[key],
+                        value: value
+                    });
+                }
+            });
+            return utmData.length ? utmData : [];
+        },
         updateScheduleStatus(newStatus) {
             this.updating = true;
             const data = {

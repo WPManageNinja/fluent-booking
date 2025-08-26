@@ -219,8 +219,9 @@ export default {
             const url = new URL(link, window.location.origin);
             this.paramFields.forEach(field => {
                 if (field.name && field.value) {
+                    const fixedFields = ['date', 'time', 'booking_coupons', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term'];
                     const param = field.name.replace(/custom_/i, '').replace(/-/g, '_');
-                    const prefix = ['date', 'time', 'booking_coupons'].includes(field.name) ? '' : 'invitee_';
+                    const prefix = fixedFields.includes(field.name) ? '' : 'invitee_';
                     url.searchParams.set(prefix + param, field.value);
                 }
             });
@@ -233,22 +234,27 @@ export default {
         updateBookingFields() {
             const allowTypes = ['text', 'email', 'phone', 'number', 'hidden', 'dropdown', 'radio', 'checkbox', 'multi-select'];
             this.fieldTypes = [
-                ...this.getOtherFields(),
                 ...this.bookingFields
-                .filter(field => {
-                    return field.enabled  && field.name !== 'location' && (allowTypes.includes(field.type) || field.name == 'message');
-                })
-                .map(field => {
-                    return {
-                        label: field.label,
-                        value: field.name
-                    }
-            })];
+                    .filter(field => {
+                        return field.enabled  && field.name !== 'location' && (allowTypes.includes(field.type) || field.name == 'message');
+                    })
+                    .map(field => {
+                        return {
+                            label: field.label,
+                            value: field.name
+                        }
+                    }),
+                ...this.getOtherFields()
+            ];
         },
         getOtherFields() {
             const fields = [
                 { label: 'Date', value: 'date' },
-                { label: 'Time', value: 'time' }
+                { label: 'Time', value: 'time' },
+                { label: 'UTM Source', value: 'utm_source' },
+                { label: 'UTM Medium', value: 'utm_medium' },
+                { label: 'UTM Campaign', value: 'utm_campaign' },
+                { label: 'UTM Term', value: 'utm_term' }
             ];
             if (this.isCouponEnabled) {
                 fields.push({ label: 'Coupon', value: 'booking_coupons' });
