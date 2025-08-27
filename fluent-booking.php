@@ -21,6 +21,7 @@ define('FLUENT_BOOKING_DIR', plugin_dir_path(__FILE__));
 define('FLUENT_BOOKING_URL', plugin_dir_url(__FILE__));
 define('FLUENT_BOOKING_VERSION', '1.9.0');
 define('FLUENT_BOOKING_ASSETS_VERSION', '1.9.0');
+define('FLUENT_BOOKING_MIN_PRO_VERSION', '1.9.0');
 
 require __DIR__ . '/vendor/autoload.php';
 

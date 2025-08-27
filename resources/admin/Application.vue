@@ -1,6 +1,7 @@
 <template>
     <div class="fl_app">
         <UpgradationBlock />
+        <NoticeBlock />
         <router-view></router-view>
     </div>
 </template>
@@ -8,11 +9,13 @@
 <script>
 import OnBoard from './Components/OnBoard';
 import UpgradationBlock from './Components/Notice/UpgradationBlock.vue';
+import NoticeBlock from './Components/Notice/NoticeBlock.vue';
 
 export default {
     name: 'DashboardApplication',
     components: {
         OnBoard,
+        NoticeBlock,
         UpgradationBlock
     },
     mounted() {
