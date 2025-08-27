@@ -301,8 +301,9 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 
 == Changelog ==
 
-= 1.9.0 (Date: 22 Aug 2025)
+= 1.9.0 (Date: 27 Aug 2025)
 - Introduced Coupon Module
+- Introduced UTM Tracking for Bookings
 - Redesigned Payment Configuration
 - Added: Currency Format and Position Settings
 - Added: Total Guest Count Shortcode
@@ -312,6 +313,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 - Added: Multiple Team Blocks Support on Same Page
 - Added: Hook for Paginations
 - Added: Default Booking Filter Hook
+- Added: Spanish Language Files for FluentBookingPro
 - Added: Missing Translations
 - Applied Time Format in Manual Booking
 - Resolved: Multi Booking Issue with Remote Calendars
