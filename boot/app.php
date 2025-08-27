@@ -22,7 +22,7 @@ return function ($file) {
 
     add_action('plugins_loaded', function () use ($app) {
         do_action('fluent_booking/loaded', $app);
-        if (FLUENT_BOOKING_MIN_PRO_VERSION !== FLUENT_BOOKING_PRO_VERSION && version_compare(FLUENT_BOOKING_MIN_PRO_VERSION, FLUENT_BOOKING_PRO_VERSION, '>')) {
+        if (FLUENT_BOOKING_PRO_VERSION && version_compare(FLUENT_BOOKING_MIN_PRO_VERSION, FLUENT_BOOKING_PRO_VERSION, '>')) {
             if (!current_user_can('manage_options')) {
                 return;
             }
