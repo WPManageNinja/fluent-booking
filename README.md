@@ -27,6 +27,9 @@ Running for production
 ### Production Build
 - Free Build: `php build.php --node-build`
 - Pro Build: `php build.php --pro-build --node-build`
+or
+- Free Build: `sh build.sh --node-build`
+- Pro Build: `sh build.sh --node-build --with_pro`
 - It will create a plugin folder(free/pro) in the /builds folder
 
 ### Build Files

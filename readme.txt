@@ -301,7 +301,7 @@ Yes, FluentBooking has a [public roadmap](https://fluentbooking.com/roadmap/) wh
 
 == Changelog ==
 
-= 1.9.0 (Date: 27 Aug 2025)
+= 1.9.0 (Date: 28 Aug 2025)
 - Introduced Coupon Module
 - Introduced UTM Tracking for Bookings
 - Redesigned Payment Configuration
