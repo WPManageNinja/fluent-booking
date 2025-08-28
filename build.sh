@@ -127,6 +127,6 @@ copy_and_compress "." "builds/fluent-booking" "" "app" "readme.txt" "assets" "bo
 if "$withPro"; then
   echo -e "\Compressing Pro\n"
   # Copy and compress Fluent Booking Pro
-  copy_and_compress "../fluent-booking-pro" "builds/fluent-booking-pro" "" "app" "assets" "boot" "config" "language" "vendor" "composer.json" "fluent-booking-pro.php" "index.php" "readme.txt"
+  copy_and_compress "../fluent-booking-pro" "builds/fluent-booking-pro" "" "app" "boot" "config" "database" "language" "vendor" "composer.json" "fluent-booking-pro.php" "index.php" "readme.txt"
   echo -e "\Pro Addon done\n"
 fi
