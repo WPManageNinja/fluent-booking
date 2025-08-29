@@ -3,7 +3,7 @@
         <div class="fcal_module_desc">
             <div>
                 <h4>{{ $t('Coupon Module') }}
-                    <span v-if="featureModules.coupon?.enabled == 'yes'" class="fcal_addon_installed">{{ $t('Enabled') }}</span>
+                    <span v-if="appVars.has_pro && featureModules.coupon?.enabled == 'yes'" class="fcal_addon_installed">{{ $t('Enabled') }}</span>
                     <span v-else class="fcal_addon_installed fcal_addon_disabled">{{ $t('Disabled') }}</span>
                 </h4>
                 <p>{{ $t('Create and manage coupons for your bookings') }}
