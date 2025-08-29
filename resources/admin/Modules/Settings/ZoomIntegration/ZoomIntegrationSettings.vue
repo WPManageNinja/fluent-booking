@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="!disabled" class="fcal_configure_integration_body">
+                    <div v-if="isEnabled" class="fcal_configure_integration_body">
                         <el-skeleton v-if="loading" :rows="3" animated></el-skeleton>
                         <template v-else>
                             <div v-if="!connected_users.length" class="fcal_box_padded">
@@ -76,7 +76,8 @@ export default {
             is_current_user_connected: false,
             form_fields: {},
             showingForm: false,
-            disconnecting: false
+            disconnecting: false,
+            isEnabled: !this.disabled && this.appVars.has_pro
         }
     },
     methods: {
@@ -97,7 +98,7 @@ export default {
         },
     },
     mounted() {
-        if (!this.disabled) {
+        if (this.isEnabled) {
             this.fetchConnectedUsers();
         }
     }

@@ -24,7 +24,7 @@
                             </div>
                         </div>
                     </div>
-                    <template v-if="!disabled">
+                    <template v-if="isEnabled">
                         <div v-if="!loading" class="fcal_configure_integration_body">
                             <template v-if="Object.keys(fieldSettings).length">
                                 <h4>{{ $t('GoogleIntegrationSettings/app_type')}}</h4>
@@ -133,12 +133,13 @@ export default {
             loading: false,
             fieldSettings: {},
             settings: {},
-            settings_key: 'google'
+            settings_key: 'google',
+            isEnabled: !this.disabled && this.appVars.has_pro
         }
     },
     watch: {
         settings_key() {
-            if (!this.disabled) {
+            if (this.isEnabled) {
                 this.getSettings();
             }
         }
@@ -193,7 +194,7 @@ export default {
         }
     },
     mounted() {
-        if (!this.disabled) {
+        if (this.isEnabled) {
             this.getSettings();
         }
     }

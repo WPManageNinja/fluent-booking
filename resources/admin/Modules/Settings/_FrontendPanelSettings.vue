@@ -3,7 +3,7 @@
         <div class="fcal_module_desc">
             <div>
                 <h4>{{ $t('Frontend Portal') }}
-                    <span v-if="featureModules.frontend.enabled == 'yes'" class="fcal_addon_installed">{{ $t('Enabled') }}</span>
+                    <span v-if="appVars.has_pro && featureModules.frontend.enabled == 'yes'" class="fcal_addon_installed">{{ $t('Enabled') }}</span>
                     <span v-else class="fcal_addon_installed fcal_addon_disabled">{{ $t('Disabled') }}</span>
                 </h4>
                 <p>{{ $t('Load FluentBooking in the frontend of the website') }}
