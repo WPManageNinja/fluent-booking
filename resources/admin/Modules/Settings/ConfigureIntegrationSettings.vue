@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <template v-if="!disabled">
+                    <template v-if="isEnabled">
                         <div v-if="!loading" class="fcal_configure_integration_body">
                             <div v-html="fieldSettings.description"></div>
                             <template v-if="fieldSettings.fields">
@@ -108,12 +108,13 @@ export default {
             saving: false,
             loading: false,
             fieldSettings: {},
-            settings: {}
+            settings: {},
+            isEnabled: !this.disabled && this.appVars.has_pro
         }
     },
     watch: {
         settings_key() {
-            if (!this.disabled) {
+            if (this.isEnabled) {
                 this.getSettings();
             }
         }
@@ -189,7 +190,7 @@ export default {
         }
     },
     mounted() {
-        if (!this.disabled) {
+        if (this.isEnabled) {
             this.getSettings();
         }
     }

@@ -4,7 +4,7 @@
             <div class="fcal_settings_head">
                 <h3>{{$t('License Management')}}</h3>
             </div>
-            <div v-if="!disabled" class="fcal_settings_actions">
+            <div v-if="isEnabled" class="fcal_settings_actions">
                 <el-button
                     class="refresh-setting-icon"
                     @click="getSettings">
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div v-if="!disabled" v-loading="verifying" class="fcal_configure_integration_body">
+        <div v-if="isEnabled" v-loading="verifying" class="fcal_configure_integration_body">
             <div v-if="fetching" v-loading="fetching" class="text-align-center">
                 <h3>{{$t("Fetching License Information Please wait")}}</h3>
             </div>
@@ -87,7 +87,8 @@ export default {
             licenseData: {},
             licenseKey: '',
             showNewLicenseInput: false,
-            errorMessage: ''
+            errorMessage: '',
+            isEnabled: !this.disabled && this.appVars.has_pro
         };
     },
     methods: {
@@ -148,7 +149,7 @@ export default {
         },
     },
     mounted() {
-        if (!this.disabled) {
+        if (this.isEnabled) {
             this.getSettings();
         }
     }

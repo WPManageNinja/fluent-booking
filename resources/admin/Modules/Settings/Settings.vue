@@ -97,7 +97,7 @@ export default {
                 }
                 return false;
             });
-            this.menuDisabled = currentMenu?.disable || false;
+            this.menuDisabled = currentMenu?.disable && !this.hasPro;
         },
         isChildrenActive(current) {
             const routeMeta = this.$route?.meta;
@@ -128,6 +128,7 @@ export default {
     },
     mounted() {
         this.maybeExpandedMenu();
+        this.updateMenuStatus();
     }
 }
 </script>
