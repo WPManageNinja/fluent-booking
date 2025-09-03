@@ -13,14 +13,14 @@
                         <p>{{ $t('TeamManagement/description') }}</p>
                     </div>
                 </div>
-                <div v-if="!disabled" class="right">
+                <div v-if="isEnabled" class="right">
                     <el-button type="primary" @click="initShow()">
                         <el-icon><Plus /></el-icon>
                         <span>{{ $t('Team Member') }}</span>
                     </el-button>
                 </div>
             </div>
-            <template v-if="!disabled">
+            <template v-if="isEnabled">
                 <el-skeleton animated v-if="loading"></el-skeleton>
                 <div v-else class="fcal_configure_integration_body">
                     <div class="fcal_integration_items">
@@ -169,7 +169,8 @@ export default {
             editingMember: null,
             showModal: false,
             saving: false,
-            user_id: ''
+            user_id: '',
+            isEnabled: !this.disabled && this.appVars.has_pro
         }
     },
     methods: {
@@ -252,7 +253,7 @@ export default {
         }
     },
     mounted() {
-        if (!this.disabled) {
+        if (this.isEnabled) {
             this.fetch();
         }
     }
