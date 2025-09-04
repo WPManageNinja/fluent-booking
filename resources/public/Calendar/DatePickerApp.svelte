@@ -149,6 +149,7 @@
     let error = false;
     let errorText = '';
     let firstLoading = true;
+
     function loadAvailableDates() {
         isLoadingDates = true;
         availableDates = {};
@@ -171,7 +172,10 @@
                 } else if (firstLoading && slot.pre_selects?.day) {
                     selectedDate = generateDate(slot.pre_selects);
                     dayClick({ date: selectedDate });
-                } else {
+                } else if (firstLoading && noAvailability && !nextDisabled) {
+                    next();
+                }
+                 else {
                     selectedDate = '';
                     dispatch('dayClicked', '');
                 }
