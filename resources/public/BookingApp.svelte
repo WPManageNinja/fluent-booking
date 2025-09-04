@@ -59,7 +59,7 @@
 
     function getPreSelectsFormData() {
         const currentPerson = window.fluentCalendarPublicVars.current_person || {};
-        const utm_data = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term'];
+        const utm_data = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
         const urlParams = new URLSearchParams(window.location.search);
 
         const formFields = {};
