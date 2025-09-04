@@ -219,7 +219,7 @@ export default {
             const url = new URL(link, window.location.origin);
             this.paramFields.forEach(field => {
                 if (field.name && field.value) {
-                    const fixedFields = ['date', 'time', 'booking_coupons', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term'];
+                    const fixedFields = ['date', 'time', 'booking_coupons', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
                     const param = field.name.replace(/custom_/i, '').replace(/-/g, '_');
                     const prefix = fixedFields.includes(field.name) ? '' : 'invitee_';
                     url.searchParams.set(prefix + param, field.value);
@@ -254,7 +254,8 @@ export default {
                 { label: 'UTM Source', value: 'utm_source' },
                 { label: 'UTM Medium', value: 'utm_medium' },
                 { label: 'UTM Campaign', value: 'utm_campaign' },
-                { label: 'UTM Term', value: 'utm_term' }
+                { label: 'UTM Term', value: 'utm_term' },
+                { label: 'UTM Content', value: 'utm_content' }
             ];
             if (this.isCouponEnabled) {
                 fields.push({ label: 'Coupon', value: 'booking_coupons' });
