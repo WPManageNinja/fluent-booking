@@ -49,7 +49,7 @@
                                     {{ $t('Cancel') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item 
-                                    v-if="!isBookingCompleted" @click="deleteDialog = true">
+                                    @click="deleteDialog = true">
                                     <el-icon><Delete/></el-icon>
                                     {{ $t('Delete') }}
                                 </el-dropdown-item>
