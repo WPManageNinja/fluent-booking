@@ -150,7 +150,8 @@ export default {
                 utm_source: this.$t('UTM Source'),
                 utm_medium: this.$t('UTM Medium'),
                 utm_campaign: this.$t('UTM Campaign'),
-                utm_term: this.$t('UTM Term')
+                utm_term: this.$t('UTM Term'),
+                utm_content: this.$t('UTM Content')
             }
             Object.keys(utmDataMap).forEach(key => {
                 if (booking[key]) {
