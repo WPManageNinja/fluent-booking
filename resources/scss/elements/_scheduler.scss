@@ -278,8 +278,9 @@
               margin: 0 0 24px 0;
               font-size: 14px;
               font-weight: 400;
-              gap: 32px;
               line-height: 1;
+              gap: 8px;
+              justify-content: space-between;
 
               > span {
                 color: #8F97A2;
