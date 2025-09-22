@@ -5,7 +5,7 @@ import DashboardApplication from "./Application.vue";
 import Rest from './Bits/Rest.js';
 import { ElNotification, ElLoading, ElMessageBox } from 'element-plus'
 import Storage from '@/Bits/Storage';
-import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs';
 import { Plus, Delete, Location, More, Operation, UserFilled, InfoFilled, Lock, Edit, EditPen, CopyDocument }  from "@element-plus/icons-vue";
 import Errors from '@common/Errors';
 import { applyFilters, addFilter } from '@wordpress/hooks';
@@ -142,9 +142,11 @@ app.mixin({
                 weekdays: Object.values(i18nConfig.weekdays),
                 weekdaysShort: Object.values(i18nConfig.weekdaysShort),
                 months: Object.values(i18nConfig.months),
-                monthsShort: Object.values(i18nConfig.monthsShort)
+                monthsShort: Object.values(i18nConfig.monthsShort),
+                ordinal: (n) => {
+                    return n;
+                }
             }).utc('z').local().tz(this.currentTimezone).format(format);
-
             return getDateTimeStringI18(convertedDate, 'mNumber');
         },
         isToday(date) {
@@ -163,7 +165,10 @@ app.mixin({
                 weekdays: Object.values(i18nConfig.weekdays),
                 weekdaysShort: Object.values(i18nConfig.weekdaysShort),
                 months: Object.values(i18nConfig.months),
-                monthsShort: Object.values(i18nConfig.monthsShort)
+                monthsShort: Object.values(i18nConfig.monthsShort),
+                ordinal: (n) => {
+                    return n;
+                }
             }).format(format);
 
             return getDateTimeStringI18(formattedDate, 'mNumber');
