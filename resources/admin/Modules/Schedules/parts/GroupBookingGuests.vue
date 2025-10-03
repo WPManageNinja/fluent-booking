@@ -59,6 +59,15 @@
                                         <a :href="scope.row.source_url" target="_blank">{{ scope.row.source_url }}</a>
                                     </div>
                                 </div>
+                                <div class="fcal_schedule_details_event_item">
+                                    <editable-booking-data
+                                        input_type="textarea"
+                                        :input_label="$t('Internal Note')"
+                                        data_key="internal_note"
+                                        @dataUpdated="handleDataUpdated"
+                                        :booking="scope.row">
+                                    </editable-booking-data>
+                                </div>
                             </div>
 
                             <div class="fcal_schedule_details_event">
@@ -192,6 +201,7 @@
 
 <script>
 import { MoreFilled, Refresh, Close, Download, Search, Notification } from '@element-plus/icons-vue';
+import EditableBookingData from "./EditableBookingData";
 import Pagination from "../../../Pieces/Pagination.vue";
 import PaymentLogs from './PaymentLogs';
 export default {
@@ -201,6 +211,7 @@ export default {
     components: {
         PaymentLogs,
         Pagination,
+        EditableBookingData,
         MoreFilled,
         Notification,
         Refresh,
@@ -349,6 +360,11 @@ export default {
                     this.updating = false;
                     this.getAdditionalData(booking.id);
                 });
+        },
+        handleDataUpdated(data) {
+            if (this.booking) {
+                this.booking[data.key] = data.value;
+            }
         }
     },
     mounted() {
