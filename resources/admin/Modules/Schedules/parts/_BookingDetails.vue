@@ -109,6 +109,9 @@
                 <p class="fcal_meeting_time">{{ formattedTimeRange }}</p>
                 <p>{{ $t('ScheduleBookingDetails/cancel_event_desc') }}</p>
                 <el-input type="textarea" v-model="cancel_reason" :placeholder="$t('Reason for cancellation')"></el-input>
+                <el-checkbox v-if="isRefundable(schedule)" true-label="yes" false-label="no" class="fcal_refund_checkbox" v-model="refund_payment">
+                    {{ $t('Refund payment from stripe') }}
+                </el-checkbox>
             </div>
             <template #footer>
               <span class="dialog-footer">
@@ -118,6 +121,8 @@
                     {{ $t("No, Don't cancel") }}
                 </el-button>
                 <el-button
+                    v-loading="updating"
+                    :disabled="updating"
                     class="fcal_primary_btn"
                     @click="updateScheduleStatus('cancelled')">
                     {{ $t('Yes, Cancel') }}
@@ -150,8 +155,10 @@ export default {
     },
     data() {
         return {
+            updating: false,
             cancel_reason: '',
             cancelDialog: false,
+            refund_payment: 'no',
             timeFormat: this.appVars.time_format
         }
     },
@@ -186,6 +193,9 @@ export default {
         },
         isStatus(schedule, status) {
             return schedule.status == status;
+        },
+        isRefundable(schedule) {
+            return schedule.payment_method == 'stripe' && schedule.payment_status != 'refunded';
         },
         canCancelOrReschedule(schedule) {
             return !this.isMultiGuestBooking(schedule.event_type) && ['scheduled', 'approved', 'pending'].includes(schedule.status);
@@ -237,12 +247,14 @@ export default {
                 });
         },
         updateScheduleStatus(new_status, column = 'status') {
+            this.updating = true;
             const data = {
                 column: column,
                 value: new_status
             };
             if (new_status == 'cancelled') {
                 data.cancel_reason = this.cancel_reason;
+                data.refund_payment = this.refund_payment;
             }
 
             this.$put(`schedules/${this.schedule.id}`, data)
@@ -259,6 +271,9 @@ export default {
                 .catch(errors => {
                     this.$handleError(errors);
                 })
+                .finally(() => {
+                    this.updating = false;
+                });
         },
         openFullScreen(bookingId) {
             this.$router.push({
