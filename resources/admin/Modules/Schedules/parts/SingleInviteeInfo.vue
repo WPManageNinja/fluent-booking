@@ -57,6 +57,10 @@
                     <h3>{{ $t('Booked At') }}</h3>
                     <p>{{ toCurrentTimezone(booking.created_at, this.appVars.date_time_formatter) }}</p>
                 </div>
+                <div v-if="booking.ip_address" class="fcal_schedule_details_event_item">
+                    <h3>{{ $t('IP Address') }}</h3>
+                    <p>{{ booking.ip_address }}</p>
+                </div>
                 <div v-for="utm in getUtmData(booking)" class="fcal_schedule_details_event_item">
                     <h3>{{ utm.label }}</h3>
                     <p>{{ utm.value }}</p>

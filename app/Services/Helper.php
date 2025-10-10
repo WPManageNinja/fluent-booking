@@ -942,15 +942,18 @@ class Helper
     {
         $server = $_SERVER;
 
-        $clientIp = Arr::get($server, 'HTTP_CLIENT_IP');
-        $xForwarded = Arr::get($server, 'HTTP_X_FORWARDED_FOR');
+        $ipSources = [
+            'clientIp'   => Arr::get($server, 'HTTP_CLIENT_IP'),
+            'xForwarded' => Arr::get($server, 'HTTP_X_FORWARDED_FOR'),
+            'serverAddr' => Arr::get($server, 'SERVER_ADDR')
+        ];
 
-        if (!empty($clientIp)) {
-            $ip = $clientIp;
-        } elseif (!empty($xForwarded)) {
-            $ip = $clientIp;
-        } else {
-            $ip = $clientIp;
+        $ip = '';
+        foreach ($ipSources as $source) {
+            if (!empty($source) && filter_var($source, FILTER_VALIDATE_IP)) {
+                $ip = $source;
+                break;
+            }
         }
 
         return sanitize_text_field($ip);
