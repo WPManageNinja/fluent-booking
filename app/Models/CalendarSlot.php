@@ -170,7 +170,7 @@ class CalendarSlot extends Model
 
     public function isProEvent()
     {
-        return $this->isGroup() || $this->isTeamEvent() || $this->isOneOffEvent();
+        return $this->isGroup() || $this->isTeamEvent() || $this->isOneOffEvent() || $this->allowMultiBooking();
     }
 
     public function allowMultiBooking()
