@@ -1,0 +1,62 @@
+@import "flags";
+
+.fcal_phone_wrapper {
+  position: relative;
+
+  .fcal_country_select {
+    position: absolute !important;
+    top: 1px;
+    left: 1px;
+    background: var(--fcal_slot_border) !important;
+    border: 0 !important;
+    border-right: 1px solid var(--fcal_slot_border) !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    height: calc(100% - 2px) !important;
+    min-height: unset !important;
+    input{
+      border: none !important;
+    }
+  }
+
+  .svelte-select {
+    width: 120px !important;
+    .value-container{
+      .selected-item{
+        padding-left: 20px !important;
+        div[slot="selection"]{
+          display: flex;
+          gap: 4px;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .svelte-select-list {
+    min-width: fit-content !important;
+    padding-left: 0 !important;
+    .list-item{
+      div[slot="item"]{
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+    }
+  }
+
+  .basic-tel-input{
+    padding-left: 130px !important;
+  }
+
+  &.fcal_had_input {
+    .basic-tel-input.fcal_invalid{
+      // make the border color if not on focus
+      &:not(:focus) {
+        border-color: #ec4899 !important;
+      }
+    }
+  }
+}
+
+

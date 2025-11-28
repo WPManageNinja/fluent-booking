@@ -1,0 +1,178 @@
+@import "calendar";
+.fcal_teams,
+.fcal_calendar_wrapper {
+  display: block;
+  margin: 1rem auto;
+  max-width: 1000px;
+  border-radius: 4px;
+  background: var(--fcal_cal_bg);
+  * {
+    box-sizing: border-box;
+    outline: none;
+  }
+
+  .fcal_team_header,
+  .fcal_calendar_header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    .fcal_team_title,
+    .fcal_calendar_title {
+      font-size: 1.5rem;
+      margin: 6px 0 .2rem 0;
+      line-height: 1.2;
+      color: var(--fcal_dark);
+      font-weight: 500;
+    }
+    .fcal_team_description,
+    .fcal_calendar_description {
+      font-size: 14px;
+      line-height: 20px;
+      color: #6b7280;
+      font-weight: 400;
+      mark {
+        background-color: transparent;
+      }
+    }
+    img {
+      max-width: 74px;
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .fcal_person_avatar {
+      display: inline-block;
+
+      img {
+        max-height: 44px;
+      }
+    }
+  }
+
+  .fcal_team_body {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+
+    @media (max-width: 767px) {
+      grid-template-columns: 1fr;
+    }
+
+    .fcal_each_member {
+      overflow: hidden;
+      cursor: pointer;
+      width: 100%;
+      border: 1px solid var(--fcal_slot_border);
+      border-radius: 8px;
+      padding: 16px;
+      display: block;
+      text-decoration: none;
+      transition: 0.2s;
+      background: var(--fcal_cal_bg);
+
+      &:hover {
+        //box-shadow: 0 8px 30px rgba(27, 37, 51, 0.05);
+        background: #f9fafb;
+      }
+
+      .fcal_person_avatar {
+        width: 100%;
+        overflow: hidden;
+
+        img {
+          max-width: 44px;
+          max-height: 44px;
+          border-radius: 50%;
+          display: block;
+        }
+      }
+
+      .fcal_person_body {
+        .fcal_person_name {
+          font-size: 16px;
+          line-height: 24px;
+          color: var(--fcal_dark);
+          margin: 8px 0 0;
+          font-weight: 500;
+        }
+        .fcal_person_description {
+          margin: 0;
+          font-size: 14px;
+          line-height: 24px;
+          color: #6b7280;
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .fcal_teams_inner {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  .fcal_teams_wrap,
+  .fcal_cals_wrap {
+    flex: none;
+    display: block;
+    width: 100%;
+    transition: .4s;
+  }
+
+  .fluent_booking_team_view {
+    width: 100%;
+    flex: none;
+    transition: .4s;
+
+    .fcal_calendar_wrap,
+    .fcal_calendar_wrap_block {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: hidden;
+
+      .fluent_booking_app {
+        flex: none;
+        width: 100%;
+        transition: .4s;
+      }
+
+      .fluent_booking_wrap {
+        flex: none;
+        padding-top: 0;
+        width: 100%;
+        transition: .4s;
+        .fcal_slots_wrap {
+            margin-top: 1rem;
+        }
+      }
+    }
+  }
+  .fcal_back_btn_team {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+    color: var(--fcal_dark);
+
+    svg {
+      width: 20px;
+      polygon {
+        fill: var(--fcal_dark);
+      }
+    }
+  }
+
+  &.fcal_showing_team_calendar {
+    .fcal_back_btn_team {
+      display: none !important;
+    }
+  }
+}

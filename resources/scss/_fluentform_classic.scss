@@ -1,0 +1,36 @@
+.fluentform_calendar_app {
+  &.fcal_showing_host {
+    .fcal_on_xs {
+      border: none !important;
+    }
+  }
+  &.fcal_not_showing_host {
+    .fcal_calendar_inner {
+      border: none !important;
+      .calendar-container {
+        max-width: 100%;
+        padding: 0;
+      }
+    }
+  }
+  .slot_time_range {
+    font-weight: bold;
+  }
+}
+
+.fcal_ff_location {
+  margin-top: 20px !important;
+}
+
+.ffc_question {
+  .fcal_calendar_inner {
+    border: none !important;
+  }
+  .fcal_slot_description {
+    p {
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 20px;
+    }
+  }
+}

@@ -1,0 +1,368 @@
+@forward "~element-plus/theme-chalk/src/common/var.scss" with (
+  $colors: (
+    "primary": (
+      "base": #2653C7,
+    ),
+  ),
+);
+
+@import "~element-plus/theme-chalk/el-notification.css";
+@import "~element-plus/theme-chalk/el-loading.css";
+@import "~element-plus/theme-chalk/el-message-box.css";
+
+
+
+// customize element ui css here
+.el {
+  &-select {
+    width: 100%;
+    input, input:focus {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    &-multiple {
+      input {
+        height: 40px !important;
+      }
+    }
+    .el-input.is-focus {
+      input {
+        &:focus {
+          outline: none !important;
+          box-shadow: none !important;
+          border-color: #409eff;
+        }
+      }
+    }
+    &:hover,
+    &:focus {
+      .el-input {
+        input {
+          box-shadow: none !important;
+        }
+      }
+    }
+  }
+  &-dialog {
+    margin-top: 38px !important;
+    &__body {
+      padding: 15px 20px 15px 20px;
+    }
+  }
+
+  &-form-item {
+    &__label {
+      padding: initial !important;
+    }
+  }
+
+  &-tag + &-tag {
+    margin-left: 10px;
+  }
+
+  &-tag {
+    &--white {
+      background: white;
+      color: black;
+      border-color: white;
+
+      .el-tag__close {
+        color: #909399;
+
+        &:hover {
+          background-color: #909399;
+          color: #fff;
+        }
+      }
+    }
+  }
+  &-popover {
+    padding: 10px;
+    text-align: left;
+    .action-buttons {
+      margin: 0;
+      text-align: center;
+    }
+  }
+  &-button {
+    &--mini {
+      padding: 4px;
+    }
+  }
+  &-fluid {
+    width: 100% !important;
+  }
+}
+
+.el-dropdown-menu {
+  padding: 0 15px;
+  list-style: none;
+  li {
+    margin: 10px 0;
+  }
+}
+
+.el-overlay {
+  @media all and (max-width: 1000px) {
+    .el-dialog {
+      min-width: 80%;
+    }
+  }
+}
+
+.el-date-editor .el-range-separator {
+  width: auto;
+}
+
+.el-dialog {
+  margin-top: 78px !important;
+  .el-dialog__header {
+    display: block;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    margin-right: 0;
+    padding-top: 10px;
+    border-radius: 2px 2px 0 0;
+  }
+  .el-dialog__headerbtn {
+    top: 0;
+    height: 46px;
+    &:hover i {
+      color: #ff0000;
+    }
+  }
+  .dialog-footer {
+    padding: 10px 20px 10px;
+    text-align: right;
+    box-sizing: border-box;
+    border-top: 1px solid #D6DAE1;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: auto;
+    display: block;
+    margin: 0 -20px -20px;
+  }
+}
+
+.el-breadcrumb {
+  display: flex;
+  align-items: center;
+  .el-breadcrumb__inner a:hover,
+  .el-breadcrumb__inner.is-link:hover {
+    color: #2653C7;
+  }
+  span.fct_tag {
+    display: inline-flex;
+    margin-right: 0.25rem;
+    color: #202223;
+    padding: 3px 8px;
+    font-size: 12px;
+    border-radius: 20px;
+    background-color: #e4e5e7;
+    text-transform: capitalize;
+    .el-icon {
+      margin-right: 2px;
+    }
+  }
+}
+
+input.el-input__inner {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  color: var(--el-input-text-color,var(--el-text-color-regular));
+  &:focus {
+    border-color: transparent;
+    outline: 0;
+    box-shadow: none;
+  }
+}
+
+.el-form-item > .el-form-item__label {
+  color: #000;
+  font-weight: 500;
+}
+
+
+.el-form-item {
+  margin-bottom: 10px;
+}
+
+.el-pager li {
+  margin-bottom: 0 !important;
+}
+
+.fcal_clickable {
+  cursor: pointer;
+}
+
+
+.el-popconfirm__main {
+  word-break: break-word;
+  line-height: 120%;
+}
+
+.el-select-dropdown {
+  &.fcal_selector_with_submenu {
+    li {
+      line-height: 16px;
+      padding: 8px 20px !important;
+      height: auto;
+      + li {
+        margin-top: 8px !important;
+      }
+
+      b {
+        display: block;
+        line-height: 1.2;
+        margin-bottom: 8px;
+      }
+      span {
+        display: block;
+        color: var(--el-text-color-secondary);
+        padding: 0;
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.2;
+      }
+    }
+  }
+}
+
+ul.fframe_menu.fcal_secondary_menu {
+  float: right;
+}
+
+.fcal_hightlight_box {
+  background: #f5f6f7;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.fcal_promt_box {
+  background: #f5f6f7;
+  border: 1px solid #e5e7eb;
+}
+
+.fcal_lined_checks > label {
+  display: flex;
+}
+
+a.el-button {
+  text-decoration: none;
+}
+
+.fcal_icon_line {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fcal_actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.el-dropdown .el-dropdown-link {
+  &.fcal_more i {
+    cursor: pointer;
+    margin-top: 6px;
+    transform: rotate(90deg);
+  }
+}
+
+.fcal_radio_switch {
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  padding: 5px;
+  background: #fff;
+  .el-radio-button  input.el-radio-button__original-radio {
+    display: none !important;
+  }
+  .is-active.is-active .el-radio-button__inner {
+    background: #e5e7eb;
+    color: rgb(55, 65, 81);
+    border-radius: 5px !important;
+    box-shadow: none;
+  }
+  .el-radio-button .el-radio-button__inner {
+    padding: 7px 10px;
+    background: transparent;
+    border: none !important;
+  }
+}
+
+.fcal_radio_btn_group {
+  .el-radio-button {
+    &.is-active {
+      .el-radio-button__inner {
+        background-color: #306ae0;
+        border-color: #306ae0;
+      }
+    }
+    &.is-disabled {
+      .el-radio-button__inner {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.fcal_input_desc {
+  margin: 3px 0 0;
+  font-size: 90%;
+  color: #6e6d6d;
+}
+
+.fcal_photo_card.fcal_featured_image_upload .fcal_photo_holder {
+  width: 100% !important;
+  border-radius: 0 !important;
+  img {
+    border-radius: 0 !important;
+    border: none !important;
+  }
+}
+
+.fcal_img_icon {
+  max-width: 18px;
+}
+
+@media (min-width: 1440px) {
+  .fc_item_half {
+    float:left;
+    padding-right: 20px;
+    width: 50%
+  }
+}
+
+.fc_global_form_builder {
+  .el-form .el-form-item:nth-child(2n) {
+    padding-right: 0;
+  }
+  .fc_full_width {
+    width: 100%;
+    overflow: hidden;
+  }
+  .fc_mb_0 {
+    margin-bottom: 0 !important;
+  }
+  .fc_inline_help {
+    display: block;
+    width: 100%;
+    margin: 0;
+    font-size: 80%;
+  }
+}
+
+.fc_wp_editor {
+  margin-top: 20px;
+  .el-form-item__content {
+    width: 100%;
+    display: block;
+  }
+}

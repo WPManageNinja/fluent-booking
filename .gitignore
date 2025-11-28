@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+resources/.DS_Store
+assets/
+.idea/
+builds/
+svn

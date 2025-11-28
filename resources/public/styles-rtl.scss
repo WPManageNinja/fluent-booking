@@ -1,0 +1,127 @@
+
+html[dir='rtl'] {
+	.fcal_calendar_inner {
+		.fcal_side {
+			border-right: none;
+			border-left: 1px solid var(--fcal_slot_border);
+		}
+		&.fcal_day_selected {
+			.calendar-container {
+				border-right: none;
+				border-left: 1px solid var(--fcal_slot_border);
+			}
+		}
+		.fcal_date_wrapper {
+			.fcal_date_event_details {
+				right: auto;
+				left: -100%;
+				&.is_active {
+					left: 0;
+				}
+			}
+			&.is_active {
+				.fcal_day_picker_wrap {
+					margin-left: 0;
+					margin-right: -100%;
+				}
+			}
+		}
+
+		&.fcal_on_xs,
+		&.fcal_on_sm {
+			&.fcal_day_selected {
+				.calendar-container {
+					margin-left: auto;
+					margin-right: -100%;
+				}
+				.fcal_slot_picker {
+					&.is_active {
+						left: 0;
+					}
+				}
+			}
+			.fcal_date_wrapper {
+				.fcal_slot_picker {
+					right: auto;
+					left: -100%;
+				}
+			}
+		}
+	}
+	.fcal_calendar_slot_wrap {
+		&.is_active {
+			padding-right: 0;
+			padding-left: 240px;
+		}
+	}
+	.fcal_slot_picker {
+		right: auto;
+		left: 0;
+		.fcal_spot_lists {
+			.fcal_spot {
+				padding-right: 0;
+				padding-left: 2px;
+			}
+		}
+	}
+	.fcal_booking_form_wrap {
+		.fcal_booking_form {
+			.fcal_form_item {
+				.fcal_input_content {
+					.fcal_radio_group {
+						padding-left: 0;
+						padding-right: 1.75rem;
+						input,
+						.fcal_radio_icon {
+							left: auto;
+							right: 0;
+						}
+					}
+					.fcal_input_wrap{
+						&.fcal_input_multi_select_wrap {
+							.svelte-select {
+								.value-container {
+									padding-left: 0;
+									padding-right: 10px;
+									&:before {
+										right: auto;
+										left: 15px;
+									}
+								}
+							}
+						}
+						&.address {
+							textarea {
+								padding-left: 0.4rem;
+								padding-right: 2rem;
+							}
+							svg {
+								left: auto;
+								right: 12px;
+							}
+						}
+					}
+					.fcal_custom_checkbox {
+						padding-left: 0;
+						padding-right: 1.75rem;
+						.checkbox_mark {
+							left: auto;
+							right: 0;
+							margin-right: 0;
+							margin-left: 1em;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.fcal_timezone_select {
+		.svelte-select {
+			&:before {
+				right: auto;
+				left: 15px;
+			}
+		}
+	}
+}

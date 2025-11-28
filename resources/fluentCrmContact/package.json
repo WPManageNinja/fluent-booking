@@ -1,0 +1,22 @@
+{
+  "name": "fluent-hr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "laravel-mix": "^6.0.41",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^12.4.0",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.7.16"
+  },
+  "dependencies": {
+    "vue": "^2.7.14"
+  }
+}
