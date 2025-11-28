@@ -1,0 +1,249 @@
+:root {
+  --fcal_dark: #1B2533;
+  --fcal_body_bg: #f3f4f6;
+  --fcal_cal_bg: #ffffff;
+  --fcal_slot_border: #D6DAE1;
+  --fcal_primary_color: #386bb8;
+  --fcal_thBG: #f5f6f7;
+}
+.fcal-dark-mode {
+  --fcal_dark: #dddbdb;
+  --fcal_body_bg: #101010;
+  --fcal_cal_bg: #1c1c1c;
+  --fcal_slot_border: #2b2b2b;
+  --fcal_primary_color: #ffffff;
+  --fcal_thBG: #2b2b2b;
+
+  .fcal_to_calendars {
+    a {
+      img {
+        filter: invert(1);
+      }
+    }
+
+  }
+
+  .fcal_booking_confirmed {
+    .fcal_to_calendars {
+      .fcal_cal_items {
+        a {
+          img {
+            filter: invert(1);
+          }
+        }
+      }
+    }
+  }
+}
+.fcal_booking_confirmed {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 30px;
+  min-width: 600px;
+  @media (max-width: 819px) {
+    min-width: 100%;
+  }
+
+  .fcal_confirm_header {
+    text-align: center;
+  }
+
+  ul.fcal_conform_items {
+    list-style: none;
+    margin: 20px 0;
+    padding: 20px 0;
+    border-top: 2px solid rgba(26, 26, 26, 0.1);
+    border-bottom: 2px solid rgba(26, 26, 26, 0.1);
+
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+  span.fcal_slot_name_icon {
+    width: 18px;
+    height: 18px;
+    background-color: rgb(130, 71, 245);
+    border-radius: 50%;
+  }
+
+  li.fcal_conform_slot_name {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+  }
+}
+
+.fcal_confirm_header {
+  text-align: center;
+
+  .fcal_check_holder {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        background: #f3f4f6;
+        svg {
+            display: block;
+            stroke: #384252;
+            width: 20px;
+            height: 20px;
+        }
+    }
+  h2 {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    color: var(--fcal_dark);
+  }
+}
+.fcal_confirmation {
+  padding: 30px 0 30px;
+
+  .fcal_confirm_header {
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--fcal_slot_border);
+    margin-bottom: 20px;
+    h2 {
+      font-weight: 500;
+    }
+    p {
+      margin: 5px 0;
+      color: var(--fcal_dark);
+    }
+  }
+  .fcal_confirm_body {
+    hr {
+      border-color: var(--fcal_slot_border);
+    }
+    .fluent_booking_order_items_table {
+      thead {
+        th {
+          border-color: var(--fcal_slot_border);
+          background: var(--fcal_thBG);
+          color: var(--fcal_dark);
+        }
+      }
+      tbody {
+        tr {
+          td {
+            color: var(--fcal_dark);
+          }
+        }
+      }
+    }
+    .fcal_payment_html {
+      h4,
+      h3 {
+        color: var(--fcal_dark);
+      }
+    }
+  }
+  .fcal_confirm_section {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    flex-direction: column;
+  }
+
+  .fcal_confirm_section_content {
+    font-size: 0.875rem;
+    color: #666666;
+    a {
+      color: var(--fcal_primary_color);
+    }
+  }
+  .fcal_confirm_section_title {
+    width: 200px;
+    line-height: 1.5rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .fcal_confirm_section {
+    h4 {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--fcal_dark);
+    }
+    p {
+      margin: 0;
+    }
+  }
+
+  .fcal_booking_manage {
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 2px solid var(--fcal_slot_border);
+    color: var(--fcal_dark);
+  }
+}
+ul.fcal_listed {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  li {
+    display: block;
+  }
+}
+span.fcal_host_badge {
+  padding: 3px 10px;
+  border-radius: 5px;
+  margin-left: 6px;
+  font-size: 80%;
+  color: var(--fcal_primary_color);
+  position: relative;
+  z-index: 1;
+  &:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+    background: var(--fcal_primary_color);
+    z-index: -1;
+    opacity: 0.1;
+  }
+}
+
+
+.fcal_to_calendars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  margin-top: 0 !important;
+  .fcal_cal_items {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+    a {
+      display: flex;
+      align-items: center;
+      padding: 6px;
+      border: 1px solid #e5e7eb;
+    }
+  }
+}
+
+// Dark mode
+.fcal-dark-mode {
+  .fcal_confirmation {
+    .fcal_confirm_section_content {
+      color: var(--fcal_dark);
+    }
+    .fcal_confirm_header {
+        .fcal_check_holder {
+            background: #2e2e2e;
+            svg {
+                stroke: #ffffff;
+            }
+
+        }
+    }
+  }
+}

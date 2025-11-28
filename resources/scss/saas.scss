@@ -1,0 +1,182 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+ol, ul {
+  list-style: none;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 1em 0;
+}
+
+.fcal_loading {
+  margin: 0 auto;
+  text-align: center;
+  background: white;
+  min-height: 500px;
+  max-width: 810px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.22s ease-out;
+}
+
+.calendar_wrap {
+  margin: 0;
+  padding: 66px 10px 30px 10px;
+  background: var(--fcal_body_bg);
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+.fluent_booking_app {
+  margin: 0 auto;
+  padding: 20px 0;
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
+
+  &.f_cal_day_selected, &.f_cal_spot_selected {
+    max-width: 1000px;
+  }
+
+  .fcal_form_item {
+    .fcal_input {
+      width: 100%;
+      display: block;
+      box-sizing: border-box;
+      min-height: 46px;
+      padding: 10px 14px;
+      border: 1px solid #B2B2B2;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 1);
+      color: #1a1a1a;
+      font-size: 1rem;
+      line-height: 1.5;
+      overflow-wrap: normal;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+
+      &:disabled {
+        cursor: no-drop;
+        background: var(--fcal_input_disable_bg) !important;
+      }
+    }
+  }
+
+  .fcal_btn_submit {
+    line-height: 22px;
+    font-size: 110%;
+  }
+}
+
+.book_up {
+  margin: 30px 0;
+  text-align: center;
+  padding: 20px 0;
+  border-top: 2px solid #f0f0f0;
+
+  h3 {
+    font-size: 23px;
+    text-transform: capitalize;
+  }
+
+  a {
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 20px;
+    padding: 13px 20px;
+    border-radius: 4px;
+    background-color: var(--fcal_primary_color);
+    color: white;
+
+    &:hover {
+      background: var(--fcal_primary_color);
+    }
+  }
+}
+
+.menu_logo_holder img {
+  max-width: 130px;
+}
+
+.fcal_booking_inner {
+  border-radius: 8px;
+  box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);
+  background: #fff;
+}
+
+.fcal_rescheduling_wrap {
+  margin: 1.25rem auto;
+  max-width: 752px;
+  text-align: center;
+  h3 {
+    color: var(--fcal_dark);
+  }
+}
+
+.fcal_powered_by {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--fcal_primary_color);
+    span a {
+        font-weight: bold;
+        text-decoration: none;
+        color: var(--fcal_primary_color);
+    }
+}
+
+.fcal_booking_iframe {
+  &.calendar_wrap {
+    padding: 0;
+    height: auto;
+    background: transparent;
+  }
+  .fluent_booking_app {
+    padding: 0;
+  }
+  .confirmation_page {
+    padding: 0;
+    margin: 40px 0;
+    background: transparent;
+  }
+}

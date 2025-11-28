@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./resources/admin/*"],
+      "@common/*": ["./resources/common/*"],
+    }
+  },
+  "include": ["resources/admin/**/*"],
+  "exclude": ["node_modules"]
+}

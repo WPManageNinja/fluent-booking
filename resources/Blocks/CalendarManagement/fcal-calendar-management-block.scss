@@ -1,0 +1,554 @@
+
+
+.fcal_calendar_management_block_wrap {
+	box-sizing: border-box;
+	*, *:before, *:after {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+	.fcal_calendar_management_block_header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 30px;
+		img {
+			max-width: 64px;
+			width: 100%;
+			border-radius: 8px;
+            margin-bottom: 8px;
+		}
+		h1 {
+			font-size: 24px;
+			line-height: 1.2;
+			color: #111827;
+			font-weight: 500;
+			margin: 6px 0 4px;
+		}
+        h4 {
+            font-size: 20px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+		p {
+			font-size: 14px;
+			line-height: 20px;
+			color: #6b7280;
+			font-weight: 400;
+			a {
+				text-decoration: none;
+			}
+		}
+		.empty-text {
+			display: none;
+		}
+	}
+
+    .fcal_slots_wrap {
+      margin-top: 2rem;
+      .fcal_slots {
+        display: grid;
+        grid-template-columns: 1fr;
+        border: 1px solid #D6DAE1;
+        border-radius: 8px;
+        overflow: hidden;
+        .fcal_slot {
+          border-bottom: 1px solid #D6DAE1;
+          padding: 16px 24px;
+          transition: 0.3s;
+          background: #ffffff;
+            h2 {
+              font-size: 16px;
+              font-weight: 700;
+              line-height: 24px;
+              position: relative;
+              margin: 0;
+              color: #1B2533;
+              padding-left: 19px;
+              .fcal_slot_color_schema {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+                top: 8px;
+              }
+            }
+            button {
+              color: #1B2533;
+              border: 1px solid #D6DAE1;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 20px;
+              min-width: fit-content;
+              display: inline-flex;
+              align-items: center;
+              border-radius: 8px;
+              background: transparent;
+              padding: 7px 16px 7px 16px;
+              cursor: pointer;
+              transition: 0.3s;
+              gap: 8px;
+              position: relative;
+            }
+            .fcal_slot_duration,
+            .fcal_slot_location {
+                font-size: 12px;
+                font-weight: 500;
+                line-height: 18px;
+                margin: 0;
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                color: #445164;
+                padding-left: 19px;
+            }
+            .fcal_slot_payment_icon {
+                gap: 6px;
+                margin: 0;
+                font-size: 12px;
+                display: inline-flex;
+                align-items: center;
+                color: #445164;
+                padding-left: 19px;
+                svg {
+                    height: 15px;
+                    width: 15px;
+                }
+              }
+            .slot_location {
+                &.fcal_icon_item {
+                    gap: 7px;
+                    margin: 0;
+                    font-size: 12px;
+                    font-weight: 500;
+                    line-height: 18px;
+                    padding-left: 19px;
+                    display: inline-flex;
+                    align-items: center;
+                    color: #445164;
+                    img.fcal_loc_icon {
+                        width: 16px;
+                        height: 16px;
+                    }
+                }
+            }
+            .fcal_card {
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+      .fcal_slot_content {
+        .fcal_description {
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #6b7280;
+          margin: 4px 0 4px;
+          padding-left: 19px;
+        }
+      }
+            }
+        }
+      }
+    }
+}
+.wp-block{
+	&.is-selected {
+		.fcal_calendar_management_block_wrap {
+			.fcal_calendar_management_block_header {
+				.empty-text {
+					display: block;
+				}
+			}
+		}
+	}
+}
+
+.fcal_block_inspector_widget {
+	box-sizing: border-box !important;
+	*, *:before, *:after {
+		box-sizing: border-box !important;
+	}
+	&.fcal_block_media {
+		button {
+			background: #125e96;
+			border: none;
+			box-shadow: none;
+			color: #fff;
+			font-weight: 400;
+			border-radius: 4px;
+			display: inline-block;
+			padding: 8px 16px;
+			cursor: pointer;
+		}
+	}
+	.fcal-render-image {
+		position: relative;
+		display: block;
+		width: fit-content;
+		margin-top: 6px !important;
+		.fcal-remove-image {
+			position: absolute;
+			right: -4px;
+			top: 4px;
+			cursor: pointer;
+			width: 16px;
+			height: 16px;
+			background: #ffffff;
+			border: 1.5px solid #1e1e1e;
+			color: #1e1e1e;
+			border-radius: 50%;
+			line-height: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			font-weight: 800;
+			transform: rotate(45deg);
+			padding: 0 0 1px 0;
+			transition: .2s;
+			&:hover {
+				border-color: #d63638;
+				color: #d63638;
+			}
+		}
+		img {
+			max-width: 80px;
+			border: 1px solid #e5e7eb;
+			border-radius: 8px;
+			margin-top: 5px;
+		}
+	}
+	> .info {
+		margin-bottom: 0;
+		margin-top: -2px !important;
+		opacity: 0.6;
+		color: #555;
+	}
+	&.fcal_block_calendars_select {
+		.components-base-control {
+			margin-bottom: 0;
+		}
+	}
+
+
+	ul.accordion-list {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: auto;
+		margin: 0;
+		list-style: none;
+
+		li {
+			position: relative;
+			display: block;
+			width: 100%;
+			height: auto;
+			background-color: #FFF;
+			padding: 5px 10px;
+			margin: 0 auto 24px auto;
+			border: 1px solid #eee;
+			border-radius: 5px;
+			cursor: pointer;
+
+			&.active {
+				h3 {
+					&:after {
+						transform: rotate(45deg);
+					}
+				}
+			}
+
+			h3 {
+				font-weight: 700;
+				position: relative;
+				display: block;
+				width: 100%;
+				height: auto;
+				padding: 0 0 0 0;
+				margin: 0 0 8px;
+				letter-spacing: 0.01em;
+				cursor: pointer;
+			}
+
+			div.answer {
+				position: relative;
+				display: block;
+				width: 100%;
+				height: auto;
+				margin: 0;
+				padding: 0;
+				cursor: pointer;
+
+				p {
+					position: relative;
+					display: block;
+					font-weight: 300;
+					padding: 10px 0 0 0;
+					cursor: pointer;
+					line-height: 150%;
+					margin: 0 0 15px 0;
+					font-size: 14px;
+				}
+			}
+		}
+		> div {
+			margin-bottom: 12px;
+			border: 1px solid #eee;
+			border-radius: 4px;
+			padding: 8px;
+			> h3 {
+				position: relative;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				margin-bottom: 10px;
+				border-bottom: 1px solid #e3e2e2;
+				padding-bottom: 8px;
+				img {
+					display: block;
+					width: 28px;
+					height: 28px;
+					-o-object-fit: cover;
+					object-fit: cover;
+					border-radius: 50%;
+				}
+				.remove-host {
+					position: absolute;
+					right: 0;
+					top: -1px;
+					border: none;
+					box-shadow: none;
+					border-radius: 30px;
+					background: #eeeeee;
+					cursor: pointer;
+					font-size: 14px;
+					line-height: 16px;
+					width: 20px;
+					height: 20px;
+					transform: rotate(45deg);
+					padding-left: 6px;
+					padding-bottom: 3px;
+					transition: .2s;
+					&:hover {
+						background: #dddddd;
+					}
+				}
+			}
+			.components-checkbox-control {
+				margin-bottom: 0;
+				> .components-base-control__field {
+					margin-bottom: 0;
+					display: flex;
+					align-items: center;
+					.components-checkbox-control__input-container {
+						margin-right: 0;
+					}
+					input {
+						border-color: #dbd8d8;
+						border-radius: 4px;
+						&:focus {
+							outline: none;
+							box-shadow: none;
+						}
+						&:checked {
+							border-color: #007cba;
+						}
+					}
+					.components-checkbox-control__label {
+						max-width: 100%;
+						flex: 1;
+						margin-right: 0;
+						padding-left: 8px;
+						display: block;
+					}
+				}
+			}
+			.fcal_calendar_event {
+				margin-bottom: 8px;
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+			.all-event-checked {
+				margin-bottom: 8px;
+			}
+		}
+
+		.components-panel__body {
+			border: none;
+			border-radius: 4px;
+			margin-top: 0;
+			width: 100%;
+			margin-left: auto;
+			padding: 0;
+
+			.components-panel__body-title {
+				margin: 8px 0 0;
+				&:hover {
+					background: transparent;
+				}
+				.components-button {
+					padding: 8px 28px 8px 0;
+					.components-panel__arrow {
+						right: 6px;
+					}
+					&:focus {
+						outline: none;
+						box-shadow: none;
+					}
+				}
+			}
+
+			.components-panel__row {
+				min-height: auto;
+			}
+
+			.answer {
+				width: 100%;
+				.fcal_calendar_event {
+					margin-top: 12px;
+					&:last-child {
+						margin-bottom: 0;
+					}
+				}
+				.components-checkbox-control {
+					margin-bottom: 0;
+					.components-checkbox-control__input-container {
+						margin-right: 0;
+					}
+				}
+			}
+		}
+	}
+
+
+	&.fcal_inspector_host_select {
+		.components-base-control {
+			margin-bottom: 12px;
+		}
+		.fcal-add-calendar-container {
+			margin-bottom: 10px;
+		}
+	}
+}
+
+.fcal-add-calendar-container {
+    width: 100%;
+    min-width: 230px;
+	button.components-button {
+        width: 100%;
+		display: flex;
+		align-items: center;
+		border: 1px solid gray;
+		padding: 5px 15px;
+		border-radius: 4px;
+        position: relative;
+		svg {
+			margin-right: 10px;
+			width: 20px;
+			height: 20px;
+		}
+        &:before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-left: 2px solid gray;
+            border-bottom: 2px solid gray;
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            transform: rotate(-45deg);
+            transform-origin: center;
+            transition: 0.3s;
+            -webkit-transition: 0.3s;
+            -moz-transition: 0.3s;
+            -ms-transition: 0.3s;
+            -o-transition: 0.3s;
+          }
+	}
+    button.components-button[aria-expanded=true] {
+      &:before {
+        top: 15px;
+        border-left-color: gray;
+        border-bottom-color: gray;
+        transform: rotate(135deg);
+      }
+    }
+}
+
+.fcal-add-calendar-content {
+	.components-popover__content {
+		padding: 10px 15px;
+		box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 20px;
+		border-radius: 8px;
+		border: 1px solid #eee;
+	}
+	.fcal-host-list {
+		width: 230px;
+		+.fcal-host-list {
+			margin-top: 2px;
+		}
+		.select-host {
+			font-weight: 500;
+			text-transform: uppercase;
+			font-size: 12px;
+			margin-bottom: 8px;
+			color: #000000;
+			display: block;
+		}
+		p {
+			margin: 0;
+            &.selected {
+                color: #125e96;
+            }
+		}
+
+		button {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			border: none;
+			background: none;
+			border-radius: 6px;
+			width: 100%;
+			text-align: left;
+			padding: 6px 10px;
+			cursor: pointer;
+			transition: .2s;
+			&:hover {
+				background: #eeeeee;
+			}
+			img {
+				display: block;
+				width: 28px;
+				height: 28px;
+				object-fit: cover;
+				border-radius: 50%;
+			}
+		}
+	}
+}
+
+.fcal_block_dropdown_container {
+	.fcal_block_dropdown_content_wrap {
+		width: 240px;
+		.fcal_dropdown_checkboxes_group {
+			.fcal_calendar_events_lists {
+				padding-left: 30px;
+				margin-bottom: 20px;
+				h3 {
+					color: #1e1e1e;
+					font-size: 11px;
+					font-weight: 500;
+					margin: 0 0 5px;
+					text-transform: uppercase;
+					opacity: 0.6;
+				}
+			}
+		}
+	}
+}

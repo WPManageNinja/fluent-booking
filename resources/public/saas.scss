@@ -1,0 +1,62 @@
+.fcal_wrap {
+  .fcal_holder {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    transition: all .22s ease-out;
+  }
+
+  .fcal_calendar_inner {
+    border: 1px solid var(--fcal_slot_border);
+    border-radius: 8px;
+    transition: all .22s ease-out;
+    background: var(--fcal_cal_bg);
+
+    .fcal_booking_confirmed {
+      margin-top: 0;
+      .fcal_confirmation {
+        padding-top: 0;
+      }
+    }
+
+    &.fcal_form_calendar {
+      width: 100%;
+      box-shadow: none;
+    }
+
+    .fcal_side {
+      transition: all .22s ease-out;
+    }
+  }
+
+  .text-danger {
+    color: #F56C6C;
+    font-size: 0.875rem;
+    margin-top: 4px;
+    line-height: 1.7;
+  }
+
+  .border-danger {
+    border-color: #F56C6C;
+  }
+
+  .fcal_label_required::after {
+    content: " *";
+    color: #F56C6C;
+    margin-left: 3px;
+  }
+}
+
+.fluent-booking-calendar-block, .elementor-widget-container {
+    .fcal_calendar_inner {
+        width: 100%;
+    }
+}
+
+.fcal_normal_booking_footer {
+  text-align: center;
+  color: var(--fcal_dark);
+  a {
+    color: var(--fcal_primary_color);
+  }
+}

@@ -1,0 +1,14 @@
+
+
+html[dir="rtl"] {
+	.fcal_slot {
+		h2 {
+			padding: 0;
+			padding-right: 19px;
+			.fcal_slot_color_schema {
+				left: auto;
+				right: 0;
+			}
+		}
+	}
+}
