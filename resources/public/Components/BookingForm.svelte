@@ -109,7 +109,7 @@
                                 {:else if field.type === 'date' }
                                     <div class="fcal_date_field">
                                         <DateInput
-                                            format={'MM/dd/yyyy'}
+                                            format={getDateFormat(field.date_format)}
                                             min={new Date(field.min_date || '1900-01-01')}
                                             max={field.max_date ? new Date(field.max_date) : undefined}
                                             dynamicPositioning={true}
@@ -157,7 +157,7 @@
                     </div>
                 {/if}
                 <div class="fcal_form_item fcal_submit">
-                    {#if hasPaymentItem() && form['payment_method'] != 'offline'}
+                    {#if hasPaymentItem() && getTotal(appData?.payment_items, quantity, discount) && form['payment_method'] != 'offline'}
                         <button disabled={submitting} type="submit"
                                 class="fcal_btn_submit { submitting ? 'fcal_btn_submitting' : '' }">
                             {appData.i18n.Continue_to_Payments}
@@ -205,6 +205,7 @@
     export let spots;
     export let spot;
     export let slot;
+    export let occurrence;
 
     export let appData;
 
@@ -224,6 +225,8 @@
 
     const currentUrl = window.location.href;
 
+    const dateFormatter = appData.date_formatter;
+
     const dateTimei18 = window.fluentCalendarPublicVars.i18?.date_time_config;
 
     const startDayIndex = window.fluentCalendarPublicVars.start_day == 'sun' ? 0 : 1;
@@ -237,6 +240,19 @@
 
     function isReschedulingForm(fields) {
         return fields.some(field => field.name === 'rescheduling_hash' && field.enabled);
+    }
+
+    function getDateFormat(dateFormat) {
+        let format = dateFormat || dateFormatter;
+        format = format.replace(/MMMM+/g, 'MM');
+        format = format.replace(/MMM+/g, 'MM');
+        format = format.replace(/mm/gi, 'mm');
+        format = format.replace(/dd/gi, 'dd');
+        format = format.replace(/(?<!m)m(?!m)/gi, 'MM');
+        format = format.replace(/(?<!d)d(?!d)/gi, 'dd');
+        format = format.replace(/y{4}/gi, 'yyyy');
+        format = format.replace(/y{2}/gi, 'yy');
+        return format;
     }
 
     setTimeout(() => {
@@ -361,6 +377,10 @@
             action: 'fluent_cal_schedule_meeting'
         }
 
+        if (slot.settings?.recurring_config?.enabled && occurrence) {
+            postdata.recurring_count = occurrence;
+        }
+
         errors = '';
         submitting = true;
         util.$post(window.fluentCalendarPublicVars.ajaxurl, postdata)
@@ -406,7 +426,7 @@
 
     function handleDateChange(e, field) {
         const selectedDate = e.detail;
-        const dateFormat = field.date_format || appData.date_formatter;
+        const dateFormat = field.date_format || dateFormatter;
         const formatterDate = util.dayjs(selectedDate).format(dateFormat);
         form[field.name] = formatterDate;
     }

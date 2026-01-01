@@ -12,7 +12,7 @@ class CartHelper
     {
         return CartProductVariant::where('id', $productId)
             ->whereHas('product', function ($query) {
-                $query->where('post_status', 'publish');
+                $query->whereIn('post_status', ['publish', 'private']);
             })
             ->first();
     }
@@ -100,7 +100,7 @@ class CartHelper
 
         $products = CartProductVariant::whereIn('id', array_values($productIds))
             ->whereHas('product', function ($query) {
-                $query->where('post_status', 'publish');
+                $query->whereIn('post_status', ['publish', 'private']);
             })
             ->get()
             ->keyBy('id');

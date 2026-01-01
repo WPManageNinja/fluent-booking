@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <p class="fcal_slot_meta">
+            <div class="fcal_slot_meta">
                 <span class="fcal_slot_meta_mins"><el-icon><Clock/></el-icon>{{ getDuration(slot.duration) }}</span>
                 <span class="fcal_slot_meta_event">
                     <span class="icons" :class="eventType">
@@ -72,7 +72,13 @@
                         <img style="width: 22px; height: 22px;" :src="appVars.asset_url + 'images/woo.svg'"/>
                     </el-icon>
                 </span>
-            </p>
+            </div>
+            <div v-if="isRecurringEvent && getMaxCount" class="fcal_slot_meta">
+                <span class="fcal_slot_meta_event">
+                    <el-icon><RepeatIcon/></el-icon>
+                    {{ $t('Repeats up to') }} {{ getMaxCount }} {{ $t('times') }}
+                </span>
+            </div>
         </div>
         <div v-if="isLocationDisabled" class="fcal_slot_error">{{ $t('EachSlot/disabled_location_description')}}</div>
         <div v-if="slot.generic_error" v-html="slot.generic_error"></div>
@@ -115,17 +121,10 @@
 </template>
 
 <script>
-import { copyToClipBoard } from '@/Bits/data_config.js';
-import {
-    Share,
-    ArrowDown,
-    User,
-    Clock,
-    Right,
-    SwitchButton,
-    CreditCard
-} from '@element-plus/icons-vue';
 import ShareCalendarBlock from './ShareCalendarBlock';
+import { copyToClipBoard } from '@/Bits/data_config.js';
+import RepeatIcon from '@/Components/Icons/RepeatIcon.vue';
+import { Share, ArrowDown, User, Clock, Right, SwitchButton, CreditCard } from '@element-plus/icons-vue';
 
 export default {
     name: 'EachSlot',
@@ -139,7 +138,8 @@ export default {
         Right,
         SwitchButton,
         CreditCard,
-        ShareCalendarBlock
+        ShareCalendarBlock,
+        RepeatIcon
     },
     data() {
         return {
@@ -167,6 +167,9 @@ export default {
         isEventCalendar() {
             return ['single_event', 'group_event'].includes(this.eventType);
         },
+        isRecurringEvent() {
+            return this.slot.settings?.recurring_config?.enabled;
+        },
         isMultiHostEvent() {
             return this.isTeam || this.isEventCalendar;
         },
@@ -185,6 +188,9 @@ export default {
                 return this.durationLookup[duration] || duration + ' ' + this.$t('Minutes');
             }
         },
+        getMaxCount() {
+            return this.slot.settings?.recurring_config?.max_count || 0;
+        }
     },
     methods: {
         editSlot() {

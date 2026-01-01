@@ -5,6 +5,7 @@
             <thead>
                 <tr>
                     <th>{i18('Item')}</th>
+                    <th>{i18('Quantity')}</th>
                     <th>{i18('Price')}</th>
                 </tr>
             </thead>
@@ -13,6 +14,9 @@
                     <tr>
                         <td>
                             {getItemTitle(item)}
+                        </td>
+                        <td>
+                            {quantity || 1}
                         </td>
                         <td>
                             <span class="fcal_payment_amount">{@html getCurrencyFormat(getItemPrice(item) * (quantity || 1))}</span>
@@ -24,6 +28,7 @@
                 {#if couponField}
                     <tr>
                         <th>{i18('Subtotal:')}</th>
+                        <th></th>
                         <th>
                             <span class="fcal_payment_amount">
                                 {@html getCurrencyFormat(subTotal)}
@@ -45,6 +50,7 @@
                                     +
                                 </span>
                             </th>
+                            <th></th>
                             <th>
                                - {@html getCurrencyFormat(coupon.amount)}
                             </th>
@@ -75,6 +81,7 @@
                 {/if}
                 <tr class="fcal_payment_total">
                     <th>{i18('Total:')}</th>
+                    <th></th>
                     <th>
                         <span class="fcal_payment_amount">
                             {@html getCurrencyFormat(Math.max(0, total))}

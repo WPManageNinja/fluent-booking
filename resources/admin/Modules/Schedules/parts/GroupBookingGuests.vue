@@ -247,7 +247,7 @@ export default {
                     return false;
                 }
 
-                if (this.hasAccess('manage_all_bookings')) {
+                if (this.hasAccess(['manage_all_data', 'manage_all_bookings'])) {
                     return true;
                 }
 

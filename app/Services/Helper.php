@@ -1712,6 +1712,10 @@ class Helper
                         '{{booking.full_start_end_host_timezone}}'              => __('Full Start Date Time (with host timezone)', 'fluent-booking'),
                         '{{booking.full_start_and_end_guest_timezone}}'         => __('Full Start & End Date Time (with guest timezone)', 'fluent-booking'),
                         '{{booking.full_start_and_end_host_timezone}}'          => __('Full Start & End Date Time (with host timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_short_times_guest_timezone}}'   => __('All Bookings Short Times (with guest timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_short_times_host_timezone}}'    => __('All Bookings Short Times (with host timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_full_times_guest_timezone}}'    => __('All Bookings Full Times (with guest timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_full_times_host_timezone}}'     => __('All Bookings Full Times (with host timezone)', 'fluent-booking'),
                         '{{booking.start_date_time}}'                           => __('Event Date Time (UTC)', 'fluent-booking'),
                         '{{booking.start_date_time_for_attendee}}'              => __('Event Date Time (with attendee timezone)', 'fluent-booking'),
                         '{{booking.start_date_time_for_host}}'                  => __('Event Date Time (with host timezone)', 'fluent-booking'),
@@ -1785,6 +1789,10 @@ class Helper
                         '{{booking.full_start_end_host_timezone}}'              => __('Full Start Date Time (with host timezone)', 'fluent-booking'),
                         '{{booking.full_start_and_end_guest_timezone}}'         => __('Full Start & End Date Time (with guest timezone)', 'fluent-booking'),
                         '{{booking.full_start_and_end_host_timezone}}'          => __('Full Start & End Date Time (with host timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_short_times_guest_timezone}}'   => __('All Bookings Short Times (with guest timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_short_times_host_timezone}}'    => __('All Bookings Short Times (with host timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_full_times_guest_timezone}}'    => __('All Bookings Full Times (with guest timezone)', 'fluent-booking'),
+                        '{{booking.all_bookings_full_times_host_timezone}}'     => __('All Bookings Full Times (with host timezone)', 'fluent-booking'),
                         '{{booking.start_date_time}}'                           => __('Event Date Time (UTC)', 'fluent-booking'),
                         '{{booking.start_date_time_for_attendee}}'              => __('Event Date time (with guest timezone)', 'fluent-booking'),
                         '{{booking.start_date_time_for_host}}'                  => __('Event Date time (with host timezone)', 'fluent-booking'),
@@ -1967,7 +1975,7 @@ class Helper
                 'start_day'              => 'sun',
                 'auto_cancel_timing'     => '10',
                 'auto_complete_timing'   => '60',
-                'default_phone_country'  => ''
+                'default_country'        => ''
             ],
             'time_format'    => '12',
             'theme'          => 'system-default'

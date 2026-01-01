@@ -89,6 +89,22 @@ class EditorShortCodeParser
             return $booking->getFullBookingDateTimeText($booking->getHostTimezone()) . ' (' . $booking->getHostTimezone() . ')';
         }
 
+        if ($key == 'all_bookings_short_times_guest_timezone') {
+            return implode("<br>", $booking->getAllBookingShortTimes($booking->person_time_zone, true));
+        }
+
+        if ($key == 'all_bookings_short_times_host_timezone') {
+            return implode("<br>", $booking->getAllBookingShortTimes($booking->getHostTimezone(), true));
+        }
+
+        if ($key == 'all_bookings_full_times_guest_timezone') {
+            return implode("<br>", $booking->getAllBookingFullTimes($booking->person_time_zone, true));
+        }
+
+        if ($key == 'all_bookings_full_times_host_timezone') {
+            return implode("<br>", $booking->getAllBookingFullTimes($booking->getHostTimezone(), true));
+        }
+
         if ($key == 'start_date_time') {
             return $booking->start_time;
         }

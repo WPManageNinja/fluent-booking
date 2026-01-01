@@ -267,7 +267,7 @@
                         <pre>{{ field }}</pre>
                     </template>
 
-                    <p class="mt-1 fs-14" v-if="field.inline_tip" v-html="field.inline_tip"></p>
+                    <p class="fcal_help_text" v-if="field.inline_tip" v-html="field.inline_tip"></p>
                     <error-view :field="field.key" :errors="errors"></error-view>
 
                 </el-form-item>

@@ -95,7 +95,8 @@ export default {
             buttonInitiated: false,
             currentEditor: false,
             isPopupVisible: false,
-            ArrowDownIcon: markRaw(ArrowDown)
+            ArrowDownIcon: markRaw(ArrowDown),
+            isDarkMode: localStorage.getItem('fcal_color_mode') == 'dark',
         }
     },
     watch: {
@@ -117,6 +118,7 @@ export default {
                 tinymce: {
                     height : that.height,
                     toolbar1: this.toolbar,
+                    content_style: this.isDarkMode ? '*{color:white;} body { background: #11171d; }' : '',
                     setup(editor) {
                         editor.on('change', function (ed, l) {
                             that.changeContentEvent();

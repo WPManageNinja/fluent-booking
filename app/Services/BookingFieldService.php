@@ -144,6 +144,7 @@ class BookingFieldService
                 'disable_alter'  => false
             ];
         }
+
         if ($calendarSlot->isLocationFieldRequired()) {
             $requiredIndexes[] = 'location';
             $defaultFields['location'] = [

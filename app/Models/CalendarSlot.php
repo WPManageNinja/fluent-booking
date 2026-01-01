@@ -118,6 +118,11 @@ class CalendarSlot extends Model
             ->whereIn('object_type', ['calendar_event', 'integration']);
     }
 
+    public function isOneToOne()
+    {
+        return $this->event_type == 'single';
+    }
+
     public function isGroup()
     {
         return $this->event_type == 'group';
@@ -168,14 +173,24 @@ class CalendarSlot extends Model
         return $this->isGroup() || $this->isGroupEvent();
     }
 
+    public function isRecurringEvent()
+    {
+        return Arr::isTrue($this->getRecurringConfig(), 'enabled');
+    }
+
     public function isProEvent()
     {
         return $this->isGroup() || $this->isTeamEvent() || $this->isOneOffEvent() || $this->allowMultiBooking();
     }
 
-    public function allowMultiBooking()
+    public function isMultiBooking()
     {
         return Arr::isTrue($this->settings, 'multiple_booking.enabled');
+    }
+
+    public function allowMultiBooking()
+    {
+        return $this->isMultiBooking() || $this->isRecurringEvent();
     }
 
     public function multiBookingLimit()
@@ -224,6 +239,11 @@ class CalendarSlot extends Model
         }
 
         return $teamMembers;
+    }
+
+    public function getRecurringConfig()
+    {
+        return Arr::get($this->settings, 'recurring_config', []);
     }
 
     public function isLocationFieldRequired()

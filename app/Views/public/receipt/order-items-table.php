@@ -17,8 +17,8 @@ if (!$order->items) {
         <tbody>
         <?php $fluentBookingSubTotal = 0; ?>
         <?php foreach ($order->items->toArray() as $fluentBookingOrderItem) {
-           if (is_array($order_item)) {
-               if ($fluentBookingOrderItem['item_total']) :?>
+           if (is_array($fluentBookingOrderItem)) {
+               if (!empty($fluentBookingOrderItem['item_total'])) :?>
                    <tr>
                        <td><?php echo esc_html($fluentBookingOrderItem['item_name']); ?></td>
                        <td><?php echo esc_html($fluentBookingOrderItem['quantity']); ?></td>
@@ -29,7 +29,7 @@ if (!$order->items) {
                    $fluentBookingSubTotal += $fluentBookingOrderItem['item_total'];
                endif;
            } else {
-               if ($fluentBookingOrderItem->item_total) :?>
+               if (isset($fluentBookingOrderItem->item_total) && $fluentBookingOrderItem->item_total) :?>
                    <tr>
                        <td><?php echo esc_html($fluentBookingOrderItem->item_name); ?></td>
                        <td><?php echo esc_html($fluentBookingOrderItem->quantity); ?></td>

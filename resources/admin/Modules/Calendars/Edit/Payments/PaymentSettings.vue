@@ -99,10 +99,10 @@
                                                     </el-col>
                                                 </el-row>
                                                 <el-link @click="addItem" style="cursor: pointer;">
-                                                    {{ $t('Add more item') }}
                                                     <el-icon>
                                                         <Plus/>
                                                     </el-icon>
+                                                    {{ $t('Add more item') }}
                                                 </el-link>
                                             </div>
                                         </template>
@@ -156,7 +156,7 @@
                                     </template>
                                 </div>
                                 <woo-product-selector v-else v-model="paymentSettings.woo_product_id"/>
-                                <p>{{ $t('PaymentSettings/woo_payment_description') }}</p>
+                                <p class="fcal_help_text">{{ $t('PaymentSettings/woo_payment_description') }}</p>
                             </el-form-item>
                             <ProNotice v-else/>
                         </template>
@@ -183,7 +183,7 @@
                                     </template>
                                 </div>
                                 <cart-product-selector v-else v-model="paymentSettings.cart_product_id"/>
-                                <p>{{ $t('PaymentSettings/cart_payment_description') }}</p>
+                                <p class="fcal_help_text">{{ $t('PaymentSettings/cart_payment_description') }}</p>
                             </el-form-item>
                             <p v-else class="fcal_empty_text">
                                 <span>

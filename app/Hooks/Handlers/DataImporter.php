@@ -10,7 +10,7 @@ class DataImporter
 {
     public function importCalendar()
     {
-        if (!PermissionManager::userCan(['invite_team_members', 'manage_other_calendars'])) {
+        if (!PermissionManager::userCan(['invite_team_members', 'manage_all_data', 'manage_other_calendars'])) {
             wp_send_json_error([
                 'message' => __('You are not authorized to import calendar', 'fluent-booking'),
             ]);

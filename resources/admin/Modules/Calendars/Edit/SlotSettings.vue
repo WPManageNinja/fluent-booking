@@ -11,13 +11,16 @@
                 <el-button class="fcal_plain_btn" @click="openShare = true">
                     <el-icon><Share /></el-icon> {{ $t('Share') }}
                 </el-button>
+                <div class="fcal_event_settings_menu_opener" @click="toggleDrawer">
+                    <el-icon><OpenerIcon/></el-icon>
+                </div>
             </div>
         </div>
 
         <div v-if="loading" class="fcal_white_box">
             <el-skeleton animated :rows="6" />
         </div>
-        <div v-else class="fcal_create_calendar_body_wrap">
+        <div v-else class="fcal_create_calendar_body_wrap fcal_slot_settings">
             <el-aside>
                 <ul class="fcal_settings_sidebar">
                     <template v-for="(menu, index) in menuItems">
@@ -47,10 +50,32 @@
             @closeShare="openShare = false"
         />
     </div>
+    <el-drawer
+        v-model="showDrawer"
+        :size="320"
+        :title="$t('Event Settings')"
+        :direction="appVars.is_rtl ? 'ltr' : 'rtl'"
+        :append-to-body="true"
+        modal-class="fcal_settings_menu_drawer">
+        <div class="fcal_settings_menu">
+            <template v-for="(menu, index) in menuItems">
+                <li v-if="isRouteVisible(menu)" :key="index">
+                    <router-link :to="menu.route" @click.native="setCurrentMenu(menu)">
+                        <el-icon :class="menu.route.name">
+                            <div v-if="menu.svgIcon" class="icon" v-html="menu.svgIcon"></div>
+                            <component v-else-if="menu.elIcon" :is="menu.elIcon"></component>
+                        </el-icon>
+                        {{ menu.label }}
+                    </router-link>
+                </li>
+            </template>
+        </div>
+    </el-drawer>
 </template>
 
 <script>
 import EventIcon from '../../../Components/Icons/EventIcon';
+import OpenerIcon from '../../../Components/Icons/OpenerIcon';
 import QuestionIcon from '../../../Components/Icons/QuestionIcon';
 import ScheduleIcon from '../../../Components/Icons/ScheduleIcon';
 import NoficationIcon from '../../../Components/Icons/NoficationIcon';
@@ -60,6 +85,7 @@ import ShareCalendarBlock from "./../parts/ShareCalendarBlock";
 export default {
     name: 'SlotSettings',
     components: {
+        OpenerIcon,
         EventIcon,
         ScheduleIcon,
         NoficationIcon,
@@ -82,6 +108,7 @@ export default {
             eventLists: [],
             event_id: this.$route.params.event_id,
             calendar_id: this.$route.params.calendar_id,
+            showDrawer: false,
             slot: null,
             loading: true,
             saving: false,
@@ -98,6 +125,12 @@ export default {
     methods: {
         setCurrentMenu(menu) {
             this.currentMenu = menu;
+            if (this.showDrawer) {
+                this.toggleDrawer();
+            }
+        },
+        toggleDrawer() {
+            this.showDrawer = !this.showDrawer;
         },
         updateCurrentMenu() {
             const currentRouteName = this.$route.name;

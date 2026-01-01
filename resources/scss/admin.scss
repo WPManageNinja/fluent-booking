@@ -5,7 +5,6 @@
 @import "elements/scheduler";
 @import "elements/notification";
 @import "elements/settings";
-@import "elements/wp";
 
 .toplevel_page_fluent-booking {
   background: #f5f6f7;
@@ -48,14 +47,14 @@
       h3 {
         margin: 0;
         padding: 0;
-        color: $dark;
+        color: var(--fcal-primary-text, #19283a);
         font-size: 24px;
         line-height: 1.4;
       }
       p {
         margin: 0;
         padding: 0;
-        color: $lightDark;
+        color: var(--fcal-secondary-text, #525866);
         font-size: 13px;
         line-height: 1.4;
       }
@@ -82,11 +81,20 @@
           max-width: 200px;
 
           .el-input__wrapper {
+            box-shadow: none;
             border-radius: 8px 0 0 8px;
+            border: 1px solid var(--fcal-primary-border);
+            background: var(--fcal-primary-bg, #ffffff);
+            .el-input__inner {
+              background: var(--fcal-primary-bg, #ffffff);
+            }
           }
 
           .el-input-group__append {
+            box-shadow: none;
             border-radius: 0 8px 8px 0;
+            border: 1px solid var(--fcal-primary-border);
+            background: var(--fcal-active-bg, #f0f3f5);
           }
         }
       }
@@ -116,20 +124,23 @@
       .el-input {
         &.fcal_search_input {
           height: auto;
-          border: 1px solid #D6DAE1;
+          border: 1px solid var(--fcal-primary-border, #eaecf0);
           border-radius: 8px;
           width: 240px;
           .el-input__wrapper {
             height: auto;
             padding: 4px 10px;
             border-radius: 8px 0 0 8px;
-            border: none;
             box-shadow: none;
+            background: var(--fcal-primary-bg, #ffffff);
+            .el-input__inner {
+              background: var(--fcal-primary-bg, #ffffff);
+            }
           }
           .el-input-group__append {
-            border: none;
             box-shadow: none;
             border-radius: 0 8px 8px 0;
+            background: var(--fcal-active-bg, #f0f3f5);
             .el-button {
               border: none;
               box-shadow: none;
@@ -156,10 +167,12 @@
         }
       }
       .el-calendar__header {
-        background: #FAFAFA;
-        border-radius: 8px;
-        flex-wrap: wrap;
         gap: 12px;
+        flex-wrap: wrap;
+        border-radius: 8px;
+        background: var(--fcal-active-bg, #f0f3f5);
+        border: 1px solid var(--fcal-primary-border);
+        border-bottom: none;
         .header_date_picker {
           display: flex;
           align-items: center;
@@ -171,6 +184,7 @@
             font-size: 20px;
             font-weight: 400;
             margin: 0;
+            color: var(--fcal-primary-text, #19283a);
           }
           .date_picker_input {
             position: absolute;
@@ -198,6 +212,7 @@
         }
       }
       .el-calendar__body {
+        background: var(--fcal-primary-bg, #ffffff);
         .el-calendar-table {
           .el-calendar-table__row {
             .el-calendar-day {
@@ -229,11 +244,12 @@
                 gap: 4px;
                 margin: 2px;
                 border-radius: 8px;
+                color: var(--fcal-secondary-text, #525866);
                 &:last-child {
                   margin-bottom: 0;
                 }
                 &:hover {
-                  background: #e5e7eb;
+                  background: var(--fcal-active-bg, #f0f3f5);
                 }
                 .booking_info {
                   gap: 4px;
@@ -268,7 +284,7 @@
                 margin: 2px;
                 gap: 4px;
                 &:hover {
-                  background: #e5e7eb;
+                  background: var(--fcal-active-bg, #f0f3f5);
                 }
               }
             }
@@ -280,8 +296,8 @@
 
   .weekly_calendar_view {
     height: calc(100vh - 200px);
-    color: black;
-    background-color: #fff;
+    color: var(--fcal-primary-text, #19283a);
+    background-color: var(--fcal-primary-bg, #ffffff);
     overflow-x: hidden;
     position: relative;
     border-radius: 8px;
@@ -291,8 +307,8 @@
       z-index: 9;
       display: flex;
       position: sticky;
-      background: #fff;
-      border-bottom: 1px solid #D6DAE1;
+      background: var(--fcal-primary-bg, #ffffff);
+      border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
       .time_column_header {
         width: 60px;
         flex-shrink: 0;
@@ -302,9 +318,9 @@
         min-width: 0;
         padding: 8px;
         text-align: center;
-        border-left: 1px solid #D6DAE1;
+        border-left: 1px solid var(--fcal-primary-border, #eaecf0);
         .day_name {
-          color: #888;
+          color: var(--fcal-secondary-text, #525866);
           font-size: 12px;
           margin-bottom: 4px;
         }
@@ -328,7 +344,7 @@
         .time_slot {
           height: 60px;
           padding: 8px;
-          color: #888;
+          color: var(--fcal-secondary-text, #525866);
           font-size: 12px;
           text-align: right;
           position: relative;
@@ -342,11 +358,11 @@
         .day_column {
           flex: 1;
           min-width: 0;
-          border-left: 1px solid #D6DAE1;
+          border-left: 1px solid var(--fcal-primary-border, #eaecf0);
           position: relative;
           .hour_cell {
             height: 60px;
-            border-bottom: 1px solid #D6DAE1;
+            border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
           }
         }
       }
@@ -358,7 +374,7 @@
         padding: 4px 6px;
         font-size: 12px;
         z-index: 1;
-        border-bottom: 2px solid #fff;
+        border-bottom: 2px solid var(--fcal-primary-bg, #ffffff);
         overflow: hidden;
         cursor: pointer;
         &:last-child {
@@ -395,6 +411,7 @@
       tr {
         th {
           text-align: left;
+          color: var(--fcal-primary-text, #19283a);
           &:last-child {
             padding-left: 5px;
           }
@@ -475,14 +492,14 @@
     }
   }
   .fcal_dashboard_box {
-    background: #ffffff;
+    background: var(--fcal-primary-bg, #ffffff);
     border-radius: 8px;
     padding: 20px;
   }
 
   .fcal_dashboard {
     .fcal_section_header {
-      border-bottom: 1px solid #EAECF0;
+      border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
       padding-bottom: 12px;
 
       @media (max-width: 585px) {
@@ -501,7 +518,8 @@
           border-radius: 8px;
           padding: 3px 16px;
           box-shadow: none;
-          border: 1px solid #D6DAE1;
+          border: 1px solid var(--fcal-primary-border, #eaecf0);
+          background: var(--fcal-primary-bg, #ffffff);
           @media (max-width: 585px) {
             width: auto;
           }
@@ -512,7 +530,7 @@
     .fcal_booking_activities {
       width: 100%;
       max-width: 356px;
-      background: #ffffff;
+      background: var(--fcal-primary-bg, #ffffff);
       border-radius: 8px;
 
       .fcal_schedule_details_header {
@@ -521,8 +539,9 @@
           font-weight: 700;
           line-height: 28px;
           margin: 0;
-          border-bottom: 1px solid #EAECF0;
+          border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
           padding: 20px 14px 16px 14px;
+          color: var(--fcal-primary-text, #19283a);
         }
       }
 
@@ -566,12 +585,12 @@
           .el-date-editor {
             padding: 3px 16px;
             box-shadow: none;
-            border: 1px solid #D6DAE1;
+            border: 1px solid var(--fcal-primary-border, #eaecf0);
 
             .el-input__wrapper {
               padding: 3px 16px;
               border-radius: 8px;
-              border: 1px solid #D6DAE1;
+              border: 1px solid var(--fcal-primary-border, #eaecf0);
               box-shadow: none;
 
               .el-input__inner {
@@ -588,25 +607,27 @@
         flex: none;
 
         .fcal_schedule_event_infos {
-          background: #ffffff;
+          background: var(--fcal-primary-bg, #ffffff);
           border-radius: 8px;
           margin-bottom: 20px;
 
           .fcal_schedule_details_header {
             padding: 20px 14px 16px 14px;
             margin-bottom: 10px;
-            border-bottom: 1px solid #EAECF0;
+            border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
 
             h1 {
               margin: 0;
               font-size: 18px;
               font-weight: 500;
               line-height: 28px;
+              color: var(--fcal-primary-text, #19283a);
             }
           }
 
           .fcal_booking_activities_list {
             .fcal_booking_activity {
+              color: var(--fcal-secondary-text, #525866);
               padding: 11px 0 8px 32px;
 
               .timing {
@@ -648,7 +669,7 @@
     h1 {
       margin: 0;
       font-size: 18px;
-      border-bottom: 1px solid #EAECF0;
+      border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
       padding: 15px 20px;
     }
 
@@ -805,7 +826,7 @@
           font-weight: 700;
           line-height: 44px;
           margin: 0 0 5px;
-          color: $dark;
+          color: #19283a;
         }
 
         p {
@@ -1022,15 +1043,17 @@
   h3 {
     margin: 0;
     font-size: 16px;
+    color: var(--fcal-primary-text, #19283a);
   }
 
   p {
     margin: 5px 0 0;
+    color: var(--fcal-secondary-text, #525866);
   }
 }
 
 .fcal_remote_calendar_block {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--fcal-primary-border, #eaecf0);
   border-radius: 6px;
   margin-top: 20px;
 
@@ -1039,7 +1062,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 15px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
 
     .fcal_driver_brand {
       display: flex;
@@ -1055,10 +1078,12 @@
       h3 {
         margin: 0;
         font-size: 16px;
+        color: var(--fcal-primary-text, #19283a);
       }
 
       p {
         margin: 0 0 5px;
+        color: var(--fcal-secondary-text, #525866);
       }
     }
   }
@@ -1066,10 +1091,14 @@
   .fcal_remote_body {
     padding: 15px;
   }
+  
+  .fcal_remote_sub {
+    color: var(--fcal-secondary-text, #525866);
+  }
 
   .fcal_remote_footer {
     align-items: center;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--fcal-primary-border, #eaecf0);
     display: flex;
     justify-content: space-between;
     padding: 15px;
@@ -1084,17 +1113,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
   margin-bottom: 18px;
   padding-bottom: 10px;
 
   h2 {
     margin: 0;
     font-size: 20px;
+    color: var(--fcal-primary-text, #19283a);
   }
 
   p {
     margin: 5px 0;
+    color: var(--fcal-secondary-text, #525866);
   }
   .fcal_actions {
     .el-dropdown {
@@ -1110,17 +1141,17 @@
 .fcal_card_items {
   display: block;
   overflow: hidden;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--fcal-primary-border, #eaecf0);
   border-radius: 6px;
 
   .fcal_card_item {
-    background: white;
-    border-bottom: 1px solid #d1d5db;
+    background: var(--fcal-primary-bg, #ffffff);
+    border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
     padding: 15px;
     position: relative;
 
     &:hover {
-      background-color: #f9fafb;
+      background-color: var(--fcal-color-bg, #f0f6fe);
     }
 
     .fcal_card_item_host {
@@ -1152,10 +1183,12 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      color: var(--fcal-primary-text, #19283a);
     }
 
     p {
       margin: 5px 0;
+      color: var(--fcal-secondary-text, #525866);
     }
 
     &:last-child {
@@ -1181,7 +1214,7 @@
 
 .fcal_integration_items {
   display: block;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--fcal-primary-border, #eaecf0);
   border-radius: 6px;
 
   .fcal_integration_item {
@@ -1189,7 +1222,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-    border-bottom: 1px solid #d1d5db;
+    border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
 
     &:last-child {
       border-bottom: none;
@@ -1220,10 +1253,12 @@
           margin: 0;
           font-size: 16px;
           font-weight: 500;
+          color: var(--fcal-primary-text, #19283a);
         }
 
         .request_url {
           margin: 5px 0 0;
+          color: var(--fcal-secondary-text, #525866);
         }
 
         .event_triggers {
@@ -1244,7 +1279,8 @@
 
           li {
             margin: 0;
-            background: #f3f4f6;
+            color: var(--fcal-primary-text, #19283a);
+            background: var(--fcal-active-bg, #f0f3f5);
             display: inline-flex;
             align-items: center;
             padding: 3px 8px;
@@ -1352,6 +1388,18 @@
 .fcal_availability_card {
   cursor: pointer;
   width: 100%;
+}
+
+.fcal_calendars_skeleton {
+  background: var(--fcal-primary-bg, #ffffff);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 30px;
+  .first_row {
+    justify-content: space-between;
+    align-items:center;
+    margin-bottom: 30px;
+  }
 }
 
 @keyframes animateSvg {
@@ -1585,6 +1633,9 @@ table.shop_table.order_details {
   margin: 30px auto;
   text-align: center;
   padding: 20px;
+  h3 {
+    color: var(--fcal-primary-text, #19283a);
+  }
 }
 
 .fcal_checkable_lined > label {
@@ -1596,7 +1647,7 @@ table.shop_table.order_details {
 
   .fcal_driver_action {
     display: block;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
 
     &:last-child {
       border-bottom: none;
@@ -1625,6 +1676,11 @@ table.shop_table.order_details {
 .fcal_create_calendar_wrap.fcal_onboard_wrap {
   max-width: 850px;
   margin: 0 auto;
+}
+
+.fcal_help_text {
+  font-size: 14px;
+  color: var(--fcal-secondary-text, #525866);
 }
 
 .fcal_text_with_copy {
@@ -1663,12 +1719,20 @@ table.shop_table.order_details {
   }
 }
 
+.toplevel_page_fluent-booking #wpcontent {
+  background-color: #f0f0f1;
+  &:has(.dark) {
+    background-color: #11171d;
+ }
+}
+
 .fct-thank-you-page-order-items {
   &-header {
     display: flex;
-    padding: 0 16px;
+    padding: 4px 16px;
     margin-top: 16px;
-    background-color: #f9fafb;
+    border-radius: 8px;
+    background-color: var(--fcal-active-bg, #f0f3f5);
     justify-content: space-between;
     &-row {
       margin: 0;
@@ -1677,7 +1741,7 @@ table.shop_table.order_details {
       font-weight: 600;
       text-transform: uppercase;
       line-height: 24px;
-      color: #374151;
+      color: var(--fcal-primary-text, #19283a);
       &:last-child {
         width: 200px;
         text-align: right;
@@ -1697,14 +1761,14 @@ table.shop_table.order_details {
       font-size: 15px;
       font-weight: 500;
       line-height: 18px;
-      color: #2f3448;
+      color: var(--fcal-primary-text, #19283a);
     }
     &-variant-title{
       margin: 0;
       font-size: 14px;
       font-weight: 400;
       line-height: 15px;
-      color: #758195;
+      color: var(--fcal-secondary-text, #525866);
     }
     &-price {
       width: 200px;
@@ -1714,7 +1778,7 @@ table.shop_table.order_details {
         font-size: 14px;
         font-weight: 700;
         line-height: 24px;
-        color: #111827;
+        color: var(--fcal-primary-text, #19283a);
       }
     }
   }
@@ -1724,7 +1788,7 @@ table.shop_table.order_details {
     width: 100%;
     max-width: 290px;
     border-radius: 8px;
-    background-color: #f9fafb;
+    background-color: var(--fcal-active-bg, #f0f3f5);
     padding: 16px;
     &-total, &-subtotal, &-shipping, &-payment-method {
       display: flex;
@@ -1735,7 +1799,7 @@ table.shop_table.order_details {
       margin: 0;
       font-size: 14px;
       line-height: 24px;
-      color: #374151;
+      color: var(--fcal-primary-text, #19283a);
     }
     &-value {
       margin: 0;
@@ -1743,7 +1807,7 @@ table.shop_table.order_details {
       font-size: 13px;
       text-transform: uppercase;
       line-height: 24px;
-      color: #374151;
+      color: var(--fcal-primary-text, #19283a);
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
-    <div  class="fcal_calendars_wrap" style="background: #ffffff;border-radius: 8px;padding: 15px;">
-        <el-row style="justify-content: space-between;align-items:center; margin-bottom: 30px;">
+    <div v-for="i in 2" :key="i" class="fcal_calendars_skeleton">
+        <el-row class="first_row">
             <el-col :span="4">
                 <el-skeleton :animated="true" style="--el-skeleton-circle-size: 48px;display: flex; gap: 20px;align-items:center;">
                     <template #template>
@@ -30,6 +30,7 @@
                 <el-skeleton :animated="true" :rows="2"/>
             </el-col>
         </el-row>
+        
     </div>
 </template>
 
@@ -38,7 +39,3 @@ export default {
     name: "SkeletonLoader"
 }
 </script>
-
-<style scoped>
-
-</style>
