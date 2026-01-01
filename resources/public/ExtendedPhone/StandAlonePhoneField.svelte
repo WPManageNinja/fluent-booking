@@ -28,7 +28,7 @@
 
     function handleValueChange(value) {
         let phoneNumber = '';
-        if (value && value.isValid) {
+        if (value && (value.isValid || value.isPossible)) {
             phoneNumber = value.phoneNumber;
             currentInput = value.phoneNumber
         } else if (value) {

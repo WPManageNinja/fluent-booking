@@ -148,7 +148,7 @@
                                 </h1>
                             </div>
                             <div>
-                                <div v-html="bodyMeta.content"></div>
+                                <div v-html="bodyMeta.content" style="color: var(--fcal-secondary-text, #525866);"></div>
                             </div>
                         </div>
                     </template>
@@ -488,7 +488,7 @@ export default {
             window.open(this.showing_booking.reschedule_url, '_blank');
         },
         hasWriteAccess() {
-            const allBookingAccess = this.hasAccess('manage_all_bookings');
+            const allBookingAccess = this.hasAccess(['manage_all_data', 'manage_all_bookings']);
             const myCalendarBooking = this.showing_booking.calendar_id == this.appVars.me.calendar_id;
             const myBooking = this.showing_booking.host_user_id == this.appVars.me.id;
             return myBooking || myCalendarBooking || allBookingAccess;

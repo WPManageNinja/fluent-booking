@@ -9,6 +9,7 @@
 @import "~element-plus/theme-chalk/el-notification.css";
 @import "~element-plus/theme-chalk/el-loading.css";
 @import "~element-plus/theme-chalk/el-message-box.css";
+@import "~element-plus/theme-chalk/dark/css-vars.css";
 
 
 
@@ -150,7 +151,7 @@
   align-items: center;
   .el-breadcrumb__inner a:hover,
   .el-breadcrumb__inner.is-link:hover {
-    color: #2653C7;
+    color: var(--fcal-color-text, #306ae0);
   }
   span.fct_tag {
     display: inline-flex;
@@ -172,7 +173,8 @@ input.el-input__inner {
   border-radius: 0;
   box-shadow: none;
   padding: 0;
-  color: var(--el-input-text-color,var(--el-text-color-regular));
+  background: transparent;
+  color: var(--fcal-secondary-text, #525866);
   &:focus {
     border-color: transparent;
     outline: 0;
@@ -181,7 +183,7 @@ input.el-input__inner {
 }
 
 .el-form-item > .el-form-item__label {
-  color: #000;
+  color: var(--fcal-primary-text, #19283a);
   font-weight: 500;
 }
 
@@ -236,15 +238,15 @@ ul.fframe_menu.fcal_secondary_menu {
 }
 
 .fcal_hightlight_box {
-  background: #f5f6f7;
+  background: var(--fcal-active-bg, #f0f3f5);
   padding: 1rem 1.5rem;
   border-radius: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--fcal-primary-border, #eaecf0);
 }
 
 .fcal_promt_box {
-  background: #f5f6f7;
-  border: 1px solid #e5e7eb;
+  background: var(--fcal-active-bg, #f0f3f5);
+  border: 1px solid var(--fcal-primary-border, #eaecf0);
 }
 
 .fcal_lined_checks > label {
@@ -277,16 +279,16 @@ a.el-button {
 }
 
 .fcal_radio_switch {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--fcal-primary-border, #eaecf0);
   border-radius: 5px;
   padding: 5px;
-  background: #fff;
+  background: var(--fcal-primary-bg, #ffffff);
   .el-radio-button  input.el-radio-button__original-radio {
     display: none !important;
   }
   .is-active.is-active .el-radio-button__inner {
-    background: #e5e7eb;
-    color: rgb(55, 65, 81);
+    background: var(--fcal-active-bg, #f0f3f5);
+    color: var(--fcal-primary-text, #19283a);
     border-radius: 5px !important;
     box-shadow: none;
   }
@@ -294,6 +296,10 @@ a.el-button {
     padding: 7px 10px;
     background: transparent;
     border: none !important;
+    color: var(--fcal-secondary-text, #525866);
+    &:hover {
+      color: var(--fcal-primary-text, #19283a);
+    }
   }
 }
 
@@ -316,7 +322,7 @@ a.el-button {
 .fcal_input_desc {
   margin: 3px 0 0;
   font-size: 90%;
-  color: #6e6d6d;
+  color: var(--fcal-secondary-text, #525866);
 }
 
 .fcal_photo_card.fcal_featured_image_upload .fcal_photo_holder {
@@ -355,7 +361,8 @@ a.el-button {
     display: block;
     width: 100%;
     margin: 0;
-    font-size: 80%;
+    font-size: 90%;
+    color: var(--fcal-secondary-text, #525866);
   }
 }
 

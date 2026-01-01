@@ -148,7 +148,7 @@ class CalendarController extends Controller
 
         do_action('fluent_booking/before_create_calendar', $data, $this);
 
-        if (!empty($data['user_id']) && PermissionManager::userCan('invite_team_members')) {
+        if (!empty($data['user_id']) && PermissionManager::userCan(['manage_all_data', 'invite_team_members'])) {
             $user = get_user_by('ID', $data['user_id']);
         } else {
             $user = get_user_by('ID', get_current_user_id());

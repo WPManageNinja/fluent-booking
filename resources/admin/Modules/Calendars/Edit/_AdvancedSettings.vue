@@ -142,8 +142,9 @@
                                         <span class="sub-label card-title">{{ $t("Allow Multiple Booking") }}</span>
                                         <span>{{ $t("AdvancedSettings/single_multi_booking_description") }}</span>
                                     </div>
-                                    <div class="card_action">
-                                        <el-switch v-model="settings.multiple_booking.enabled"/>
+                                    <div :class="{'card_action': true, 'switch_disabled': isRecurringEvent}">
+                                        <el-switch v-model="settings.multiple_booking.enabled" :disabled="isRecurringEvent"/>
+                                        <span class="switch_disabled_text">{{ $t('Recurring Event does not support this feature') }}</span>
                                     </div>
                                 </div>
                                 <div class="fcal_event_child_card" v-if="settings.multiple_booking.enabled">
@@ -347,6 +348,9 @@ export default {
         },
         bookingTitle() {
             return this.calendar_event.title + ' ' + this.$t('meeting between') + ' ' + this.calendar_event.author_profile?.name + ' and {{guest.first_name}}';
+        },
+        isRecurringEvent() {
+            return this.settings?.recurring_config?.enabled;
         }
     },
     methods: {
@@ -464,6 +468,9 @@ export default {
     mounted() {
         if (!this.disabled) {
             this.fetchSettings();
+        }
+        if (this.isRecurringEvent) {
+            this.settings.multiple_booking.enabled = false;
         }
     }
 }

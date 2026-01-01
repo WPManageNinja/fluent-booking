@@ -74,7 +74,7 @@
                                     </span>
 
                                     <?php if ($fluentBookingEvent->payment_html) { ?>
-                                        <?php echo wp_kses_post($fluentBookingEvent->payment_html); ?>
+                                        <?php echo $fluentBookingEvent->payment_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                                     <?php } ?>
 
                                     <?php if ($fluentBookingEvent->event_time) { ?>

@@ -30,3 +30,23 @@
     width: 80% !important;
   }
 }
+
+@media (max-width: 992px) {
+  .fcal_settings_body, .fcal_slot_settings {
+    flex-direction: column;
+    .el-aside {
+      display: none;
+    }
+    .header_right {
+      justify-content: flex-end;
+    }
+  }
+  .fcal_event_settings_menu_opener {
+    display: block;
+    cursor: pointer;
+    .el-icon {
+      display: block;
+      font-size: 32px;
+    }
+  }
+}

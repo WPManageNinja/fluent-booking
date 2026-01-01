@@ -65,15 +65,15 @@
                     <h3>{{ utm.label }}</h3>
                     <p>{{ utm.value }}</p>
                 </div>
-                <div v-if="booking.custom_form_data" v-for="field in booking.custom_form_data" class="fcal_schedule_details_event_item">
-                    <template v-if="field.value && field.value != 'undefined' && field.label != 'Location'">
+                <template v-if="booking.custom_form_data" v-for="field in booking.custom_form_data">
+                    <div v-if="field.value && field.value != 'undefined' && field.label != 'Location'" class="fcal_schedule_details_event_item">
                         <h3>{{ field.label }}</h3>
                         <div class="fcal_spot_details_value">
                             <p v-if="field.type == 'date'">{{ field.value }}</p>
                             <p v-else v-html="field.value"></p>
                         </div>
-                    </template>
-                </div>
+                    </div>
+                </template>
             </div>
         </div>
         <el-dialog

@@ -11,7 +11,7 @@
             <div v-else class="fcal_calendar_body">
                 <div v-if="connection" class="fcal_remote_calendar_block">
                     <each-zoom-account @disconnected="fetchConnection()" :calendar_id="calendar.id" :connectedAccount="connection"/>
-                    <p style="padding: 10px 20px;">{{ $t('UserZoomSettings/zoom_meeting_location_desc') }}</p>
+                    <p style="padding: 10px 20px;" class="fcal_help_text">{{ $t('UserZoomSettings/zoom_meeting_location_desc') }}</p>
                 </div>
                 <div v-else class="fcal_box_padded">
                     <h3>{{ $t('UserZoomSettings/connect_zoom_desc') }}</h3>

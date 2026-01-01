@@ -17,6 +17,7 @@
 
     const slot = appData.slot;
     const author = appData.author_profile;
+    const hasPro = appData.has_pro;
     const titleTag = appData.title_tag || 'h1';
     const teamMembers = appData.team_member_profiles;
     const isFluentform = appData.is_fluentform;
@@ -24,7 +25,8 @@
     const isRescheduling = appData.rescheduling == 'yes';
     const isSingleGuest = slot.event_type === 'single';
     const isDisplaySpots = slot.is_display_spots || false;
-    const isMultiBooking = slot.settings?.multiple_booking?.enabled || false;
+    const recurringConfig = (hasPro && slot.settings?.recurring_config?.enabled) ? slot.settings.recurring_config : {};
+    const isMultiBooking = (hasPro && slot.settings?.multiple_booking?.enabled) ? true : false;
     const isMultiBookingAllow = isMultiBooking && isSingleGuest && !isRescheduling;
     const multiBookingLimit = slot.settings?.multiple_booking?.limit || 5;
     const availableDurations = slot.settings?.multi_duration?.available_durations || [];
@@ -38,16 +40,18 @@
     let limitReachedError = '';
     let timeFormat = getTimeFormat(slot.time_format);
 
-    let skipCalendar = !!slot.pre_selects?.time;
     let selectedDate = false;
+    let isLoadingDates = false;
     let selectedDateTime = {};
     let selectedDateTimes = [];
-    let isLoadingDates = false;
+    let recurringError = false;
+    let skipCalendar = !!slot.pre_selects?.time;
+    let occurrence = recurringConfig?.max_count;
 
-    let showingPayments = false;
     let timezone = '';
-    let quantity = 1;
     let wrapperWidth = 800;
+    let showingPayments = false;
+    let quantity = occurrence || 1;
 
     let fluentFormDateTimeSelected = {};
 
@@ -130,6 +134,38 @@
 
     function onPaymentsVisibilityChanged(visibility) {
         showingPayments = visibility;
+    }
+
+    function getFrequencyLabel() {
+        const isPlural = recurringConfig?.interval > 1;
+        switch (recurringConfig?.frequency) {
+            case 'daily':
+                return isPlural ? i18('days') : i18('day');
+            case 'weekly':
+                return isPlural ? i18('weeks') : i18('week');
+            case 'monthly':
+                return isPlural ? i18('months') : i18('month');
+            case 'yearly':
+                return isPlural ? i18('years') : i18('year');
+        }
+        return '';
+    }
+
+    function getOccurrenceLabel(occurrence) {
+        return occurrence > 1 ? i18('occurrences') : i18('occurrence');
+    }
+
+    function recurringErrorText() {
+        return i18('You can only book up to') + ' ' + recurringConfig?.max_count + ' ' + getOccurrenceLabel(recurringConfig?.max_count) + ' ' + i18('at a time');
+    }
+
+    function validateRecurringCount() {
+        if (occurrence && occurrence > recurringConfig?.max_count) {
+            recurringError = true;
+        } else {
+            quantity = occurrence || 1;
+            recurringError = false;
+        }
     }
 
     function spotSelected(spot) {
@@ -257,7 +293,7 @@
 
     function getAdditionalLabel(qty) {
         if (qty > 1) {
-            return i18('per guest');
+            return occurrence ? i18('per occurrence') : i18('per guest');
         }
         return '';
     }
@@ -271,10 +307,10 @@
             selectedDate = null;
         }
         limitReachedError = '';
-        quantity = 1;
         selectedDateTime = {};
         selectedDateTimes = [];
         component.style.height = 'auto';
+        quantity = occurrence || 1;
         summaryDetailsHeightHandle();
     }
 
@@ -419,6 +455,32 @@
                                         {/if}
                                     </div>
 
+                                    {#if recurringConfig?.enabled}
+                                        <div class="fcal_icon_item" style="align-items: center;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M771.776 794.88A384 384 0 0 1 128 512h64a320 320 0 0 0 555.712 216.448H654.72a32 32 0 1 1 0-64h149.056a32 32 0 0 1 32 32v148.928a32 32 0 1 1-64 0v-50.56zM276.288 295.616h92.992a32 32 0 0 1 0 64H220.16a32 32 0 0 1-32-32V178.56a32 32 0 0 1 64 0v50.56A384 384 0 0 1 896.128 512h-64a320 320 0 0 0-555.776-216.384z"></path></svg>
+                                            <span>{i18('Every')} {recurringConfig?.interval > 1 ? recurringConfig?.interval : ''} {getFrequencyLabel()} {i18('for')}</span>
+                                            {#if recurringConfig?.is_count_fixed}
+                                                <span>{recurringConfig?.max_count} {getOccurrenceLabel(recurringConfig?.max_count)}</span>
+                                            {/if}
+                                        </div>
+                                        {#if !recurringConfig?.is_count_fixed}
+                                            <div class="fcal_icon_item">
+                                                <input type="number" min="1" max="{recurringConfig?.max_count}" class="fcal_occurrence_input"
+                                                    aria-label={i18('Number of Occurrences')}
+                                                    bind:value={occurrence}
+                                                    on:change={() => { validateRecurringCount(); }}
+                                                />
+                                                <span>{getOccurrenceLabel(occurrence)}</span>
+                                            </div>
+                                        {/if}
+                                        {#if recurringError}
+                                            <div class="fcal_icon_item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 ltr:mr-2 rtl:ml-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="16" y2="12"></line><line x1="12" x2="12.01" y1="8" y2="8"></line></svg>
+                                                <span class="error_text">{recurringErrorText()}</span>
+                                            </div>
+                                        {/if}
+                                    {/if}
+
                                     {#if slot.location_settings.length > 1}
                                         {#if slot.location_settings }
                                             <div class="fcal_multi_locations">
@@ -562,6 +624,7 @@
                                     {appData}
                                     {timezone}
                                     {duration}
+                                    {occurrence}
                                     bind:form={form}
                                     bind:quantity={quantity}
                                     bind:spot={selectedDateTime}

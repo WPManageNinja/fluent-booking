@@ -27,7 +27,7 @@
                     <td>
                         <div class="fluent_booking_payment_info_item fluent_booking_payment_info_item_total">
                             <div class="fluent_booking_item_heading"><?php esc_html_e('Total Amount:', 'fluent-booking'); ?></div>
-                            <div class="fluent_booking_item_value"><?php echo ($order->total_amount > 0) ? esc_attr(fluentbookingFormattedAmount($order->total_amount, $currency_settings)) : 'pending'; ?></div>
+                            <div class="fluent_booking_item_value"><?php echo esc_attr(fluentbookingFormattedAmount($order->total_amount, $currency_settings)); ?></div>
                         </div>
                     </td>
                 <?php endif; ?>

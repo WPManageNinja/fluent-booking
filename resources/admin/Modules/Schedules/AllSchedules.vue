@@ -152,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <el-skeleton v-else :rows="5" animated/>
+            <el-skeleton style="padding-top: 1rem;" v-else :rows="5" animated/>
         </div>
         <div v-else-if="viewType == 'calendar'">
             <CalendarView
@@ -160,7 +160,7 @@
                 @dateUpdated="handleDateUpdated"
                 @updateSchedule="fetchSchedules"/>
         </div>
-        <p>{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
+        <p class="fcal_help_text">{{ $t('All dates are shown in') }} {{ currentTimezone }} {{ $t('timezone') }}</p>
         <AddNewBookingModal
             v-if="isNewBookingOpen"
             :showModal="isNewBookingOpen"
@@ -285,7 +285,7 @@ export default {
             return period.charAt(0).toUpperCase() + period.slice(1);
         },
         hasAllBookingAccess() {
-            return this.hasAccess('manage_all_bookings') || this.hasAccess('read_all_bookings');
+            return this.hasAccess(['manage_all_data', 'manage_all_bookings', 'read_all_bookings']);
         },
         statusFilters() {
             const statuses = {

@@ -42,7 +42,7 @@
                         </el-button>
                     </template>
                 </el-input>
-                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" popper-class="fcal_select" trigger="click">
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess(['manage_all_data', 'invite_team_members'])" popper-class="fcal_select" trigger="click">
                     <span class="el-dropdown-link">
                         <el-button class="fcal_primary_btn">
                             <span>+</span> {{ $t('New') }}
@@ -65,7 +65,7 @@
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
-                <el-dropdown v-if="hasSupport('multi_users') && hasAccess('invite_team_members')" @command="handleCommand" popper-class="fcal_select" trigger="click">
+                <el-dropdown v-if="hasSupport('multi_users') && hasAccess(['manage_all_data', 'invite_team_members'])" @command="handleCommand" popper-class="fcal_select" trigger="click">
                     <span class="el-dropdown-link fcal_more">
                         <el-icon><MoreFilled /></el-icon>
                     </span>

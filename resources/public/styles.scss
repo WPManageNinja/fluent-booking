@@ -1664,6 +1664,10 @@ body >.fcal_calendar_wrap {
             }
         }
     }
+  
+    .error_text {
+      margin-top: -3px;
+    }
   }
 
   &.fcal_form_calendar {
@@ -2145,7 +2149,6 @@ body >.fcal_calendar_wrap {
   }
 }
 
-
 .fcal_multi_locations {
   position: relative;
   margin-bottom: 0.625rem;
@@ -2298,7 +2301,6 @@ body >.fcal_calendar_wrap {
   }
 }
 
-
 .fcal_loading_dates {
   position: absolute;
   top: 0;
@@ -2416,6 +2418,19 @@ body >.fcal_calendar_wrap {
             }
         }
     }
+}
+
+.fcal_occurrence_input {
+  width: 45px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  margin-left: 24px;
+  color: var(--fcal_dark);
+  border: 1px solid var(--fcal_dark);
+  background: transparent;
+  text-align: center;
+  box-shadow: none;
+  outline: none;
 }
 
 .fcal_date_wrapper {

@@ -1,14 +1,38 @@
 jQuery(document).ready(function ($) {
-    let $handHeld = $('.fframe_handheld');
-    $handHeld.on('click', function () {
-        $(this).parent().find('.fframe_menu').toggleClass('fframe_menu_open');
-    });
-    $('.fframe_menu_item a').on('click', function () {
-        $handHeld.parent().find('.fframe_menu').removeClass('fframe_menu_open');
-    });
-
     jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').remove();
 });
+
+function initColorMode() {
+    const wpBodyContent = document.getElementById('wpbody-content');
+    if (!wpBodyContent) return;
+
+    const savedMode = localStorage.getItem('fcal_color_mode');
+    if (savedMode === 'dark') {
+        wpBodyContent.classList.add('dark');
+        document.documentElement.classList.add('dark');
+    } else {
+        wpBodyContent.classList.remove('dark');
+        document.documentElement.classList.remove('dark');
+    }
+}
+
+window.toggleMobileMenu = function () {
+    const mobileMenuLinks = document.getElementById('fcal_mobile_menu_list');
+    mobileMenuLinks?.style.setProperty('display', mobileMenuLinks.style.display === 'flex' ? 'none' : 'flex');
+};
+
+window.toggleColorMode = function () {
+    const wpBodyContent = document.getElementById('wpbody-content');
+
+    if (!wpBodyContent) return;
+
+    const isDark = wpBodyContent.classList.contains('dark');
+
+    wpBodyContent.classList.toggle('dark', !isDark);
+    document.documentElement.classList.toggle('dark', !isDark);
+
+    localStorage.setItem('fcal_color_mode', isDark ? 'light' : 'dark');
+};
 
 function setCurrentDateTime() {
     const serverTimeStamp = parseInt(document.getElementById('fcal_server_timestamp').getAttribute('data-timestamp'), 10);
@@ -26,6 +50,7 @@ function setCurrentDateTime() {
     document.getElementById('fcal_server_timestamp').setAttribute('data-timestamp', serverTimeStamp + 60);
 }
 
+initColorMode();
 setCurrentDateTime();
 setInterval(setCurrentDateTime, 60000);
 

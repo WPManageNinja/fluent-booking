@@ -58,7 +58,7 @@
                                             :label="time.label">
                                         </el-option>
                                     </el-select>
-                                    <p>{{ $t('if customer does not complete the payment for paid events.') }}</p>
+                                    <p class="fcal_help_text">{{ $t('if customer does not complete the payment for paid events.') }}</p>
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">
@@ -70,7 +70,7 @@
                                             :label="time.label">
                                         </el-option>
                                     </el-select>
-                                    <p>{{ $t('from the event end time') }}</p>
+                                    <p class="fcal_help_text">{{ $t('from the event end time') }}</p>
                                 </el-form-item>
                             </el-col>
                             <el-col :sm="24" :md="8">

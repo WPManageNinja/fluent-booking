@@ -11,6 +11,7 @@ import EmailNotification from "./Modules/Calendars/Edit/_EmailNotificationSettin
 import SMSNotification from "./Modules/Calendars/Edit/_SmsNotificationSettings.vue";
 import QuestionSettings from "./Modules/Calendars/Edit/_QuestionSettings.vue";
 import AdvancedSettings from "./Modules/Calendars/Edit/_AdvancedSettings.vue";
+import RecurringSettings from "./Modules/Calendars/Edit/_RecurringSettings.vue";
 import PaymentSettings from "./Modules/Calendars/Edit/Payments/PaymentSettings.vue";
 import WebhookSettings from "./Modules/Calendars/Edit/WebHook/WebhookSettings.vue";
 import Integrations from "./Modules/Calendars/Edit/GeneralIntegration/Integration.vue";
@@ -203,6 +204,16 @@ export var routes = [
                 meta: {
                     active_menu: 'calendars',
                     title: 'Question Settings'
+                },
+            },
+            {
+                path: 'recurring-settings',
+                name: 'recurring_settings',
+                component: RecurringSettings,
+                props: true,
+                meta: {
+                    active_menu: 'calendars',
+                    title: 'Recurring Settings'
                 },
             },
             {

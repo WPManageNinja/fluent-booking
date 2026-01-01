@@ -103,7 +103,7 @@ class FluentCartController extends Controller
 
         $products = CartProduct::query()
             ->select('ID', 'post_title')
-            ->where('post_status', 'publish')
+            ->whereIn('post_status', ['publish', 'private'])
             ->whereHas('detail')
             ->whereHas('variants')
             ->when($search, function ($query) use ($search) {
@@ -130,7 +130,7 @@ class FluentCartController extends Controller
         if (!$isIncluded && $includeProductId) {
             $product = CartProduct::where('ID', $includeProductId)
                 ->select('ID', 'post_title')
-                ->where('post_status', 'publish')
+                ->whereIn('post_status', ['publish', 'private'])
                 ->whereHas('detail')
                 ->whereHas('variants')
                 ->with(['detail', 'variants' => function ($query) {

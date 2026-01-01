@@ -13,7 +13,7 @@
         a {
           &.router-link-exact-active {
             background: rgb(38 83 199 / 10%);
-            color: $primaryColor;
+            color: var(--fcal-color-text, #306ae0);
           }
         }
       }
@@ -50,7 +50,7 @@
       font-size: 16px;
       font-weight: 400;
       line-height: 24px;
-      color: #445164;
+      color: var(--fcal-secondary-text, #525866);
       gap: 10px;
       text-decoration: none;
       position: relative;
@@ -122,7 +122,7 @@
       top: 0px;
       height: 100%;
       width: 2px;
-      background-color: #F5F7FA;
+      background-color: var(--fcal-primary-border, #eaecf0);
     }
     li.submenu_item {
       a.item_menu_link {
@@ -135,7 +135,7 @@
           left: -12px;
           height: 20px;
           border-radius: 8px;
-          background-color: #306ae0;
+          background-color: var(--fcal-color-text, #306ae0);
         }
         &.router-link-exact-active {
           &::before {
@@ -154,21 +154,18 @@
       font-size: 28px;
       font-weight: 500;
       line-height: 36px;
-      color: $dark;
+      color: var(--fcal-primary-text, #19283a);
     }
   }
   .fcal_settings_body {
     display: flex;
     gap: 24px;
     align-items: flex-start;
-    @media (max-width: 705px) {
-      flex-direction: column;
-    }
     .el-aside {
       width: 100%;
       max-width: 324px;
       flex: none;
-      background: #ffffff;
+      background: var(--fcal-primary-bg, #ffffff);
       border-radius: 8px;
       padding: 24px 14px;
       overflow-x: hidden;
@@ -256,8 +253,9 @@
           display: flex;
           align-items: center;
           gap: 24px;
-          border-bottom: 1px solid #d6dae1;
+          border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
           .fcal_payment_method_tab {
+            color: var(--fcal-secondary-text, #525866);
             padding-bottom: 14px;
             margin-bottom: -1.5px;
             font-size: 16px;
@@ -276,7 +274,7 @@
       .fcal_settings_section {
         border-radius: 8px;
         margin-bottom: 20px;
-        background-color: #ffffff;
+        background-color: var(--fcal-primary-bg, #ffffff);
         &:last-child {
           margin-bottom: 0;
         }
@@ -297,7 +295,8 @@
           line-height: 24px;
           font-weight: 500;
           padding: 16px 20px;
-          border-bottom: 1px solid #eaecf0;
+          color: var(--fcal-primary-text, #19283a);
+          border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
         }
       }
     }
@@ -340,7 +339,7 @@
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
-        color: #445164;
+        color: var(--fcal-secondary-text, #525866);
         display: inline-flex;
         align-items: center;
         gap: 4px;
@@ -365,12 +364,12 @@
         }
         .el-input__wrapper {
           border-radius: 8px;
-          border: 1px solid #d6dae1;
+          border: 1px solid var(--fcal-primary-border, #eaecf0);
           font-size: 16px;
           font-weight: 400;
           line-height: 24px;
           box-shadow: none;
-          color: $dark;
+          color: var(--fcal-primary-text, #19283a);
           padding: 4px 16px;
           &.is-focus {
             border-color: $primaryColor;
@@ -380,7 +379,7 @@
           .el-input__inner {
             padding: 0;
             margin: 0;
-            color: $dark;
+            color: var(--fcal-primary-text, #19283a);
             background: transparent;
           }
         }
@@ -407,6 +406,7 @@
         }
         span {
           font-size: 13px;
+          color: var(--fcal-secondary-text, #525866);
           code {
             font-size: 12px;
           }
@@ -418,7 +418,7 @@
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
-        color: #445164;
+        color: var(--fcal-secondary-text, #525866);
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
@@ -432,7 +432,7 @@
         }
         span {
           cursor: pointer;
-          color: #2f3448;
+          color: var(--fcal-secondary-text, #525866);
           font-size: 12px;
           font-weight: 400;
           &:hover {
@@ -452,6 +452,7 @@
     .el-form-item {
       p {
         margin: 0.5rem 0;
+        color: var(--fcal-secondary-text, #525866);
       }
       .el-input {
         &.is-disabled {
@@ -497,7 +498,7 @@
         }
       }
       .el-form-item__label {
-        color: #000;
+        color: var(--fcal-primary-text, #19283a);
       }
     }
   }
@@ -505,23 +506,23 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    border-top: 1px solid #eaecf0;
+    border-top: 1px solid var(--fcal-primary-border, #eaecf0);
     padding-top: 16px;
     margin-top: 24px;
   }
 }
 
 .fcal_settings_body_inner {
-  background: #ffffff;
+  background: var(--fcal-primary-bg, #ffffff);
   border-radius: 8px;
   padding: 24px;
   .fcal_settings_header {
-    border-bottom: 1px solid #eaecf0;
+    border-bottom: 1px solid var(--fcal-primary-border, #eaecf0);
     padding-bottom: 16px;
     margin-bottom: 24px;
     h3 {
       margin: 0;
-      color: $dark;
+      color: var(--fcal-primary-text, #19283a);
       font-size: 20px;
       font-weight: 500;
       line-height: 28px;
@@ -536,7 +537,7 @@
       &.is-checked {
         .el-radio__label {
           svg {
-            box-shadow: 0 0 0 1.5px #fff, 0 0 0 4px $primaryColor;
+            box-shadow: 0 0 0 1.5px #fff, 0 0 0 4px var(--fcal-color-text, #306ae0);
           }
         }
       }
@@ -565,6 +566,7 @@
   }
 
   .fcal_configure_integration_body {
+    color: var(--fcal-secondary-text, #525866);
     .el-form {
       .el-form-item {
         .el-form-item__content {
@@ -600,6 +602,7 @@
         font-size: 18px;
         font-weight: 500;
         line-height: 28px;
+        color: var(--fcal-primary-text, #19283a);
       }
     }
   }
@@ -655,21 +658,22 @@
         .el-input {
           .el-input__wrapper {
             border-radius: 8px;
-            border: 1px solid #d6dae1;
+            border: 1px solid var(--fcal-primary-border, #eaecf0);
             font-size: 16px;
             font-weight: 400;
             line-height: 24px;
             box-shadow: none;
-            color: #1b2533;
+            color: var(--fcal-primary-text, #19283a);
             padding: 4px 16px;
             &.is-focus {
               box-shadow: none !important;
-              border-color: $primaryColor;
+              border-color: var(--fcal-color-text, #306ae0);
             }
             input {
               height: auto;
               margin: 0;
               padding: 0;
+              background: transparent;
             }
           }
         }
@@ -679,7 +683,7 @@
 }
 
 .fcal_settings_submenu {
-  background-color: #fff;
+  background-color: var(--fcal-primary-bg, #ffffff);
   margin-left: 20px;
   margin-top: 10px;
   position: relative;
@@ -733,14 +737,14 @@
       font-size: 18px;
       font-weight: 500;
       line-height: 28px;
-      color: $dark;
+      color: var(--fcal-primary-text, #19283a);
     }
     p {
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
       margin: 0;
-      color: #445164;
+      color: var(--fcal-secondary-text, #525866);
       + p {
         margin-top: 8px;
       }
@@ -752,7 +756,7 @@
       font-size: 14px;
       font-weight: 400;
       line-height: 20px;
-      color: #445164;
+      color: var(--fcal-secondary-text, #525866);
       gap: 8px;
       span {
         display: block;
@@ -784,7 +788,7 @@
         padding: 4px 16px;
         font-weight: 500;
         line-height: 20px;
-        color: $dark;
+        color: var(--fcal-primary-text, #19283a);
         font-size: 14px;
         box-shadow: none;
         &.is-focus {
@@ -796,7 +800,7 @@
           margin: 0;
           padding: 0;
           &::placeholder {
-            color: $dark;
+            color: var(--fcal-primary-text, #19283a);
             opacity: 1;
           }
         }
@@ -893,7 +897,7 @@
   }
   .fcal_settings_content_wrap {
     padding: 0 20px;
-    background: #fff;
+    background: var(--fcal-primary-bg, #ffffff);
     border-radius: 8px;
 
     .el-form {
@@ -907,7 +911,7 @@
             font-size: 18px;
             font-weight: 500;
             line-height: 28px;
-            color: $dark;
+            color: var(--fcal-primary-text, #19283a);
             display: inline-flex;
             align-items: center;
             margin: 0;
@@ -926,13 +930,13 @@
           font-size: 14px;
           font-weight: 400;
           line-height: 20px;
-          color: #445164;
+          color: var(--fcal-secondary-text, #525866);
         }
         .el-form-item__label {
           font-size: 18px;
           font-weight: 500;
           line-height: 28px;
-          color: $dark;
+          color: var(--fcal-primary-text, #19283a);
         }
         .el-form-item__content {
           position: relative;
@@ -1063,7 +1067,7 @@
   .fcal_uses_lists_wrap {
     margin-top: 24px;
     .fcal_uses_list_body {
-      background: #ffffff;
+      background: var(--fcal-primary-bg, #ffffff);
       padding: 24px;
       border-radius: 8px;
 
@@ -1071,6 +1075,7 @@
         font-weight: 500;
         text-align: center;
         font-size: 16px;
+        color: var(--fcal-secondary-text, #525866);
       }
     }
     .fcal_section_header {
@@ -1086,7 +1091,7 @@
     .el-form {
       .el-form-item {
         &.fcal_availability_header {
-          border: 1px solid #d6dae1;
+          border: 1px solid var(--fcal-primary-border, #eaecf0);
           padding: 20px;
           border-radius: 8px;
           position: relative;
@@ -1106,6 +1111,7 @@
               align-items: center;
               gap: 8px;
               width: 100%;
+              color: var(--fcal-primary-text, #19283a);
             }
             .el-dropdown {
               position: absolute;
@@ -1151,10 +1157,14 @@
 }
 
 .fcal_license_box {
+  h2 {
+    color: var(--fcal-primary-text, #19283a);
+  }
   h3 {
     font-size: 14px;
     margin-bottom: 8px;
     line-height: 22px;
+    color: var(--fcal-primary-text, #19283a);
   }
   .el-input {
     margin: 0 0 20px;
@@ -1202,10 +1212,4 @@
 .fcal_warning {
   margin: 6px 0 0;
   color: red;
-}
-
-@media (max-width: 992px) {
-  .header_right {
-    justify-content: flex-end;
-  }
 }

@@ -395,7 +395,7 @@ class SchedulesController extends Controller
         }
 
         $order = null;
-        if ($booking->payment_method && $booking->payment_order) {
+        if ($booking->payment_status && $booking->payment_order) {
             $order = $booking->payment_order;
             $relations = ['items', 'transaction'];
             if (method_exists($order, 'discounts')) {

@@ -261,8 +261,8 @@ app.mount('#fluent-framework-app');
 
 router.afterEach((to, from) => {
     const activeMenu = to.meta.active_menu;
-    jQuery('.fframe_menu li').removeClass('active_item');
-    jQuery('.fframe_menu li.fframe_item_' + activeMenu).addClass('active_item');
+    jQuery('.fcal_nav li').removeClass('active_item');
+    jQuery('.fcal_nav li.fframe_item_' + activeMenu).addClass('active_item');
 
     jQuery('.toplevel_page_fluent-booking li').removeClass('current');
     jQuery(".toplevel_page_fluent-booking li").find(`a[href*='#/${activeMenu}']`).parent().addClass("current");
@@ -270,7 +270,7 @@ router.afterEach((to, from) => {
     if (activeMenu == 'dashboard') {
         jQuery(".toplevel_page_fluent-booking li.wp-first-item").find("a[href*='fluent-booking']").parent().addClass("current");
     }
-    
+
     if (to.meta.title) {
         jQuery('head title').text(to.meta.title + ' - FluentBooking'); // Change it with your app name
     }

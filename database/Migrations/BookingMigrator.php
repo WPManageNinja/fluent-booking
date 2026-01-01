@@ -73,7 +73,8 @@ class BookingMigrator
         } else {
             $isUtmContentMigrated = $wpdb->get_col($wpdb->prepare("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND COLUMN_NAME='utm_content' AND TABLE_NAME=%s",$table)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
             if (!$isUtmContentMigrated) {
-                $wpdb->query($wpdb->prepare("ALTER TABLE %s ADD COLUMN utm_content VARCHAR(192) NULL DEFAULT '' AFTER utm_term", $table)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $safe_table = esc_sql($table);
+                $wpdb->query("ALTER TABLE `{$safe_table}` ADD COLUMN `utm_content` VARCHAR(192) NULL DEFAULT '' AFTER `utm_term`"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             }
         }
     }
