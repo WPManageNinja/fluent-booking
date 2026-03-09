@@ -116,7 +116,7 @@ class DataExporter
                 $row = array_pad($row, 11, '');
             }
 
-            $csvData[] = $row;
+            $csvData[] = array_map([$this, 'sanitizeCsvCell'], $row);
         }
 
         $csvData = apply_filters('fluent_booking/exporting_booking_data_csv', $csvData, $attendees);
@@ -131,6 +131,20 @@ class DataExporter
 
         fclose($output); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
         exit();
+    }
+
+    private function sanitizeCsvCell($value)
+    {
+        if (!is_string($value) || $value === '') {
+            return $value;
+        }
+
+        $firstChar = substr(ltrim($value), 0, 1);
+        if (in_array($firstChar, ['=', '+', '-', '@'], true)) {
+            return "'" . $value;
+        }
+
+        return $value;
     }
 
     /*
