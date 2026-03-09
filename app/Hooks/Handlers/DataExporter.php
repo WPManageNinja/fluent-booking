@@ -11,7 +11,7 @@ class DataExporter
 {
     public function exportCalendar()
     {
-        $calendarId = (int)$_REQUEST['calendar_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $calendarId = isset($_REQUEST['calendar_id']) ? (int)$_REQUEST['calendar_id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$calendarId) {
             die(esc_html__('Please provide Calendar ID', 'fluent-booking'));
@@ -43,7 +43,7 @@ class DataExporter
             die(esc_html__('You do not have permission to export data', 'fluent-booking'));
         }
 
-        $groupId = (int)$_REQUEST['group_id']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $groupId = isset($_REQUEST['group_id']) ? (int)$_REQUEST['group_id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         if (!$groupId) {
             die(esc_html__('Please provide Group ID', 'fluent-booking'));
