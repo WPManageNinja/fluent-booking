@@ -49,7 +49,9 @@ class DataExporter
             die(esc_html__('Please provide Group ID', 'fluent-booking'));
         }
 
-        $attendees = Booking::where('group_id', $groupId)->get();
+        $attendees = Booking::with(['payment_order.transaction'])
+            ->where('group_id', $groupId)
+            ->get();
 
         $csvData[] = [
             'First Name',
