@@ -674,7 +674,13 @@ class FrontEndHandler
 
         $postedData = $_REQUEST;  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $eventId = (int)$postedData['event_id'];
+        $eventId = (int)Arr::get($postedData, 'event_id', 0);
+
+        if (!$eventId) {
+            wp_send_json([
+                'message' => __('Invalid calendar event', 'fluent-booking')
+            ], 422);
+        }
 
         $isRescheduling = Arr::get($postedData, 'rescheduling_hash', '');
 
@@ -918,11 +924,17 @@ class FrontEndHandler
 
         $request = $_REQUEST; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $eventId = (int)$request['event_id'];
+        $eventId = (int)Arr::get($request, 'event_id', 0);
+
+        if (!$eventId) {
+            wp_send_json([
+                'message' => __('Invalid calendar event', 'fluent-booking')
+            ], 422);
+        }
 
         $rescheduling = Arr::get($request, 'rescheduling', 'no');
 
-        $calendarEvent = CalendarSlot::findOrfail($eventId);
+        $calendarEvent = CalendarSlot::find($eventId);
 
         if (!$calendarEvent || ($calendarEvent->status != 'active' && $rescheduling == 'no')) {
             wp_send_json([
