@@ -361,7 +361,7 @@ class BookingController extends Controller
                 'booking_title'     => $booking->getBookingTitle(true),
                 'author_name'       => $booking->getHostDetails(false)['name'],
                 'booking_date'      => DateTimeHelper::formatToLocale($booking->getAttendeeStartTime(), 'date'),
-                'booking_time'      => DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time') . ' - ' . DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time'),
+                'booking_time'      => DateTimeHelper::formatToLocale($booking->getAttendeeStartTime(), 'time') . ' - ' . DateTimeHelper::formatToLocale($booking->getAttendeeEndTime(), 'time'),
             ];
         }
 
