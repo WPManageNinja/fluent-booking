@@ -32,7 +32,7 @@ class DataExporter
         $calendarData = $this->prepareCalendarExportData($calendar);
 
         header('Content-Type: application/json');
-        header('Content-Disposition: attachment; filename=CluentBookingHostExport-' . $calendarId . '.json');
+        header('Content-Disposition: attachment; filename=FluentBookingHostExport-' . $calendarId . '.json');
         echo json_encode($calendarData, JSON_PRETTY_PRINT); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         exit();
     }
