@@ -95,14 +95,15 @@ class BookingController extends Controller
             $messages['location_description.required'] = __('Please provide attendee\'s address', 'fluent-booking');
         }
 
-        if ($additionalGuests = Arr::get($postedData, 'guests', [])) {
+        $additionalGuests = [];
+        if ($guestData = Arr::get($postedData, 'guests', [])) {
             if ($calendarEvent->isMultiGuestEvent()) {
-                $additionalGuests = $this->sanitize_mapped_data($additionalGuests);
+                $additionalGuests = $this->sanitize_mapped_data($guestData);
                 $additionalGuests = array_values(array_filter($additionalGuests, function ($guest) {
                     return Arr::get($guest, 'name') && Arr::get($guest, 'email');
                 }));
             } else {
-                $additionalGuests = array_filter(array_map('sanitize_email', $additionalGuests));
+                $additionalGuests = array_filter(array_map('sanitize_email', $guestData));
             }
         }
 
