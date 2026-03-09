@@ -151,6 +151,11 @@ class BookingController extends Controller
 
         $startDateTime = DateTimeHelper::convertToUtc($postedData['event_time'], $timezone);
         $endDateTime   = gmdate('Y-m-d H:i:s', strtotime($startDateTime) + ($duration * 60));
+        $status = sanitize_text_field(Arr::get($postedData, 'status', 'scheduled'));
+
+        if (!in_array($status, ['scheduled', 'pending', 'completed', 'cancelled', 'rejected', 'no_show'], true)) {
+            $status = 'scheduled';
+        }
 
         $bookingData = [
             'person_time_zone' => sanitize_text_field($timezone),
@@ -161,7 +166,7 @@ class BookingController extends Controller
             'phone'            => sanitize_textarea_field(Arr::get($postedData, 'phone_number', '')),
             'address'          => sanitize_textarea_field(Arr::get($postedData, 'address', '')),
             'ip_address'       => Helper::getIp(),
-            'status'           => sanitize_text_field($postedData['status']),
+            'status'           => $status,
             'source'           => 'admin',
             'event_type'       => $calendarEvent->event_type,
             'slot_minutes'     => $duration
